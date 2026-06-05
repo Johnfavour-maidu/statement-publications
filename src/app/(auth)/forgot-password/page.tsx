@@ -3,11 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { BookOpen, ArrowLeft, Mail, Send } from "lucide-react";
+import { ArrowLeft, Mail, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -31,13 +30,7 @@ export default function ForgotPasswordPage() {
     >
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-2 mb-4">
-          <BookOpen className="h-8 w-8 text-primary" />
-          <div>
-            <span className="text-xl font-bold tracking-tight">Statement</span>
-            <span className="block text-[10px] leading-tight text-muted-foreground -mt-0.5">
-              Every Story Makes A Statement
-            </span>
-          </div>
+          <img src="/logo.svg" alt="Statement Publications" className="h-10 w-auto" />
         </Link>
         <h1 className="text-2xl font-bold tracking-tight">Reset your password</h1>
         <p className="text-sm text-muted-foreground mt-1">
@@ -45,11 +38,19 @@ export default function ForgotPasswordPage() {
         </p>
       </div>
 
-      <div className="rounded-xl border bg-card p-6 shadow-sm">
+      <div
+        className="rounded-2xl p-6 shadow-sm"
+        style={{
+          background: "rgba(255,255,255,0.7)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          border: "1px solid rgba(255,255,255,0.4)",
+        }}
+      >
         {isSubmitted ? (
           <div className="text-center space-y-4 py-4">
-            <div className="mx-auto h-14 w-14 rounded-full bg-primary/10 flex items-center justify-center">
-              <Send className="h-7 w-7 text-primary" />
+            <div className="mx-auto h-14 w-14 rounded-full bg-[#EBC9A8]/20 flex items-center justify-center">
+              <Send className="h-7 w-7 text-[#8A6A4A]" />
             </div>
             <div className="space-y-2">
               <h2 className="font-semibold">Check your email</h2>
@@ -64,8 +65,8 @@ export default function ForgotPasswordPage() {
                 Try a different email
               </Button>
               <Link
-                href="/auth/login"
-                className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+                href="/login"
+                className="inline-flex items-center gap-2 text-sm text-[#8A6A4A] hover:underline"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to sign in
@@ -96,8 +97,8 @@ export default function ForgotPasswordPage() {
 
             <div className="text-center">
               <Link
-                href="/auth/login"
-                className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
+                href="/login"
+                className="inline-flex items-center gap-2 text-sm text-[#8A6A4A] hover:underline"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to sign in

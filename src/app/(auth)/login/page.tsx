@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { BookOpen, Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,13 +29,7 @@ export default function LoginPage() {
     >
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-2 mb-4">
-          <BookOpen className="h-8 w-8 text-primary" />
-          <div>
-            <span className="text-xl font-bold tracking-tight">Statement</span>
-            <span className="block text-[10px] leading-tight text-muted-foreground -mt-0.5">
-              Every Story Makes A Statement
-            </span>
-          </div>
+          <img src="/logo.svg" alt="Statement Publications" className="h-10 w-auto" />
         </Link>
         <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
         <p className="text-sm text-muted-foreground mt-1">
@@ -43,7 +37,15 @@ export default function LoginPage() {
         </p>
       </div>
 
-      <div className="rounded-xl border bg-card p-6 shadow-sm space-y-6">
+      <div
+        className="rounded-2xl p-6 shadow-sm space-y-6"
+        style={{
+          background: "rgba(255,255,255,0.7)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          border: "1px solid rgba(255,255,255,0.4)",
+        }}
+      >
         <div className="grid grid-cols-2 gap-3">
           <Button variant="outline" className="w-full" type="button">
             <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
@@ -64,7 +66,7 @@ export default function LoginPage() {
 
         <div className="relative">
           <Separator />
-          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-xs text-muted-foreground">
+          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs text-muted-foreground" style={{ background: "rgba(255,255,255,0.7)" }}>
             or continue with email
           </span>
         </div>
@@ -90,7 +92,7 @@ export default function LoginPage() {
             <div className="flex items-center justify-between">
               <Label htmlFor="password">Password</Label>
               <Link
-                href="/auth/forgot-password"
+                href="/forgot-password"
                 className="text-xs text-primary hover:underline"
               >
                 Forgot password?
@@ -128,10 +130,32 @@ export default function LoginPage() {
 
         <p className="text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
-          <Link href="/auth/register" className="text-primary font-medium hover:underline">
+          <Link href="/register" className="text-primary font-medium hover:underline">
             Sign up
           </Link>
         </p>
+      </div>
+
+      {/* Demo Credentials */}
+      <div className="mt-6 rounded-xl border border-[#EBC9A8]/40 bg-[#EBC9A8]/10 p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Info className="h-4 w-4 text-[#8A6A4A]" />
+          <h3 className="text-sm font-semibold text-[#8A6A4A]">Demo Credentials</h3>
+        </div>
+        <div className="space-y-2 text-xs">
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground">Admin</span>
+            <code className="font-mono text-foreground bg-background/80 px-1.5 py-0.5 rounded">admin@statementpublications.com / admin123</code>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground">Author</span>
+            <code className="font-mono text-foreground bg-background/80 px-1.5 py-0.5 rounded">sarah.chen@statementpub.com / author123</code>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-muted-foreground">Reader</span>
+            <code className="font-mono text-foreground bg-background/80 px-1.5 py-0.5 rounded">reader@example.com / reader123</code>
+          </div>
+        </div>
       </div>
     </motion.div>
   );

@@ -2,10 +2,7 @@ import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { hash } from "bcryptjs";
 
-const adapter = new PrismaPg({
-  connectionString: process.env.DATABASE_URL!,
-});
-
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
 const CATEGORIES = [
@@ -25,506 +22,158 @@ const CATEGORIES = [
 ];
 
 const BOOKS = [
-  {
-    title: "The Silent Echo",
-    slug: "the-silent-echo",
-    subtitle: "A Mystery Novel",
-    description: "When detective Maya Chen receives a cryptic message from a missing journalist, she's drawn into a web of corruption that reaches the highest levels of power.",
-    isbn: "978-1-234567-00-1",
-    pageCount: 342,
-    format: "EBOOK" as const,
-    price: 12.99,
-    isFeatured: true,
-    isBestseller: true,
-    tags: ["mystery", "thriller", "detective"],
-    category: "mystery-thriller",
-  },
-  {
-    title: "Whispers in the Wind",
-    slug: "whispers-in-the-wind",
-    subtitle: "A Love Story",
-    description: "Two strangers meet on a train crossing the American heartland. What begins as a chance encounter becomes a journey of love, loss, and second chances.",
-    isbn: "978-1-234567-00-2",
-    pageCount: 287,
-    format: "PAPERBACK" as const,
-    price: 14.99,
-    discountPrice: 11.99,
-    isFeatured: true,
-    tags: ["romance", "contemporary", "love"],
-    category: "romance",
-  },
-  {
-    title: "Beyond the Stars",
-    slug: "beyond-the-stars",
-    subtitle: "Chronicles of the Void",
-    description: "In a galaxy torn apart by war, a young pilot discovers an ancient power that could either save humanity or destroy it forever.",
-    isbn: "978-1-234567-00-3",
-    pageCount: 456,
-    format: "EBOOK" as const,
-    price: 15.99,
-    isBestseller: true,
-    tags: ["science fiction", "space opera", "adventure"],
-    category: "science-fiction",
-  },
-  {
-    title: "The Art of Mindful Living",
-    slug: "the-art-of-mindful-living",
-    subtitle: "A Guide to Inner Peace",
-    description: "Discover the transformative power of mindfulness through practical exercises, meditations, and real-world applications for modern life.",
-    isbn: "978-1-234567-00-4",
-    pageCount: 234,
-    format: "HARDCOVER" as const,
-    price: 24.99,
-    isFeatured: true,
-    tags: ["self-help", "mindfulness", "meditation"],
-    category: "self-help",
-  },
-  {
-    title: "Kingdom of Shadows",
-    slug: "kingdom-of-shadows",
-    subtitle: "The Dark Realm Saga",
-    description: "A young sorceress must navigate political intrigue and dark magic to claim her rightful place on the throne of a kingdom in turmoil.",
-    isbn: "978-1-234567-00-5",
-    pageCount: 523,
-    format: "EBOOK" as const,
-    price: 16.99,
-    tags: ["fantasy", "magic", "adventure"],
-    category: "fantasy",
-  },
-  {
-    title: "My Father's Legacy",
-    slug: "my-fathers-legacy",
-    subtitle: "A Memoir",
-    description: "A deeply personal account of growing up in the shadow of a legendary civil rights leader, and the journey to understanding his true legacy.",
-    isbn: "978-1-234567-00-6",
-    pageCount: 312,
-    format: "PAPERBACK" as const,
-    price: 18.99,
-    tags: ["memoir", "family", "civil rights"],
-    category: "biography-memoir",
-  },
-  {
-    title: "Digital Empire",
-    slug: "digital-empire",
-    subtitle: "Building a Tech Startup from Scratch",
-    description: "From garage to global: the inside story of building a billion-dollar tech company, including the failures, pivots, and breakthroughs along the way.",
-    isbn: "978-1-234567-00-7",
-    pageCount: 298,
-    format: "EBOOK" as const,
-    price: 19.99,
-    tags: ["business", "startup", "technology"],
-    category: "business-finance",
-  },
-  {
-    title: "Verses of the Soul",
-    slug: "verses-of-the-soul",
-    subtitle: "Collected Poems",
-    description: "A collection of poems exploring love, loss, nature, and the human condition with vivid imagery and emotional depth.",
-    isbn: "978-1-234567-00-8",
-    pageCount: 156,
-    format: "EBOOK" as const,
-    price: 9.99,
-    tags: ["poetry", "collection", "literary"],
-    category: "poetry",
-  },
-  {
-    title: "The Forgotten Kingdom",
-    slug: "the-forgotten-kingdom",
-    subtitle: "Chronicles of the Lost Realm",
-    description: "A young archaeologist uncovers a hidden civilization that challenges everything we know about human history.",
-    isbn: "978-1-234567-00-9",
-    pageCount: 445,
-    format: "HARDCOVER" as const,
-    price: 22.99,
-    isBestseller: true,
-    tags: ["historical fiction", "adventure", "mystery"],
-    category: "fiction",
-  },
-  {
-    title: "Eternal Night",
-    slug: "eternal-night",
-    subtitle: "A Vampire Chronicle",
-    description: "For centuries, she has walked alone. Now, a forbidden love threatens to destroy the delicate balance between the living and the undead.",
-    isbn: "978-1-234567-01-0",
-    pageCount: 389,
-    format: "EBOOK" as const,
-    price: 13.99,
-    tags: ["paranormal", "vampire", "romance"],
-    category: "fiction",
-  },
-  {
-    title: "Quantum Horizons",
-    slug: "quantum-horizons",
-    subtitle: "The Future of Physics",
-    description: "A groundbreaking exploration of quantum computing, dark matter, and the fundamental nature of reality itself.",
-    isbn: "978-1-234567-01-1",
-    pageCount: 267,
-    format: "EBOOK" as const,
-    price: 21.99,
-    tags: ["science", "physics", "technology"],
-    category: "non-fiction",
-  },
-  {
-    title: "Little Dreamers",
-    slug: "little-dreamers",
-    subtitle: "Bedtime Stories for Children",
-    description: "A collection of enchanting bedtime stories that inspire imagination and teach valuable life lessons to children ages 3-8.",
-    isbn: "978-1-234567-01-2",
-    pageCount: 128,
-    format: "PAPERBACK" as const,
-    price: 11.99,
-    tags: ["children", "bedtime stories", "illustrated"],
-    category: "children-ya",
-  },
-  {
-    title: "The Warrior's Path",
-    slug: "the-warriors-path",
-    subtitle: "A Tale of Honor",
-    description: "In ancient Japan, a young samurai must choose between duty and honor when his lord orders him to commit an act that violates his principles.",
-    isbn: "978-1-234567-01-3",
-    pageCount: 378,
-    format: "EBOOK" as const,
-    price: 14.99,
-    tags: ["historical fiction", "samurai", "honor"],
-    category: "fiction",
-  },
-  {
-    title: "Sacred Journeys",
-    slug: "sacred-journeys",
-    subtitle: "A Spiritual Guide",
-    description: "Explore the world's great spiritual traditions and find your own path to inner peace and divine connection.",
-    isbn: "978-1-234567-01-4",
-    pageCount: 312,
-    format: "HARDCOVER" as const,
-    price: 26.99,
-    tags: ["spirituality", "religion", "philosophy"],
-    category: "religion-spirituality",
-  },
-  {
-    title: "Code Breakers",
-    slug: "code-breakers",
-    subtitle: "The Secret History of Cryptography",
-    description: "From ancient ciphers to modern encryption, the fascinating story of how code breakers shaped the course of history.",
-    isbn: "978-1-234567-01-5",
-    pageCount: 356,
-    format: "EBOOK" as const,
-    price: 17.99,
-    tags: ["history", "cryptography", "technology"],
-    category: "history",
-  },
+  { title: "The Silent Echo", slug: "the-silent-echo", description: "A haunting tale of memory and loss that transcends time and space.", categoryId: "fiction", price: 12.99, pages: 320, rating: 4.5 },
+  { title: "Echoes of Tomorrow", slug: "echoes-of-tomorrow", description: "A visionary novel about the threads that connect our past to our future.", categoryId: "fiction", price: 14.99, pages: 280, rating: 4.3 },
+  { title: "The Silent Garden", slug: "the-silent-garden", description: "A lyrical exploration of solitude and the secrets gardens keep.", categoryId: "fiction", price: 11.99, pages: 256, rating: 4.7 },
+  { title: "Midnight Bridges", slug: "midnight-bridges", description: "Stories that span cultures, generations, and the bridges between us.", categoryId: "fiction", price: 13.99, pages: 340, rating: 4.2 },
+  { title: "Thinking in Systems", slug: "thinking-in-systems", description: "A primer on systems thinking for a complex world.", categoryId: "non-fiction", price: 16.99, pages: 240, rating: 4.6 },
+  { title: "The Power of Habit", slug: "the-power-of-habit", description: "Why we do what we do in life and business.", categoryId: "non-fiction", price: 15.99, pages: 371, rating: 4.4 },
+  { title: "Atomic Focus", slug: "atomic-focus", description: "Small changes, remarkable results. Master the art of concentration.", categoryId: "non-fiction", price: 14.99, pages: 320, rating: 4.8 },
+  { title: "The Art of Innovation", slug: "the-art-of-innovation", description: "Lessons in creativity from IDEO, America's leading design firm.", categoryId: "business", price: 18.99, pages: 304, rating: 4.3 },
+  { title: "Zero to One", slug: "zero-to-one", description: "Notes on startups, or how to build the future.", categoryId: "business", price: 17.99, pages: 224, rating: 4.5 },
+  { title: "Good to Great", slug: "good-to-great", description: "Why some companies make the leap and others don't.", categoryId: "business", price: 16.99, pages: 320, rating: 4.4 },
+  { title: "Clean Code", slug: "clean-code", description: "A handbook of agile software craftsmanship.", categoryId: "technology", price: 34.99, pages: 464, rating: 4.7 },
+  { title: "The Pragmatic Programmer", slug: "the-pragmatic-programmer", description: "Your journey to mastery in software development.", categoryId: "technology", price: 39.99, pages: 352, rating: 4.8 },
+  { title: "AI Revolution", slug: "ai-revolution", description: "How artificial intelligence is transforming our world.", categoryId: "technology", price: 22.99, pages: 380, rating: 4.2 },
+  { title: "Mindset", slug: "mindset", description: "The new psychology of success that changes how we think about learning.", categoryId: "education", price: 14.99, pages: 276, rating: 4.5 },
+  { title: "The First 20 Hours", slug: "the-first-20-hours", description: "How to learn anything fast.", categoryId: "education", price: 13.99, pages: 256, rating: 4.1 },
+  { title: "Ultralearning", slug: "ultralearning", description: "Master hard skills, outsmart the competition, and accelerate your career.", categoryId: "education", price: 15.99, pages: 304, rating: 4.6 },
+  { title: "The Purpose Driven Life", slug: "the-purpose-driven-life", description: "What on Earth am I here for?", categoryId: "religion", price: 12.99, pages: 368, rating: 4.3 },
+  { title: "Mere Christianity", slug: "mere-christianity", description: "A theological classic by C.S. Lewis.", categoryId: "religion", price: 11.99, pages: 227, rating: 4.7 },
+  { title: "Steve Jobs", slug: "steve-jobs", description: "The exclusive biography of Apple's visionary co-founder.", categoryId: "biography", price: 16.99, pages: 656, rating: 4.5 },
+  { title: "Educated", slug: "educated", description: "A memoir about a young girl who leaves her survivalist family.", categoryId: "biography", price: 14.99, pages: 352, rating: 4.8 },
+  { title: "Becoming", slug: "becoming", description: "Michelle Obama's inspiring journey from childhood to the White House.", categoryId: "biography", price: 18.99, pages: 448, rating: 4.6 },
+  { title: "The Notebook", slug: "the-notebook", description: "A love story that spans decades and defies all odds.", categoryId: "romance", price: 11.99, pages: 214, rating: 4.4 },
+  { title: "Pride and Prejudice", slug: "pride-and-prejudice", description: "Jane Austen's timeless tale of love and misunderstanding.", categoryId: "romance", price: 9.99, pages: 432, rating: 4.9 },
+  { title: "Gone Girl", slug: "gone-girl", description: "A thriller about a marriage gone terribly wrong.", categoryId: "mystery", price: 13.99, pages: 432, rating: 4.2 },
+  { title: "The Girl on the Train", slug: "the-girl-on-the-train", description: "A gripping psychological thriller that will keep you guessing.", categoryId: "mystery", price: 12.99, pages: 336, rating: 4.1 },
+  { title: "The Silent Patient", slug: "the-silent-patient", description: "A woman shoots her husband and then stops speaking entirely.", categoryId: "mystery", price: 14.99, pages: 352, rating: 4.6 },
+  { title: "Milk and Honey", slug: "milk-and-honey", description: "A collection of poetry about survival, loss, love, and femininity.", categoryId: "poetry", price: 12.99, pages: 208, rating: 4.3 },
+  { title: "The Sun and Her Flowers", slug: "the-sun-and-her-flowers", description: "A vibrant poetry collection about growth and healing.", categoryId: "poetry", price: 14.99, pages: 256, rating: 4.4 },
+  { title: "Leaves of Grass", slug: "leaves-of-grass", description: "Walt Whitman's masterpiece of American poetry.", categoryId: "poetry", price: 10.99, pages: 544, rating: 4.7 },
+  { title: "The Giving Tree", slug: "the-giving-tree", description: "A timeless parable about giving and receiving.", categoryId: "children", price: 8.99, pages: 64, rating: 4.8 },
+  { title: "Where the Wild Things Are", slug: "where-the-wild-things-are", description: "Maurice Sendak's beloved classic of childhood imagination.", categoryId: "children", price: 9.99, pages: 48, rating: 4.9 },
+  { title: "Charlotte's Web", slug: "charlottes-web", description: "The classic tale of a pig named Wilbur and his friendship with a spider.", categoryId: "children", price: 7.99, pages: 184, rating: 4.9 },
+  { title: "Rich Dad Poor Dad", slug: "rich-dad-poor-dad", description: "What the rich teach their kids about money.", categoryId: "finance", price: 15.99, pages: 336, rating: 4.5 },
+  { title: "The Millionaire Next Door", slug: "the-millionaire-next-door", description: "The surprising secrets of America's wealthy.", categoryId: "finance", price: 14.99, pages: 272, rating: 4.3 },
+  { title: "I Will Teach You to Be Rich", slug: "i-will-teach-you-to-be-rich", description: "A 6-week personal finance program for ages 20 to 35.", categoryId: "finance", price: 16.99, pages: 336, rating: 4.6 },
+  { title: "Sapiens", slug: "sapiens", description: "A brief history of humankind that changed how we see the world.", categoryId: "history", price: 17.99, pages: 464, rating: 4.7 },
+  { title: "Guns, Germs, and Steel", slug: "guns-germs-and-steel", description: "The fates of human societies explained through geography.", categoryId: "history", price: 15.99, pages: 498, rating: 4.4 },
 ];
 
 const BLOG_POSTS = [
-  {
-    title: "The Future of Self-Publishing in 2025",
-    slug: "future-of-self-publishing-2025",
-    content: `<h2>The Rise of Independent Authors</h2><p>The self-publishing industry continues to evolve at a rapid pace. With platforms like Statement Publications empowering authors to take control of their publishing journey, the landscape is shifting dramatically.</p><h3>Key Trends to Watch</h3><ul><li>AI-assisted writing tools</li><li>Direct-to-reader sales models</li><li>Audio-first content creation</li><li>NFT-based book ownership</li></ul><p>Authors who embrace these trends while maintaining authentic storytelling will thrive in the new publishing ecosystem.</p>`,
-    excerpt: "Explore the emerging trends shaping self-publishing and how independent authors can leverage new technologies.",
-    category: "Publishing",
-    tags: ["self-publishing", "trends", "2025", "authors"],
-    isPublished: true,
-    isFeatured: true,
-  },
-  {
-    title: "How to Write a Compelling Book Blurb",
-    slug: "how-to-write-compelling-book-blurb",
-    content: `<h2>The Art of the Book Blurb</h2><p>Your book blurb is your first impression on potential readers. It's the sales pitch that can make or break a book sale.</p><h3>The Perfect Formula</h3><ol><li>Hook: Start with a compelling question or statement</li><li>Conflict: Introduce the central tension</li><li>Stakes: Show what's at risk</li><li>Closing: Leave them wanting more</li></ol><p>Remember: you have about 150 words to convince a reader to buy your book. Make every word count.</p>`,
-    excerpt: "Master the art of writing book blurbs that sell. Learn the proven formula that converts browsers into buyers.",
-    category: "Writing Tips",
-    tags: ["writing", "marketing", "book blurbs"],
-    isPublished: true,
-  },
-  {
-    title: "Understanding Royalties: A Complete Guide for Authors",
-    slug: "understanding-royalties-complete-guide",
-    content: `<h2>How Royalties Work</h2><p>As an author, understanding how royalties work is crucial to managing your writing career as a business.</p><h3>Standard Royalty Rates</h3><ul><li>Ebooks: 35-70% (depending on pricing)</li><li>Paperbacks: 40-60%</li><li>Audiobooks: 25-50%</li></ul><p>At Statement Publications, we offer industry-leading royalty rates to ensure authors are fairly compensated for their work.</p>`,
-    excerpt: "Everything authors need to know about royalty rates, payments, and maximizing their earnings.",
-    category: "Author Resources",
-    tags: ["royalties", "income", "author business"],
-    isPublished: true,
-    isFeatured: true,
-  },
-  {
-    title: "5 Common Mistakes New Authors Make",
-    slug: "5-common-mistakes-new-authors",
-    content: `<h2>Avoid These Pitfalls</h2><p>Every first-time author faces challenges. Here are the five most common mistakes and how to avoid them.</p><h3>1. Skipping Professional Editing</h3><p>Even the best writers need editors. A fresh set of eyes can catch errors you've read past a hundred times.</p><h3>2. Poor Cover Design</h3><p>Readers DO judge books by their covers. Invest in professional cover design.</p><h3>3. Ignoring Marketing</h3><p>Writing the book is only half the battle. You need a marketing strategy.</p><h3>4. Underpricing</h3><p>Don't undervalue your work. Research comparable titles and price accordingly.</p><h3>5. Giving Up Too Soon</h3><p>Success takes time. Keep writing, keep learning, keep growing.</p>`,
-    excerpt: "Learn from the mistakes of others. These five common pitfalls can derail your publishing journey.",
-    category: "Writing Tips",
-    tags: ["writing", "tips", "beginners"],
-    isPublished: true,
-  },
-  {
-    title: "Building Your Author Platform from Scratch",
-    slug: "building-author-platform-from-scratch",
-    content: `<h2>Why Author Platform Matters</h2><p>In today's crowded publishing landscape, having a strong author platform is essential for success.</p><h3>Key Components</h3><ul><li>Professional website</li><li>Email list</li><li>Social media presence</li><li>Content marketing</li><li>Community engagement</li></ul><p>Start small and be consistent. Your platform will grow over time if you show up regularly and provide value to your readers.</p>`,
-    excerpt: "A step-by-step guide to building an author platform that attracts readers and sells books.",
-    category: "Marketing",
-    tags: ["platform", "marketing", "social media"],
-    isPublished: true,
-  },
+  { title: "How to Write Your First Book in 30 Days", slug: "write-first-book-30-days", content: "Writing a book doesn't have to take years. Here's a proven framework to draft your manuscript in just one month...", excerpt: "A proven framework to draft your manuscript in just one month.", category: "Writing Tips" },
+  { title: "The Complete Guide to Self-Publishing in 2026", slug: "complete-guide-self-publishing-2026", content: "Self-publishing has never been more accessible. From manuscript to market, here's everything you need to know...", excerpt: "Everything you need to know about self-publishing in the modern era.", category: "Publishing" },
+  { title: "10 Book Cover Design Trends That Sell", slug: "book-cover-design-trends", content: "Your book cover is your first impression. These design trends are dominating bestseller lists right now...", excerpt: "Design trends dominating bestseller lists right now.", category: "Design" },
+  { title: "Building Your Author Platform from Scratch", slug: "building-author-platform", content: "Every successful author needs a platform. Here's how to build one from zero with no audience...", excerpt: "Build an author platform from zero with no existing audience.", category: "Marketing" },
+  { title: "Understanding Royalties: How Authors Actually Make Money", slug: "understanding-royalties", content: "Royalties can be confusing. Let's break down exactly how authors earn from their books...", excerpt: "A clear breakdown of how authors earn from their books.", category: "Business" },
 ];
 
 async function main() {
-  console.log("🌱 Seeding database...");
+  console.log("Seeding database...");
 
   // Clean existing data
-  await prisma.$transaction([
-    prisma.auditLog.deleteMany(),
-    prisma.analyticsEvent.deleteMany(),
-    prisma.note.deleteMany(),
-    prisma.highlight.deleteMany(),
-    prisma.bookmark.deleteMany(),
-    prisma.readingProgress.deleteMany(),
-    prisma.affiliateReferral.deleteMany(),
-    prisma.affiliate.deleteMany(),
-    prisma.coupon.deleteMany(),
-    prisma.blogComment.deleteMany(),
-    prisma.blogPost.deleteMany(),
-    prisma.notification.deleteMany(),
-    prisma.follower.deleteMany(),
-    prisma.wishlist.deleteMany(),
-    prisma.purchase.deleteMany(),
-    prisma.review.deleteMany(),
-    prisma.orderItem.deleteMany(),
-    prisma.payment.deleteMany(),
-    prisma.order.deleteMany(),
-    prisma.royalty.deleteMany(),
-    prisma.withdrawal.deleteMany(),
-    prisma.walletTransaction.deleteMany(),
-    prisma.wallet.deleteMany(),
-    prisma.book.deleteMany(),
-    prisma.authorProfile.deleteMany(),
-    prisma.readerProfile.deleteMany(),
-    prisma.category.deleteMany(),
-    prisma.siteContent.deleteMany(),
-    prisma.announcement.deleteMany(),
-    prisma.session.deleteMany(),
-    prisma.account.deleteMany(),
-    prisma.verificationToken.deleteMany(),
-    prisma.user.deleteMany(),
-  ]);
+  try {
+    await prisma.$executeRaw`TRUNCATE TABLE "AuditLog", "AnalyticsEvent", "Note", "Highlight", "Bookmark", "ReadingProgress", "AffiliateReferral", "Affiliate", "Coupon", "BlogComment", "BlogPost", "Notification", "Follower", "Wishlist", "Purchase", "Review", "OrderItem", "Payment", "Order", "Royalty", "Withdrawal", "WalletTransaction", "Wallet", "Book", "AuthorProfile", "ReaderProfile", "Category", "SiteContent", "Announcement", "Session", "Account", "VerificationToken", "User" CASCADE`;
+    console.log("Cleaned existing data");
+  } catch (e) {
+    console.log("Tables may not exist yet, continuing...");
+  }
 
-  console.log("✅ Cleaned existing data");
-
-  // Create roles and users
-  const hashedPassword = await hash("admin123", 12);
-  const readerPassword = await hash("reader123", 12);
+  // Create users
+  const adminPassword = await hash("admin123", 12);
   const authorPassword = await hash("author123", 12);
+  const readerPassword = await hash("reader123", 12);
 
   const admin = await prisma.user.create({
-    data: {
-      email: "admin@statementpublications.com",
-      name: "Admin User",
-      password: hashedPassword,
-      role: "SUPER_ADMIN",
-      isVerified: true,
-      isActive: true,
-      bio: "Platform administrator for Statement Publications.",
-    },
+    data: { email: "admin@statementpublications.com", name: "Admin User", password: adminPassword, role: "ADMIN", isVerified: true, emailVerified: new Date() },
   });
 
   const author1 = await prisma.user.create({
-    data: {
-      email: "sarah.chen@statementpub.com",
-      name: "Sarah Chen",
-      password: authorPassword,
-      role: "AUTHOR",
-      isVerified: true,
-      isActive: true,
-      bio: "Award-winning author of mystery and thriller novels.",
-      authorProfile: {
-        create: {
-          penName: "Sarah Chen",
-          website: "https://sarahchen.com",
-          genre: ["Mystery", "Thriller", "Crime"],
-          bio: "Sarah Chen is an award-winning author known for her gripping mystery novels. With over a decade of writing experience, she has captivated readers worldwide.",
-          totalBooks: 3,
-          isFeatured: true,
-        },
-      },
-    },
+    data: { email: "sarah.chen@statementpub.com", name: "Sarah Chen", password: authorPassword, role: "AUTHOR", isVerified: true, emailVerified: new Date() },
   });
 
   const author2 = await prisma.user.create({
-    data: {
-      email: "james.rivera@statementpub.com",
-      name: "James Rivera",
-      password: authorPassword,
-      role: "AUTHOR",
-      isVerified: true,
-      isActive: true,
-      bio: "Bestselling author of science fiction and fantasy.",
-      authorProfile: {
-        create: {
-          penName: "J.R. Rivera",
-          website: "https://jamesrivera.com",
-          genre: ["Science Fiction", "Fantasy", "Adventure"],
-          bio: "J.R. Rivera is a bestselling author who crafts epic tales of adventure across multiple genres.",
-          totalBooks: 4,
-          totalSales: 15000,
-          totalEarnings: 12000.50,
-          isFeatured: true,
-        },
-      },
-    },
+    data: { email: "james.mitchell@statementpub.com", name: "James Mitchell", password: authorPassword, role: "AUTHOR", isVerified: true, emailVerified: new Date() },
   });
 
   const author3 = await prisma.user.create({
-    data: {
-      email: "emily.park@statementpub.com",
-      name: "Emily Park",
-      password: authorPassword,
-      role: "AUTHOR",
-      isVerified: true,
-      isActive: true,
-      bio: "Author of self-help and personal development books.",
-      authorProfile: {
-        create: {
-          penName: "Emily Park",
-          website: "https://emilypark.com",
-          genre: ["Self-Help", "Mindfulness", "Personal Development"],
-          bio: "Emily Park is a mindfulness coach and author helping people find inner peace in a chaotic world.",
-          totalBooks: 2,
-          totalSales: 8000,
-          totalEarnings: 6500.00,
-        },
-      },
-    },
+    data: { email: "ama.okafor@statementpub.com", name: "Ama Okafor", password: authorPassword, role: "AUTHOR", isVerified: true, emailVerified: new Date() },
   });
 
-  const reader1 = await prisma.user.create({
-    data: {
-      email: "reader@example.com",
-      name: "Alex Reader",
-      password: readerPassword,
-      role: "READER",
-      isVerified: true,
-      isActive: true,
-      bio: "Avid reader and book lover.",
-      readerProfile: {
-        create: {
-          favoriteGenres: ["Mystery", "Science Fiction", "Fantasy"],
-          totalPurchases: 5,
-          totalSpent: 64.95,
-        },
-      },
-    },
+  const reader = await prisma.user.create({
+    data: { email: "reader@example.com", name: "Demo Reader", password: readerPassword, role: "READER", isVerified: true, emailVerified: new Date() },
   });
 
-  const reader2 = await prisma.user.create({
-    data: {
-      email: "bookworm@example.com",
-      name: "Jordan Bookworm",
-      password: readerPassword,
-      role: "READER",
-      isVerified: true,
-      isActive: true,
-      bio: "Can't stop reading!",
-      readerProfile: {
-        create: {
-          favoriteGenres: ["Romance", "Poetry", "Children"],
-          totalPurchases: 3,
-          totalSpent: 38.97,
-        },
-      },
-    },
+  console.log("Created users");
+
+  // Create author profiles
+  const ap1 = await prisma.authorProfile.create({
+    data: { userId: author1.id, penName: "Sarah Chen", bio: "Award-winning author of contemporary fiction and literary novels.", genre: ["Fiction", "Literary Fiction"], totalBooks: 5, isFeatured: true },
   });
 
-  console.log("✅ Created users");
+  const ap2 = await prisma.authorProfile.create({
+    data: { userId: author2.id, penName: "James Mitchell", bio: "Business strategist and bestselling non-fiction author.", genre: ["Business", "Non-Fiction"], totalBooks: 4, isFeatured: true },
+  });
+
+  const ap3 = await prisma.authorProfile.create({
+    data: { userId: author3.id, penName: "Ama Okafor", bio: "Poet, essayist, and storyteller from Lagos, Nigeria.", genre: ["Poetry", "Fiction"], totalBooks: 3, isFeatured: true },
+  });
+
+  // Create reader profile
+  await prisma.readerProfile.create({
+    data: { userId: reader.id, favoriteGenres: ["Fiction", "Business", "Poetry"], totalPurchases: 0 },
+  });
+
+  // Create wallets
+  await prisma.wallet.create({ data: { userId: author1.id, balance: 1250.00, totalEarned: 3500.00, totalWithdrawn: 2250.00 } });
+  await prisma.wallet.create({ data: { userId: author2.id, balance: 890.00, totalEarned: 2100.00, totalWithdrawn: 1210.00 } });
+  await prisma.wallet.create({ data: { userId: author3.id, balance: 450.00, totalEarned: 900.00, totalWithdrawn: 450.00 } });
+
+  console.log("Created profiles and wallets");
 
   // Create categories
   const categoryMap: Record<string, string> = {};
-
   for (const cat of CATEGORIES) {
     const created = await prisma.category.create({
-      data: {
-        name: cat.name,
-        slug: cat.slug,
-        description: cat.description,
-        sortOrder: cat.sortOrder,
-        isActive: true,
-      },
+      data: { name: cat.name, slug: cat.slug, description: cat.description, sortOrder: cat.sortOrder },
     });
     categoryMap[cat.slug] = created.id;
   }
 
-  console.log("✅ Created categories");
-
-  // Get author profile IDs
-  const authorProfile1 = await prisma.authorProfile.findUnique({ where: { userId: author1.id } });
-  const authorProfile2 = await prisma.authorProfile.findUnique({ where: { userId: author2.id } });
-  const authorProfile3 = await prisma.authorProfile.findUnique({ where: { userId: author3.id } });
+  console.log("Created categories");
 
   // Create books
-  const bookIds: string[] = [];
-
+  const authorProfiles = [ap1, ap2, ap3];
   for (let i = 0; i < BOOKS.length; i++) {
-    const bookData = BOOKS[i];
-    const authorProfiles = [authorProfile1, authorProfile2, authorProfile3];
+    const book = BOOKS[i];
     const authorProfile = authorProfiles[i % 3];
-
-    const book = await prisma.book.create({
+    const catId = categoryMap[book.categoryId];
+    await prisma.book.create({
       data: {
-        title: bookData.title,
-        slug: bookData.slug,
-        subtitle: bookData.subtitle,
-        description: bookData.description,
-        authorId: authorProfile!.id,
-        categoryId: categoryMap[bookData.category],
-        isbn: bookData.isbn,
-        pageCount: bookData.pageCount,
-        format: bookData.format,
+        title: book.title,
+        slug: book.slug,
+        description: book.description,
+        authorId: authorProfile.id,
+        categoryId: catId,
+        pageCount: book.pages,
+        price: book.price,
+        royaltyRate: 70,
         status: "PUBLISHED",
         isPublic: true,
-        isFeatured: bookData.isFeatured ?? false,
-        isBestseller: bookData.isBestseller ?? false,
-        isNew: i > 10,
-        price: bookData.price,
-        discountPrice: bookData.discountPrice ?? null,
-        royaltyRate: 70,
+        averageRating: book.rating,
         totalSales: Math.floor(Math.random() * 500) + 50,
-        totalRevenue: Math.floor(Math.random() * 5000) + 500,
         totalReviews: Math.floor(Math.random() * 50) + 5,
-        averageRating: Math.round((Math.random() * 2 + 3) * 10) / 10,
-        tags: bookData.tags,
+        totalRevenue: Math.floor(Math.random() * 5000) + 500,
+        format: "EBOOK",
+        language: "English",
         publicationDate: new Date(2024, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
+        tags: [book.categoryId],
       },
     });
-
-    bookIds.push(book.id);
   }
 
-  console.log("✅ Created books");
-
-  // Create reviews
-  const reviewData = [
-    { userId: reader1.id, bookSlug: "the-silent-echo", rating: 5, title: "Absolutely gripping!", content: "Couldn't put it down. The plot twists were incredible." },
-    { userId: reader2.id, bookSlug: "the-silent-echo", rating: 4, title: "Great mystery", content: "Well-written with compelling characters." },
-    { userId: reader1.id, bookSlug: "whispers-in-the-wind", rating: 5, title: "Beautiful love story", content: "Touched my heart. A must-read for romance fans." },
-    { userId: reader2.id, bookSlug: "beyond-the-stars", rating: 5, title: "Epic space opera", content: "Amazing world-building and characters." },
-    { userId: reader1.id, bookSlug: "the-art-of-mindful-living", rating: 4, title: "Life-changing", content: "Practical advice that actually works." },
-    { userId: reader2.id, bookSlug: "kingdom-of-shadows", rating: 4, title: "Fantasy at its best", content: "Couldn't stop reading. Waiting for the sequel!" },
-    { userId: reader1.id, bookSlug: "digital-empire", rating: 5, title: "Inspiring", content: "Must-read for any aspiring entrepreneur." },
-    { userId: reader2.id, bookSlug: "verses-of-the-soul", rating: 5, title: "Poetry that moves", content: "Every poem is a masterpiece." },
-  ];
-
-  for (const review of reviewData) {
-    const book = await prisma.book.findUnique({ where: { slug: review.bookSlug } });
-    if (book) {
-      await prisma.review.create({
-        data: {
-          userId: review.userId,
-          bookId: book.id,
-          rating: review.rating,
-          title: review.title,
-          content: review.content,
-          isVerified: true,
-        },
-      });
-    }
-  }
-
-  console.log("✅ Created reviews");
+  console.log("Created books");
 
   // Create blog posts
   for (const post of BLOG_POSTS) {
@@ -534,92 +183,52 @@ async function main() {
         slug: post.slug,
         content: post.content,
         excerpt: post.excerpt,
-        authorId: admin.id,
+        authorId: author1.id,
         category: post.category,
-        tags: post.tags,
-        isPublished: post.isPublished,
-        isFeatured: post.isFeatured ?? false,
+        tags: [post.category.toLowerCase()],
+        isPublished: true,
         publishedAt: new Date(),
       },
     });
   }
 
-  console.log("✅ Created blog posts");
+  console.log("Created blog posts");
 
-  // Create wallets for authors
-  for (const profile of [authorProfile1, authorProfile2, authorProfile3]) {
-    if (profile) {
-      const user = await prisma.user.findUnique({ where: { id: profile.userId } });
-      if (user) {
-        await prisma.wallet.create({
-          data: {
-            userId: user.id,
-            balance: Math.floor(Math.random() * 1000) + 100,
-            totalEarned: Math.floor(Math.random() * 5000) + 500,
-            totalWithdrawn: Math.floor(Math.random() * 500),
-          },
-        });
-      }
-    }
+  // Create some reviews
+  const books = await prisma.book.findMany({ take: 10 });
+  for (const book of books) {
+    await prisma.review.create({
+      data: {
+        userId: reader.id,
+        bookId: book.id,
+        rating: Math.floor(Math.random() * 2) + 4,
+        title: `Great read!`,
+        content: `Really enjoyed "${book.title}". Highly recommend it!`,
+        isVerified: true,
+      },
+    });
   }
 
-  console.log("✅ Created wallets");
+  console.log("Created reviews");
 
-  // Create sample notifications
-  await prisma.notification.createMany({
-    data: [
-      {
-        userId: admin.id,
-        type: "SYSTEM",
-        title: "Welcome to Statement Publications",
-        message: "Your admin account has been set up successfully.",
-        isRead: true,
-      },
-      {
-        userId: author1.id,
-        type: "BOOK_APPROVED",
-        title: "Book Published",
-        message: "Your book 'The Silent Echo' has been approved and is now live.",
-      },
-      {
-        userId: reader1.id,
-        type: "ANNOUNCEMENT",
-        title: "New Releases",
-        message: "Check out the latest books from your favorite authors!",
-      },
-    ],
-  });
+  // Site content
+  await prisma.siteContent.create({ data: { key: "hero_title", value: "Publish Your Story To The World", type: "text" } });
+  await prisma.siteContent.create({ data: { key: "hero_subtitle", value: "Become a Published Author Today", type: "text" } });
+  await prisma.siteContent.create({ data: { key: "about", value: "Statement Publications empowers writers, authors, researchers, educators, and storytellers to publish, distribute, and monetize their works globally.", type: "text" } });
 
-  console.log("✅ Created notifications");
+  console.log("Created site content");
+  console.log("Seeding complete!");
+  console.log("");
+  console.log("Demo Login Credentials:");
+  console.log("Admin:  admin@statementpublications.com / admin123");
+  console.log("Author: sarah.chen@statementpub.com / author123");
+  console.log("Reader: reader@example.com / reader123");
 
-  // Create site content
-  const siteContents = [
-    { key: "hero_title", value: "Every Story Makes A Statement" },
-    { key: "hero_subtitle", value: "Publish your story to the world with Statement Publications." },
-    { key: "about_title", value: "About Statement Publications" },
-    { key: "about_content", value: "Statement Publications is a modern self-publishing platform empowering authors worldwide." },
-    { key: "contact_email", value: "hello@statementpub.com" },
-    { key: "footer_text", value: "© 2025 Statement Publications. All rights reserved." },
-  ];
-
-  for (const content of siteContents) {
-    await prisma.siteContent.create({ data: content });
-  }
-
-  console.log("✅ Created site content");
-
-  console.log("\n🎉 Seed completed successfully!");
-  console.log("\n📧 Login credentials:");
-  console.log("  Admin: admin@statementpublications.com / admin123");
-  console.log("  Author: sarah.chen@statementpub.com / author123");
-  console.log("  Reader: reader@example.com / reader123");
+  await prisma.$disconnect();
 }
 
-main()
-  .catch((e) => {
-    console.error("❌ Seed failed:", e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main().catch((e) => {
+  console.error("Seed failed:", e);
+  prisma.$disconnect();
+  process.exit(1);
+});

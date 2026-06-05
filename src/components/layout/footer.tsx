@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpen, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -54,15 +54,7 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <BookOpen className="h-6 w-6 text-primary" />
-              <div>
-                <span className="text-lg font-bold tracking-tight">
-                  Statement
-                </span>
-                <span className="block text-[10px] leading-tight text-muted-foreground -mt-0.5">
-                  Every Story Makes A Statement
-                </span>
-              </div>
+              <img src="/logo.svg" alt="Statement Publications" className="h-8 w-auto" />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
               A modern publishing platform connecting authors with readers.

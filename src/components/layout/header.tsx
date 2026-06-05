@@ -9,7 +9,6 @@ import {
   X,
   Search,
   User,
-  BookOpen,
   ChevronDown,
   ShoppingBag,
 } from "lucide-react";
@@ -79,15 +78,7 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4 lg:h-20">
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <BookOpen className="h-7 w-7 text-primary" />
-            <div className="hidden sm:block">
-              <span className="text-lg font-bold tracking-tight">
-                Statement
-              </span>
-              <span className="block text-[10px] leading-tight text-muted-foreground -mt-0.5">
-                Every Story Makes A Statement
-              </span>
-            </div>
+            <img src="/logo.svg" alt="Statement Publications" className="h-8 w-auto" />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-1">
@@ -128,14 +119,26 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
 
           <div className="flex items-center gap-2">
             <Link href="/cart" className="relative">
-              <Button variant="ghost" size="icon" className="relative">
-                <ShoppingBag className="h-5 w-5" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
-                    {cartCount > 99 ? "99+" : cartCount}
-                  </span>
-                )}
-              </Button>
+              <motion.div whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="relative bg-[#EBC9A8]/20 hover:bg-[#EBC9A8]/40 transition-all duration-300"
+                  style={{ boxShadow: "0 0 12px 2px rgba(235,201,168,0.3)" }}
+                >
+                  <ShoppingBag className="h-5 w-5 text-[#8A6A4A]" />
+                  {cartCount > 0 && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#D8B27A] text-[10px] font-bold text-[#1D1D1D] shadow-md"
+                    >
+                      {cartCount > 99 ? "99+" : cartCount}
+                    </motion.span>
+                  )}
+                  <span className="absolute inset-0 rounded-lg animate-ping bg-[#EBC9A8]/30" />
+                </Button>
+              </motion.div>
             </Link>
 
             {user ? (
@@ -183,10 +186,10 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
             ) : (
               <div className="hidden sm:flex items-center gap-2">
                 <Button variant="ghost" size="sm" asChild>
-                  <Link href="/auth/signin">Sign In</Link>
+                  <Link href="/login">Sign In</Link>
                 </Button>
                 <Button size="sm" asChild>
-                  <Link href="/auth/signup">Sign Up</Link>
+                  <Link href="/register">Sign Up</Link>
                 </Button>
               </div>
             )}
@@ -247,10 +250,10 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
               {!user && (
                 <div className="flex flex-col gap-2 pt-2 border-t">
                   <Button variant="outline" asChild className="w-full">
-                    <Link href="/auth/signin">Sign In</Link>
+                    <Link href="/login">Sign In</Link>
                   </Button>
                   <Button asChild className="w-full">
-                    <Link href="/auth/signup">Sign Up</Link>
+                    <Link href="/register">Sign Up</Link>
                   </Button>
                 </div>
               )}

@@ -103,6 +103,8 @@ function useCountUp(target: number, duration = 2000) {
   return { count, ref };
 }
 
+const rotatingWords = ["Story", "Vision", "Legacy", "Masterpiece", "Voice", "Dream"];
+
 const features = [
   {
     icon: BookOpen,
@@ -182,8 +184,7 @@ const mockBooks = [
     rating: 4.8,
     reviews: 234,
     price: 14.99,
-    cover: null,
-    color: "from-amber-800 to-amber-600",
+    gradient: "linear-gradient(135deg, #8B4513 0%, #CD853F 60%, #DEB887 100%)",
   },
   {
     id: "2",
@@ -192,8 +193,7 @@ const mockBooks = [
     rating: 4.6,
     reviews: 189,
     price: 12.99,
-    cover: null,
-    color: "from-emerald-800 to-emerald-600",
+    gradient: "linear-gradient(135deg, #065F46 0%, #10B981 60%, #34D399 100%)",
   },
   {
     id: "3",
@@ -202,8 +202,7 @@ const mockBooks = [
     rating: 4.9,
     reviews: 312,
     price: 16.99,
-    cover: null,
-    color: "from-slate-800 to-slate-600",
+    gradient: "linear-gradient(135deg, #1E293B 0%, #475569 60%, #94A3B8 100%)",
   },
   {
     id: "4",
@@ -212,8 +211,7 @@ const mockBooks = [
     rating: 4.7,
     reviews: 156,
     price: 13.99,
-    cover: null,
-    color: "from-rose-800 to-rose-600",
+    gradient: "linear-gradient(135deg, #9F1239 0%, #F43F5E 60%, #FDA4AF 100%)",
   },
   {
     id: "5",
@@ -222,8 +220,7 @@ const mockBooks = [
     rating: 4.5,
     reviews: 278,
     price: 11.99,
-    cover: null,
-    color: "from-violet-800 to-violet-600",
+    gradient: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 40%, #F2D8BE 100%)",
   },
   {
     id: "6",
@@ -232,8 +229,7 @@ const mockBooks = [
     rating: 4.8,
     reviews: 201,
     price: 15.99,
-    cover: null,
-    color: "from-sky-800 to-sky-600",
+    gradient: "linear-gradient(135deg, #1E3A5F 0%, #3B82F6 60%, #93C5FD 100%)",
   },
 ];
 
@@ -339,6 +335,14 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [wordIndex, setWordIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setWordIndex((prev) => (prev + 1) % rotatingWords.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -352,18 +356,19 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/10 rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-primary/5 to-accent/5 rounded-full blur-3xl" />
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-beige via-white to-white">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-peach/20 rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gold/15 rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-peach/10 to-gold/10 rounded-full blur-3xl" />
+        </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border bg-card/50 backdrop-blur-sm px-4 py-1.5 text-sm text-muted-foreground mb-8"
+            className="inline-flex items-center gap-2 rounded-full border border-peach/30 bg-white/60 backdrop-blur-sm px-4 py-1.5 text-sm text-dark-gray mb-8 shadow-sm"
           >
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
             Over 10,000 books published worldwide
@@ -373,9 +378,24 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1]"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] text-charcoal"
           >
-            Publish Your Story
+            Publish Your{" "}
+            <span className="relative inline-flex items-center" style={{ minWidth: "280px", minHeight: "1.2em" }}>
+              <AnimatePresence mode="popLayout">
+                <motion.span
+                  key={wordIndex}
+                  initial={{ y: 50, opacity: 0, rotateX: -90 }}
+                  animate={{ y: 0, opacity: 1, rotateX: 0 }}
+                  exit={{ y: -50, opacity: 0, rotateX: 90 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="absolute left-0 text-gold"
+                  style={{ perspective: "600px" }}
+                >
+                  {rotatingWords[wordIndex]}
+                </motion.span>
+              </AnimatePresence>
+            </span>
             <br />
             <span className="text-gradient">To The World</span>
           </motion.h1>
@@ -384,11 +404,9 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
+            className="mt-8 text-lg sm:text-xl text-dark-gray/80 max-w-2xl mx-auto leading-relaxed"
           >
-            Become a published author today. Statement gives you everything you
-            need to publish, sell, and earn from your books — all in one elegant
-            platform.
+            Become a Published Author Today
           </motion.p>
 
           <motion.div
@@ -397,30 +415,34 @@ export default function Home() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
           >
-            <Button size="lg" className="text-base px-8 h-14" asChild>
-              <Link href="/auth/signup">
-                Start Publishing
-                <ArrowRight className="h-5 w-5 ml-1" />
-              </Link>
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="text-base px-8 h-14"
-              asChild
-            >
-              <Link href="/store">
-                Browse Books
-                <ChevronRight className="h-5 w-5 ml-1" />
-              </Link>
-            </Button>
+            <motion.div whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(235,201,168,0.6)" }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
+              <Button size="lg" className="text-base px-8 h-14 bg-peach text-charcoal hover:bg-peach-dark font-semibold shadow-md" asChild>
+                <Link href="/auth/signup">
+                  Start Publishing
+                  <ArrowRight className="h-5 w-5 ml-1" />
+                </Link>
+              </Button>
+            </motion.div>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
+              <Button
+                variant="outline"
+                size="lg"
+                className="text-base px-8 h-14 border-2 border-peach text-peach hover:bg-peach hover:text-charcoal font-semibold"
+                asChild
+              >
+                <Link href="/store">
+                  Browse Books
+                  <ChevronRight className="h-5 w-5 ml-1" />
+                </Link>
+              </Button>
+            </motion.div>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="mt-16 flex items-center justify-center gap-8 text-sm text-muted-foreground"
+            className="mt-16 flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-sm text-dark-gray/70"
           >
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 text-emerald-500" />
@@ -439,16 +461,16 @@ export default function Home() {
       </section>
 
       {/* ── Features ────────────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-card/30">
+      <section className="py-24 sm:py-32 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-primary uppercase tracking-wider">
+            <span className="text-sm font-semibold text-peach uppercase tracking-wider">
               Everything You Need
             </span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">
+            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               A Platform Built for Authors
             </h2>
-            <p className="mt-4 text-lg text-muted-foreground">
+            <p className="mt-4 text-lg text-dark-gray/70">
               From manuscript to marketplace, we provide every tool you need to
               bring your book to life and share it with the world.
             </p>
@@ -465,13 +487,15 @@ export default function Home() {
               <motion.div
                 key={feature.title}
                 variants={fadeInUp}
-                className="group relative rounded-2xl border bg-card p-8 transition-all duration-300 hover:shadow-lg hover:border-primary/20 hover:-translate-y-1"
+                whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.3)" }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="group relative rounded-2xl border border-peach/10 bg-white p-8 transition-colors duration-300 hover:border-peach/30 shadow-sm"
               >
-                <div className="mb-5 inline-flex items-center justify-center rounded-xl bg-primary/10 p-3">
-                  <feature.icon className="h-6 w-6 text-primary" />
+                <div className="mb-5 inline-flex items-center justify-center rounded-xl bg-peach/15 p-3">
+                  <feature.icon className="h-6 w-6 text-peach" />
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
+                <h3 className="text-lg font-semibold mb-2 text-charcoal">{feature.title}</h3>
+                <p className="text-sm text-dark-gray/70 leading-relaxed">
                   {feature.description}
                 </p>
               </motion.div>
@@ -481,23 +505,23 @@ export default function Home() {
       </section>
 
       {/* ── How It Works ────────────────────────────────── */}
-      <section className="py-24 sm:py-32">
+      <section className="py-24 sm:py-32 bg-[#EBC9A8]/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-primary uppercase tracking-wider">
+            <span className="text-sm font-semibold text-gold uppercase tracking-wider">
               Simple Process
             </span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">
+            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               How It Works
             </h2>
-            <p className="mt-4 text-lg text-muted-foreground">
+            <p className="mt-4 text-lg text-dark-gray/70">
               Five simple steps from manuscript to published author.
             </p>
           </AnimatedSection>
 
           <div className="relative">
             {/* connecting line */}
-            <div className="hidden lg:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-primary/20 via-primary/40 to-primary/20" />
+            <div className="hidden lg:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-peach/20 via-gold/50 to-peach/20" />
 
             <motion.div
               initial="hidden"
@@ -510,16 +534,18 @@ export default function Home() {
                 <motion.div
                   key={step.title}
                   variants={fadeInUp}
+                  whileHover={{ y: -4 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   className="relative text-center"
                 >
-                  <div className="relative z-10 mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full border-2 border-primary bg-background text-primary font-bold text-lg">
+                  <div className="relative z-10 mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full border-2 border-gold bg-white text-gold font-bold text-lg shadow-sm">
                     {index + 1}
                   </div>
-                  <div className="mb-3 inline-flex items-center justify-center rounded-xl bg-primary/10 p-2.5">
-                    <step.icon className="h-5 w-5 text-primary" />
+                  <div className="mb-3 inline-flex items-center justify-center rounded-xl bg-gold/15 p-2.5">
+                    <step.icon className="h-5 w-5 text-gold" />
                   </div>
-                  <h3 className="text-base font-semibold mb-1">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <h3 className="text-base font-semibold mb-1 text-charcoal">{step.title}</h3>
+                  <p className="text-sm text-dark-gray/70 leading-relaxed">
                     {step.description}
                   </p>
                 </motion.div>
@@ -530,23 +556,25 @@ export default function Home() {
       </section>
 
       {/* ── Popular Books ───────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-card/30">
+      <section className="py-24 sm:py-32 bg-charcoal">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="flex items-end justify-between mb-12">
             <div>
-              <span className="text-sm font-semibold text-primary uppercase tracking-wider">
+              <span className="text-sm font-semibold text-gold uppercase tracking-wider">
                 Discover
               </span>
-              <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">
+              <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-white">
                 Popular Books
               </h2>
             </div>
-            <Button variant="outline" className="hidden sm:inline-flex" asChild>
-              <Link href="/store">
-                View All
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </Link>
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
+              <Button variant="outline" className="hidden sm:inline-flex border-gold/30 text-gold hover:bg-gold hover:text-charcoal" asChild>
+                <Link href="/store">
+                  View All
+                  <ArrowRight className="h-4 w-4 ml-1" />
+                </Link>
+              </Button>
+            </motion.div>
           </AnimatedSection>
 
           <div
@@ -560,66 +588,85 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -6 }}
                 transition={{ duration: 0.3 }}
                 className="min-w-[220px] sm:min-w-[260px] snap-start"
               >
-                <div className="group relative overflow-hidden rounded-xl border bg-card transition-all duration-300 hover:shadow-lg hover:border-primary/20">
+                <motion.div
+                  whileHover={{ y: -10, boxShadow: "0 20px 40px -15px rgba(216,178,122,0.3)" }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 transition-colors duration-300 hover:border-gold/30"
+                >
                   <div
-                    className={cn(
-                      "aspect-[3/4] bg-gradient-to-br",
-                      book.color,
-                      "flex items-center justify-center"
-                    )}
+                    className="aspect-[3/4] flex items-center justify-center relative"
+                    style={{ background: book.gradient }}
                   >
-                    <BookOpen className="h-16 w-16 text-white/30" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                    <BookOpen className="h-16 w-16 text-white/25" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                    <div className="absolute top-3 right-3">
+                      <div className="flex items-center gap-1 rounded-full bg-black/30 backdrop-blur-sm px-2 py-1">
+                        <Star className="h-3 w-3 fill-gold text-gold" />
+                        <span className="text-xs font-medium text-white">{book.rating}</span>
+                      </div>
+                    </div>
                     <div className="absolute bottom-3 left-3 right-3">
-                      <h3 className="text-sm font-bold text-white line-clamp-2">
+                      <h3 className="text-sm font-bold text-white line-clamp-2 drop-shadow-md">
                         {book.title}
                       </h3>
                     </div>
                   </div>
                   <div className="p-3.5 space-y-1.5">
-                    <p className="text-xs text-muted-foreground truncate">
+                    <p className="text-xs text-white/60 truncate">
                       {book.author}
                     </p>
-                    <div className="flex items-center gap-1">
-                      <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
-                      <span className="text-xs font-medium">{book.rating}</span>
-                      <span className="text-[10px] text-muted-foreground">
-                        ({book.reviews})
-                      </span>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className={cn(
+                              "h-3 w-3",
+                              i < Math.round(book.rating)
+                                ? "fill-gold text-gold"
+                                : "text-white/20"
+                            )}
+                          />
+                        ))}
+                        <span className="text-[10px] text-white/40 ml-1">
+                          ({book.reviews})
+                        </span>
+                      </div>
+                      <p className="text-sm font-bold text-gold">${book.price}</p>
                     </div>
-                    <p className="text-sm font-bold">${book.price}</p>
                   </div>
-                </div>
+                </motion.div>
               </motion.div>
             ))}
           </div>
 
           <div className="mt-6 text-center sm:hidden">
-            <Button variant="outline" asChild>
-              <Link href="/store">
-                View All Books
-                <ArrowRight className="h-4 w-4 ml-1" />
-              </Link>
-            </Button>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
+              <Button variant="outline" className="border-gold/30 text-gold hover:bg-gold hover:text-charcoal" asChild>
+                <Link href="/store">
+                  View All Books
+                  <ArrowRight className="h-4 w-4 ml-1" />
+                </Link>
+              </Button>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* ── Featured Authors ────────────────────────────── */}
-      <section className="py-24 sm:py-32">
+      <section className="py-24 sm:py-32 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-primary uppercase tracking-wider">
+            <span className="text-sm font-semibold text-peach uppercase tracking-wider">
               Meet Our Authors
             </span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">
+            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               Featured Authors
             </h2>
-            <p className="mt-4 text-lg text-muted-foreground">
+            <p className="mt-4 text-lg text-dark-gray/70">
               Talented writers who chose Statement to bring their stories to the world.
             </p>
           </AnimatedSection>
@@ -635,8 +682,9 @@ export default function Home() {
               <motion.div
                 key={author.name}
                 variants={fadeInUp}
-                whileHover={{ y: -4 }}
-                className="group rounded-2xl border bg-card p-6 text-center transition-all duration-300 hover:shadow-lg hover:border-primary/20"
+                whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.3)" }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="group rounded-2xl border border-peach/10 bg-white p-6 text-center transition-colors duration-300 hover:border-peach/30 shadow-sm"
               >
                 <div
                   className={cn(
@@ -649,27 +697,29 @@ export default function Home() {
                     .map((n) => n[0])
                     .join("")}
                 </div>
-                <h3 className="font-semibold text-lg">{author.name}</h3>
-                <div className="mt-1 flex items-center justify-center gap-1 text-sm text-muted-foreground">
-                  <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                <h3 className="font-semibold text-lg text-charcoal">{author.name}</h3>
+                <div className="mt-1 flex items-center justify-center gap-1 text-sm text-dark-gray/70">
+                  <Star className="h-3.5 w-3.5 fill-gold text-gold" />
                   <span>{author.rating}</span>
                   <span className="text-xs">·</span>
                   <span>{author.books} books</span>
                 </div>
-                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
+                <p className="mt-3 text-sm text-dark-gray/70 leading-relaxed">
                   {author.bio}
                 </p>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="mt-4 text-primary"
-                  asChild
-                >
-                  <Link href={`/store?author=${encodeURIComponent(author.name)}`}>
-                    View Books
-                    <ArrowRight className="h-3.5 w-3.5 ml-1" />
-                  </Link>
-                </Button>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} className="mt-4">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-peach hover:text-peach-dark hover:bg-peach/10"
+                    asChild
+                  >
+                    <Link href={`/store?author=${encodeURIComponent(author.name)}`}>
+                      View Books
+                      <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                    </Link>
+                  </Button>
+                </motion.div>
               </motion.div>
             ))}
           </motion.div>
@@ -677,14 +727,14 @@ export default function Home() {
       </section>
 
       {/* ── Statistics ──────────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-gradient-to-br from-charcoal to-dark-gray text-white relative overflow-hidden">
+      <section className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               Trusted by Authors Worldwide
             </h2>
-            <p className="mt-4 text-lg text-white/60">
+            <p className="mt-4 text-lg text-charcoal/60">
               Our growing community is making an impact.
             </p>
           </AnimatedSection>
@@ -693,21 +743,26 @@ export default function Home() {
             {stats.map((stat) => {
               const { count, ref } = useCountUp(stat.value);
               return (
-                <div
+                <motion.div
                   key={stat.label}
                   ref={ref}
-                  className="text-center"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className="text-center rounded-2xl bg-white/30 backdrop-blur-sm p-6 shadow-sm"
                 >
-                  <div className="inline-flex items-center justify-center rounded-2xl bg-white/10 p-3 mb-4">
-                    <stat.icon className="h-6 w-6 text-primary" />
+                  <div className="inline-flex items-center justify-center rounded-2xl bg-charcoal/10 p-3 mb-4">
+                    <stat.icon className="h-6 w-6 text-charcoal" />
                   </div>
-                  <div className="text-3xl sm:text-4xl font-bold text-white">
+                  <div className="text-3xl sm:text-4xl font-bold text-charcoal">
                     {stat.prefix || ""}
                     {count.toLocaleString()}
                     {stat.suffix}
                   </div>
-                  <p className="mt-1 text-sm text-white/60">{stat.label}</p>
-                </div>
+                  <p className="mt-1 text-sm text-charcoal/60">{stat.label}</p>
+                </motion.div>
               );
             })}
           </div>
@@ -715,16 +770,16 @@ export default function Home() {
       </section>
 
       {/* ── Testimonials ────────────────────────────────── */}
-      <section className="py-24 sm:py-32">
+      <section className="py-24 sm:py-32 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-primary uppercase tracking-wider">
+            <span className="text-sm font-semibold text-peach uppercase tracking-wider">
               Testimonials
             </span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">
+            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               Loved by Authors
             </h2>
-            <p className="mt-4 text-lg text-muted-foreground">
+            <p className="mt-4 text-lg text-dark-gray/70">
               Hear from writers who turned their manuscripts into published books.
             </p>
           </AnimatedSection>
@@ -740,10 +795,12 @@ export default function Home() {
               <motion.div
                 key={testimonial.name}
                 variants={fadeInUp}
-                className="group relative rounded-2xl border bg-card p-8 transition-all duration-300 hover:shadow-lg hover:border-primary/20"
+                whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.25)" }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="group relative rounded-2xl border border-peach/10 bg-white p-8 transition-colors duration-300 hover:border-peach/30 shadow-sm"
               >
-                <Quote className="h-8 w-8 text-primary/20 mb-4" />
-                <p className="text-sm leading-relaxed text-muted-foreground">
+                <Quote className="h-8 w-8 text-peach/30 mb-4" />
+                <p className="text-sm leading-relaxed text-dark-gray/70">
                   &ldquo;{testimonial.quote}&rdquo;
                 </p>
                 <div className="mt-6 flex items-center gap-3">
@@ -759,8 +816,8 @@ export default function Home() {
                       .join("")}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold">{testimonial.name}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-sm font-semibold text-charcoal">{testimonial.name}</p>
+                    <p className="text-xs text-dark-gray/60">
                       {testimonial.role}
                     </p>
                   </div>
@@ -769,7 +826,7 @@ export default function Home() {
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star
                       key={i}
-                      className="h-3.5 w-3.5 fill-amber-400 text-amber-400"
+                      className="h-3.5 w-3.5 fill-gold text-gold"
                     />
                   ))}
                 </div>
@@ -780,13 +837,13 @@ export default function Home() {
       </section>
 
       {/* ── FAQ ─────────────────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-card/30">
+      <section className="py-24 sm:py-32 bg-light-gray">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-12">
-            <span className="text-sm font-semibold text-primary uppercase tracking-wider">
+            <span className="text-sm font-semibold text-gold uppercase tracking-wider">
               FAQ
             </span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight">
+            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               Frequently Asked Questions
             </h2>
           </AnimatedSection>
@@ -797,12 +854,12 @@ export default function Home() {
                 <AccordionItem
                   key={index}
                   value={`faq-${index}`}
-                  className="rounded-xl border bg-card px-5 data-[state=open]:shadow-sm"
+                  className="rounded-xl border border-peach/10 bg-white px-5 data-[state=open]:shadow-sm data-[state=open]:border-peach/20 transition-colors"
                 >
-                  <AccordionTrigger className="text-left text-sm sm:text-base font-medium py-5 hover:no-underline hover:text-primary">
+                  <AccordionTrigger className="text-left text-sm sm:text-base font-medium py-5 hover:no-underline hover:text-peach">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-sm text-muted-foreground leading-relaxed pb-5">
+                  <AccordionContent className="text-sm text-dark-gray/70 leading-relaxed pb-5">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -813,19 +870,19 @@ export default function Home() {
       </section>
 
       {/* ── Newsletter ──────────────────────────────────── */}
-      <section className="py-24 sm:py-32">
+      <section className="py-24 sm:py-32 bg-charcoal">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection>
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-primary/10 via-primary/5 to-accent/10 border p-8 sm:p-12 lg:p-16">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/5 via-white/[0.02] to-white/5 border border-white/10 p-8 sm:p-12 lg:p-16">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
               <div className="relative z-10 max-w-2xl mx-auto text-center">
-                <div className="inline-flex items-center justify-center rounded-2xl bg-primary/10 p-3 mb-6">
-                  <Mail className="h-6 w-6 text-primary" />
+                <div className="inline-flex items-center justify-center rounded-2xl bg-gold/15 p-3 mb-6">
+                  <Mail className="h-6 w-6 text-gold" />
                 </div>
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
                   Stay in the Loop
                 </h2>
-                <p className="mt-3 text-muted-foreground">
+                <p className="mt-3 text-white/60">
                   Get the latest books, author stories, and platform updates
                   delivered straight to your inbox. No spam, ever.
                 </p>
@@ -838,13 +895,15 @@ export default function Home() {
                     placeholder="Enter your email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-12 bg-background border-0 shadow-sm"
+                    className="h-12 bg-white/10 border-white/10 text-white placeholder:text-white/40 focus:border-gold focus:ring-gold/20"
                     required
                   />
-                  <Button type="submit" size="lg" className="h-12 shrink-0">
-                    Subscribe
-                    <ArrowRight className="h-4 w-4 ml-1" />
-                  </Button>
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
+                    <Button type="submit" size="lg" className="h-12 shrink-0 bg-gold text-charcoal hover:bg-peach-dark font-semibold shadow-md">
+                      Subscribe
+                      <ArrowRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </motion.div>
                 </form>
                 <AnimatePresence>
                   {subscribed && (
@@ -852,13 +911,13 @@ export default function Home() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      className="mt-4 text-sm text-emerald-600 font-medium"
+                      className="mt-4 text-sm text-emerald-400 font-medium"
                     >
                       Thanks for subscribing! Check your inbox for a welcome email.
                     </motion.p>
                   )}
                 </AnimatePresence>
-                <p className="mt-3 text-xs text-muted-foreground">
+                <p className="mt-3 text-xs text-white/40">
                   Join 5,000+ readers and authors. Unsubscribe anytime.
                 </p>
               </div>
@@ -868,42 +927,46 @@ export default function Home() {
       </section>
 
       {/* ── CTA Banner ──────────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-gradient-to-br from-charcoal to-dark-gray text-white relative overflow-hidden">
+      <section className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
         <div className="absolute inset-0">
-          <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
+          <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-white/15 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gold/10 rounded-full blur-3xl" />
         </div>
         <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-charcoal">
               Ready to Share Your Story?
             </h2>
-            <p className="mt-6 text-lg text-white/70 max-w-2xl mx-auto">
+            <p className="mt-6 text-lg text-charcoal/70 max-w-2xl mx-auto">
               Join thousands of authors who chose Statement to publish their
               books. Start your publishing journey today — it&apos;s free.
             </p>
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button
-                size="lg"
-                className="text-base px-8 h-14 bg-primary text-primary-foreground hover:bg-primary/90"
-                asChild
-              >
-                <Link href="/auth/signup">
-                  Get Started for Free
-                  <ArrowRight className="h-5 w-5 ml-1" />
-                </Link>
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="text-base px-8 h-14 border-white/20 text-white hover:bg-white/10"
-                asChild
-              >
-                <Link href="/services">
-                  Learn More
-                  <ChevronRight className="h-5 w-5 ml-1" />
-                </Link>
-              </Button>
+              <motion.div whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(29,29,29,0.4)" }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
+                <Button
+                  size="lg"
+                  className="text-base px-8 h-14 bg-charcoal text-white hover:bg-dark-gray font-semibold shadow-lg"
+                  asChild
+                >
+                  <Link href="/auth/signup">
+                    Get Started for Free
+                    <ArrowRight className="h-5 w-5 ml-1" />
+                  </Link>
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="text-base px-8 h-14 border-2 border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white font-semibold"
+                  asChild
+                >
+                  <Link href="/services">
+                    Learn More
+                    <ChevronRight className="h-5 w-5 ml-1" />
+                  </Link>
+                </Button>
+              </motion.div>
             </div>
           </AnimatedSection>
         </div>

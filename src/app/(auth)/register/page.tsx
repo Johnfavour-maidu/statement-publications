@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { BookOpen, Eye, EyeOff, Mail, Lock, User, PenLine, BookOpenCheck } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, PenLine, BookOpenCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,13 +39,7 @@ export default function RegisterPage() {
     >
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-2 mb-4">
-          <BookOpen className="h-8 w-8 text-primary" />
-          <div>
-            <span className="text-xl font-bold tracking-tight">Statement</span>
-            <span className="block text-[10px] leading-tight text-muted-foreground -mt-0.5">
-              Every Story Makes A Statement
-            </span>
-          </div>
+          <img src="/logo.svg" alt="Statement Publications" className="h-10 w-auto" />
         </Link>
         <h1 className="text-2xl font-bold tracking-tight">Create an account</h1>
         <p className="text-sm text-muted-foreground mt-1">
@@ -53,7 +47,15 @@ export default function RegisterPage() {
         </p>
       </div>
 
-      <div className="rounded-xl border bg-card p-6 shadow-sm space-y-6">
+      <div
+        className="rounded-2xl p-6 shadow-sm space-y-6"
+        style={{
+          background: "rgba(255,255,255,0.7)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+          border: "1px solid rgba(255,255,255,0.4)",
+        }}
+      >
         <div className="grid grid-cols-2 gap-3">
           <Button variant="outline" className="w-full" type="button">
             <svg className="h-4 w-4 mr-2" viewBox="0 0 24 24">
@@ -74,7 +76,7 @@ export default function RegisterPage() {
 
         <div className="relative">
           <Separator />
-          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-card px-2 text-xs text-muted-foreground">
+          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs text-muted-foreground" style={{ background: "rgba(255,255,255,0.7)" }}>
             or sign up with email
           </span>
         </div>
@@ -89,11 +91,11 @@ export default function RegisterPage() {
                 className={cn(
                   "flex items-center gap-3 rounded-lg border p-4 text-left transition-all",
                   role === "READER"
-                    ? "border-primary bg-primary/10"
+                    ? "border-[#EBC9A8] bg-[#EBC9A8]/15"
                     : "hover:border-foreground/20"
                 )}
               >
-                <BookOpenCheck className={cn("h-5 w-5", role === "READER" ? "text-primary" : "text-muted-foreground")} />
+                <BookOpenCheck className={cn("h-5 w-5", role === "READER" ? "text-[#8A6A4A]" : "text-muted-foreground")} />
                 <div>
                   <p className="text-sm font-medium">Read</p>
                   <p className="text-xs text-muted-foreground">Browse & buy books</p>
@@ -105,11 +107,11 @@ export default function RegisterPage() {
                 className={cn(
                   "flex items-center gap-3 rounded-lg border p-4 text-left transition-all",
                   role === "AUTHOR"
-                    ? "border-primary bg-primary/10"
+                    ? "border-[#EBC9A8] bg-[#EBC9A8]/15"
                     : "hover:border-foreground/20"
                 )}
               >
-                <PenLine className={cn("h-5 w-5", role === "AUTHOR" ? "text-primary" : "text-muted-foreground")} />
+                <PenLine className={cn("h-5 w-5", role === "AUTHOR" ? "text-[#8A6A4A]" : "text-muted-foreground")} />
                 <div>
                   <p className="text-sm font-medium">Write</p>
                   <p className="text-xs text-muted-foreground">Publish & earn</p>
@@ -201,11 +203,11 @@ export default function RegisterPage() {
             />
             <label htmlFor="terms" className="text-sm text-muted-foreground">
               I agree to the{" "}
-              <Link href="/terms" className="text-primary hover:underline">
+              <Link href="/terms" className="text-[#8A6A4A] hover:underline">
                 Terms of Service
               </Link>{" "}
               and{" "}
-              <Link href="/privacy" className="text-primary hover:underline">
+              <Link href="/privacy" className="text-[#8A6A4A] hover:underline">
                 Privacy Policy
               </Link>
             </label>
@@ -222,7 +224,7 @@ export default function RegisterPage() {
 
         <p className="text-center text-sm text-muted-foreground">
           Already have an account?{" "}
-          <Link href="/auth/login" className="text-primary font-medium hover:underline">
+          <Link href="/login" className="text-[#8A6A4A] font-medium hover:underline">
             Sign in
           </Link>
         </p>

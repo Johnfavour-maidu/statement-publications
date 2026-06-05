@@ -38,6 +38,11 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Statement Publications" }],
   creator: "Statement Publications",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
