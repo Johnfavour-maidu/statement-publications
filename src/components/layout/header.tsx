@@ -4,23 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Menu,
-  X,
-  Search,
-  User,
-  ChevronDown,
-  ShoppingBag,
-} from "lucide-react";
+import { Menu, X, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -43,42 +28,22 @@ interface HeaderProps {
 
 export function Header({ user, cartCount = 0 }: HeaderProps) {
   const pathname = usePathname();
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      window.location.href = `/store?search=${encodeURIComponent(searchQuery.trim())}`;
-    }
-  };
-
   return (
-    <header
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
-        isScrolled
-          ? "bg-background/80 backdrop-blur-xl border-b shadow-sm"
-          : "bg-transparent"
-      )}
-    >
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#FDF6EE]/95 backdrop-blur-md shadow-sm">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between gap-4 lg:h-20">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <img src="/logo.svg" alt="Statement Publications" className="h-8 w-auto" />
+        <div className="flex h-16 items-center justify-between lg:h-20">
+          <Link href="/" className="flex items-center shrink-0">
+            <img
+              src="/logo.svg"
+              alt="Statement Publications"
+              className="h-10"
+            />
           </Link>
 
           <nav className="hidden lg:flex items-center gap-1">
@@ -87,17 +52,17 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "relative px-3 py-2 text-sm font-medium rounded-lg transition-colors",
+                  "relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200",
                   pathname === link.href
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                    ? "text-brown"
+                    : "text-dark-gray hover:text-brown hover:bg-peach/10"
                 )}
               >
                 {link.label}
                 {pathname === link.href && (
                   <motion.div
                     layoutId="activeNav"
-                    className="absolute inset-0 rounded-lg bg-primary/10"
+                    className="absolute inset-0 rounded-lg bg-peach/20"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
@@ -105,90 +70,42 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
             ))}
           </nav>
 
-          <div className="hidden md:flex flex-1 max-w-xs">
-            <form onSubmit={handleSearch} className="w-full relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search books..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 h-9 bg-muted/50 border-0 focus-visible:ring-1"
-              />
-            </form>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Link href="/cart" className="relative">
-              <motion.div whileHover={{ scale: 1.08 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="relative bg-[#EBC9A8]/20 hover:bg-[#EBC9A8]/40 transition-all duration-300"
-                  style={{ boxShadow: "0 0 12px 2px rgba(235,201,168,0.3)" }}
-                >
-                  <ShoppingBag className="h-5 w-5 text-[#8A6A4A]" />
+          <div className="flex items-center gap-3">
+            <Link href="/books">
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <div className="relative flex items-center justify-center h-10 w-10 rounded-full bg-peach/20 hover:bg-peach/40 transition-all duration-300 cursor-pointer">
+                  <ShoppingBag className="h-5 w-5 text-brown" />
                   {cartCount > 0 && (
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
-                      className="absolute -top-1.5 -right-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#D8B27A] text-[10px] font-bold text-[#1D1D1D] shadow-md"
+                      className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-[10px] font-bold text-charcoal shadow-md"
                     >
                       {cartCount > 99 ? "99+" : cartCount}
                     </motion.span>
                   )}
-                  <span className="absolute inset-0 rounded-lg animate-ping bg-[#EBC9A8]/30" />
-                </Button>
+                </div>
               </motion.div>
             </Link>
 
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="gap-2 pl-2">
-                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center overflow-hidden">
-                      {user.image ? (
-                        <img
-                          src={user.image}
-                          alt={user.name || "User"}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        <User className="h-4 w-4 text-primary" />
-                      )}
-                    </div>
-                    <span className="hidden lg:inline text-sm font-medium truncate max-w-[120px]">
-                      {user.name || "User"}
-                    </span>
-                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <div className="px-2 py-1.5">
-                    <p className="text-sm font-medium">{user.name}</p>
-                    <p className="text-xs text-muted-foreground">{user.email}</p>
-                  </div>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard">Dashboard</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard/profile">Profile</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="/dashboard/orders">Orders</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="/api/auth/signout">Sign Out</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
+            {!user && (
               <div className="hidden sm:flex items-center gap-2">
-                <Button variant="ghost" size="sm" asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-dark-gray hover:text-brown hover:bg-peach/10"
+                  asChild
+                >
                   <Link href="/login">Sign In</Link>
                 </Button>
-                <Button size="sm" asChild>
+                <Button
+                  size="sm"
+                  className="bg-peach text-charcoal hover:bg-peach-dark transition-colors duration-200"
+                  asChild
+                >
                   <Link href="/register">Sign Up</Link>
                 </Button>
               </div>
@@ -213,22 +130,22 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-            className="lg:hidden border-t bg-background/95 backdrop-blur-xl"
+            initial={{ opacity: 0, x: "100%" }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: "100%" }}
+            transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+            className="fixed inset-y-0 right-0 w-72 bg-[#FDF6EE] shadow-xl z-50 lg:hidden"
           >
-            <div className="mx-auto max-w-7xl px-4 py-4 space-y-3">
-              <form onSubmit={handleSearch} className="relative md:hidden">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search books..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9"
-                />
-              </form>
+            <div className="flex flex-col h-full p-6">
+              <div className="flex justify-end mb-8">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              </div>
 
               <nav className="flex flex-col gap-1">
                 {navLinks.map((link) => (
@@ -236,10 +153,10 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                      "rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
+                      "rounded-lg px-4 py-3 text-sm font-medium transition-colors duration-200",
                       pathname === link.href
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                        ? "bg-peach/20 text-brown"
+                        : "text-dark-gray hover:bg-peach/10 hover:text-brown"
                     )}
                   >
                     {link.label}
@@ -248,11 +165,18 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
               </nav>
 
               {!user && (
-                <div className="flex flex-col gap-2 pt-2 border-t">
-                  <Button variant="outline" asChild className="w-full">
+                <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-peach/30">
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="w-full border-peach text-brown hover:bg-peach/10"
+                  >
                     <Link href="/login">Sign In</Link>
                   </Button>
-                  <Button asChild className="w-full">
+                  <Button
+                    asChild
+                    className="w-full bg-peach text-charcoal hover:bg-peach-dark"
+                  >
                     <Link href="/register">Sign Up</Link>
                   </Button>
                 </div>
