@@ -223,39 +223,39 @@ const steps = [
 const mockBooks = [
   {
     id: "1",
-    title: "The Silent Garden",
-    author: "Amara Osei",
+    title: "Financial Freedom Unleashed",
+    author: "Sarah Mitchell",
     rating: 4.8,
     reviews: 234,
     price: 14.99,
-    cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop",
+    cover: "/cover1.jpg",
   },
   {
     id: "2",
-    title: "Echoes of Tomorrow",
-    author: "Kofi Mensah",
+    title: "Explore Your Creative Mind to Positivity",
+    author: "Rotyen Mercado",
     rating: 4.6,
     reviews: 189,
     price: 12.99,
-    cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=600&fit=crop",
+    cover: "/cover2.webp",
   },
   {
     id: "3",
-    title: "Whispers in the Dark",
-    author: "Nana Agyeman",
+    title: "Made to Impress",
+    author: "Andrew Cris",
     rating: 4.9,
     reviews: 312,
     price: 16.99,
-    cover: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=600&fit=crop",
+    cover: "/cover3.webp",
   },
   {
     id: "4",
-    title: "The Last Horizon",
-    author: "Akosua Boateng",
+    title: "The Mind of a Leader",
+    author: "Kevin Anderson",
     rating: 4.7,
     reviews: 156,
     price: 13.99,
-    cover: "https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=400&h=600&fit=crop",
+    cover: "/cover4.webp",
   },
   {
     id: "5",
@@ -264,7 +264,7 @@ const mockBooks = [
     rating: 4.5,
     reviews: 278,
     price: 11.99,
-    cover: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400&h=600&fit=crop",
+    cover: "/cover5.webp",
   },
   {
     id: "6",
@@ -273,7 +273,16 @@ const mockBooks = [
     rating: 4.8,
     reviews: 201,
     price: 15.99,
-    cover: "https://images.unsplash.com/photo-1476275466078-4007374efbbe?w=400&h=600&fit=crop",
+    cover: "/cover6.webp",
+  },
+  {
+    id: "7",
+    title: "Echoes of Tomorrow",
+    author: "Kofi Mensah",
+    rating: 4.6,
+    reviews: 189,
+    price: 12.99,
+    cover: "/cover7.webp",
   },
 ];
 
@@ -284,6 +293,7 @@ const featuredAuthors = [
     bio: "Award-winning author of contemporary fiction exploring identity and belonging.",
     rating: 4.8,
     color: "from-amber-500 to-orange-600",
+    border: "border-amber-300",
   },
   {
     name: "Kofi Mensah",
@@ -291,6 +301,7 @@ const featuredAuthors = [
     bio: "Sci-fi visionary crafting stories about technology and humanity.",
     rating: 4.6,
     color: "from-emerald-500 to-teal-600",
+    border: "border-emerald-300",
   },
   {
     name: "Nana Agyeman",
@@ -298,6 +309,7 @@ const featuredAuthors = [
     bio: "Bestselling thriller writer with a passion for suspense and mystery.",
     rating: 4.9,
     color: "from-blue-500 to-indigo-600",
+    border: "border-blue-300",
   },
   {
     name: "Akosua Boateng",
@@ -305,6 +317,7 @@ const featuredAuthors = [
     bio: "Poet and storyteller weaving West African folklore into modern narratives.",
     rating: 4.7,
     color: "from-rose-500 to-pink-600",
+    border: "border-rose-300",
   },
 ];
 
@@ -459,7 +472,7 @@ export default function Home() {
               className="mt-8 flex flex-wrap items-center gap-4"
             >
               <Link
-                href="/auth/signup"
+                href="/register"
                 className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal transition-all hover:shadow-lg"
                 style={{ fontFamily: "var(--font-libre)", backgroundColor: "#EBC9A8" }}
               >
@@ -668,7 +681,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="p-3.5 space-y-1.5">
-                    <p className="text-xs text-dark-gray/70 truncate">
+                    <p className="text-xs text-charcoal truncate font-medium">
                       {book.author}
                     </p>
                     <div className="flex items-center justify-between">
@@ -679,16 +692,16 @@ export default function Home() {
                             className={cn(
                               "h-3 w-3",
                               i < Math.round(book.rating)
-                                ? "fill-gold text-gold"
+                                ? "fill-yellow-400 text-yellow-400"
                                 : "text-charcoal/20"
                             )}
                           />
                         ))}
-                        <span className="text-[10px] text-dark-gray/50 ml-1">
+                        <span className="text-[10px] text-charcoal/60 ml-1">
                           ({book.reviews})
                         </span>
                       </div>
-                      <p className="text-sm font-bold text-[#8A6A4A]">${book.price}</p>
+                      <p className="text-sm font-bold text-charcoal">${book.price}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -737,7 +750,7 @@ export default function Home() {
                 variants={fadeInUp}
                 whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.3)" }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="group rounded-2xl border border-peach/10 bg-white p-6 text-center transition-colors duration-300 hover:border-peach/30 shadow-sm"
+                className={`group rounded-2xl border bg-white p-6 text-center transition-colors duration-300 shadow-sm ${author.border}`}
               >
                 <div
                   className={cn(
@@ -793,8 +806,15 @@ export default function Home() {
           </AnimatedSection>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat) => {
+            {stats.map((stat, index) => {
               const { count, ref } = useCountUp(stat.value);
+              const colors = [
+                { bg: "bg-amber-100", icon: "text-amber-700", box: "bg-amber-200" },
+                { bg: "bg-emerald-100", icon: "text-emerald-700", box: "bg-emerald-200" },
+                { bg: "bg-blue-100", icon: "text-blue-700", box: "bg-blue-200" },
+                { bg: "bg-rose-100", icon: "text-rose-700", box: "bg-rose-200" },
+              ];
+              const c = colors[index % colors.length];
               return (
                 <motion.div
                   key={stat.label}
@@ -804,10 +824,10 @@ export default function Home() {
                   viewport={{ once: true }}
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className="text-center rounded-2xl bg-white/30 backdrop-blur-sm p-6 shadow-sm"
+                  className={`text-center rounded-2xl p-6 shadow-sm ${c.bg}`}
                 >
-                  <div className="inline-flex items-center justify-center rounded-2xl bg-charcoal/10 p-3 mb-4">
-                    <stat.icon className="h-6 w-6 text-charcoal" />
+                  <div className={`inline-flex items-center justify-center rounded-2xl p-3 mb-4 ${c.box}`}>
+                    <stat.icon className={`h-6 w-6 ${c.icon}`} />
                   </div>
                   <div className="text-3xl sm:text-4xl font-bold text-charcoal">
                     {stat.prefix || ""}
@@ -1001,7 +1021,7 @@ export default function Home() {
                   className="text-base px-8 h-14 bg-charcoal text-white hover:bg-dark-gray font-semibold shadow-lg"
                   asChild
                 >
-                  <Link href="/auth/signup">
+                  <Link href="/register">
                     Get Started for Free
                     <ArrowRight className="h-5 w-5 ml-1" />
                   </Link>

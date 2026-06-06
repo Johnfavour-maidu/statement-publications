@@ -40,7 +40,7 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
         <div className="flex h-16 items-center justify-between lg:h-20">
           <Link href="/" className="flex items-center shrink-0">
             <img
-              src="/logo.svg"
+              src="/logo-new.png"
               alt="Statement Publications"
               className="h-10"
             />
