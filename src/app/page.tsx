@@ -24,7 +24,6 @@ import {
   Users,
   BookMarked,
   CheckCircle2,
-  Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -103,8 +102,6 @@ function useCountUp(target: number, duration = 2000) {
 
   return { count, ref };
 }
-
-const rotatingWords = ["Story", "Vision", "Legacy", "Masterpiece", "Voice", "Dream"];
 
 const features = [
   {
@@ -389,14 +386,6 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [wordIndex, setWordIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setWordIndex((prev) => (prev + 1) % rotatingWords.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
@@ -410,64 +399,48 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-white via-[#FDF6EE] to-[#F5E6D3]">
-        {/* Watercolor brush stroke accents */}
-        <div className="absolute top-0 right-0 w-[60%] h-full opacity-30">
-          <div className="absolute top-10 right-20 w-80 h-80 bg-[#EBC9A8] rounded-full blur-3xl" />
-          <div className="absolute top-1/3 right-10 w-60 h-60 bg-[#D8B27A] rounded-full blur-3xl" />
-          <div className="absolute bottom-20 right-40 w-72 h-72 bg-[#F2D8BE] rounded-full blur-3xl" />
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-beige via-[#F9F0E5] to-white">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-peach/20 rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gold/15 rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
         </div>
 
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            {/* Left side - Text */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7 }}
-              className="text-left"
-            >
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-                className="text-xl sm:text-2xl text-dark-gray/70 italic font-serif mb-2"
-              >
-                Welcome to
-              </motion.p>
-
+            {/* Left — Text */}
+            <div className="text-left">
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold italic font-serif text-charcoal leading-tight"
+                transition={{ duration: 0.6 }}
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] text-charcoal"
               >
-                Statement
+                Welcome to
                 <br />
-                Publications
+                <span className="italic text-charcoal">Statement Publications</span>
               </motion.h1>
 
               <motion.div
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ duration: 0.5, delay: 0.4 }}
-                className="w-24 h-1 bg-[#D8B27A] mt-6 mb-6 origin-left"
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="mt-4 h-1 w-20 bg-peach origin-left"
               />
 
               <motion.p
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.5 }}
-                className="text-xl sm:text-2xl font-semibold text-charcoal mb-4"
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="mt-4 text-lg sm:text-xl font-semibold text-charcoal"
               >
                 Don&apos;t Just Publish, Make a Statement
               </motion.p>
 
               <motion.p
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-                className="text-base sm:text-lg text-dark-gray/70 max-w-md leading-relaxed mb-8"
+                transition={{ duration: 0.6, delay: 0.25 }}
+                className="mt-6 text-base sm:text-lg text-dark-gray/70 max-w-lg leading-relaxed"
               >
                 Empowering independent authors to share their voice and connect with millions of readers across the globe.
               </motion.p>
@@ -475,12 +448,12 @@ export default function Home() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.7 }}
-                className="flex flex-col sm:flex-row items-start gap-4 mb-12"
+                transition={{ duration: 0.6, delay: 0.35 }}
+                className="mt-10 flex flex-col sm:flex-row items-start gap-4"
               >
                 <motion.div whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(235,201,168,0.6)" }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-                  <Button size="lg" className="text-base px-8 h-14 bg-[#EBC9A8] text-charcoal hover:bg-[#D8B27A] font-semibold shadow-md" asChild>
-                    <Link href="/auth/signup">
+                  <Button size="lg" className="text-base px-8 h-14 bg-peach text-charcoal hover:bg-peach-dark font-semibold shadow-md" asChild>
+                    <Link href="/register">
                       Start Publishing
                       <ArrowRight className="h-5 w-5 ml-1" />
                     </Link>
@@ -490,7 +463,7 @@ export default function Home() {
                   <Button
                     variant="outline"
                     size="lg"
-                    className="text-base px-8 h-14 border-2 border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white font-semibold"
+                    className="text-base px-8 h-14 border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-white font-semibold"
                     asChild
                   >
                     <Link href="/books">
@@ -500,67 +473,48 @@ export default function Home() {
                 </motion.div>
               </motion.div>
 
-              {/* Bottom icons */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.9 }}
-                className="grid grid-cols-2 sm:grid-cols-4 gap-6"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+                className="mt-12 flex flex-wrap items-center gap-6 sm:gap-8 text-sm text-dark-gray/70"
               >
-                {[
-                  { icon: BookOpen, label: "Publish\nYour Book" },
-                  { icon: Globe, label: "Reach\nGlobal Readers" },
-                  { icon: DollarSign, label: "Earn\nRoyalties" },
-                  { icon: Heart, label: "Leave Your\nLegacy" },
-                ].map((item, i) => (
-                  <motion.div
-                    key={item.label}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: 1 + i * 0.1 }}
-                    className="flex flex-col items-center text-center"
-                  >
-                    <div className="w-14 h-14 rounded-full bg-[#EBC9A8]/40 flex items-center justify-center mb-2">
-                      <item.icon className="h-6 w-6 text-[#8A6A4A]" />
-                    </div>
-                    <p className="text-xs text-dark-gray/70 whitespace-pre-line leading-tight">
-                      {item.label}
-                    </p>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.div>
-
-            {/* Right side - Artistic Image */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.3 }}
-              className="relative hidden lg:flex items-center justify-center"
-            >
-              <div className="relative w-full max-w-lg">
-                {/* Main artistic image */}
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-                  <img
-                    src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&h=1000&fit=crop"
-                    alt="Statement Publications"
-                    className="w-full h-auto object-cover rounded-3xl"
-                    style={{ maxHeight: "700px" }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#EBC9A8]/30 via-transparent to-transparent" />
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-peach" />
+                  Publish your book
                 </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-peach" />
+                  Reach Global Readers
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-peach" />
+                  Earn Royalties
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-peach" />
+                  Leave Your Legacy
+                </div>
+              </motion.div>
+            </div>
 
-                {/* Floating mug card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 1.2 }}
-                  className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4 max-w-[180px]"
-                >
-                  <p className="text-sm font-serif italic text-charcoal leading-snug">
-                    &ldquo;Every Story Makes A Statement&rdquo;
-                  </p>
-                </motion.div>
+            {/* Right — Image */}
+            <motion.div
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="hidden lg:block relative"
+            >
+              <div className="relative w-full aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=900&h=700&fit=crop"
+                  alt="Author writing"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-peach/30 via-transparent to-transparent" />
+              </div>
+              <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4 border border-peach/20">
+                <p className="text-sm font-semibold text-charcoal italic">&ldquo;Every Story Makes A Statement&rdquo;</p>
               </div>
             </motion.div>
           </div>
