@@ -228,7 +228,7 @@ const mockBooks = [
     rating: 4.8,
     reviews: 234,
     price: 14.99,
-    gradient: "linear-gradient(135deg, #8B4513 0%, #CD853F 60%, #DEB887 100%)",
+    cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop",
   },
   {
     id: "2",
@@ -237,7 +237,7 @@ const mockBooks = [
     rating: 4.6,
     reviews: 189,
     price: 12.99,
-    gradient: "linear-gradient(135deg, #065F46 0%, #10B981 60%, #34D399 100%)",
+    cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=600&fit=crop",
   },
   {
     id: "3",
@@ -246,7 +246,7 @@ const mockBooks = [
     rating: 4.9,
     reviews: 312,
     price: 16.99,
-    gradient: "linear-gradient(135deg, #1E293B 0%, #475569 60%, #94A3B8 100%)",
+    cover: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=600&fit=crop",
   },
   {
     id: "4",
@@ -255,7 +255,7 @@ const mockBooks = [
     rating: 4.7,
     reviews: 156,
     price: 13.99,
-    gradient: "linear-gradient(135deg, #9F1239 0%, #F43F5E 60%, #FDA4AF 100%)",
+    cover: "https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=400&h=600&fit=crop",
   },
   {
     id: "5",
@@ -264,7 +264,7 @@ const mockBooks = [
     rating: 4.5,
     reviews: 278,
     price: 11.99,
-    gradient: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 40%, #F2D8BE 100%)",
+    cover: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=400&h=600&fit=crop",
   },
   {
     id: "6",
@@ -273,7 +273,7 @@ const mockBooks = [
     rating: 4.8,
     reviews: 201,
     price: 15.99,
-    gradient: "linear-gradient(135deg, #1E3A5F 0%, #3B82F6 60%, #93C5FD 100%)",
+    cover: "https://images.unsplash.com/photo-1476275466078-4007374efbbe?w=400&h=600&fit=crop",
   },
 ];
 
@@ -517,7 +517,7 @@ export default function Home() {
       <section className="py-24 sm:py-32 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-peach uppercase tracking-wider">
+            <span className="text-base font-bold uppercase tracking-wider text-[#8A6A4A]">
               Everything You Need
             </span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
@@ -561,7 +561,7 @@ export default function Home() {
       <section className="py-24 sm:py-32 bg-[#EBC9A8]/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-gold uppercase tracking-wider">
+            <span className="text-base font-bold uppercase tracking-wider text-[#8A6A4A]">
               Simple Process
             </span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
@@ -609,19 +609,19 @@ export default function Home() {
       </section>
 
       {/* ── Popular Books ───────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-charcoal">
+      <section className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="flex items-end justify-between mb-12">
             <div>
-              <span className="text-sm font-semibold text-gold uppercase tracking-wider">
+              <span className="text-base font-bold uppercase tracking-wider text-[#8A6A4A]">
                 Discover
               </span>
-              <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-white">
+              <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
                 Popular Books
               </h2>
             </div>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-              <Button variant="outline" className="hidden sm:inline-flex border-gold/30 text-gold hover:bg-gold hover:text-charcoal" asChild>
+              <Button variant="outline" className="hidden sm:inline-flex border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white" asChild>
                 <Link href="/store">
                   View All
                   <ArrowRight className="h-4 w-4 ml-1" />
@@ -647,13 +647,14 @@ export default function Home() {
                 <motion.div
                   whileHover={{ y: -10, boxShadow: "0 20px 40px -15px rgba(216,178,122,0.3)" }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 transition-colors duration-300 hover:border-gold/30"
+                  className="group relative overflow-hidden rounded-xl border border-charcoal/10 bg-white shadow-sm transition-colors duration-300 hover:border-gold/30"
                 >
-                  <div
-                    className="aspect-[3/4] flex items-center justify-center relative"
-                    style={{ background: book.gradient }}
-                  >
-                    <BookOpen className="h-16 w-16 text-white/25" />
+                  <div className="aspect-[3/4] relative overflow-hidden">
+                    <img
+                      src={book.cover}
+                      alt={book.title}
+                      className="h-full w-full object-cover"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                     <div className="absolute top-3 right-3">
                       <div className="flex items-center gap-1 rounded-full bg-black/30 backdrop-blur-sm px-2 py-1">
@@ -668,7 +669,7 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="p-3.5 space-y-1.5">
-                    <p className="text-xs text-white/60 truncate">
+                    <p className="text-xs text-dark-gray/70 truncate">
                       {book.author}
                     </p>
                     <div className="flex items-center justify-between">
@@ -680,15 +681,15 @@ export default function Home() {
                               "h-3 w-3",
                               i < Math.round(book.rating)
                                 ? "fill-gold text-gold"
-                                : "text-white/20"
+                                : "text-charcoal/20"
                             )}
                           />
                         ))}
-                        <span className="text-[10px] text-white/40 ml-1">
+                        <span className="text-[10px] text-dark-gray/50 ml-1">
                           ({book.reviews})
                         </span>
                       </div>
-                      <p className="text-sm font-bold text-gold">${book.price}</p>
+                      <p className="text-sm font-bold text-[#8A6A4A]">${book.price}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -698,7 +699,7 @@ export default function Home() {
 
           <div className="mt-6 text-center sm:hidden">
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-              <Button variant="outline" className="border-gold/30 text-gold hover:bg-gold hover:text-charcoal" asChild>
+              <Button variant="outline" className="border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white" asChild>
                 <Link href="/store">
                   View All Books
                   <ArrowRight className="h-4 w-4 ml-1" />
