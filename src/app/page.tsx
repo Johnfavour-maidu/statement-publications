@@ -111,36 +111,54 @@ const features = [
     title: "Publish Books",
     description:
       "Transform your manuscript into a professionally published book available to readers worldwide.",
+    color: "bg-amber-50",
+    iconColor: "text-amber-600",
+    border: "hover:border-amber-200",
   },
   {
     icon: ShoppingCart,
     title: "Sell Books",
     description:
       "Set your own prices and sell directly to readers through our built-in marketplace.",
+    color: "bg-emerald-50",
+    iconColor: "text-emerald-600",
+    border: "hover:border-emerald-200",
   },
   {
     icon: DollarSign,
     title: "Earn Royalties",
     description:
       "Earn competitive royalties on every sale with transparent, timely payouts.",
+    color: "bg-blue-50",
+    iconColor: "text-blue-600",
+    border: "hover:border-blue-200",
   },
   {
     icon: Globe,
     title: "Reach Global Readers",
     description:
       "Distribute your book across multiple platforms and reach millions of readers worldwide.",
+    color: "bg-rose-50",
+    iconColor: "text-rose-600",
+    border: "hover:border-rose-200",
   },
   {
     icon: LayoutDashboard,
     title: "Author Dashboard",
     description:
       "Track sales, royalties, reviews, and reader engagement from one powerful dashboard.",
+    color: "bg-violet-50",
+    iconColor: "text-violet-600",
+    border: "hover:border-violet-200",
   },
   {
     icon: Layers,
     title: "Digital Distribution",
     description:
       "Publish in multiple formats — eBook, paperback, and hardcover — with automatic distribution.",
+    color: "bg-teal-50",
+    iconColor: "text-teal-600",
+    border: "hover:border-teal-200",
   },
 ];
 
@@ -149,30 +167,45 @@ const steps = [
     icon: Pen,
     title: "Create Account",
     description: "Sign up for free and set up your author profile in minutes.",
+    color: "bg-amber-50",
+    iconColor: "text-amber-600",
+    number: "text-amber-500",
   },
   {
     icon: Upload,
     title: "Upload Manuscript",
     description:
       "Upload your manuscript in any standard format. We accept DOCX, PDF, and more.",
+    color: "bg-emerald-50",
+    iconColor: "text-emerald-600",
+    number: "text-emerald-500",
   },
   {
     icon: Palette,
     title: "Design Your Book",
     description:
       "Choose from professional templates or upload your own cover design.",
+    color: "bg-blue-50",
+    iconColor: "text-blue-600",
+    number: "text-blue-500",
   },
   {
     icon: Rocket,
     title: "Publish",
     description:
       "Review, preview, and hit publish. Your book goes live within 24 hours.",
+    color: "bg-rose-50",
+    iconColor: "text-rose-600",
+    number: "text-rose-500",
   },
   {
     icon: Banknote,
     title: "Earn Royalties",
     description:
       "Start earning competitive royalties on every sale with weekly payouts.",
+    color: "bg-violet-50",
+    iconColor: "text-violet-600",
+    number: "text-violet-500",
   },
 ];
 
@@ -279,6 +312,8 @@ const testimonials = [
       "Statement Publications made publishing my debut novel effortless. The platform is intuitive, the support team is incredible, and I earned my first royalty within the first month.",
     rating: 5,
     color: "from-amber-500 to-orange-600",
+    quoteColor: "text-amber-400",
+    borderHover: "hover:border-amber-200",
   },
   {
     name: "Kwame Poku",
@@ -287,6 +322,8 @@ const testimonials = [
       "I've tried other platforms, but none compare. The author dashboard gives me full visibility into my sales and royalties. The design tools are top-notch.",
     rating: 5,
     color: "from-emerald-500 to-teal-600",
+    quoteColor: "text-emerald-400",
+    borderHover: "hover:border-emerald-200",
   },
   {
     name: "Efua Mensah",
@@ -295,6 +332,8 @@ const testimonials = [
       "From manuscript upload to global distribution, everything was seamless. My book is now available in 30+ countries. I couldn't be happier with the results.",
     rating: 5,
     color: "from-blue-500 to-indigo-600",
+    quoteColor: "text-blue-400",
+    borderHover: "hover:border-blue-200",
   },
 ];
 
@@ -489,10 +528,10 @@ export default function Home() {
                 variants={fadeInUp}
                 whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.3)" }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="group relative rounded-2xl border border-peach/10 bg-white p-8 transition-colors duration-300 hover:border-peach/30 shadow-sm"
+                className={`group relative rounded-2xl border border-peach/10 bg-white p-8 transition-colors duration-300 ${feature.border} shadow-sm`}
               >
-                <div className="mb-5 inline-flex items-center justify-center rounded-xl bg-peach/15 p-3">
-                  <feature.icon className="h-6 w-6 text-peach" />
+                <div className={`mb-5 inline-flex items-center justify-center rounded-xl ${feature.color} p-3`}>
+                  <feature.icon className={`h-6 w-6 ${feature.iconColor}`} />
                 </div>
                 <h3 className="text-lg font-semibold mb-2 text-charcoal">{feature.title}</h3>
                 <p className="text-sm text-dark-gray/70 leading-relaxed">
@@ -538,11 +577,11 @@ export default function Home() {
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   className="relative text-center"
                 >
-                  <div className="relative z-10 mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full border-2 border-gold bg-white text-gold font-bold text-lg shadow-sm">
+                  <div className={`relative z-10 mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full border-2 border-current bg-white ${step.number} font-bold text-lg shadow-sm`}>
                     {index + 1}
                   </div>
-                  <div className="mb-3 inline-flex items-center justify-center rounded-xl bg-gold/15 p-2.5">
-                    <step.icon className="h-5 w-5 text-gold" />
+                  <div className={`mb-3 inline-flex items-center justify-center rounded-xl ${step.color} p-2.5`}>
+                    <step.icon className={`h-5 w-5 ${step.iconColor}`} />
                   </div>
                   <h3 className="text-base font-semibold mb-1 text-charcoal">{step.title}</h3>
                   <p className="text-sm text-dark-gray/70 leading-relaxed">
@@ -797,9 +836,9 @@ export default function Home() {
                 variants={fadeInUp}
                 whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.25)" }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className="group relative rounded-2xl border border-peach/10 bg-white p-8 transition-colors duration-300 hover:border-peach/30 shadow-sm"
+                className={`group relative rounded-2xl border border-peach/10 bg-white p-8 transition-colors duration-300 ${testimonial.borderHover} shadow-sm`}
               >
-                <Quote className="h-8 w-8 text-peach/30 mb-4" />
+                <Quote className={`h-8 w-8 ${testimonial.quoteColor} mb-4`} />
                 <p className="text-sm leading-relaxed text-dark-gray/70">
                   &ldquo;{testimonial.quote}&rdquo;
                 </p>
