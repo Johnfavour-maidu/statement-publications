@@ -24,6 +24,7 @@ import {
   Users,
   BookMarked,
   CheckCircle2,
+  Heart,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -409,107 +410,160 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-beige via-white to-white">
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-peach/20 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gold/15 rounded-full blur-3xl animate-float" style={{ animationDelay: "1.5s" }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-peach/10 to-gold/10 rounded-full blur-3xl" />
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-white via-[#FDF6EE] to-[#F5E6D3]">
+        {/* Watercolor brush stroke accents */}
+        <div className="absolute top-0 right-0 w-[60%] h-full opacity-30">
+          <div className="absolute top-10 right-20 w-80 h-80 bg-[#EBC9A8] rounded-full blur-3xl" />
+          <div className="absolute top-1/3 right-10 w-60 h-60 bg-[#D8B27A] rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-40 w-72 h-72 bg-[#F2D8BE] rounded-full blur-3xl" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 rounded-full border border-peach/30 bg-white/60 backdrop-blur-sm px-4 py-1.5 text-sm text-dark-gray mb-8 shadow-sm"
-          >
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            Over 10,000 books published worldwide
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-[1.1] text-charcoal"
-          >
-            Publish Your{" "}
-            <span className="relative inline-flex items-center" style={{ minWidth: "280px", minHeight: "1.2em" }}>
-              <AnimatePresence mode="popLayout">
-                <motion.span
-                  key={wordIndex}
-                  initial={{ y: 50, opacity: 0, rotateX: -90 }}
-                  animate={{ y: 0, opacity: 1, rotateX: 0 }}
-                  exit={{ y: -50, opacity: 0, rotateX: 90 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="absolute left-0 text-gold"
-                  style={{ perspective: "600px" }}
-                >
-                  {rotatingWords[wordIndex]}
-                </motion.span>
-              </AnimatePresence>
-            </span>
-            <br />
-            <span className="text-gradient">To The World</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-8 text-lg sm:text-xl text-dark-gray/80 max-w-2xl mx-auto leading-relaxed"
-          >
-            Become a Published Author Today
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
-          >
-            <motion.div whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(235,201,168,0.6)" }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-              <Button size="lg" className="text-base px-8 h-14 bg-peach text-charcoal hover:bg-peach-dark font-semibold shadow-md" asChild>
-                <Link href="/auth/signup">
-                  Start Publishing
-                  <ArrowRight className="h-5 w-5 ml-1" />
-                </Link>
-              </Button>
-            </motion.div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-              <Button
-                variant="outline"
-                size="lg"
-                className="text-base px-8 h-14 border-2 border-peach text-peach hover:bg-peach hover:text-charcoal font-semibold"
-                asChild
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left side - Text */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7 }}
+              className="text-left"
+            >
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                className="text-xl sm:text-2xl text-dark-gray/70 italic font-serif mb-2"
               >
-                <Link href="/store">
-                  Browse Books
-                  <ChevronRight className="h-5 w-5 ml-1" />
-                </Link>
-              </Button>
-            </motion.div>
-          </motion.div>
+                Welcome to
+              </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="mt-16 flex flex-wrap items-center justify-center gap-6 sm:gap-8 text-sm text-dark-gray/70"
-          >
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-              Free to publish
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-              Up to 70% royalties
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-              Global distribution
-            </div>
-          </motion.div>
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold italic font-serif text-charcoal leading-tight"
+              >
+                Statement
+                <br />
+                Publications
+              </motion.h1>
+
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                className="w-24 h-1 bg-[#D8B27A] mt-6 mb-6 origin-left"
+              />
+
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                className="text-xl sm:text-2xl font-semibold text-charcoal mb-4"
+              >
+                Don&apos;t Just Publish, Make a Statement
+              </motion.p>
+
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                className="text-base sm:text-lg text-dark-gray/70 max-w-md leading-relaxed mb-8"
+              >
+                Empowering independent authors to share their voice and connect with millions of readers across the globe.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.7 }}
+                className="flex flex-col sm:flex-row items-start gap-4 mb-12"
+              >
+                <motion.div whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(235,201,168,0.6)" }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
+                  <Button size="lg" className="text-base px-8 h-14 bg-[#EBC9A8] text-charcoal hover:bg-[#D8B27A] font-semibold shadow-md" asChild>
+                    <Link href="/auth/signup">
+                      Start Publishing
+                      <ArrowRight className="h-5 w-5 ml-1" />
+                    </Link>
+                  </Button>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="text-base px-8 h-14 border-2 border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white font-semibold"
+                    asChild
+                  >
+                    <Link href="/books">
+                      Explore Books
+                    </Link>
+                  </Button>
+                </motion.div>
+              </motion.div>
+
+              {/* Bottom icons */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.9 }}
+                className="grid grid-cols-2 sm:grid-cols-4 gap-6"
+              >
+                {[
+                  { icon: BookOpen, label: "Publish\nYour Book" },
+                  { icon: Globe, label: "Reach\nGlobal Readers" },
+                  { icon: DollarSign, label: "Earn\nRoyalties" },
+                  { icon: Heart, label: "Leave Your\nLegacy" },
+                ].map((item, i) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: 1 + i * 0.1 }}
+                    className="flex flex-col items-center text-center"
+                  >
+                    <div className="w-14 h-14 rounded-full bg-[#EBC9A8]/40 flex items-center justify-center mb-2">
+                      <item.icon className="h-6 w-6 text-[#8A6A4A]" />
+                    </div>
+                    <p className="text-xs text-dark-gray/70 whitespace-pre-line leading-tight">
+                      {item.label}
+                    </p>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
+
+            {/* Right side - Artistic Image */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.7, delay: 0.3 }}
+              className="relative hidden lg:flex items-center justify-center"
+            >
+              <div className="relative w-full max-w-lg">
+                {/* Main artistic image */}
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+                  <img
+                    src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=800&h=1000&fit=crop"
+                    alt="Statement Publications"
+                    className="w-full h-auto object-cover rounded-3xl"
+                    style={{ maxHeight: "700px" }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#EBC9A8]/30 via-transparent to-transparent" />
+                </div>
+
+                {/* Floating mug card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 1.2 }}
+                  className="absolute -bottom-6 -left-6 bg-white rounded-2xl shadow-xl p-4 max-w-[180px]"
+                >
+                  <p className="text-sm font-serif italic text-charcoal leading-snug">
+                    &ldquo;Every Story Makes A Statement&rdquo;
+                  </p>
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
