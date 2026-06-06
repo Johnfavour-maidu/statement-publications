@@ -412,37 +412,103 @@ export default function Home() {
       <section className="relative min-h-screen w-full overflow-hidden">
         {/* Full-screen background image */}
         <img
-          src="/hero.jpg"
+          src="/hero-bg.jpg"
           alt="Statement Publications — Empowering Authors"
-          className="absolute inset-0 h-full w-full object-cover object-left"
+          className="absolute inset-0 h-full w-full object-cover"
         />
 
-        {/* Clickable overlay buttons positioned over the image */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-end pb-24 sm:pb-32">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="flex flex-wrap items-center gap-4"
-          >
-            <Link
-              href="/auth/signup"
-              className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal transition-all hover:shadow-lg"
-              style={{ fontFamily: "var(--font-libre)", backgroundColor: "#EBC9A8" }}
-            >
-              Start Publishing
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </Link>
-            <Link
-              href="/books"
-              className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal px-6 py-3 text-base font-semibold text-charcoal transition-all hover:bg-charcoal hover:text-white"
+        {/* Text overlay on the left */}
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
+          <div className="max-w-xl py-20">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-5xl sm:text-6xl md:text-7xl leading-[1.1] text-charcoal"
               style={{ fontFamily: "var(--font-libre)" }}
             >
-              Explore Books
-            </Link>
-          </motion.div>
+              <span className="italic">Welcome to</span>
+              <br />
+              <span className="italic font-bold">Statement Publications</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="mt-6 text-lg sm:text-xl font-bold text-charcoal"
+              style={{ fontFamily: "var(--font-libre)" }}
+            >
+              Don&apos;t Just Publish, Make a Statement
+            </motion.p>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mt-5 text-base sm:text-lg text-dark-gray/80 max-w-lg leading-relaxed"
+              style={{ fontFamily: "var(--font-libre)" }}
+            >
+              Empowering independent authors to share their voice and connect with millions of readers across the globe.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-8 flex flex-wrap items-center gap-4"
+            >
+              <Link
+                href="/auth/signup"
+                className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal transition-all hover:shadow-lg"
+                style={{ fontFamily: "var(--font-libre)", backgroundColor: "#EBC9A8" }}
+              >
+                Start Publishing
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+              <Link
+                href="/books"
+                className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal px-6 py-3 text-base font-semibold text-charcoal transition-all hover:bg-charcoal hover:text-white"
+                style={{ fontFamily: "var(--font-libre)" }}
+              >
+                Explore Books
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.5 }}
+              className="mt-10 flex flex-wrap items-center gap-6 text-sm text-dark-gray/70"
+            >
+              <div className="flex items-center gap-2">
+                <svg className="h-5 w-5 text-[#EBC9A8]" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>Publish<br/>your book</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="h-5 w-5 text-[#EBC9A8]" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>Reach<br/>Global Readers</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="h-5 w-5 text-[#EBC9A8]" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>Earn<br/>Royalties</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <svg className="h-5 w-5 text-[#EBC9A8]" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>Leave Your<br/>Legacy</span>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
