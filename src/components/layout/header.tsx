@@ -174,7 +174,7 @@ export function Header({ user }: HeaderProps) {
               {/* Wishlist — Amazon style: icon + text */}
               <Link href="/wishlist" className="flex flex-col items-center px-2 py-1 rounded-lg hover:bg-peach/10 transition-colors group">
                 <div className="relative">
-                  <Heart className="h-6 w-6 text-brown group-hover:text-[#8A6A4A] transition-colors" />
+                  <Heart className="h-6 w-6 text-charcoal group-hover:text-charcoal/70 transition-colors" />
                   {wishlistCount > 0 && (
                     <motion.span
                       initial={{ scale: 0 }}
@@ -185,13 +185,13 @@ export function Header({ user }: HeaderProps) {
                     </motion.span>
                   )}
                 </div>
-                <span className="text-[10px] font-semibold text-brown mt-0.5 hidden sm:block">Wishlist</span>
+                <span className="text-[10px] font-semibold text-charcoal mt-0.5 hidden sm:block">Wishlist</span>
               </Link>
 
               {/* Cart — Amazon style: icon + text */}
               <Link href="/cart" className="flex flex-col items-center px-2 py-1 rounded-lg hover:bg-peach/10 transition-colors group">
                 <div className="relative">
-                  <ShoppingCart className="h-6 w-6 text-brown group-hover:text-[#8A6A4A] transition-colors" />
+                  <ShoppingCart className="h-6 w-6 text-charcoal group-hover:text-charcoal/70 transition-colors" />
                   {totalItems > 0 && (
                     <motion.span
                       initial={{ scale: 0 }}
@@ -202,13 +202,13 @@ export function Header({ user }: HeaderProps) {
                     </motion.span>
                   )}
                 </div>
-                <span className="text-[10px] font-semibold text-brown mt-0.5 hidden sm:block">Cart</span>
+                <span className="text-[10px] font-semibold text-charcoal mt-0.5 hidden sm:block">Cart</span>
               </Link>
 
               {/* My Account — Amazon style: icon + text */}
               <Link href="/login" className="flex flex-col items-center px-2 py-1 rounded-lg hover:bg-peach/10 transition-colors group">
-                <User className="h-6 w-6 text-brown group-hover:text-[#8A6A4A] transition-colors" />
-                <span className="text-[10px] font-semibold text-brown mt-0.5 hidden sm:block">My Account</span>
+                <User className="h-6 w-6 text-charcoal group-hover:text-charcoal/70 transition-colors" />
+                <span className="text-[10px] font-semibold text-charcoal mt-0.5 hidden sm:block">My Account</span>
               </Link>
 
               <Button
@@ -257,15 +257,15 @@ export function Header({ user }: HeaderProps) {
                 </nav>
 
                 <div className="mt-4 pt-4 border-t border-peach/30 space-y-1">
-                  <Link href="/wishlist" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal hover:bg-peach/10 hover:text-brown transition-colors">
+                  <Link href="/wishlist" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal hover:bg-peach/10 transition-colors">
                     <Heart className="h-4 w-4" /> Wishlist
                     {wishlistCount > 0 && <span className="ml-auto text-[10px] bg-rose-100 text-rose-600 px-2 py-0.5 rounded-full font-bold">{wishlistCount}</span>}
                   </Link>
-                  <Link href="/cart" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal hover:bg-peach/10 hover:text-brown transition-colors">
+                  <Link href="/cart" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal hover:bg-peach/10 transition-colors">
                     <ShoppingCart className="h-4 w-4" /> Cart
                     {totalItems > 0 && <span className="ml-auto text-[10px] bg-[#EBC9A8] text-charcoal px-2 py-0.5 rounded-full font-bold">{totalItems}</span>}
                   </Link>
-                  <Link href="/support" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal hover:bg-peach/10 hover:text-brown transition-colors">
+                  <Link href="/support" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal hover:bg-peach/10 transition-colors">
                     Support
                   </Link>
                 </div>

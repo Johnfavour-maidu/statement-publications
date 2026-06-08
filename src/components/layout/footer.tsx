@@ -50,34 +50,14 @@ export function Footer() {
         {/* 4-Column Grid */}
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
 
-          {/* Column 1 — Logo + Description + Newsletter */}
-          <div className="space-y-6">
+          {/* Column 1 — Logo + Description */}
+          <div className="space-y-3">
             <Link href="/" className="inline-block">
-              <img src="/logo.png" alt="Statement Publications" className="h-[140px] w-auto" />
+              <img src="/logo.png" alt="Statement Publications" className="h-36 lg:h-[170px] w-auto" />
             </Link>
             <p className="text-sm text-charcoal/70 leading-relaxed max-w-[280px]">
               Empowering independent authors to share their voice and connect with millions of readers across the globe.
             </p>
-            <div>
-              <h4 className="text-sm font-bold text-charcoal mb-2">Newsletter</h4>
-              <p className="text-xs text-charcoal/60 mb-3">Get the latest books and updates delivered to your inbox.</p>
-              <form onSubmit={handleSubscribe} className="flex gap-2">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-11 text-sm border-gray-200 bg-white rounded-lg flex-1"
-                  required
-                />
-                <Button type="submit" size="icon" className="h-11 w-11 shrink-0 rounded-lg bg-[#EBC9A8] hover:bg-[#D8B27A] text-charcoal">
-                  <Send className="h-4 w-4" />
-                </Button>
-              </form>
-              {subscribed && (
-                <p className="text-xs text-green-600 mt-2">Thanks for subscribing!</p>
-              )}
-            </div>
           </div>
 
           {/* Column 2 — About */}
