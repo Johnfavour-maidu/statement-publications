@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 
 const footerLinks = {
@@ -19,12 +18,6 @@ const footerLinks = {
     { label: "Blog", href: "/blog" },
     { label: "Services", href: "/services" },
     { label: "Help Center", href: "/help" },
-  ],
-  categories: [
-    { label: "Fiction", href: "/books?category=fiction" },
-    { label: "Non-Fiction", href: "/books?category=non-fiction" },
-    { label: "Poetry", href: "/books?category=poetry" },
-    { label: "Children's", href: "/books?category=children" },
   ],
 };
 
@@ -52,24 +45,45 @@ export function Footer() {
   };
 
   return (
-    <footer className="border-t bg-card">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
-          {/* Column 1 — Logo + Description */}
-          <div className="space-y-4">
-            <Link href="/" className="flex items-center gap-2">
-              <img src="/logo.png" alt="Statement Publications" className="h-[170px] w-auto" />
+    <footer className="border-t border-gray-200" style={{ backgroundColor: "#FAF8F5" }}>
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
+        {/* 4-Column Grid */}
+        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+
+          {/* Column 1 — Logo + Description + Newsletter */}
+          <div className="space-y-6">
+            <Link href="/" className="inline-block">
+              <img src="/logo.png" alt="Statement Publications" className="h-[140px] w-auto" />
             </Link>
-            <p className="text-sm text-charcoal/70 leading-relaxed max-w-xs">
-              Empowering independent authors to share their voice and connect
-              with millions of readers across the globe.
+            <p className="text-sm text-charcoal/70 leading-relaxed max-w-[280px]">
+              Empowering independent authors to share their voice and connect with millions of readers across the globe.
             </p>
+            <div>
+              <h4 className="text-sm font-bold text-charcoal mb-2">Newsletter</h4>
+              <p className="text-xs text-charcoal/60 mb-3">Get the latest books and updates delivered to your inbox.</p>
+              <form onSubmit={handleSubscribe} className="flex gap-2">
+                <Input
+                  type="email"
+                  placeholder="Enter your email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="h-11 text-sm border-gray-200 bg-white rounded-lg flex-1"
+                  required
+                />
+                <Button type="submit" size="icon" className="h-11 w-11 shrink-0 rounded-lg bg-[#EBC9A8] hover:bg-[#D8B27A] text-charcoal">
+                  <Send className="h-4 w-4" />
+                </Button>
+              </form>
+              {subscribed && (
+                <p className="text-xs text-green-600 mt-2">Thanks for subscribing!</p>
+              )}
+            </div>
           </div>
 
           {/* Column 2 — About */}
           <div>
-            <h3 className="text-sm font-semibold mb-4">About</h3>
-            <ul className="space-y-2.5">
+            <h3 className="text-sm font-bold text-charcoal mb-5">About</h3>
+            <ul className="space-y-3.5">
               {footerLinks.about.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-sm text-charcoal/70 transition-colors hover:text-charcoal">
@@ -82,8 +96,8 @@ export function Footer() {
 
           {/* Column 3 — Quick Links */}
           <div>
-            <h3 className="text-sm font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2.5">
+            <h3 className="text-sm font-bold text-charcoal mb-5">Quick Links</h3>
+            <ul className="space-y-3.5">
               {footerLinks.quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-sm text-charcoal/70 transition-colors hover:text-charcoal">
@@ -96,13 +110,13 @@ export function Footer() {
 
           {/* Column 4 — Stay In Touch */}
           <div>
-            <h3 className="text-sm font-semibold mb-4">Stay In Touch</h3>
-            <p className="text-xs text-charcoal/70 mb-4">
+            <h3 className="text-sm font-bold text-charcoal mb-5">Stay In Touch</h3>
+            <p className="text-sm text-charcoal/70 mb-5 leading-relaxed">
               Connect with Statement Publications across our social platforms.
             </p>
 
-            {/* Colored Social Icons */}
-            <div className="flex flex-wrap gap-2.5 mb-5">
+            {/* Social Icons */}
+            <div className="flex flex-wrap gap-3 mb-8">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
@@ -111,72 +125,47 @@ export function Footer() {
                   rel="noopener noreferrer"
                   aria-label={social.label}
                   title={social.label}
-                  className={`flex h-9 w-9 items-center justify-center rounded-full text-white transition-all duration-300 hover:scale-110 hover:shadow-lg ${social.color}`}
+                  className={`flex h-10 w-10 items-center justify-center rounded-full text-white transition-all duration-300 hover:scale-110 hover:shadow-lg ${social.color}`}
                 >
-                  <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor"><path d={social.path} /></svg>
+                  <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d={social.path} /></svg>
                 </a>
               ))}
             </div>
 
-            {/* Newsletter */}
+            {/* Newsletter in Column 4 */}
             <div>
-              <h4 className="text-xs font-semibold mb-2">Newsletter</h4>
+              <h4 className="text-sm font-bold text-charcoal mb-2">Newsletter</h4>
               <form onSubmit={handleSubscribe} className="flex gap-2">
                 <Input
                   type="email"
                   placeholder="Your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-9 text-sm"
+                  className="h-11 text-sm border-gray-200 bg-white rounded-lg flex-1"
                   required
                 />
-                <Button type="submit" size="icon" className="h-9 w-9 shrink-0">
+                <Button type="submit" size="icon" className="h-11 w-11 shrink-0 rounded-lg bg-[#EBC9A8] hover:bg-[#D8B27A] text-charcoal">
                   <Send className="h-4 w-4" />
                 </Button>
               </form>
               {subscribed && (
-                <p className="text-xs text-[#D8B27A] mt-2">Thanks for subscribing!</p>
+                <p className="text-xs text-green-600 mt-2">Thanks for subscribing!</p>
               )}
             </div>
           </div>
         </div>
 
-        <Separator />
-
-        <div className="flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:justify-between">
-          <div className="max-w-sm">
-            <h3 className="text-sm font-semibold mb-1">Newsletter</h3>
-            <p className="text-xs text-charcoal/70 mb-3">
-              Get the latest books and updates delivered to your inbox.
+        {/* Bottom Bar */}
+        <div className="mt-16 pt-8 border-t border-gray-200">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-sm text-charcoal/60">
+              &copy; {new Date().getFullYear()} Statement Publications. All rights reserved.
             </p>
-            <form onSubmit={handleSubscribe} className="flex gap-2">
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-9 text-sm"
-                required
-              />
-              <Button type="submit" size="sm" className="shrink-0">
-                <Send className="h-4 w-4" />
-                <span className="sr-only">Subscribe</span>
-              </Button>
-            </form>
-            {subscribed && (
-              <p className="text-xs text-[#D8B27A] mt-2">
-                Thanks for subscribing!
-              </p>
-            )}
-          </div>
-
-          <div className="text-xs text-charcoal/70">
-            <p>&copy; {new Date().getFullYear()} Statement Publications. All rights reserved.</p>
-            <div className="mt-1 flex gap-3">
-              <Link href="/privacy" className="hover:text-charcoal transition-colors">
+            <div className="flex gap-6">
+              <Link href="/privacy" className="text-sm text-charcoal/60 hover:text-charcoal transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="hover:text-charcoal transition-colors">
+              <Link href="/terms" className="text-sm text-charcoal/60 hover:text-charcoal transition-colors">
                 Terms of Service
               </Link>
             </div>
