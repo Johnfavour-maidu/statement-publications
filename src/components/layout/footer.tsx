@@ -60,7 +60,7 @@ export function Footer() {
             <Link href="/" className="flex items-center gap-2">
               <img src="/logo.png" alt="Statement Publications" className="h-[170px] w-auto" />
             </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
+            <p className="text-sm text-charcoal/70 leading-relaxed max-w-xs">
               Empowering independent authors to share their voice and connect
               with millions of readers across the globe.
             </p>
@@ -72,7 +72,7 @@ export function Footer() {
             <ul className="space-y-2.5">
               {footerLinks.about.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  <Link href={link.href} className="text-sm text-charcoal/70 transition-colors hover:text-charcoal">
                     {link.label}
                   </Link>
                 </li>
@@ -86,7 +86,7 @@ export function Footer() {
             <ul className="space-y-2.5">
               {footerLinks.quickLinks.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  <Link href={link.href} className="text-sm text-charcoal/70 transition-colors hover:text-charcoal">
                     {link.label}
                   </Link>
                 </li>
@@ -97,7 +97,7 @@ export function Footer() {
           {/* Column 4 — Stay In Touch */}
           <div>
             <h3 className="text-sm font-semibold mb-4">Stay In Touch</h3>
-            <p className="text-xs text-muted-foreground mb-4">
+            <p className="text-xs text-charcoal/70 mb-4">
               Connect with Statement Publications across our social platforms.
             </p>
 
@@ -146,7 +146,7 @@ export function Footer() {
         <div className="flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:justify-between">
           <div className="max-w-sm">
             <h3 className="text-sm font-semibold mb-1">Newsletter</h3>
-            <p className="text-xs text-muted-foreground mb-3">
+            <p className="text-xs text-charcoal/70 mb-3">
               Get the latest books and updates delivered to your inbox.
             </p>
             <form onSubmit={handleSubscribe} className="flex gap-2">
@@ -170,13 +170,13 @@ export function Footer() {
             )}
           </div>
 
-          <div className="text-xs text-muted-foreground">
+          <div className="text-xs text-charcoal/70">
             <p>&copy; {new Date().getFullYear()} Statement Publications. All rights reserved.</p>
             <div className="mt-1 flex gap-3">
-              <Link href="/privacy" className="hover:text-foreground transition-colors">
+              <Link href="/privacy" className="hover:text-charcoal transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="hover:text-foreground transition-colors">
+              <Link href="/terms" className="hover:text-charcoal transition-colors">
                 Terms of Service
               </Link>
             </div>

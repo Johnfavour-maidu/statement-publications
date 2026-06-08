@@ -4,85 +4,83 @@ import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search, SlidersHorizontal, Star, ShoppingCart, Heart, X, ChevronDown,
+  Search, Star, ShoppingCart, Heart, X, ChevronDown,
   ArrowUpDown, BookOpen, TrendingUp, Clock, Filter,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
 import { useWishlist } from "@/context/wishlist-context";
+import { demoBooks, type DemoBook } from "@/lib/demo-books";
 
 const categories = [
-  { id: "all", name: "All Books", count: 39 },
-  { id: "fiction", name: "Fiction", count: 6, sub: [
-    { id: "literary-fiction", name: "Literary Fiction", count: 2 },
-    { id: "contemporary", name: "Contemporary", count: 2 },
-    { id: "historical-fiction", name: "Historical Fiction", count: 1 },
-    { id: "magical-realism", name: "Magical Realism", count: 1 },
+  { id: "all", name: "All Books", count: demoBooks.length },
+  { id: "Fiction", name: "Fiction", count: 35, sub: [
+    { id: "Romance", name: "Romance", count: 5 },
+    { id: "Contemporary Fiction", name: "Contemporary Fiction", count: 5 },
+    { id: "Historical Fiction", name: "Historical Fiction", count: 5 },
+    { id: "Literary Fiction", name: "Literary Fiction", count: 5 },
+    { id: "Mystery", name: "Mystery", count: 5 },
+    { id: "Thriller", name: "Thriller", count: 5 },
+    { id: "Crime", name: "Crime", count: 5 },
   ]},
-  { id: "non-fiction", name: "Non-Fiction", count: 5, sub: [
-    { id: "memoir", name: "Memoir", count: 2 },
-    { id: "essays", name: "Essays", count: 1 },
-    { id: "journalism", name: "Journalism", count: 1 },
-    { id: "self-help", name: "Self-Help", count: 1 },
+  { id: "Business", name: "Business", count: 25, sub: [
+    { id: "Entrepreneurship", name: "Entrepreneurship", count: 4 },
+    { id: "Leadership", name: "Leadership", count: 8 },
+    { id: "Marketing", name: "Marketing", count: 4 },
+    { id: "Management", name: "Management", count: 3 },
+    { id: "Personal Branding", name: "Personal Branding", count: 3 },
+    { id: "Sales", name: "Sales", count: 3 },
   ]},
-  { id: "business", name: "Business", count: 5, sub: [
-    { id: "entrepreneurship", name: "Entrepreneurship", count: 2 },
-    { id: "leadership", name: "Leadership", count: 2 },
-    { id: "marketing", name: "Marketing", count: 1 },
+  { id: "Technology", name: "Technology", count: 25, sub: [
+    { id: "Artificial Intelligence", name: "Artificial Intelligence", count: 5 },
+    { id: "Software Development", name: "Software Development", count: 5 },
+    { id: "Cybersecurity", name: "Cybersecurity", count: 4 },
+    { id: "Data Science", name: "Data Science", count: 4 },
+    { id: "Cloud Computing", name: "Cloud Computing", count: 3 },
+    { id: "Web Development", name: "Web Development", count: 4 },
   ]},
-  { id: "technology", name: "Technology", count: 5, sub: [
-    { id: "artificial-intelligence", name: "Artificial Intelligence", count: 2 },
-    { id: "data-science", name: "Data Science", count: 1 },
-    { id: "cybersecurity", name: "Cybersecurity", count: 1 },
-    { id: "web-development", name: "Web Development", count: 1 },
+  { id: "Education", name: "Education", count: 20, sub: [
+    { id: "Mathematics", name: "Mathematics", count: 5 },
+    { id: "Science", name: "Science", count: 5 },
+    { id: "English", name: "English", count: 4 },
+    { id: "Study Skills", name: "Study Skills", count: 3 },
+    { id: "Teaching Resources", name: "Teaching Resources", count: 3 },
   ]},
-  { id: "religion", name: "Religion", count: 4, sub: [
-    { id: "christianity", name: "Christianity", count: 2 },
-    { id: "spirituality", name: "Spirituality", count: 1 },
-    { id: "devotionals", name: "Devotionals", count: 1 },
+  { id: "Religion", name: "Religion", count: 25, sub: [
+    { id: "Christian Living", name: "Christian Living", count: 6 },
+    { id: "Theology", name: "Theology", count: 5 },
+    { id: "Devotional", name: "Devotional", count: 5 },
+    { id: "Faith & Inspiration", name: "Faith & Inspiration", count: 5 },
+    { id: "Leadership", name: "Leadership", count: 4 },
   ]},
-  { id: "health", name: "Health & Wellness", count: 3, sub: [
-    { id: "nutrition", name: "Nutrition", count: 1 },
-    { id: "fitness", name: "Fitness", count: 1 },
-    { id: "mental-health", name: "Mental Health", count: 1 },
+  { id: "Children", name: "Children", count: 20, sub: [
+    { id: "Early Readers", name: "Early Readers", count: 5 },
+    { id: "Bedtime Stories", name: "Bedtime Stories", count: 5 },
+    { id: "Educational Stories", name: "Educational Stories", count: 5 },
+    { id: "Adventure Stories", name: "Adventure Stories", count: 5 },
   ]},
-  { id: "education", name: "Education", count: 4, sub: [
-    { id: "textbooks", name: "Textbooks", count: 2 },
-    { id: "study-guides", name: "Study Guides", count: 1 },
-    { id: "children-education", name: "Children's Education", count: 1 },
+  { id: "Biography", name: "Biography", count: 15, sub: [
+    { id: "Entrepreneurs", name: "Entrepreneurs", count: 4 },
+    { id: "Historical Figures", name: "Historical Figures", count: 4 },
+    { id: "Political Leaders", name: "Political Leaders", count: 4 },
+    { id: "Inspirational Personalities", name: "Inspirational Personalities", count: 3 },
   ]},
-  { id: "children", name: "Children's", count: 4, sub: [
-    { id: "picture-books", name: "Picture Books", count: 2 },
-    { id: "early-readers", name: "Early Readers", count: 1 },
-    { id: "middle-grade", name: "Middle Grade", count: 1 },
+  { id: "Poetry", name: "Poetry", count: 10, sub: [
+    { id: "Contemporary Poetry", name: "Contemporary Poetry", count: 4 },
+    { id: "Inspirational Poetry", name: "Inspirational Poetry", count: 3 },
+    { id: "Love Poetry", name: "Love Poetry", count: 3 },
   ]},
-  { id: "poetry", name: "Poetry", count: 3, sub: [
-    { id: "contemporary-poetry", name: "Contemporary Poetry", count: 1 },
-    { id: "african-poetry", name: "African Poetry", count: 1 },
-    { id: "love-poetry", name: "Love Poetry", count: 1 },
+  { id: "Academic", name: "Academic", count: 15, sub: [
+    { id: "Research Methods", name: "Research Methods", count: 4 },
+    { id: "Journals", name: "Journals", count: 4 },
+    { id: "Textbooks", name: "Textbooks", count: 4 },
+    { id: "Professional Development", name: "Professional Development", count: 3 },
   ]},
-  { id: "romance", name: "Romance", count: 3, sub: [
-    { id: "contemporary-romance", name: "Contemporary Romance", count: 1 },
-    { id: "historical-romance", name: "Historical Romance", count: 1 },
-    { id: "romantic-suspense", name: "Romantic Suspense", count: 1 },
-  ]},
-  { id: "mystery", name: "Mystery & Thriller", count: 3, sub: [
-    { id: "crime-thriller", name: "Crime Thriller", count: 1 },
-    { id: "psychological-thriller", name: "Psychological Thriller", count: 1 },
-    { id: "cozy-mystery", name: "Cozy Mystery", count: 1 },
-  ]},
-  { id: "finance", name: "Finance", count: 3, sub: [
-    { id: "investing", name: "Investing", count: 1 },
-    { id: "personal-finance", name: "Personal Finance", count: 1 },
-    { id: "financial-freedom", name: "Financial Freedom", count: 1 },
-  ]},
-  { id: "biography", name: "Biography", count: 3, sub: [
-    { id: "autobiography", name: "Autobiography", count: 1 },
-    { id: "historical-biography", name: "Historical Biography", count: 1 },
-    { id: "celebrity-biography", name: "Celebrity Biography", count: 1 },
+  { id: "Health & Wellness", name: "Health & Wellness", count: 15, sub: [
+    { id: "Nutrition", name: "Nutrition", count: 4 },
+    { id: "Mental Health", name: "Mental Health", count: 4 },
+    { id: "Fitness", name: "Fitness", count: 4 },
+    { id: "Lifestyle", name: "Lifestyle", count: 3 },
   ]},
 ];
 
@@ -102,48 +100,6 @@ const trendingSearches = [
   "Poetry", "Self-Help", "Entrepreneurship", "Children's Books",
 ];
 
-const mockBooks = [
-  { id: "1", title: "Financial Freedom Unleashed", slug: "financial-freedom-unleashed", author: "Sarah Mitchell", price: 14.99, discountPrice: 11.99, averageRating: 4.8, totalReviews: 234, category: "finance", subcategory: "financial-freedom", isNew: true, isBestseller: true, cover: "/cover1.jpg", description: "Your roadmap to wealth and prosperity." },
-  { id: "2", title: "Explore Your Creative Mind to Positivity", slug: "creative-mind-positivity", author: "Rotyen Mercado", price: 12.99, discountPrice: null, averageRating: 4.6, totalReviews: 189, category: "non-fiction", subcategory: "self-help", isNew: false, isBestseller: true, cover: "/cover2.webp", description: "Unlock the motivation to increase productivity and develop positive thinking habits." },
-  { id: "3", title: "Made to Impress", slug: "made-to-impress", author: "Andrew Cris", price: 16.99, discountPrice: null, averageRating: 4.9, totalReviews: 312, category: "non-fiction", subcategory: "self-help", isNew: false, isBestseller: true, cover: "/cover3.webp", description: "Discover great secrets of abstract art and creative expression." },
-  { id: "4", title: "The Mind of a Leader", slug: "mind-of-a-leader", author: "Kevin Anderson", price: 13.99, discountPrice: 10.99, averageRating: 4.7, totalReviews: 156, category: "business", subcategory: "leadership", isNew: true, isBestseller: false, cover: "/cover4.webp", description: "How to lead yourself, your people and your organization to extraordinary results." },
-  { id: "5", title: "Rivers of Gold", slug: "rivers-of-gold", author: "Yaw Asante", price: 11.99, discountPrice: null, averageRating: 4.5, totalReviews: 278, category: "fiction", subcategory: "contemporary", isNew: false, isBestseller: true, cover: "/cover5.webp", description: "A sweeping tale of adventure and discovery across West Africa." },
-  { id: "6", title: "Beneath the Stars", slug: "beneath-the-stars", author: "Esi Dankwa", price: 15.99, discountPrice: 12.99, averageRating: 4.8, totalReviews: 201, category: "romance", subcategory: "contemporary-romance", isNew: true, isBestseller: false, cover: "/cover6.webp", description: "A love story that transcends time and distance." },
-  { id: "7", title: "Echoes of Tomorrow", slug: "echoes-of-tomorrow", author: "Kofi Mensah", price: 12.99, discountPrice: null, averageRating: 4.6, totalReviews: 189, category: "technology", subcategory: "artificial-intelligence", isNew: false, isBestseller: false, cover: "/cover7.webp", description: "Exploring the intersection of technology and humanity." },
-  { id: "8", title: "The Silent Garden", slug: "the-silent-garden", author: "Amara Osei", price: 14.99, discountPrice: null, averageRating: 4.8, totalReviews: 234, category: "fiction", subcategory: "literary-fiction", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop", description: "A lyrical exploration of memory and belonging." },
-  { id: "9", title: "Whispers in the Dark", slug: "whispers-in-the-dark", author: "Nana Agyeman", price: 16.99, discountPrice: 13.99, averageRating: 4.9, totalReviews: 312, category: "mystery", subcategory: "psychological-thriller", isNew: true, isBestseller: true, cover: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400&h=600&fit=crop", description: "A gripping psychological thriller that keeps you guessing." },
-  { id: "10", title: "The Last Horizon", slug: "the-last-horizon", author: "Akosua Boateng", price: 13.99, discountPrice: null, averageRating: 4.7, totalReviews: 156, category: "fiction", subcategory: "historical-fiction", isNew: false, isBestseller: false, cover: "https://images.unsplash.com/photo-1524578271613-d550eacf6090?w=400&h=600&fit=crop", description: "An epic historical saga spanning three generations." },
-  { id: "11", title: "Digital Empires", slug: "digital-empires", author: "Dr. Fatima Al-Hassan", price: 18.99, discountPrice: 14.99, averageRating: 4.7, totalReviews: 198, category: "technology", subcategory: "artificial-intelligence", isNew: true, isBestseller: false, cover: "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&h=600&fit=crop", description: "The future of AI and its impact on society." },
-  { id: "12", title: "The Art of Starting Up", slug: "art-of-starting-up", author: "Kwame Mensah", price: 15.99, discountPrice: null, averageRating: 4.6, totalReviews: 145, category: "business", subcategory: "entrepreneurship", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop", description: "A practical guide to building your first company." },
-  { id: "13", title: "Prayers That Move Mountains", slug: "prayers-move-mountains", author: "Pastor David Osei", price: 11.99, discountPrice: 9.99, averageRating: 4.9, totalReviews: 456, category: "religion", subcategory: "christianity", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=400&h=600&fit=crop", description: "A powerful devotional for spiritual breakthrough." },
-  { id: "14", title: "Little Stars Learning", slug: "little-stars-learning", author: "Grace Adjei", price: 9.99, discountPrice: null, averageRating: 4.8, totalReviews: 89, category: "children", subcategory: "picture-books", isNew: true, isBestseller: false, cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=600&fit=crop", description: "A colorful adventure teaching kids about the alphabet." },
-  { id: "15", title: "Code Like a Pro", slug: "code-like-pro", author: "Michael Chen", price: 22.99, discountPrice: 17.99, averageRating: 4.5, totalReviews: 312, category: "technology", subcategory: "web-development", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&h=600&fit=crop", description: "Master modern web development from zero to hero." },
-  { id: "16", title: "The Wealth Blueprint", slug: "wealth-blueprint", author: "Nadia Okafor", price: 16.99, discountPrice: null, averageRating: 4.7, totalReviews: 178, category: "finance", subcategory: "investing", isNew: false, isBestseller: false, cover: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=600&fit=crop", description: "Build lasting wealth through smart investment strategies." },
-  { id: "17", title: "African Voices Anthology", slug: "african-voices", author: "Various Authors", price: 19.99, discountPrice: 15.99, averageRating: 4.8, totalReviews: 234, category: "poetry", subcategory: "african-poetry", isNew: true, isBestseller: false, cover: "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=400&h=600&fit=crop", description: "A stunning collection of contemporary African poetry." },
-  { id: "18", title: "The Entrepreneur's Playbook", slug: "entrepreneurs-playbook", author: "Samuel Kwarteng", price: 17.99, discountPrice: null, averageRating: 4.6, totalReviews: 167, category: "business", subcategory: "entrepreneurship", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=400&h=600&fit=crop", description: "Lessons from Africa's most successful founders." },
-  { id: "19", title: "Healing Hearts", slug: "healing-hearts", author: "Dr. Ama Serwaa", price: 13.99, discountPrice: 10.99, averageRating: 4.7, totalReviews: 145, category: "health", subcategory: "mental-health", isNew: true, isBestseller: false, cover: "https://images.unsplash.com/photo-1544027993-37dbfe43562a?w=400&h=600&fit=crop", description: "A compassionate guide to emotional wellness and resilience." },
-  { id: "20", title: "Crimson Shadows", slug: "crimson-shadows", author: "Evelyn Ansah", price: 14.99, discountPrice: null, averageRating: 4.8, totalReviews: 289, category: "mystery", subcategory: "crime-thriller", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1509266272358-7701da638078?w=400&h=600&fit=crop", description: "A detective hunts a serial killer in Accra." },
-  { id: "21", title: "Quantum Leaps", slug: "quantum-leaps", author: "Prof. Isaac Darko", price: 21.99, discountPrice: 17.99, averageRating: 4.5, totalReviews: 98, category: "technology", subcategory: "data-science", isNew: true, isBestseller: false, cover: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&h=600&fit=crop", description: "The science behind quantum computing breakthroughs." },
-  { id: "22", title: "Love in Lagos", slug: "love-in-lagos", author: "Chioma Eze", price: 12.99, discountPrice: null, averageRating: 4.6, totalReviews: 201, category: "romance", subcategory: "contemporary-romance", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400&h=600&fit=crop", description: "A modern love story set in the heart of Lagos." },
-  { id: "23", title: "WAEC Mathematics Success", slug: "waec-mathematics", author: "Dr. Emmanuel Nwosu", price: 8.99, discountPrice: null, averageRating: 4.4, totalReviews: 345, category: "education", subcategory: "textbooks", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1509228468518-180dd4864904?w=400&h=600&fit=crop", description: "Complete WAEC preparation guide for mathematics." },
-  { id: "24", title: "Journey to Inner Peace", slug: "inner-peace", author: "Rev. Sarah Adjei", price: 10.99, discountPrice: 8.99, averageRating: 4.8, totalReviews: 167, category: "religion", subcategory: "spirituality", isNew: false, isBestseller: false, cover: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop", description: "Finding calm in a chaotic world through meditation." },
-  { id: "25", title: "The Crypto Revolution", slug: "crypto-revolution", author: "Daniel Asante", price: 15.99, discountPrice: null, averageRating: 4.3, totalReviews: 123, category: "finance", subcategory: "investing", isNew: true, isBestseller: false, cover: "https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=400&h=600&fit=crop", description: "Understanding cryptocurrency and blockchain technology." },
-  { id: "26", title: "Tiny Tots ABC", slug: "tiny-tots-abc", author: "Patricia Owusu", price: 7.99, discountPrice: null, averageRating: 4.9, totalReviews: 89, category: "children", subcategory: "early-readers", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&h=600&fit=crop", description: "Learn the alphabet with fun illustrations." },
-  { id: "27", title: "Heartstrings", slug: "heartstrings", author: "Abena Mensah", price: 13.99, discountPrice: 11.99, averageRating: 4.7, totalReviews: 178, category: "poetry", subcategory: "love-poetry", isNew: true, isBestseller: false, cover: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=400&h=600&fit=crop", description: "Poems of love, loss, and longing." },
-  { id: "28", title: "Cyber Shield", slug: "cyber-shield", author: "Dr. Grace Amoako", price: 19.99, discountPrice: null, averageRating: 4.6, totalReviews: 89, category: "technology", subcategory: "cybersecurity", isNew: false, isBestseller: false, cover: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=600&fit=crop", description: "Protecting your digital assets in the modern age." },
-  { id: "29", title: "The CEO's Handbook", slug: "ceos-handbook", author: "James Kofi", price: 18.99, discountPrice: 14.99, averageRating: 4.8, totalReviews: 234, category: "business", subcategory: "leadership", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=600&fit=crop", description: "Essential strategies for modern business leaders." },
-  { id: "30", title: "Nutrition 101", slug: "nutrition-101", author: "Dr. Fatima Ibrahim", price: 14.99, discountPrice: null, averageRating: 4.5, totalReviews: 156, category: "health", subcategory: "nutrition", isNew: false, isBestseller: false, cover: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=400&h=600&fit=crop", description: "A complete guide to healthy eating and nutrition." },
-  { id: "31", title: "Seeds of Destiny", slug: "seeds-of-destiny", author: "Bishop Michael Osei", price: 12.99, discountPrice: 9.99, averageRating: 4.9, totalReviews: 567, category: "religion", subcategory: "devotionals", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1476231682828-37e571bc172f?w=400&h=600&fit=crop", description: "Daily devotionals for purposeful living." },
-  { id: "32", title: "The Study Master", slug: "study-master", author: "Prof. Kwaku Boateng", price: 11.99, discountPrice: null, averageRating: 4.4, totalReviews: 234, category: "education", subcategory: "study-guides", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=600&fit=crop", description: "Proven techniques for academic excellence." },
-  { id: "33", title: "Kingdom Adventures", slug: "kingdom-adventures", author: "Nana Yaa Asantewaa", price: 10.99, discountPrice: null, averageRating: 4.8, totalReviews: 67, category: "children", subcategory: "middle-grade", isNew: true, isBestseller: false, cover: "https://images.unsplash.com/photo-1510172951991-856a654063f9?w=400&h=600&fit=crop", description: "An exciting adventure through an ancient kingdom." },
-  { id: "34", title: "Shadows of Deceit", slug: "shadows-deceit", author: "Victoria Asare", price: 15.99, discountPrice: 12.99, averageRating: 4.7, totalReviews: 189, category: "mystery", subcategory: "psychological-thriller", isNew: true, isBestseller: false, cover: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=600&fit=crop", description: "Nothing is what it seems in this mind-bending thriller." },
-  { id: "35", title: "Fitness Foundations", slug: "fitness-foundations", author: "Coach Emmanuel", price: 13.99, discountPrice: null, averageRating: 4.6, totalReviews: 145, category: "health", subcategory: "fitness", isNew: false, isBestseller: false, cover: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=600&fit=crop", description: "Build strength and confidence with proven workouts." },
-  { id: "36", title: "Savannah Tales", slug: "savannah-tales", author: "Kwadwo Opoku", price: 11.99, discountPrice: null, averageRating: 4.5, totalReviews: 98, category: "fiction", subcategory: "literary-fiction", isNew: false, isBestseller: false, cover: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=400&h=600&fit=crop", description: "Stories of life on the Ghanaian savannah." },
-  { id: "37", title: "The Marketing Machine", slug: "marketing-machine", author: "Aisha Mohammed", price: 16.99, discountPrice: 13.99, averageRating: 4.7, totalReviews: 167, category: "business", subcategory: "marketing", isNew: true, isBestseller: false, cover: "https://images.unsplash.com/photo-1533750349088-cd871a92f312?w=400&h=600&fit=crop", description: "Modern marketing strategies that actually work." },
-  { id: "38", title: "Sisterhood of Stars", slug: "sisterhood-stars", author: "Ama Darko", price: 13.99, discountPrice: null, averageRating: 4.8, totalReviews: 212, category: "fiction", subcategory: "contemporary", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&h=600&fit=crop", description: "The bonds of friendship that sustain us." },
-  { id: "39", title: "WAEC English Success", slug: "waec-english", author: "Dr. Grace Osei", price: 8.99, discountPrice: null, averageRating: 4.5, totalReviews: 456, category: "education", subcategory: "textbooks", isNew: false, isBestseller: true, cover: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=400&h=600&fit=crop", description: "Complete WAEC preparation for English Language." },
-];
-
 export default function StorePage() {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -160,14 +116,15 @@ export default function StorePage() {
   const itemsPerPage = 12;
 
   const filteredBooks = useMemo(() => {
-    let result = [...mockBooks];
+    let result = [...demoBooks];
     if (search) {
       const q = search.toLowerCase();
       result = result.filter(
         (b) =>
           b.title.toLowerCase().includes(q) ||
           b.author.toLowerCase().includes(q) ||
-          b.category.toLowerCase().includes(q)
+          b.category.toLowerCase().includes(q) ||
+          b.subcategory.toLowerCase().includes(q)
       );
     }
     if (selectedCategory !== "all") {
@@ -212,7 +169,7 @@ export default function StorePage() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
-  const addToCart = (book: typeof mockBooks[0]) => {
+  const addToCart = (book: DemoBook) => {
     addItem({ id: book.id, title: book.title, author: book.author, price: book.discountPrice || book.price, cover: book.cover });
   };
 
@@ -220,8 +177,8 @@ export default function StorePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero Search Section */}
-      <section className="relative bg-gradient-to-b from-[#FDF6EE] to-white py-16 sm:py-20">
+      {/* Hero Search Section — full viewport width */}
+      <section className="relative w-full bg-gradient-to-b from-[#FDF6EE] to-white py-16 sm:py-20">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -342,7 +299,7 @@ export default function StorePage() {
                         <span>{cat.name}</span>
                         <span className="text-xs text-dark-gray/40">{cat.count}</span>
                       </button>
-                      {selectedCategory === cat.id && cat.sub && (
+                      {(selectedCategory === cat.id || cat.sub?.some(s => s.id === selectedCategory)) && cat.sub && (
                         <div className="ml-4 mt-1 space-y-0.5">
                           {cat.sub.map((sub) => (
                             <button
@@ -460,7 +417,7 @@ export default function StorePage() {
                     viewport={{ once: true }}
                     className="group"
                   >
-                    <Link href={`/books/${book.slug}`}>
+                    <Link href={`/books/${book.id}`}>
                       <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-gray-100 shadow-sm group-hover:shadow-xl transition-all duration-300">
                         <img
                           src={book.cover}
@@ -496,7 +453,7 @@ export default function StorePage() {
                         ))}
                         <span className="text-[10px] text-dark-gray/50 ml-1">({book.totalReviews})</span>
                       </div>
-                      <Link href={`/books/${book.slug}`}>
+                      <Link href={`/books/${book.id}`}>
                         <h3 className="text-sm font-semibold text-charcoal line-clamp-2 hover:text-[#8A6A4A] transition-colors leading-snug">
                           {book.title}
                         </h3>
@@ -515,7 +472,7 @@ export default function StorePage() {
                           <button
                             onClick={(e) => {
                               e.preventDefault();
-                              toggleItem({ id: book.id, title: book.title, author: book.author, price: book.price, cover: book.cover, slug: book.slug });
+                              toggleItem({ id: book.id, title: book.title, author: book.author, price: book.price, cover: book.cover, slug: book.id });
                             }}
                             className="p-1.5 rounded-full hover:bg-rose-50 transition-colors"
                           >

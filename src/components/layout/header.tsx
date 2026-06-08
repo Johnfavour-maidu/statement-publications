@@ -75,7 +75,7 @@ export function Header({ user }: HeaderProps) {
                 <span>Change Country</span>
                 <ChevronDown className="h-3 w-3" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuContent align="end" className="w-48 text-charcoal">
                 {countries.map((c) => (
                   <DropdownMenuItem key={c.code} className="flex items-center gap-2 cursor-pointer">
                     <span>{c.flag}</span>
@@ -93,7 +93,7 @@ export function Header({ user }: HeaderProps) {
                 <span>English</span>
                 <ChevronDown className="h-3 w-3" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-40">
+              <DropdownMenuContent align="end" className="w-40 text-charcoal">
                 {languages.map((l) => (
                   <DropdownMenuItem key={l.code} className="cursor-pointer">
                     {l.name}
@@ -115,7 +115,7 @@ export function Header({ user }: HeaderProps) {
                   <span>My Account</span>
                   <ChevronDown className="h-3 w-3" />
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-44">
+                <DropdownMenuContent align="end" className="w-44 text-charcoal">
                   <DropdownMenuItem asChild>
                     <Link href="/dashboard" className="cursor-pointer">Dashboard</Link>
                   </DropdownMenuItem>
@@ -154,8 +154,8 @@ export function Header({ user }: HeaderProps) {
                   className={cn(
                     "relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200",
                     pathname === link.href
-                      ? "text-brown"
-                      : "text-dark-gray hover:text-brown hover:bg-peach/10"
+                      ? "text-charcoal"
+                      : "text-charcoal hover:text-brown hover:bg-peach/10"
                   )}
                 >
                   {link.label}
@@ -247,8 +247,8 @@ export function Header({ user }: HeaderProps) {
                       className={cn(
                         "rounded-lg px-4 py-3 text-sm font-medium transition-colors duration-200",
                         pathname === link.href
-                          ? "bg-peach/20 text-brown"
-                          : "text-dark-gray hover:bg-peach/10 hover:text-brown"
+                          ? "bg-peach/20 text-charcoal"
+                          : "text-charcoal hover:bg-peach/10 hover:text-brown"
                       )}
                     >
                       {link.label}
@@ -257,15 +257,15 @@ export function Header({ user }: HeaderProps) {
                 </nav>
 
                 <div className="mt-4 pt-4 border-t border-peach/30 space-y-1">
-                  <Link href="/wishlist" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-dark-gray hover:bg-peach/10 hover:text-brown transition-colors">
+                  <Link href="/wishlist" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal hover:bg-peach/10 hover:text-brown transition-colors">
                     <Heart className="h-4 w-4" /> Wishlist
                     {wishlistCount > 0 && <span className="ml-auto text-[10px] bg-rose-100 text-rose-600 px-2 py-0.5 rounded-full font-bold">{wishlistCount}</span>}
                   </Link>
-                  <Link href="/cart" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-dark-gray hover:bg-peach/10 hover:text-brown transition-colors">
+                  <Link href="/cart" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal hover:bg-peach/10 hover:text-brown transition-colors">
                     <ShoppingCart className="h-4 w-4" /> Cart
                     {totalItems > 0 && <span className="ml-auto text-[10px] bg-[#EBC9A8] text-charcoal px-2 py-0.5 rounded-full font-bold">{totalItems}</span>}
                   </Link>
-                  <Link href="/support" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-dark-gray hover:bg-peach/10 hover:text-brown transition-colors">
+                  <Link href="/support" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal hover:bg-peach/10 hover:text-brown transition-colors">
                     Support
                   </Link>
                 </div>
