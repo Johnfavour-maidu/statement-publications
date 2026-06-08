@@ -29,7 +29,7 @@ export default function LoginPage() {
     >
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-2 mb-4">
-          <img src="/logo.png" alt="Statement Publications" className="h-10 w-auto" />
+          <img src="/logo.png" alt="Statement Publications" className="h-24 w-auto" />
         </Link>
         <h1 className="text-2xl font-bold tracking-tight">Welcome back</h1>
         <p className="text-sm text-muted-foreground mt-1">
@@ -131,7 +131,7 @@ export default function LoginPage() {
         <p className="text-center text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
           <Link href="/register" className="text-primary font-medium hover:underline">
-            Sign up
+            Create Account
           </Link>
         </p>
       </div>

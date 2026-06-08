@@ -172,7 +172,7 @@ const steps = [
   {
     icon: Pen,
     title: "Create Account",
-    description: "Sign up for free and set up your author profile in minutes.",
+    description: "Create account for free and set up your author profile in minutes.",
     bg: "bg-amber-200",
     iconColor: "text-amber-800",
     number: "text-amber-700",

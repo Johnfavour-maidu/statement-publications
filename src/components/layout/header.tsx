@@ -46,7 +46,7 @@ export function Header({ user }: HeaderProps) {
             <img
               src="/logo.png"
               alt="Statement Publications"
-              className="h-12 lg:h-14 w-auto"
+              className="h-16 lg:h-20 w-auto"
             />
           </Link>
 
@@ -126,7 +126,7 @@ export function Header({ user }: HeaderProps) {
                   className="bg-peach text-charcoal hover:bg-peach-dark transition-colors duration-200"
                   asChild
                 >
-                  <Link href="/register">Sign Up</Link>
+                  <Link href="/register">Create Account</Link>
                 </Button>
               </div>
             )}
@@ -197,7 +197,7 @@ export function Header({ user }: HeaderProps) {
                     asChild
                     className="w-full bg-peach text-charcoal hover:bg-peach-dark"
                   >
-                    <Link href="/register">Sign Up</Link>
+                    <Link href="/register">Create Account</Link>
                   </Button>
                 </div>
               )}

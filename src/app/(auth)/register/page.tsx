@@ -39,7 +39,7 @@ export default function RegisterPage() {
     >
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-2 mb-4">
-          <img src="/logo.png" alt="Statement Publications" className="h-10 w-auto" />
+          <img src="/logo.png" alt="Statement Publications" className="h-24 w-auto" />
         </Link>
         <h1 className="text-2xl font-bold tracking-tight">Create an account</h1>
         <p className="text-sm text-muted-foreground mt-1">
@@ -77,7 +77,7 @@ export default function RegisterPage() {
         <div className="relative">
           <Separator />
           <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 px-2 text-xs text-muted-foreground" style={{ background: "rgba(255,255,255,0.7)" }}>
-            or sign up with email
+            or create account with email
           </span>
         </div>
 

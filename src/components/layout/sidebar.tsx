@@ -200,7 +200,7 @@ export function Sidebar({ user, collapsed = false, onToggle }: SidebarProps) {
       )}
     >
       <Link href="/" className={cn("flex items-center gap-2 p-4 border-b", collapsed && "justify-center")}>
-        <img src="/logo.png" alt="Statement Publications" className={cn("w-auto", collapsed ? "h-8" : "h-10")} />
+        <img src="/logo.png" alt="Statement Publications" className={cn("w-auto", collapsed ? "h-14" : "h-20")} />
       </Link>
       <div className={cn("flex items-center gap-3 p-4", collapsed && "justify-center")}>
         <Avatar className="h-10 w-10">
