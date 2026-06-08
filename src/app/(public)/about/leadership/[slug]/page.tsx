@@ -6,8 +6,9 @@ export function generateStaticParams() {
   return leaders.map((leader) => ({ slug: leader.slug }));
 }
 
-export default function LeadershipProfile({ params }: { params: { slug: string } }) {
-  const leader = getLeaderBySlug(params.slug);
+export default async function LeadershipProfile({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const leader = getLeaderBySlug(slug);
   if (!leader) notFound();
 
   return <LeadershipProfileClient leader={leader} />;
