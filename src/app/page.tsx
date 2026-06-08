@@ -121,10 +121,10 @@ const features = [
     title: "Sell Books",
     description:
       "Set your own prices and sell directly to readers through our built-in marketplace.",
-    bg: "bg-emerald-200",
-    iconColor: "text-emerald-800",
-    iconBg: "bg-emerald-300",
-    border: "border-emerald-300",
+    bg: "bg-[#F2D8BE]",
+    iconColor: "text-[#8A6A4A]",
+    iconBg: "bg-[#F2D8BE]",
+    border: "border-[#EBC9A8]",
   },
   {
     icon: DollarSign,
@@ -183,10 +183,10 @@ const steps = [
     title: "Upload Manuscript",
     description:
       "Upload your manuscript in any standard format. We accept DOCX, PDF, and more.",
-    bg: "bg-emerald-200",
-    iconColor: "text-emerald-800",
-    number: "text-emerald-700",
-    border: "border-emerald-300",
+    bg: "bg-[#F2D8BE]",
+    iconColor: "text-[#8A6A4A]",
+    number: "text-[#8A6A4A]",
+    border: "border-[#EBC9A8]",
   },
   {
     icon: Palette,
@@ -300,8 +300,8 @@ const featuredAuthors = [
     books: 3,
     bio: "Sci-fi visionary crafting stories about technology and humanity.",
     rating: 4.6,
-    color: "from-emerald-500 to-teal-600",
-    border: "border-emerald-300",
+    color: "from-[#D8B27A] to-[#EBC9A8]",
+    border: "border-[#EBC9A8]",
   },
   {
     name: "Nana Agyeman",
@@ -346,10 +346,10 @@ const testimonials = [
     quote:
       "I've tried other platforms, but none compare. The author dashboard gives me full visibility into my sales and royalties. The design tools are top-notch.",
     rating: 5,
-    color: "from-emerald-500 to-teal-600",
-    quoteColor: "text-emerald-700",
-    bg: "bg-emerald-200",
-    border: "border-emerald-300",
+    color: "from-[#D8B27A] to-[#EBC9A8]",
+    quoteColor: "text-[#8A6A4A]",
+    bg: "bg-[#F2D8BE]",
+    border: "border-[#EBC9A8]",
   },
   {
     name: "Efua Mensah",
@@ -810,7 +810,7 @@ export default function Home() {
               const { count, ref } = useCountUp(stat.value);
               const colors = [
                 { bg: "bg-amber-100", icon: "text-amber-700", box: "bg-amber-200" },
-                { bg: "bg-emerald-100", icon: "text-emerald-700", box: "bg-emerald-200" },
+                { bg: "bg-[#F2D8BE]/40", icon: "text-[#8A6A4A]", box: "bg-[#F2D8BE]" },
                 { bg: "bg-blue-100", icon: "text-blue-700", box: "bg-blue-200" },
                 { bg: "bg-rose-100", icon: "text-rose-700", box: "bg-rose-200" },
               ];
@@ -984,7 +984,7 @@ export default function Home() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      className="mt-4 text-sm text-emerald-400 font-medium"
+                      className="mt-4 text-sm text-[#D8B27A] font-medium"
                     >
                       Thanks for subscribing! Check your inbox for a welcome email.
                     </motion.p>

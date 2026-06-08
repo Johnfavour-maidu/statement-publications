@@ -53,8 +53,8 @@ const serviceData: Record<string, {
     tagline: "Polish your manuscript to perfection",
     description: "Our professional editing team works with you to refine your manuscript. From developmental editing that shapes your story to copyediting that polishes every sentence, we ensure your book is the best it can be.",
     icon: PenTool,
-    color: "text-emerald-700",
-    colorBg: "bg-emerald-100",
+    color: "text-[#8A6A4A]",
+    colorBg: "bg-[#F2D8BE]/40",
     features: ["Developmental editing", "Line editing", "Copyediting", "Genre-specialist editors", "Track changes & comments", "Two rounds of revision"],
     process: [
       { step: "1", title: "Manuscript Review", desc: "Our editors read your full manuscript and provide a detailed assessment." },
@@ -293,8 +293,8 @@ const serviceData: Record<string, {
     tagline: "Your magazine, professionally produced",
     description: "Full-service magazine publishing from layout design to digital distribution. We handle every aspect of magazine production so you can focus on creating great content.",
     icon: Newspaper,
-    color: "text-emerald-700",
-    colorBg: "bg-emerald-100",
+    color: "text-[#8A6A4A]",
+    colorBg: "bg-[#F2D8BE]/40",
     features: ["Magazine layout design", "Cover design", "Article formatting", "Digital distribution", "Print-on-demand", "Subscription management"],
     process: [
       { step: "1", title: "Concept & Planning", desc: "We define the magazine's format, style, and distribution channels." },

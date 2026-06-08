@@ -126,7 +126,7 @@ export default function ContactPage() {
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 rounded-full border bg-card/50 backdrop-blur-sm px-4 py-1.5 text-sm text-muted-foreground mb-8"
           >
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="h-2 w-2 rounded-full bg-[#D8B27A] animate-pulse" />
             We&apos;d Love to Hear from You
           </motion.div>
 
@@ -250,10 +250,10 @@ export default function ContactPage() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0 }}
-                        className="flex items-center gap-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4"
+                        className="flex items-center gap-3 rounded-xl bg-[#F2D8BE]/40 border border-[#EBC9A8]/20 p-4"
                       >
-                        <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
-                        <p className="text-sm font-medium text-emerald-700 dark:text-emerald-400">
+                        <CheckCircle2 className="h-5 w-5 text-[#D8B27A] shrink-0" />
+                        <p className="text-sm font-medium text-[#8A6A4A]">
                           Message sent successfully! We&apos;ll get back to you
                           within 24 hours.
                         </p>

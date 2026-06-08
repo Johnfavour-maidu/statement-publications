@@ -43,8 +43,8 @@ export function StatsCard({
               className={cn(
                 "text-xs font-medium",
                 change.type === "increase"
-                  ? "text-emerald-600 dark:text-emerald-400"
-                  : "text-red-600 dark:text-red-400"
+                  ? "text-[#D8B27A]"
+                  : "text-red-600"
               )}
             >
               {change.type === "increase" ? "+" : ""}

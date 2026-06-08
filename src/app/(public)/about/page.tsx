@@ -48,7 +48,7 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
 
 const values = [
   { icon: Sparkles, title: "Excellence", description: "We hold ourselves to the highest standards in every manuscript we publish, every service we provide, and every interaction we have with authors.", color: "bg-amber-100 text-amber-700" },
-  { icon: Lightbulb, title: "Innovation", description: "We continuously push the boundaries of publishing technology to give authors cutting-edge tools and global reach for their work.", color: "bg-emerald-100 text-emerald-700" },
+  { icon: Lightbulb, title: "Innovation", description: "We continuously push the boundaries of publishing technology to give authors cutting-edge tools and global reach for their work.", color: "bg-[#F2D8BE]/40 text-[#8A6A4A]" },
   { icon: Shield, title: "Integrity", description: "Transparency and honesty are at the core of everything we do — from royalty structures to author contracts and communication.", color: "bg-blue-100 text-blue-700" },
   { icon: Users, title: "Community", description: "We believe in the power of connecting authors with readers, fostering a supportive network of storytellers and literary enthusiasts.", color: "bg-rose-100 text-rose-700" },
   { icon: Palette, title: "Creativity", description: "We celebrate the creative spirit in every author and provide tools that let their unique voice shine through in every published work.", color: "bg-violet-100 text-violet-700" },
@@ -57,7 +57,7 @@ const values = [
 
 const whyChooseUs = [
   { icon: Globe, title: "Global Reach", description: "Distribute your book to readers in 50+ countries through our worldwide network.", color: "bg-amber-100 text-amber-700" },
-  { icon: TrendingUp, title: "Higher Royalties", description: "Earn up to 70% royalties on every sale — among the highest in the industry.", color: "bg-emerald-100 text-emerald-700" },
+  { icon: TrendingUp, title: "Higher Royalties", description: "Earn up to 70% royalties on every sale — among the highest in the industry.", color: "bg-[#F2D8BE]/40 text-[#8A6A4A]" },
   { icon: Zap, title: "Easy Publishing", description: "Upload, format, and publish your book in minutes with our intuitive platform.", color: "bg-blue-100 text-blue-700" },
   { icon: Heart, title: "Author Ownership", description: "You retain full rights to your work. Always. No hidden contracts or fine print.", color: "bg-rose-100 text-rose-700" },
   { icon: Award, title: "Professional Support", description: "Get expert guidance from our team of publishing professionals at every step.", color: "bg-violet-100 text-violet-700" },
@@ -80,13 +80,13 @@ const processSteps = [
 
 const testimonials = [
   { name: "Adwoa Serwaa", role: "Author of The Quiet Storm", quote: "Statement Publications made publishing my debut novel effortless. The platform is intuitive, the support team is incredible, and I earned my first royalty within the first month.", rating: 5, color: "from-amber-500 to-orange-600" },
-  { name: "Kwame Poku", role: "Bestselling Author", quote: "I've tried other platforms, but none compare. The author dashboard gives me full visibility into my sales and royalties. The design tools are top-notch.", rating: 5, color: "from-emerald-500 to-teal-600" },
+  { name: "Kwame Poku", role: "Bestselling Author", quote: "I've tried other platforms, but none compare. The author dashboard gives me full visibility into my sales and royalties. The design tools are top-notch.", rating: 5, color: "from-[#D8B27A] to-[#EBC9A8]" },
   { name: "Efua Mensah", role: "Author of Roots of Gold", quote: "From manuscript upload to global distribution, everything was seamless. My book is now available in 30+ countries. I couldn't be happier with the results.", rating: 5, color: "from-blue-500 to-indigo-600" },
 ];
 
 const leadership = [
   { name: "Ama Serwaa", role: "Founder & CEO", bio: "A former literary agent with over 15 years in the publishing industry, Ama founded Statement Publications to democratize publishing for every author.", color: "from-amber-500 to-orange-600" },
-  { name: "Kwame Asante", role: "Chief Technology Officer", bio: "A tech visionary with a passion for digital publishing, Kwame leads the engineering team in building the most intuitive author platform.", color: "from-emerald-500 to-teal-600" },
+  { name: "Kwame Asante", role: "Chief Technology Officer", bio: "A tech visionary with a passion for digital publishing, Kwame leads the engineering team in building the most intuitive author platform.", color: "from-[#D8B27A] to-[#EBC9A8]" },
   { name: "Efua Mensah", role: "Head of Author Relations", bio: "With a background in creative writing and community building, Efua ensures every author receives personalized support.", color: "from-blue-500 to-indigo-600" },
 ];
 
@@ -194,8 +194,8 @@ export default function AboutPage() {
             </AnimatedSection>
             <AnimatedSection delay={0.1}>
               <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#EBC9A8]/20 h-full">
-                <div className="w-14 h-14 rounded-2xl bg-emerald-100 flex items-center justify-center mb-6">
-                  <Eye className="h-7 w-7 text-emerald-700" />
+                <div className="w-14 h-14 rounded-2xl bg-[#F2D8BE]/40 flex items-center justify-center mb-6">
+                  <Eye className="h-7 w-7 text-[#8A6A4A]" />
                 </div>
                 <h3 className="text-2xl font-bold text-charcoal mb-4">Our Vision</h3>
                 <p className="text-dark-gray/70 leading-relaxed">

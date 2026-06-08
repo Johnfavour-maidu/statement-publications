@@ -30,7 +30,7 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
 
 const services = [
   { icon: BookOpen, title: "Book Publishing", description: "End-to-end publishing for eBooks, paperbacks, and hardcovers with global distribution.", color: "bg-amber-100 text-amber-700", border: "border-amber-200", slug: "book-publishing" },
-  { icon: PenTool, title: "Book Editing", description: "Professional developmental editing, copyediting, and line editing by genre specialists.", color: "bg-emerald-100 text-emerald-700", border: "border-emerald-200", slug: "book-editing" },
+  { icon: PenTool, title: "Book Editing", description: "Professional developmental editing, copyediting, and line editing by genre specialists.", color: "bg-[#F2D8BE]/40 text-[#8A6A4A]", border: "border-[#EBC9A8]", slug: "book-editing" },
   { icon: CheckCircle2, title: "Proofreading", description: "Meticulous final-pass proofreading to catch every typo and formatting inconsistency.", color: "bg-blue-100 text-blue-700", border: "border-blue-200", slug: "proofreading" },
   { icon: FileText, title: "ISBN Registration", description: "We handle the entire ISBN registration process for retail and library distribution.", color: "bg-rose-100 text-rose-700", border: "border-rose-200", slug: "isbn-registration" },
   { icon: Palette, title: "Cover Design", description: "Custom cover designs by professional artists who understand genre trends.", color: "bg-violet-100 text-violet-700", border: "border-violet-200", slug: "cover-design" },
@@ -40,7 +40,7 @@ const services = [
   { icon: UserCheck, title: "Author Branding", description: "Build your author brand with professional headshots, bio, and social media strategy.", color: "bg-indigo-100 text-indigo-700", border: "border-indigo-200", slug: "author-branding" },
   { icon: Headphones, title: "Audiobook Publishing", description: "Professional narration, production, and distribution to Audible and Apple Books.", color: "bg-cyan-100 text-cyan-700", border: "border-cyan-200", slug: "audiobook" },
   { icon: GraduationCap, title: "Academic Publishing", description: "Specialized publishing for academic texts, dissertations, and scholarly works.", color: "bg-amber-100 text-amber-700", border: "border-amber-200", slug: "academic" },
-  { icon: Newspaper, title: "Magazine Publishing", description: "Full-service magazine publishing from layout design to digital distribution.", color: "bg-emerald-100 text-emerald-700", border: "border-emerald-200", slug: "magazine" },
+  { icon: Newspaper, title: "Magazine Publishing", description: "Full-service magazine publishing from layout design to digital distribution.", color: "bg-[#F2D8BE]/40 text-[#8A6A4A]", border: "border-[#EBC9A8]", slug: "magazine" },
 ];
 
 const pricingTiers = [
@@ -85,8 +85,8 @@ const pricingTiers = [
     price: "$999",
     period: "per book",
     description: "Premium publishing with full marketing and branding support.",
-    color: "border-emerald-200",
-    accent: "bg-emerald-100 text-emerald-700",
+    color: "border-[#EBC9A8]",
+    accent: "bg-[#F2D8BE]/40 text-[#8A6A4A]",
     icon: Award,
     features: ["Everything in Professional", "Author branding package", "Social media strategy", "Book launch campaign", "Press release distribution", "Dedicated editor", "Premium royalties (up to 75%)", "48-hour support"],
     cta: "Go Premium",
@@ -248,7 +248,7 @@ export default function ServicesPage() {
                   <ul className="space-y-2 mb-6 flex-1">
                     {tier.features.map((f) => (
                       <li key={f} className="flex items-start gap-2 text-sm text-dark-gray/70">
-                        <Check className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0" />
+                        <Check className="h-4 w-4 text-[#D8B27A] mt-0.5 shrink-0" />
                         {f}
                       </li>
                     ))}

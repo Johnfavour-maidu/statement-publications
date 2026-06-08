@@ -126,7 +126,7 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between text-dark-gray/70">
                   <span>Shipping</span>
-                  <span className="text-emerald-600 font-medium">Free</span>
+                  <span className="text-[#D8B27A] font-medium">Free</span>
                 </div>
                 <div className="border-t border-gray-100 pt-3 flex justify-between">
                   <span className="font-bold text-charcoal">Total</span>
@@ -151,8 +151,8 @@ export default function CartPage() {
               {/* Trust badges */}
               <div className="mt-6 pt-6 border-t border-gray-100 grid grid-cols-2 gap-3 text-center text-xs text-dark-gray/50">
                 <div className="flex flex-col items-center gap-1">
-                  <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-                    <span className="text-emerald-600 text-sm">&#10003;</span>
+                  <div className="w-8 h-8 rounded-full bg-[#F2D8BE]/40 flex items-center justify-center">
+                    <span className="text-[#D8B27A] text-sm">&#10003;</span>
                   </div>
                   Secure Checkout
                 </div>

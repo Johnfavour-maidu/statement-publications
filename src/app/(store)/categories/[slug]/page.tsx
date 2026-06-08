@@ -239,7 +239,7 @@ export default function CategoryBooksPage() {
                     
                     <div className="absolute top-3 left-3 flex flex-col gap-1.5">
                       {book.discountPrice && (
-                        <Badge className="bg-emerald-500 text-white border-0 text-[10px]">
+                        <Badge className="bg-[#D8B27A] text-white border-0 text-[10px]">
                           -{Math.round(((book.price - book.discountPrice) / book.price) * 100)}%
                         </Badge>
                       )}

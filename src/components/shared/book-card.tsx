@@ -60,7 +60,7 @@ export function BookCard({ book, onAddToCart, onAddToWishlist }: BookCardProps) 
 
             <div className="absolute top-2 left-2 flex flex-col gap-1">
               {discount > 0 && (
-                <Badge className="bg-emerald-500 text-white border-0 text-[10px]">
+                <Badge className="bg-[#D8B27A] text-white border-0 text-[10px]">
                   -{discount}%
                 </Badge>
               )}
