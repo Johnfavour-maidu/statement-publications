@@ -15,16 +15,16 @@ const footerLinks = {
     { label: "Press", href: "/press" },
   ],
   quickLinks: [
-    { label: "Store", href: "/store" },
+    { label: "Store", href: "/books" },
     { label: "Blog", href: "/blog" },
     { label: "Services", href: "/services" },
     { label: "Help Center", href: "/help" },
   ],
   categories: [
-    { label: "Fiction", href: "/store?category=fiction" },
-    { label: "Non-Fiction", href: "/store?category=non-fiction" },
-    { label: "Poetry", href: "/store?category=poetry" },
-    { label: "Children's", href: "/store?category=children" },
+    { label: "Fiction", href: "/books?category=fiction" },
+    { label: "Non-Fiction", href: "/books?category=non-fiction" },
+    { label: "Poetry", href: "/books?category=poetry" },
+    { label: "Children's", href: "/books?category=children" },
   ],
 };
 
@@ -54,11 +54,11 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <img src="/logo.png" alt="Statement Publications" className="h-8 w-auto" />
+              <img src="/logo.png" alt="Statement Publications" className="h-12 w-auto" />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              A modern publishing platform connecting authors with readers.
-              Discover stories that make a statement.
+              Empowering independent authors to share their voice and connect
+              with millions of readers across the globe.
             </p>
             <div className="flex gap-3">
               {socialLinks.map((social) => (

@@ -4,9 +4,11 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ShoppingBag } from "lucide-react";
+import { Menu, X, ShoppingBag, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/context/cart-context";
+import { useWishlist } from "@/context/wishlist-context";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -26,9 +28,11 @@ interface HeaderProps {
   cartCount?: number;
 }
 
-export function Header({ user, cartCount = 0 }: HeaderProps) {
+export function Header({ user }: HeaderProps) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { totalItems } = useCart();
+  const { totalItems: wishlistCount } = useWishlist();
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -42,7 +46,7 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
             <img
               src="/logo.png"
               alt="Statement Publications"
-              className="h-10"
+              className="h-12 lg:h-14 w-auto"
             />
           </Link>
 
@@ -71,6 +75,22 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
           </nav>
 
           <div className="flex items-center gap-3">
+            <Link href="/reader/wishlist">
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                <div className="relative flex items-center justify-center h-10 w-10 rounded-full bg-peach/20 hover:bg-peach/40 transition-all duration-300 cursor-pointer">
+                  <Heart className="h-5 w-5 text-brown" />
+                  {wishlistCount > 0 && (
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white shadow-md"
+                    >
+                      {wishlistCount > 99 ? "99+" : wishlistCount}
+                    </motion.span>
+                  )}
+                </div>
+              </motion.div>
+            </Link>
             <Link href="/books">
               <motion.div
                 whileHover={{ scale: 1.1 }}
@@ -78,13 +98,13 @@ export function Header({ user, cartCount = 0 }: HeaderProps) {
               >
                 <div className="relative flex items-center justify-center h-10 w-10 rounded-full bg-peach/20 hover:bg-peach/40 transition-all duration-300 cursor-pointer">
                   <ShoppingBag className="h-5 w-5 text-brown" />
-                  {cartCount > 0 && (
+                  {totalItems > 0 && (
                     <motion.span
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gold text-[10px] font-bold text-charcoal shadow-md"
                     >
-                      {cartCount > 99 ? "99+" : cartCount}
+                      {totalItems > 99 ? "99+" : totalItems}
                     </motion.span>
                   )}
                 </div>
