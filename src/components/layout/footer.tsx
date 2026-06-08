@@ -54,7 +54,7 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-12">
           <div className="space-y-4">
             <Link href="/" className="flex items-center gap-2">
-              <img src="/logo.png" alt="Statement Publications" className="h-20 w-auto" />
+              <img src="/logo.png" alt="Statement Publications" className="h-[100px] w-auto" />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
               Empowering independent authors to share their voice and connect

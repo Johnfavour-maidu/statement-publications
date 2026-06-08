@@ -46,7 +46,7 @@ export function Header({ user }: HeaderProps) {
             <img
               src="/logo.png"
               alt="Statement Publications"
-              className="h-16 lg:h-20 w-auto"
+              className="h-80 lg:h-[400px] w-auto"
             />
           </Link>
 
