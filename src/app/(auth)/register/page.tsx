@@ -39,7 +39,7 @@ export default function RegisterPage() {
     >
       <div className="text-center mb-8">
         <Link href="/" className="inline-flex items-center gap-2 mb-4">
-          <img src="/logo.svg" alt="Statement Publications" className="h-10 w-auto" />
+          <img src="/logo.png" alt="Statement Publications" className="h-10 w-auto" />
         </Link>
         <h1 className="text-2xl font-bold tracking-tight">Create an account</h1>
         <p className="text-sm text-muted-foreground mt-1">

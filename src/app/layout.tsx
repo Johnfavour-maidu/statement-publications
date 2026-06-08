@@ -47,9 +47,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Statement Publications" }],
   creator: "Statement Publications",
   icons: {
-    icon: "/logo-new.png",
-    shortcut: "/logo-new.png",
-    apple: "/logo-new.png",
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
   },
   openGraph: {
     type: "website",
