@@ -5,7 +5,8 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Star, ShoppingCart, Heart, X, ChevronDown,
-  ArrowUpDown, BookOpen, TrendingUp, Clock, Filter,
+  ArrowUpDown, BookOpen, TrendingUp, Clock, Filter, MapPin,
+  Check,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
@@ -100,6 +101,17 @@ const trendingSearches = [
   "Poetry", "Self-Help", "Entrepreneurship", "Children's Books",
 ];
 
+const countries = [
+  { code: "NG", name: "Nigeria", flag: "\u{1F1F3}\u{1F1EC}" },
+  { code: "US", name: "United States", flag: "\u{1F1FA}\u{1F1F8}" },
+  { code: "GB", name: "United Kingdom", flag: "\u{1F1EC}\u{1F1E7}" },
+  { code: "GH", name: "Ghana", flag: "\u{1F1EC}\u{1F1ED}" },
+  { code: "KE", name: "Kenya", flag: "\u{1F1F0}\u{1F1EA}" },
+  { code: "ZA", name: "South Africa", flag: "\u{1F1FF}\u{1F1E6}" },
+  { code: "CA", name: "Canada", flag: "\u{1F1E8}\u{1F1E6}" },
+  { code: "AU", name: "Australia", flag: "\u{1F1E6}\u{1F1FA}" },
+];
+
 export default function StorePage() {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -109,10 +121,16 @@ export default function StorePage() {
   const [searchFocused, setSearchFocused] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 50]);
+  const [searchCategory, setSearchCategory] = useState("all");
+  const [deliverCountry, setDeliverCountry] = useState(countries[0]);
+  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
+  const [cartNotification, setCartNotification] = useState<string | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+  const countryRef = useRef<HTMLDivElement>(null);
   const { addItem } = useCart();
   const { toggleItem, isInWishlist } = useWishlist();
 
+  const searchCategories = categories.filter((c) => c.id !== "all");
   const itemsPerPage = 12;
 
   const filteredBooks = useMemo(() => {
@@ -151,6 +169,24 @@ export default function StorePage() {
     currentPage * itemsPerPage
   );
 
+  const getPageNumbers = () => {
+    const maxVisible = 5;
+    const pages: (number | string)[] = [];
+    if (totalPages <= maxVisible) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      let start = Math.max(1, currentPage - 2);
+      let end = Math.min(totalPages, start + maxVisible - 1);
+      if (end - start < maxVisible - 1) start = Math.max(1, end - maxVisible + 1);
+      if (start > 1) pages.push(1);
+      if (start > 2) pages.push("...");
+      for (let i = start; i <= end; i++) pages.push(i);
+      if (end < totalPages - 1) pages.push("...");
+      if (end < totalPages) pages.push(totalPages);
+    }
+    return pages;
+  };
+
   const handleSearch = useCallback((term: string) => {
     setSearch(term);
     setCurrentPage(1);
@@ -159,74 +195,137 @@ export default function StorePage() {
     }
   }, [recentSearches]);
 
+  const handleSearchSubmit = () => {
+    if (searchCategory !== "all") {
+      setSelectedCategory(searchCategory);
+    }
+    setCurrentPage(1);
+  };
+
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
         setSearchFocused(false);
+      }
+      if (countryRef.current && !countryRef.current.contains(e.target as Node)) {
+        setShowCountryDropdown(false);
       }
     };
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  useEffect(() => {
+    if (cartNotification) {
+      const t = setTimeout(() => setCartNotification(null), 2500);
+      return () => clearTimeout(t);
+    }
+  }, [cartNotification]);
+
   const addToCart = (book: DemoBook) => {
     addItem({ id: book.id, title: book.title, author: book.author, price: book.discountPrice || book.price, cover: book.cover });
+    setCartNotification(book.title);
   };
 
   const selectedCat = categories.find((c) => c.id === selectedCategory);
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Search Section — full viewport width */}
-      <section className="relative w-full bg-gradient-to-b from-[#FDF6EE] to-white py-16 sm:py-20">
-        <div className="mx-auto max-w-4xl px-4 text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl sm:text-5xl font-bold tracking-tight text-charcoal"
-            style={{ fontFamily: "var(--font-libre)" }}
-          >
-            Discover Your Next Great Read
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mt-4 text-lg text-dark-gray/70"
-          >
-            Browse thousands of books from independent authors worldwide
-          </motion.p>
-
-          {/* Search Bar */}
+    <div className="min-h-screen bg-white pt-[116px]">
+      {/* Cart Success Notification */}
+      <AnimatePresence>
+        {cartNotification && (
           <motion.div
-            ref={searchRef}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="relative mt-8 max-w-2xl mx-auto"
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-[120px] left-1/2 -translate-x-1/2 z-[100] bg-charcoal text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 text-sm"
           >
-            <div className={cn(
-              "flex items-center rounded-2xl border-2 bg-white shadow-lg transition-all duration-300",
-              searchFocused ? "border-[#EBC9A8] shadow-xl ring-4 ring-[#EBC9A8]/10" : "border-gray-200"
-            )}>
-              <Search className="ml-4 h-5 w-5 text-dark-gray/40" />
+            <div className="h-6 w-6 rounded-full bg-green-500 flex items-center justify-center">
+              <Check className="h-4 w-4 text-white" />
+            </div>
+            <span className="font-medium">&ldquo;{cartNotification}&rdquo; added to cart</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Amazon-Style Search Header */}
+      <section className="w-full bg-gradient-to-b from-[#FDF6EE] to-white border-b">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+          <div ref={searchRef} className="relative flex items-stretch gap-0 rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-white max-w-5xl mx-auto">
+            {/* Location Selector */}
+            <div
+              ref={countryRef}
+              className="hidden md:flex items-center gap-2 px-4 py-3 bg-gray-50 border-r border-gray-200 min-w-[160px] cursor-pointer hover:bg-gray-100 transition-colors relative"
+              onClick={() => setShowCountryDropdown(!showCountryDropdown)}
+            >
+              <MapPin className="h-5 w-5 text-charcoal shrink-0" />
+              <div className="text-left">
+                <p className="text-[10px] text-dark-gray/60 leading-tight">Deliver to</p>
+                <p className="text-sm font-bold text-charcoal leading-tight">{deliverCountry.name}</p>
+              </div>
+              <ChevronDown className="h-3.5 w-3.5 text-dark-gray/50 ml-auto" />
+              {showCountryDropdown && (
+                <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-xl border shadow-xl z-50 py-1">
+                  {countries.map((c) => (
+                    <button
+                      key={c.code}
+                      onClick={(e) => { e.stopPropagation(); setDeliverCountry(c); setShowCountryDropdown(false); }}
+                      className={cn(
+                        "w-full flex items-center gap-2.5 px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors text-left",
+                        c.code === deliverCountry.code && "bg-[#EBC9A8]/10 font-medium"
+                      )}
+                    >
+                      <span className="text-lg">{c.flag}</span>
+                      <span className="text-charcoal">{c.name}</span>
+                      {c.code === deliverCountry.code && <Check className="h-4 w-4 text-[#D8B27A] ml-auto" />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Category Dropdown */}
+            <div className="hidden sm:flex items-center px-3 py-3 bg-gray-50 border-r border-gray-200 min-w-[100px]">
+              <select
+                value={searchCategory}
+                onChange={(e) => setSearchCategory(e.target.value)}
+                className="bg-transparent text-sm font-medium text-charcoal outline-none cursor-pointer appearance-none pr-1"
+              >
+                <option value="all">All</option>
+                {searchCategories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                ))}
+              </select>
+              <ChevronDown className="h-3.5 w-3.5 text-dark-gray/50 -ml-1 pointer-events-none" />
+            </div>
+
+            {/* Search Input */}
+            <div className="flex-1 relative">
               <input
                 type="text"
                 value={search}
                 onChange={(e) => handleSearch(e.target.value)}
                 onFocus={() => setSearchFocused(true)}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSearch(search);
+                  if (e.key === "Enter") handleSearchSubmit();
                 }}
-                placeholder="Search by title, author, or category..."
-                className="flex-1 px-4 py-4 text-base bg-transparent outline-none placeholder:text-dark-gray/40"
+                placeholder="Search books, authors, categories..."
+                className="w-full px-4 py-3.5 text-base bg-transparent outline-none placeholder:text-dark-gray/40"
               />
               {search && (
-                <button onClick={() => handleSearch("")} className="mr-2 p-1 rounded-full hover:bg-gray-100">
+                <button onClick={() => handleSearch("")} className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full hover:bg-gray-100">
                   <X className="h-4 w-4 text-dark-gray/50" />
                 </button>
               )}
             </div>
+
+            {/* Search Button */}
+            <button
+              onClick={handleSearchSubmit}
+              className="px-6 bg-[#EBC9A8] hover:bg-[#D8B27A] text-charcoal transition-colors flex items-center justify-center"
+            >
+              <Search className="h-5 w-5" />
+            </button>
 
             {/* Search Dropdown */}
             <AnimatePresence>
@@ -271,7 +370,7 @@ export default function StorePage() {
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -503,21 +602,53 @@ export default function StorePage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 mt-10">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={cn(
-                      "h-10 w-10 rounded-lg text-sm font-medium transition-all",
-                      page === currentPage
-                        ? "bg-[#EBC9A8] text-charcoal shadow-sm"
-                        : "text-dark-gray/60 hover:bg-gray-100"
-                    )}
-                  >
-                    {page}
-                  </button>
-                ))}
+              <div className="flex items-center justify-center gap-1 mt-10" role="navigation" aria-label="Pagination">
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className={cn(
+                    "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all",
+                    currentPage === 1
+                      ? "text-dark-gray/30 cursor-not-allowed"
+                      : "text-dark-gray/70 hover:bg-gray-100"
+                  )}
+                >
+                  <ChevronDown className="h-4 w-4 rotate-90" />
+                  Previous
+                </button>
+                {getPageNumbers().map((page, i) =>
+                  typeof page === "string" ? (
+                    <span key={`ellipsis-${i}`} className="px-2 py-2 text-sm text-dark-gray/40">
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={cn(
+                        "h-10 w-10 rounded-lg text-sm font-medium transition-all",
+                        page === currentPage
+                          ? "bg-[#EBC9A8] text-charcoal shadow-sm"
+                          : "text-dark-gray/60 hover:bg-gray-100"
+                      )}
+                    >
+                      {page}
+                    </button>
+                  )
+                )}
+                <button
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className={cn(
+                    "flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all",
+                    currentPage === totalPages
+                      ? "text-dark-gray/30 cursor-not-allowed"
+                      : "text-dark-gray/70 hover:bg-gray-100"
+                  )}
+                >
+                  Next
+                  <ChevronDown className="h-4 w-4 -rotate-90" />
+                </button>
               </div>
             )}
           </div>
