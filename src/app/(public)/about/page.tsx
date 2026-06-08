@@ -46,48 +46,58 @@ function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
   return <div ref={ref}>{count.toLocaleString()}{suffix}</div>;
 }
 
-const values = [
-  { icon: Sparkles, title: "Excellence", description: "We hold ourselves to the highest standards in every manuscript we publish, every service we provide, and every interaction we have with authors.", color: "bg-amber-100 text-amber-700" },
-  { icon: Lightbulb, title: "Innovation", description: "We continuously push the boundaries of publishing technology to give authors cutting-edge tools and global reach for their work.", color: "bg-[#F2D8BE]/40 text-[#8A6A4A]" },
-  { icon: Shield, title: "Integrity", description: "Transparency and honesty are at the core of everything we do — from royalty structures to author contracts and communication.", color: "bg-blue-100 text-blue-700" },
-  { icon: Users, title: "Community", description: "We believe in the power of connecting authors with readers, fostering a supportive network of storytellers and literary enthusiasts.", color: "bg-rose-100 text-rose-700" },
-  { icon: Palette, title: "Creativity", description: "We celebrate the creative spirit in every author and provide tools that let their unique voice shine through in every published work.", color: "bg-violet-100 text-violet-700" },
-  { icon: Globe, title: "Global Reach", description: "We empower authors to transcend borders, distributing their stories to readers across continents and cultures worldwide.", color: "bg-teal-100 text-teal-700" },
+const coreValues = [
+  { icon: Sparkles, title: "Excellence", description: "We hold ourselves to the highest standards in every manuscript we publish, every service we provide, and every interaction we have with authors.", borderColor: "border-amber-400", iconBg: "bg-amber-100 text-amber-700" },
+  { icon: Lightbulb, title: "Innovation", description: "We continuously push the boundaries of publishing technology to give authors cutting-edge tools and global reach for their work.", borderColor: "border-[#D8B27A]", iconBg: "bg-[#F2D8BE]/40 text-[#8A6A4A]" },
+  { icon: Shield, title: "Integrity", description: "Transparency and honesty are at the core of everything we do — from royalty structures to author contracts and communication.", borderColor: "border-blue-400", iconBg: "bg-blue-100 text-blue-700" },
+  { icon: Users, title: "Community", description: "We believe in the power of connecting authors with readers, fostering a supportive network of storytellers and literary enthusiasts.", borderColor: "border-rose-400", iconBg: "bg-rose-100 text-rose-700" },
+  { icon: Palette, title: "Creativity", description: "We celebrate the creative spirit in every author and provide tools that let their unique voice shine through in every published work.", borderColor: "border-violet-400", iconBg: "bg-violet-100 text-violet-700" },
+  { icon: Globe, title: "Global Reach", description: "We empower authors to transcend borders, distributing their stories to readers across continents and cultures worldwide.", borderColor: "border-teal-400", iconBg: "bg-teal-100 text-teal-700" },
 ];
 
 const whyChooseUs = [
-  { icon: Globe, title: "Global Reach", description: "Distribute your book to readers in 50+ countries through our worldwide network.", color: "bg-amber-100 text-amber-700" },
-  { icon: TrendingUp, title: "Higher Royalties", description: "Earn up to 70% royalties on every sale — among the highest in the industry.", color: "bg-[#F2D8BE]/40 text-[#8A6A4A]" },
-  { icon: Zap, title: "Easy Publishing", description: "Upload, format, and publish your book in minutes with our intuitive platform.", color: "bg-blue-100 text-blue-700" },
-  { icon: Heart, title: "Author Ownership", description: "You retain full rights to your work. Always. No hidden contracts or fine print.", color: "bg-rose-100 text-rose-700" },
-  { icon: Award, title: "Professional Support", description: "Get expert guidance from our team of publishing professionals at every step.", color: "bg-violet-100 text-violet-700" },
-];
-
-const timeline = [
-  { year: "Vision", title: "The Idea", description: "Statement Publications was born from a simple belief: every author deserves a fair chance to share their story with the world." },
-  { year: "Building", title: "The Platform", description: "We built a world-class publishing platform designed to empower independent authors with professional tools and global distribution." },
-  { year: "Launch", title: "Going Live", description: "Statement Publications launched, connecting authors with readers across continents and cultures." },
-  { year: "Growth", title: "Global Impact", description: "Thousands of authors trust Statement Publications to publish, distribute, and monetize their work worldwide." },
-];
-
-const processSteps = [
-  { icon: BookOpen, title: "Create Account", description: "Sign up for free and set up your author profile in minutes." },
-  { icon: PenTool, title: "Upload Manuscript", description: "Upload your manuscript in any standard format. We accept DOCX, PDF, and more." },
-  { icon: CheckCircle2, title: "Review & Publish", description: "Review, preview, and hit publish. Your book goes live within 24 hours." },
-  { icon: Rocket, title: "Reach Readers", description: "Your book is distributed globally through our extensive partner network." },
-  { icon: Star, title: "Earn Royalties", description: "Start earning competitive royalties on every sale with weekly payouts." },
+  { icon: Globe, title: "Global Distribution", description: "Distribute your book to readers in 50+ countries through our worldwide network of retailers, libraries, and distributors.", bg: "bg-amber-50 border-amber-200", iconBg: "bg-amber-100 text-amber-700" },
+  { icon: TrendingUp, title: "Higher Royalty Earnings", description: "Earn up to 70% royalties on every sale — among the highest in the industry. Weekly payouts with full transparency.", bg: "bg-[#FDF6EE] border-[#EBC9A8]", iconBg: "bg-[#F2D8BE]/60 text-[#8A6A4A]" },
+  { icon: Zap, title: "Easy Publishing Tools", description: "Upload, format, and publish your book in minutes with our intuitive platform. No technical skills required.", bg: "bg-blue-50 border-blue-200", iconBg: "bg-blue-100 text-blue-700" },
+  { icon: Award, title: "Professional Support", description: "Get expert guidance from our team of publishing professionals at every step of your publishing journey.", bg: "bg-violet-50 border-violet-200", iconBg: "bg-violet-100 text-violet-700" },
+  { icon: Rocket, title: "Marketing Opportunities", description: "Leverage our marketing tools, featured placements, and promotional campaigns to maximize your book's visibility.", bg: "bg-rose-50 border-rose-200", iconBg: "bg-rose-100 text-rose-700" },
+  { icon: Heart, title: "Author Community", description: "Join a vibrant community of fellow authors. Share experiences, collaborate, and grow together in your publishing journey.", bg: "bg-teal-50 border-teal-200", iconBg: "bg-teal-100 text-teal-700" },
 ];
 
 const testimonials = [
-  { name: "Adwoa Serwaa", role: "Author of The Quiet Storm", quote: "Statement Publications made publishing my debut novel effortless. The platform is intuitive, the support team is incredible, and I earned my first royalty within the first month.", rating: 5, color: "from-amber-500 to-orange-600" },
-  { name: "Kwame Poku", role: "Bestselling Author", quote: "I've tried other platforms, but none compare. The author dashboard gives me full visibility into my sales and royalties. The design tools are top-notch.", rating: 5, color: "from-[#D8B27A] to-[#EBC9A8]" },
-  { name: "Efua Mensah", role: "Author of Roots of Gold", quote: "From manuscript upload to global distribution, everything was seamless. My book is now available in 30+ countries. I couldn't be happier with the results.", rating: 5, color: "from-blue-500 to-indigo-600" },
+  { name: "Adwoa Serwaa", role: "Author of The Quiet Storm", quote: "Statement Publications made publishing my debut novel effortless. The platform is intuitive, the support team is incredible, and I earned my first royalty within the first month.", rating: 5, borderColor: "border-amber-300" },
+  { name: "Kwame Poku", role: "Bestselling Author", quote: "I've tried other platforms, but none compare. The author dashboard gives me full visibility into my sales and royalties. The design tools are top-notch.", rating: 5, borderColor: "border-[#D8B27A]" },
+  { name: "Efua Mensah", role: "Author of Roots of Gold", quote: "From manuscript upload to global distribution, everything was seamless. My book is now available in 30+ countries. I couldn't be happier with the results.", rating: 5, borderColor: "border-blue-300" },
 ];
 
 const leadership = [
-  { name: "Ama Serwaa", role: "Founder & CEO", bio: "A former literary agent with over 15 years in the publishing industry, Ama founded Statement Publications to democratize publishing for every author.", color: "from-amber-500 to-orange-600" },
-  { name: "Kwame Asante", role: "Chief Technology Officer", bio: "A tech visionary with a passion for digital publishing, Kwame leads the engineering team in building the most intuitive author platform.", color: "from-[#D8B27A] to-[#EBC9A8]" },
-  { name: "Efua Mensah", role: "Head of Author Relations", bio: "With a background in creative writing and community building, Efua ensures every author receives personalized support.", color: "from-blue-500 to-indigo-600" },
+  {
+    name: "Ama Serwaa",
+    role: "Founder & Chief Executive Officer",
+    bio: "A former literary agent with over 15 years in the publishing industry, Ama founded Statement Publications to democratize publishing for every author.",
+    slug: "chief-executive-officer",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
+    color: "from-amber-500 to-orange-600",
+    expertise: ["Publishing Strategy", "Business Development", "Author Relations"],
+  },
+  {
+    name: "Kwame Asante",
+    role: "Chief Technology Officer",
+    bio: "A tech visionary with a passion for digital publishing, Kwame leads the engineering team in building the most intuitive author platform in the industry.",
+    slug: "chief-technology-officer",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+    color: "from-[#D8B27A] to-[#EBC9A8]",
+    expertise: ["Platform Architecture", "AI & Machine Learning", "Product Innovation"],
+  },
+  {
+    name: "Efua Mensah",
+    role: "Head of Author Relations",
+    bio: "With a background in creative writing and community building, Efua ensures every author receives personalized support and guidance throughout their journey.",
+    slug: "head-of-author-relations",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face",
+    color: "from-blue-500 to-indigo-600",
+    expertise: ["Community Building", "Author Support", "Creative Writing"],
+  },
 ];
 
 export default function AboutPage() {
@@ -144,8 +154,43 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Our Story ────────────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-white">
+      {/* ── Achievement Boxes (Enhanced) ──────────────────── */}
+      <section className="py-20 sm:py-24 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-14">
+            <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">Our Impact</span>
+            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
+              Numbers That Speak
+            </h2>
+          </AnimatedSection>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: BookOpen, value: 10000, suffix: "+", label: "Books Published", bg: "bg-[#FDF6EE]", border: "border-[#EBC9A8]", iconColor: "text-[#8A6A4A]" },
+              { icon: Users, value: 5000, suffix: "+", label: "Active Authors", bg: "bg-blue-50", border: "border-blue-200", iconColor: "text-blue-600" },
+              { icon: Globe, value: 50, suffix: "+", label: "Countries Reached", bg: "bg-emerald-50", border: "border-emerald-200", iconColor: "text-emerald-600" },
+              { icon: TrendingUp, value: 1, prefix: "$", suffix: "M+", label: "Royalties Paid", bg: "bg-amber-50", border: "border-amber-200", iconColor: "text-amber-600" },
+            ].map((stat) => (
+              <AnimatedSection key={stat.label}>
+                <div className={cn(
+                  "text-center rounded-2xl p-6 shadow-sm border-2 hover:shadow-md transition-all duration-300 hover:-translate-y-1",
+                  stat.bg, stat.border
+                )}>
+                  <div className={cn("inline-flex items-center justify-center rounded-2xl bg-white/60 p-3 mb-4", stat.iconColor)}>
+                    <stat.icon className="h-6 w-6" />
+                  </div>
+                  <div className="text-3xl sm:text-4xl font-bold text-charcoal">
+                    {stat.prefix || ""}<CountUp target={stat.value} />{stat.suffix}
+                  </div>
+                  <p className="mt-1 text-sm text-charcoal/60 font-medium">{stat.label}</p>
+                </div>
+              </AnimatedSection>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Our Story (Redesigned) ────────────────────────── */}
+      <section className="py-24 sm:py-32 bg-[#FDF6EE]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">Our Story</span>
@@ -154,35 +199,94 @@ export default function AboutPage() {
             </h2>
           </AnimatedSection>
 
-          <div className="relative">
-            <div className="absolute left-1/2 -translate-x-px top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#EBC9A8] via-[#D8B27A] to-[#EBC9A8]" />
-            <div className="space-y-12">
-              {timeline.map((item, index) => (
-                <AnimatedSection key={item.title} delay={index * 0.1}>
-                  <div className={cn("flex items-center gap-8", index % 2 === 0 ? "flex-row" : "flex-row-reverse")}>
-                    <div className="flex-1 text-right">
-                      <div className={cn("bg-white p-6 rounded-2xl shadow-sm border border-[#EBC9A8]/20 inline-block", index % 2 === 0 ? "ml-auto" : "mr-auto")}>
-                        <span className="text-xs font-bold text-[#8A6A4A] uppercase tracking-wider">{item.year}</span>
-                        <h3 className="text-xl font-bold text-charcoal mt-1">{item.title}</h3>
-                        <p className="text-sm text-dark-gray/70 mt-2 max-w-sm">{item.description}</p>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+            {/* Left: Story + Timeline */}
+            <AnimatedSection>
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-2xl font-bold text-charcoal mb-4">From Vision to Reality</h3>
+                  <p className="text-dark-gray/70 leading-relaxed mb-4">
+                    Statement Publications was born from a simple belief: every author deserves a fair chance to share their story with the world. We saw an industry that was often exclusive, complex, and unfair to independent voices.
+                  </p>
+                  <p className="text-dark-gray/70 leading-relaxed">
+                    Today, we&apos;re changing that narrative — one author at a time. Our platform combines cutting-edge technology with a deep passion for literature, giving every storyteller the tools they need to succeed.
+                  </p>
+                </div>
+
+                {/* Compact Timeline */}
+                <div className="space-y-4">
+                  {[
+                    { year: "2021", title: "The Idea", description: "Founded on the belief that every author deserves a fair chance.", color: "bg-[#EBC9A8]" },
+                    { year: "2022", title: "Building the Platform", description: "Developed a world-class publishing platform with professional tools.", color: "bg-blue-200" },
+                    { year: "2023", title: "Going Live", description: "Launched globally, connecting authors with readers across continents.", color: "bg-amber-200" },
+                    { year: "2024", title: "Global Impact", description: "Thousands of authors trust us to publish and monetize their work.", color: "bg-violet-200" },
+                  ].map((item, index) => (
+                    <div key={item.title} className="flex items-start gap-4">
+                      <div className={cn("flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center text-sm font-bold text-charcoal", item.color)}>
+                        {item.year}
+                      </div>
+                      <div className="pt-1">
+                        <h4 className="font-semibold text-charcoal">{item.title}</h4>
+                        <p className="text-sm text-dark-gray/70">{item.description}</p>
                       </div>
                     </div>
-                    <div className="relative z-10 w-4 h-4 rounded-full bg-[#EBC9A8] border-4 border-white shadow" />
-                    <div className="flex-1" />
+                  ))}
+                </div>
+              </div>
+            </AnimatedSection>
+
+            {/* Right: Visual Imagery */}
+            <AnimatedSection delay={0.15}>
+              <div className="relative">
+                <div className="absolute -inset-4 bg-gradient-to-br from-[#EBC9A8]/30 to-[#D8B27A]/20 rounded-3xl blur-2xl" />
+                <div className="relative space-y-4">
+                  <div className="rounded-2xl overflow-hidden shadow-lg border border-[#EBC9A8]/20">
+                    <img
+                      src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&h=350&fit=crop"
+                      alt="Books on shelves"
+                      className="w-full h-56 object-cover"
+                    />
                   </div>
-                </AnimatedSection>
-              ))}
-            </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="rounded-2xl overflow-hidden shadow-lg border border-[#EBC9A8]/20">
+                      <img
+                        src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=300&h=200&fit=crop"
+                        alt="Author writing"
+                        className="w-full h-36 object-cover"
+                      />
+                    </div>
+                    <div className="rounded-2xl overflow-hidden shadow-lg border border-[#EBC9A8]/20">
+                      <img
+                        src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=200&fit=crop"
+                        alt="Library"
+                        className="w-full h-36 object-cover"
+                      />
+                    </div>
+                  </div>
+                  <div className="bg-white rounded-2xl p-6 shadow-lg border border-[#EBC9A8]/20">
+                    <div className="flex items-center gap-4">
+                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#EBC9A8] flex items-center justify-center">
+                        <BookOpen className="h-6 w-6 text-[#8A6A4A]" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-charcoal">Publishing Since 2021</p>
+                        <p className="text-xs text-dark-gray/60">Empowering authors worldwide</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
 
-      {/* ── Mission & Vision ────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-[#FDF6EE]">
+      {/* ── Mission & Vision (Differentiated) ──────────────── */}
+      <section className="py-24 sm:py-32 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <AnimatedSection>
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#EBC9A8]/20 h-full">
+              <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-8 border-2 border-amber-200 h-full hover:shadow-lg transition-all duration-300">
                 <div className="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center mb-6">
                   <Target className="h-7 w-7 text-amber-700" />
                 </div>
@@ -193,9 +297,9 @@ export default function AboutPage() {
               </div>
             </AnimatedSection>
             <AnimatedSection delay={0.1}>
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#EBC9A8]/20 h-full">
-                <div className="w-14 h-14 rounded-2xl bg-[#F2D8BE]/40 flex items-center justify-center mb-6">
-                  <Eye className="h-7 w-7 text-[#8A6A4A]" />
+              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border-2 border-blue-200 h-full hover:shadow-lg transition-all duration-300">
+                <div className="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center mb-6">
+                  <Eye className="h-7 w-7 text-blue-700" />
                 </div>
                 <h3 className="text-2xl font-bold text-charcoal mb-4">Our Vision</h3>
                 <p className="text-dark-gray/70 leading-relaxed">
@@ -207,8 +311,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Core Values ────────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-white">
+      {/* ── Core Values (Colored Borders) ──────────────────── */}
+      <section className="py-24 sm:py-32 bg-[#FDF6EE]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">Core Values</span>
@@ -217,10 +321,13 @@ export default function AboutPage() {
             </h2>
           </AnimatedSection>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {values.map((value, index) => (
+            {coreValues.map((value, index) => (
               <AnimatedSection key={value.title} delay={index * 0.05}>
-                <div className="group p-6 rounded-2xl border border-gray-100 bg-white hover:shadow-lg transition-all duration-300 hover:border-[#EBC9A8]/30 h-full">
-                  <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center mb-4", value.color)}>
+                <div className={cn(
+                  "group p-6 rounded-2xl border-2 bg-white hover:shadow-lg transition-all duration-300 h-full",
+                  value.borderColor
+                )}>
+                  <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center mb-4", value.iconBg)}>
                     <value.icon className="h-6 w-6" />
                   </div>
                   <h3 className="text-lg font-bold text-charcoal mb-2">{value.title}</h3>
@@ -232,8 +339,8 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Why Authors Choose Us ────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-[#FDF6EE]">
+      {/* ── Why Authors Choose Us (6 Cards) ────────────────── */}
+      <section className="py-24 sm:py-32 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">Why Authors Choose Us</span>
@@ -244,8 +351,11 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {whyChooseUs.map((item, index) => (
               <AnimatedSection key={item.title} delay={index * 0.05}>
-                <div className="group bg-white p-6 rounded-2xl shadow-sm border border-[#EBC9A8]/20 hover:shadow-lg transition-all duration-300 h-full">
-                  <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center mb-4", item.color)}>
+                <div className={cn(
+                  "group p-6 rounded-2xl border-2 hover:shadow-lg transition-all duration-300 h-full",
+                  item.bg
+                )}>
+                  <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center mb-4", item.iconBg)}>
                     <item.icon className="h-6 w-6" />
                   </div>
                   <h3 className="text-lg font-bold text-charcoal mb-2">{item.title}</h3>
@@ -257,69 +367,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Statistics ──────────────────────────────────── */}
-      <section className="py-24 sm:py-32" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
-              Trusted by Authors Worldwide
-            </h2>
-          </AnimatedSection>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { icon: BookOpen, value: 10000, suffix: "+", label: "Books Published" },
-              { icon: Users, value: 5000, suffix: "+", label: "Active Authors" },
-              { icon: Globe, value: 50, suffix: "+", label: "Countries Reached" },
-              { icon: TrendingUp, value: 1, prefix: "$", suffix: "M+", label: "Royalties Paid" },
-            ].map((stat) => (
-              <AnimatedSection key={stat.label}>
-                <div className="text-center rounded-2xl bg-white/30 backdrop-blur-sm p-6 shadow-sm">
-                  <div className="inline-flex items-center justify-center rounded-2xl bg-white/40 p-3 mb-4">
-                    <stat.icon className="h-6 w-6 text-charcoal" />
-                  </div>
-                  <div className="text-3xl sm:text-4xl font-bold text-charcoal">
-                    {stat.prefix || ""}<CountUp target={stat.value} />{stat.suffix}
-                  </div>
-                  <p className="mt-1 text-sm text-charcoal/60">{stat.label}</p>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Publishing Journey ──────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">How It Works</span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
-              Your Publishing Journey
-            </h2>
-          </AnimatedSection>
-          <div className="relative">
-            <div className="hidden lg:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-[#EBC9A8]/20 via-[#D8B27A]/50 to-[#EBC9A8]/20" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-4">
-              {processSteps.map((step, index) => (
-                <AnimatedSection key={step.title} delay={index * 0.1}>
-                  <div className="relative text-center">
-                    <div className="relative z-10 mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border-2 border-[#D8B27A] bg-white text-[#8A6A4A] font-bold text-lg shadow-sm">
-                      {index + 1}
-                    </div>
-                    <div className="mb-3 flex justify-center">
-                      <step.icon className="h-6 w-6 text-[#8A6A4A]" />
-                    </div>
-                    <h3 className="text-base font-semibold mb-1 text-charcoal">{step.title}</h3>
-                    <p className="text-sm text-dark-gray/70 leading-relaxed">{step.description}</p>
-                  </div>
-                </AnimatedSection>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Testimonials ────────────────────────────────── */}
+      {/* ── Testimonials (Standardized) ────────────────────── */}
       <section className="py-24 sm:py-32 bg-[#FDF6EE]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
@@ -331,15 +379,20 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((t, index) => (
               <AnimatedSection key={t.name} delay={index * 0.1}>
-                <div className="bg-white rounded-2xl p-8 shadow-sm border border-[#EBC9A8]/20 h-full">
+                <div className={cn(
+                  "bg-white rounded-2xl p-8 shadow-sm border-2 h-full flex flex-col",
+                  t.borderColor
+                )}>
                   <div className="flex gap-1 mb-4">
                     {[...Array(t.rating)].map((_, i) => (
                       <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                     ))}
                   </div>
-                  <p className="text-sm text-dark-gray/70 leading-relaxed mb-6">&ldquo;{t.quote}&rdquo;</p>
-                  <div className="flex items-center gap-3">
-                    <div className={cn("h-10 w-10 rounded-full bg-gradient-to-br flex items-center justify-center text-sm font-bold text-white", t.color)}>
+                  <p className="text-sm text-dark-gray/70 leading-relaxed mb-6 line-clamp-4 flex-1">
+                    &ldquo;{t.quote}&rdquo;
+                  </p>
+                  <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+                    <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#EBC9A8] to-[#D8B27A] flex items-center justify-center text-sm font-bold text-white">
                       {t.name.split(" ").map((n) => n[0]).join("")}
                     </div>
                     <div>
@@ -354,7 +407,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Leadership ──────────────────────────────────── */}
+      {/* ── Leadership Team (Enhanced) ─────────────────────── */}
       <section className="py-24 sm:py-32 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
@@ -363,16 +416,33 @@ export default function AboutPage() {
               Leadership
             </h2>
           </AnimatedSection>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {leadership.map((person, index) => (
               <AnimatedSection key={person.name} delay={index * 0.1}>
-                <div className="text-center p-6 rounded-2xl border border-gray-100 bg-white hover:shadow-lg transition-all duration-300">
-                  <div className={cn("mx-auto mb-4 h-24 w-24 rounded-full bg-gradient-to-br flex items-center justify-center text-3xl font-bold text-white", person.color)}>
-                    {person.name.split(" ").map((n) => n[0]).join("")}
+                <div className="text-center p-6 rounded-2xl border border-gray-100 bg-white hover:shadow-lg transition-all duration-300 group">
+                  <div className="relative mx-auto mb-4 w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-lg group-hover:shadow-xl transition-shadow">
+                    <img
+                      src={person.image}
+                      alt={person.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <h3 className="text-lg font-bold text-charcoal">{person.name}</h3>
-                  <p className="text-sm text-[#8A6A4A] font-medium">{person.role}</p>
+                  <p className="text-sm text-[#8A6A4A] font-medium mt-1">{person.role}</p>
                   <p className="mt-3 text-sm text-dark-gray/70 leading-relaxed">{person.bio}</p>
+                  <div className="flex flex-wrap gap-1.5 justify-center mt-4">
+                    {person.expertise.map((skill) => (
+                      <span key={skill} className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#FDF6EE] text-[#8A6A4A] border border-[#EBC9A8]/30">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                  <Link
+                    href={`/about/leadership/${person.slug}`}
+                    className="inline-flex items-center gap-1.5 mt-5 text-sm font-semibold text-[#8A6A4A] hover:text-[#D8B27A] transition-colors"
+                  >
+                    View Profile <ChevronRight className="h-4 w-4" />
+                  </Link>
                 </div>
               </AnimatedSection>
             ))}
