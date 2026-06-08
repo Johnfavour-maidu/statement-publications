@@ -5,8 +5,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Star, ShoppingCart, Heart, X, ChevronDown,
-  ArrowUpDown, BookOpen, TrendingUp, Clock, Filter, MapPin,
-  Check,
+  ArrowUpDown, BookOpen, TrendingUp, Clock, Filter, Check,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
@@ -101,17 +100,6 @@ const trendingSearches = [
   "Poetry", "Self-Help", "Entrepreneurship", "Children's Books",
 ];
 
-const countries = [
-  { code: "NG", name: "Nigeria", flag: "\u{1F1F3}\u{1F1EC}" },
-  { code: "US", name: "United States", flag: "\u{1F1FA}\u{1F1F8}" },
-  { code: "GB", name: "United Kingdom", flag: "\u{1F1EC}\u{1F1E7}" },
-  { code: "GH", name: "Ghana", flag: "\u{1F1EC}\u{1F1ED}" },
-  { code: "KE", name: "Kenya", flag: "\u{1F1F0}\u{1F1EA}" },
-  { code: "ZA", name: "South Africa", flag: "\u{1F1FF}\u{1F1E6}" },
-  { code: "CA", name: "Canada", flag: "\u{1F1E8}\u{1F1E6}" },
-  { code: "AU", name: "Australia", flag: "\u{1F1E6}\u{1F1FA}" },
-];
-
 export default function StorePage() {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -122,11 +110,8 @@ export default function StorePage() {
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 50]);
   const [searchCategory, setSearchCategory] = useState("all");
-  const [deliverCountry, setDeliverCountry] = useState(countries[0]);
-  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
   const [cartNotification, setCartNotification] = useState<string | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
-  const countryRef = useRef<HTMLDivElement>(null);
   const { addItem } = useCart();
   const { toggleItem, isInWishlist } = useWishlist();
 
@@ -207,9 +192,6 @@ export default function StorePage() {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
         setSearchFocused(false);
       }
-      if (countryRef.current && !countryRef.current.contains(e.target as Node)) {
-        setShowCountryDropdown(false);
-      }
     };
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
@@ -248,84 +230,82 @@ export default function StorePage() {
         )}
       </AnimatePresence>
 
-      {/* Amazon-Style Search Header */}
-      <section className="w-full bg-gradient-to-b from-[#FDF6EE] to-white border-b">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
-          <div ref={searchRef} className="relative flex items-stretch gap-0 rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-white max-w-5xl mx-auto">
-            {/* Location Selector */}
-            <div
-              ref={countryRef}
-              className="hidden md:flex items-center gap-2 px-4 py-3 bg-gray-50 border-r border-gray-200 min-w-[160px] cursor-pointer hover:bg-gray-100 transition-colors relative"
-              onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-            >
-              <MapPin className="h-5 w-5 text-charcoal shrink-0" />
-              <div className="text-left">
-                <p className="text-[10px] text-dark-gray/60 leading-tight">Deliver to</p>
-                <p className="text-sm font-bold text-charcoal leading-tight">{deliverCountry.name}</p>
-              </div>
-              <ChevronDown className="h-3.5 w-3.5 text-dark-gray/50 ml-auto" />
-              {showCountryDropdown && (
-                <div className="absolute top-full left-0 mt-1 w-56 bg-white rounded-xl border shadow-xl z-50 py-1">
-                  {countries.map((c) => (
-                    <button
-                      key={c.code}
-                      onClick={(e) => { e.stopPropagation(); setDeliverCountry(c); setShowCountryDropdown(false); }}
-                      className={cn(
-                        "w-full flex items-center gap-2.5 px-4 py-2.5 text-sm hover:bg-gray-50 transition-colors text-left",
-                        c.code === deliverCountry.code && "bg-[#EBC9A8]/10 font-medium"
-                      )}
-                    >
-                      <span className="text-lg">{c.flag}</span>
-                      <span className="text-charcoal">{c.name}</span>
-                      {c.code === deliverCountry.code && <Check className="h-4 w-4 text-[#D8B27A] ml-auto" />}
-                    </button>
+      {/* Hero Section */}
+      <section className="w-full bg-gradient-to-b from-[#FDF6EE] to-white">
+        <div className="mx-auto max-w-4xl px-4 text-center pt-12 pb-8 sm:pt-16 sm:pb-10">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl sm:text-5xl font-bold tracking-tight text-charcoal"
+            style={{ fontFamily: "var(--font-libre)" }}
+          >
+            Discover Your Next Great Read
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="mt-4 text-lg text-dark-gray/70"
+          >
+            Browse thousands of books from independent authors worldwide
+          </motion.p>
+
+          {/* Search Bar */}
+          <motion.div
+            ref={searchRef}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="relative mt-8 max-w-3xl mx-auto"
+          >
+            <div className="flex items-stretch gap-0 rounded-xl overflow-hidden shadow-lg border border-gray-200 bg-white">
+              {/* Category Dropdown */}
+              <div className="hidden sm:flex items-center px-4 py-3 bg-gray-50 border-r border-gray-200 min-w-[140px]">
+                <select
+                  value={searchCategory}
+                  onChange={(e) => {
+                    setSearchCategory(e.target.value);
+                    setSelectedCategory(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  className="bg-transparent text-sm font-medium text-charcoal outline-none cursor-pointer appearance-none pr-1"
+                >
+                  <option value="all">Categories</option>
+                  {searchCategories.map((cat) => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
                   ))}
-                </div>
-              )}
-            </div>
+                </select>
+                <ChevronDown className="h-3.5 w-3.5 text-dark-gray/50 -ml-1 pointer-events-none" />
+              </div>
 
-            {/* Category Dropdown */}
-            <div className="hidden sm:flex items-center px-3 py-3 bg-gray-50 border-r border-gray-200 min-w-[100px]">
-              <select
-                value={searchCategory}
-                onChange={(e) => setSearchCategory(e.target.value)}
-                className="bg-transparent text-sm font-medium text-charcoal outline-none cursor-pointer appearance-none pr-1"
+              {/* Search Input */}
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => handleSearch(e.target.value)}
+                  onFocus={() => setSearchFocused(true)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSearchSubmit();
+                  }}
+                  placeholder="Search by title, author, ISBN, or category..."
+                  className="w-full px-5 py-3.5 text-base bg-transparent outline-none placeholder:text-dark-gray/40"
+                />
+                {search && (
+                  <button onClick={() => handleSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-gray-100">
+                    <X className="h-4 w-4 text-dark-gray/50" />
+                  </button>
+                )}
+              </div>
+
+              {/* Search Button */}
+              <button
+                onClick={handleSearchSubmit}
+                className="px-6 bg-[#EBC9A8] hover:bg-[#D8B27A] text-charcoal transition-colors flex items-center justify-center"
               >
-                <option value="all">All</option>
-                {searchCategories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-              </select>
-              <ChevronDown className="h-3.5 w-3.5 text-dark-gray/50 -ml-1 pointer-events-none" />
+                <Search className="h-5 w-5" />
+              </button>
             </div>
-
-            {/* Search Input */}
-            <div className="flex-1 relative">
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => handleSearch(e.target.value)}
-                onFocus={() => setSearchFocused(true)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSearchSubmit();
-                }}
-                placeholder="Search books, authors, categories..."
-                className="w-full px-4 py-3.5 text-base bg-transparent outline-none placeholder:text-dark-gray/40"
-              />
-              {search && (
-                <button onClick={() => handleSearch("")} className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full hover:bg-gray-100">
-                  <X className="h-4 w-4 text-dark-gray/50" />
-                </button>
-              )}
-            </div>
-
-            {/* Search Button */}
-            <button
-              onClick={handleSearchSubmit}
-              className="px-6 bg-[#EBC9A8] hover:bg-[#D8B27A] text-charcoal transition-colors flex items-center justify-center"
-            >
-              <Search className="h-5 w-5" />
-            </button>
 
             {/* Search Dropdown */}
             <AnimatePresence>
@@ -370,7 +350,7 @@ export default function StorePage() {
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -387,7 +367,7 @@ export default function StorePage() {
                   {categories.map((cat) => (
                     <div key={cat.id}>
                       <button
-                        onClick={() => { setSelectedCategory(cat.id); setCurrentPage(1); }}
+                        onClick={() => { setSelectedCategory(cat.id); setSearchCategory(cat.id); setCurrentPage(1); }}
                         className={cn(
                           "w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm transition-all",
                           selectedCategory === cat.id
@@ -444,7 +424,7 @@ export default function StorePage() {
               {/* Clear Filters */}
               {(selectedCategory !== "all" || search || priceRange[1] < 50) && (
                 <button
-                  onClick={() => { setSelectedCategory("all"); setSearch(""); setPriceRange([0, 50]); setCurrentPage(1); }}
+                  onClick={() => { setSelectedCategory("all"); setSearchCategory("all"); setSearch(""); setPriceRange([0, 50]); setCurrentPage(1); }}
                   className="w-full px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
                 >
                   Clear All Filters
@@ -489,7 +469,7 @@ export default function StorePage() {
                 {selectedCategory !== "all" && (
                   <span className="inline-flex items-center gap-1 px-3 py-1 text-xs rounded-full bg-[#EBC9A8]/20 text-charcoal font-medium">
                     {selectedCat?.name}
-                    <button onClick={() => setSelectedCategory("all")} className="ml-1 hover:text-rose-600">
+                    <button onClick={() => { setSelectedCategory("all"); setSearchCategory("all"); }} className="ml-1 hover:text-rose-600">
                       <X className="h-3 w-3" />
                     </button>
                   </span>
