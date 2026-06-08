@@ -5,7 +5,6 @@ import { AuthProvider } from "@/providers/auth-provider";
 import { QueryProvider } from "@/providers/query-provider";
 import { CartProvider } from "@/context/cart-context";
 import { WishlistProvider } from "@/context/wishlist-context";
-import { UtilityBar } from "@/components/layout/utility-bar";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import "./globals.css";
@@ -148,7 +147,6 @@ export default function RootLayout({
             <QueryProvider>
               <CartProvider>
                 <WishlistProvider>
-                  <UtilityBar />
                   <Header />
                   <main className="flex-1">{children}</main>
                   <Footer />

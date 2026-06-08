@@ -4,11 +4,40 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ShoppingBag, Heart } from "lucide-react";
+import { Menu, X, ShoppingBag, Heart, Phone, HelpCircle, MapPin, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useCart } from "@/context/cart-context";
 import { useWishlist } from "@/context/wishlist-context";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const countries = [
+  { code: "US", name: "United States", flag: "🇺🇸" },
+  { code: "GB", name: "United Kingdom", flag: "🇬🇧" },
+  { code: "GH", name: "Ghana", flag: "🇬🇭" },
+  { code: "NG", name: "Nigeria", flag: "🇳🇬" },
+  { code: "KE", name: "Kenya", flag: "🇰🇪" },
+  { code: "ZA", name: "South Africa", flag: "🇿🇦" },
+  { code: "CA", name: "Canada", flag: "🇨🇦" },
+  { code: "AU", name: "Australia", flag: "🇦🇺" },
+];
+
+const languages = [
+  { code: "en", name: "English", flag: "🇺🇸" },
+  { code: "fr", name: "Français", flag: "🇫🇷" },
+  { code: "es", name: "Español", flag: "🇪🇸" },
+  { code: "pt", name: "Português", flag: "🇧🇷" },
+  { code: "de", name: "Deutsch", flag: "🇩🇪" },
+  { code: "it", name: "Italiano", flag: "🇮🇹" },
+  { code: "ar", name: "العربية", flag: "🇸🇦" },
+  { code: "zh", name: "中文", flag: "🇨🇳" },
+  { code: "ja", name: "日本語", flag: "🇯🇵" },
+];
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -39,14 +68,74 @@ export function Header({ user }: HeaderProps) {
   }, [pathname]);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-[#FDF6EE]/95 backdrop-blur-md shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50">
+      {/* Utility Bar */}
+      <div className="bg-[#F5EDE3] border-b border-[#E8D5BE] text-xs text-[#5C4A3A] hidden md:block">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-9">
+            <div className="flex items-center gap-4">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-1.5 hover:text-[#8A6A4A] transition-colors cursor-pointer">
+                  <MapPin className="h-3 w-3" />
+                  <span>United States</span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-48">
+                  {countries.map((c) => (
+                    <DropdownMenuItem key={c.code} className="flex items-center gap-2 cursor-pointer">
+                      <span>{c.flag}</span>
+                      <span>{c.name}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <span className="w-px h-3 bg-[#D4C4B0]" />
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-1.5 hover:text-[#8A6A4A] transition-colors cursor-pointer">
+                  <span>🌐</span>
+                  <span>English</span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-40">
+                  {languages.map((l) => (
+                    <DropdownMenuItem key={l.code} className="flex items-center gap-2 cursor-pointer">
+                      <span>{l.flag}</span>
+                      <span>{l.name}</span>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div className="flex items-center gap-5">
+              <Link href="/faq" className="flex items-center gap-1 hover:text-[#8A6A4A] transition-colors">
+                <HelpCircle className="h-3 w-3" />
+                <span>FAQ</span>
+              </Link>
+              <Link href="/help" className="hover:text-[#8A6A4A] transition-colors">Help Center</Link>
+              <Link href="/support" className="hover:text-[#8A6A4A] transition-colors">Support</Link>
+            </div>
+            <div className="flex items-center gap-4">
+              <Link href="/contact" className="flex items-center gap-1 hover:text-[#8A6A4A] transition-colors">
+                <Phone className="h-3 w-3" />
+                <span>Contact Us</span>
+              </Link>
+              <Link href="/orders" className="hover:text-[#8A6A4A] transition-colors">Track Order</Link>
+              <Link href="/dashboard" className="flex items-center gap-1 hover:text-[#8A6A4A] transition-colors">
+                <User className="h-3 w-3" />
+                <span>My Account</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Navigation */}
+      <div className="bg-[#FDF6EE]/95 backdrop-blur-md shadow-sm">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between lg:h-20">
           <Link href="/" className="flex items-center shrink-0">
             <img
               src="/logo.png"
               alt="Statement Publications"
-              className="h-80 lg:h-[400px] w-auto"
+              className="h-40 lg:h-[200px] w-auto"
             />
           </Link>
 
@@ -205,6 +294,7 @@ export function Header({ user }: HeaderProps) {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </header>
   );
 }
