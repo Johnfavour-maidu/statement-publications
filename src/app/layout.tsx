@@ -94,6 +94,12 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/logo.png" />
+        <link rel="apple-touch-icon" href="/logo.png" />
+        <meta name="theme-color" content="#EBC9A8" />
+        <meta name="msapplication-TileColor" content="#EBC9A8" />
+        <meta name="msapplication-TileImage" content="/logo.png" />
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <>
             <script

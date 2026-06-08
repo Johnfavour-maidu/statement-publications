@@ -199,6 +199,9 @@ export function Sidebar({ user, collapsed = false, onToggle }: SidebarProps) {
         collapsed ? "w-16" : "w-64"
       )}
     >
+      <Link href="/" className={cn("flex items-center gap-2 p-4 border-b", collapsed && "justify-center")}>
+        <img src="/logo.png" alt="Statement Publications" className={cn("w-auto", collapsed ? "h-8" : "h-10")} />
+      </Link>
       <div className={cn("flex items-center gap-3 p-4", collapsed && "justify-center")}>
         <Avatar className="h-10 w-10">
           <AvatarImage src={user.image || undefined} alt={user.name || ""} />
