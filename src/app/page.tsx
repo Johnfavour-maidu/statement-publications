@@ -441,7 +441,7 @@ export default function Home() {
             >
               <span className="italic">Welcome to</span>
               <br />
-              <span className="italic font-bold">Statement Publications</span>
+              <span className="italic font-bold mt-2 block">Statement Publications</span>
             </motion.h1>
 
             <motion.p
