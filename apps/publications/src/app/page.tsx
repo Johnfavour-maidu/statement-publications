@@ -440,9 +440,9 @@ export default function Home() {
       </section>
 
       {/* ── How It Works ────────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-[#EBC9A8]/10">
+      <section className="py-16 sm:py-20 bg-[#EBC9A8]/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-10">
             <span className="text-base font-bold uppercase tracking-wider text-[#8A6A4A]">
               Simple Process
             </span>
@@ -456,14 +456,14 @@ export default function Home() {
 
           <div className="relative">
             {/* connecting line */}
-            <div className="hidden lg:block absolute top-12 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-peach/20 via-gold/50 to-peach/20" />
+            <div className="hidden lg:block absolute top-10 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-peach/20 via-gold/50 to-peach/20" />
 
             <motion.div
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true, margin: "-80px" }}
               variants={stagger}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 lg:gap-3"
             >
               {steps.map((step, index) => (
                 <motion.div
@@ -474,16 +474,16 @@ export default function Home() {
                   <motion.div
                     whileHover={{ y: -4 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                    className={`relative text-center rounded-[14px] p-6 ${step.bg}`}
+                    className={`relative text-center rounded-[14px] p-5 ${step.bg}`}
                   >
-                    <div className={`relative z-10 mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border-2 border-current bg-white ${step.number} font-bold text-lg shadow-sm`}>
+                    <div className={`relative z-10 mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-white ${step.number} font-bold text-sm shadow-sm`}>
                       {index + 1}
                     </div>
-                    <div className="mb-3 flex justify-center">
-                      <step.icon className={`h-6 w-6 ${step.iconColor}`} />
+                    <div className="mb-2 flex justify-center">
+                      <step.icon className={`h-5 w-5 ${step.iconColor}`} />
                     </div>
-                    <h3 className="text-base font-semibold mb-1 text-charcoal">{step.title}</h3>
-                    <p className="text-sm text-dark-gray/70 leading-relaxed">
+                    <h3 className="text-sm font-semibold mb-1 text-charcoal">{step.title}</h3>
+                    <p className="text-xs text-dark-gray/70 leading-relaxed">
                       {step.description}
                     </p>
                   </motion.div>
