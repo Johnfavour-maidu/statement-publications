@@ -29,18 +29,18 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
 }
 
 const services = [
-  { icon: BookOpen, title: "Book Publishing", description: "End-to-end publishing for eBooks, paperbacks, and hardcovers with global distribution.", color: "bg-amber-100 text-amber-700", border: "border-amber-200", slug: "book-publishing" },
-  { icon: PenTool, title: "Book Editing", description: "Professional developmental editing, copyediting, and line editing by genre specialists.", color: "bg-[#F2D8BE]/40 text-[#8A6A4A]", border: "border-[#EBC9A8]", slug: "book-editing" },
-  { icon: CheckCircle2, title: "Proofreading", description: "Meticulous final-pass proofreading to catch every typo and formatting inconsistency.", color: "bg-blue-100 text-blue-700", border: "border-blue-200", slug: "proofreading" },
-  { icon: FileText, title: "ISBN Registration", description: "We handle the entire ISBN registration process for retail and library distribution.", color: "bg-rose-100 text-rose-700", border: "border-rose-200", slug: "isbn-registration" },
-  { icon: Palette, title: "Cover Design", description: "Custom cover designs by professional artists who understand genre trends.", color: "bg-violet-100 text-violet-700", border: "border-violet-200", slug: "cover-design" },
-  { icon: Printer, title: "Book Formatting", description: "Interior formatting for print and digital formats on every device and edition.", color: "bg-teal-100 text-teal-700", border: "border-teal-200", slug: "book-formatting" },
-  { icon: Megaphone, title: "Marketing Services", description: "Strategic marketing campaigns including social media, book launches, and advertising.", color: "bg-orange-100 text-orange-700", border: "border-orange-200", slug: "marketing" },
-  { icon: Feather, title: "Ghostwriting", description: "Skilled ghostwriters who bring your ideas to life while maintaining your voice.", color: "bg-pink-100 text-pink-700", border: "border-pink-200", slug: "ghostwriting" },
-  { icon: UserCheck, title: "Author Branding", description: "Build your author brand with professional headshots, bio, and social media strategy.", color: "bg-indigo-100 text-indigo-700", border: "border-indigo-200", slug: "author-branding" },
-  { icon: Headphones, title: "Audiobook Publishing", description: "Professional narration, production, and distribution to Audible and Apple Books.", color: "bg-cyan-100 text-cyan-700", border: "border-cyan-200", slug: "audiobook" },
-  { icon: GraduationCap, title: "Academic Publishing", description: "Specialized publishing for academic texts, dissertations, and scholarly works.", color: "bg-amber-100 text-amber-700", border: "border-amber-200", slug: "academic" },
-  { icon: Newspaper, title: "Magazine Publishing", description: "Full-service magazine publishing from layout design to digital distribution.", color: "bg-[#F2D8BE]/40 text-[#8A6A4A]", border: "border-[#EBC9A8]", slug: "magazine" },
+  { icon: BookOpen, title: "Book Publishing", description: "End-to-end publishing for eBooks, paperbacks, and hardcovers with global distribution.", cardBg: "bg-amber-50 border-amber-200", iconBg: "bg-amber-100 text-amber-700", btnBg: "bg-amber-100 hover:bg-amber-200 text-amber-700", slug: "book-publishing" },
+  { icon: PenTool, title: "Book Editing", description: "Professional developmental editing, copyediting, and line editing by genre specialists.", cardBg: "bg-[#FDF6EE] border-[#EBC9A8]", iconBg: "bg-[#F2D8BE]/60 text-[#8A6A4A]", btnBg: "bg-[#F2D8BE]/40 hover:bg-[#EBC9A8]/40 text-[#8A6A4A]", slug: "book-editing" },
+  { icon: CheckCircle2, title: "Proofreading", description: "Meticulous final-pass proofreading to catch every typo and formatting inconsistency.", cardBg: "bg-blue-50 border-blue-200", iconBg: "bg-blue-100 text-blue-700", btnBg: "bg-blue-100 hover:bg-blue-200 text-blue-700", slug: "proofreading" },
+  { icon: FileText, title: "ISBN Registration", description: "We handle the entire ISBN registration process for retail and library distribution.", cardBg: "bg-rose-50 border-rose-200", iconBg: "bg-rose-100 text-rose-700", btnBg: "bg-rose-100 hover:bg-rose-200 text-rose-700", slug: "isbn-registration" },
+  { icon: Palette, title: "Cover Design", description: "Custom cover designs by professional artists who understand genre trends.", cardBg: "bg-violet-50 border-violet-200", iconBg: "bg-violet-100 text-violet-700", btnBg: "bg-violet-100 hover:bg-violet-200 text-violet-700", slug: "cover-design" },
+  { icon: Printer, title: "Book Formatting", description: "Interior formatting for print and digital formats on every device and edition.", cardBg: "bg-teal-50 border-teal-200", iconBg: "bg-teal-100 text-teal-700", btnBg: "bg-teal-100 hover:bg-teal-200 text-teal-700", slug: "book-formatting" },
+  { icon: Megaphone, title: "Marketing Services", description: "Strategic marketing campaigns including social media, book launches, and advertising.", cardBg: "bg-orange-50 border-orange-200", iconBg: "bg-orange-100 text-orange-700", btnBg: "bg-orange-100 hover:bg-orange-200 text-orange-700", slug: "marketing" },
+  { icon: Feather, title: "Ghostwriting", description: "Skilled ghostwriters who bring your ideas to life while maintaining your voice.", cardBg: "bg-pink-50 border-pink-200", iconBg: "bg-pink-100 text-pink-700", btnBg: "bg-pink-100 hover:bg-pink-200 text-pink-700", slug: "ghostwriting" },
+  { icon: UserCheck, title: "Author Branding", description: "Build your author brand with professional headshots, bio, and social media strategy.", cardBg: "bg-indigo-50 border-indigo-200", iconBg: "bg-indigo-100 text-indigo-700", btnBg: "bg-indigo-100 hover:bg-indigo-200 text-indigo-700", slug: "author-branding" },
+  { icon: Headphones, title: "Audiobook Publishing", description: "Professional narration, production, and distribution to Audible and Apple Books.", cardBg: "bg-cyan-50 border-cyan-200", iconBg: "bg-cyan-100 text-cyan-700", btnBg: "bg-cyan-100 hover:bg-cyan-200 text-cyan-700", slug: "audiobook" },
+  { icon: GraduationCap, title: "Academic Publishing", description: "Specialized publishing for academic texts, dissertations, and scholarly works.", cardBg: "bg-amber-50 border-amber-200", iconBg: "bg-amber-100 text-amber-700", btnBg: "bg-amber-100 hover:bg-amber-200 text-amber-700", slug: "academic" },
+  { icon: Newspaper, title: "Magazine Publishing", description: "Full-service magazine publishing from layout design to digital distribution.", cardBg: "bg-[#FDF6EE] border-[#EBC9A8]", iconBg: "bg-[#F2D8BE]/60 text-[#8A6A4A]", btnBg: "bg-[#F2D8BE]/40 hover:bg-[#EBC9A8]/40 text-[#8A6A4A]", slug: "magazine" },
 ];
 
 const pricingTiers = [
@@ -49,8 +49,8 @@ const pricingTiers = [
     price: "Free",
     period: "",
     description: "Perfect for first-time authors ready to self-publish.",
-    color: "border-gray-200",
-    accent: "bg-gray-100 text-gray-700",
+    borderColor: "border-blue-200",
+    accent: "bg-blue-100 text-blue-700",
     icon: BookOpen,
     features: ["eBook publishing", "Basic cover templates", "ISBN registration", "Author dashboard", "Standard royalties (up to 50%)", "Email support"],
     cta: "Start Free",
@@ -61,7 +61,7 @@ const pricingTiers = [
     price: "$99",
     period: "per book",
     description: "Essential services for authors who need a professional start.",
-    color: "border-amber-200",
+    borderColor: "border-amber-200",
     accent: "bg-amber-100 text-amber-700",
     icon: PenTool,
     features: ["Everything in Starter", "Professional formatting", "Cover design consultation", "Metadata optimization", "Enhanced royalties (up to 60%)", "Priority email support"],
@@ -73,7 +73,7 @@ const pricingTiers = [
     price: "$499",
     period: "per book",
     description: "Comprehensive publishing for serious authors.",
-    color: "border-[#EBC9A8]",
+    borderColor: "border-[#EBC9A8]",
     accent: "bg-[#EBC9A8]/20 text-[#8A6A4A]",
     icon: Star,
     features: ["Everything in Basic", "Custom cover design", "Professional editing", "Print-on-demand setup", "Marketing consultation", "Audiobook production", "Priority support", "Enhanced royalties (up to 70%)"],
@@ -85,8 +85,8 @@ const pricingTiers = [
     price: "$999",
     period: "per book",
     description: "Premium publishing with full marketing and branding support.",
-    color: "border-[#EBC9A8]",
-    accent: "bg-[#F2D8BE]/40 text-[#8A6A4A]",
+    borderColor: "border-orange-200",
+    accent: "bg-orange-100 text-orange-700",
     icon: Award,
     features: ["Everything in Professional", "Author branding package", "Social media strategy", "Book launch campaign", "Press release distribution", "Dedicated editor", "Premium royalties (up to 75%)", "48-hour support"],
     cta: "Go Premium",
@@ -97,7 +97,7 @@ const pricingTiers = [
     price: "$1,999",
     period: "per book",
     description: "For established authors who want the complete package.",
-    color: "border-violet-200",
+    borderColor: "border-violet-200",
     accent: "bg-violet-100 text-violet-700",
     icon: Crown,
     features: ["Everything in Premium", "Multi-format publishing", "Global distribution setup", "Advanced marketing campaigns", "Author website design", "Newsletter setup", "Maximum royalties (up to 80%)", "Dedicated account manager"],
@@ -109,8 +109,8 @@ const pricingTiers = [
     price: "Custom",
     period: "",
     description: "Tailored solutions for publishers and large catalogs.",
-    color: "border-charcoal",
-    accent: "bg-charcoal/10 text-charcoal",
+    borderColor: "border-emerald-200",
+    accent: "bg-emerald-100 text-emerald-700",
     icon: Rocket,
     features: ["Everything in Author Pro", "Bulk publishing tools", "Custom branding package", "Advanced analytics dashboard", "API access", "White-label options", "Negotiable royalties", "Dedicated support team"],
     cta: "Contact Sales",
@@ -198,13 +198,21 @@ export default function ServicesPage() {
             {services.map((service, index) => (
               <AnimatedSection key={service.title} delay={index * 0.05}>
                 <Link href={`/services/${service.slug}`}>
-                  <div className={cn("group p-6 rounded-2xl border bg-white hover:shadow-xl transition-all duration-300 h-full cursor-pointer", service.border, "hover:-translate-y-1")}>
-                    <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center mb-4", service.color)}>
-                      <service.icon className="h-6 w-6" />
+                  <div className={cn(
+                    "group p-6 rounded-2xl border-2 transition-all duration-300 h-full cursor-pointer",
+                    "hover:shadow-xl hover:-translate-y-1",
+                    service.cardBg
+                  )}>
+                    <div className={cn("w-14 h-14 rounded-xl flex items-center justify-center mb-5 shadow-sm", service.iconBg)}>
+                      <service.icon className="h-7 w-7" />
                     </div>
                     <h3 className="text-lg font-bold text-charcoal mb-2 group-hover:text-[#8A6A4A] transition-colors">{service.title}</h3>
-                    <p className="text-sm text-dark-gray/70 leading-relaxed">{service.description}</p>
-                    <div className="mt-4 flex items-center gap-1 text-sm font-semibold text-[#8A6A4A] opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p className="text-sm text-dark-gray/70 leading-relaxed mb-5">{service.description}</p>
+                    <div className={cn(
+                      "inline-flex items-center gap-2 rounded-lg px-5 py-2.5 text-sm font-semibold transition-all duration-300",
+                      "shadow-sm group-hover:shadow-md group-hover:scale-105",
+                      service.btnBg
+                    )}>
                       Learn More <ArrowRight className="h-4 w-4" />
                     </div>
                   </div>
@@ -230,9 +238,14 @@ export default function ServicesPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {pricingTiers.map((tier, index) => (
               <AnimatedSection key={tier.name} delay={index * 0.05}>
-                <div className={cn("relative bg-white rounded-2xl border-2 p-6 shadow-sm hover:shadow-xl transition-all duration-300 h-full flex flex-col", tier.color, tier.popular && "ring-2 ring-[#EBC9A8] scale-[1.02]")}>
+                <div className={cn(
+                  "relative bg-white rounded-2xl border-2 p-6 transition-all duration-300 h-full flex flex-col",
+                  "hover:shadow-xl hover:-translate-y-1",
+                  tier.borderColor,
+                  tier.popular && "ring-2 ring-[#EBC9A8] scale-[1.02]"
+                )}>
                   {tier.popular && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#EBC9A8] text-charcoal text-xs font-bold rounded-full">
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-[#EBC9A8] text-charcoal text-xs font-bold rounded-full shadow-sm">
                       Most Popular
                     </div>
                   )}
@@ -253,7 +266,12 @@ export default function ServicesPage() {
                       </li>
                     ))}
                   </ul>
-                  <Link href="/register" className={cn("w-full inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-all", tier.popular ? "bg-[#EBC9A8] text-charcoal hover:bg-[#D8B27A]" : "border-2 border-charcoal/20 text-charcoal hover:bg-charcoal hover:text-white")}>
+                  <Link href="/register" className={cn(
+                    "w-full inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-all",
+                    tier.popular
+                      ? "bg-[#EBC9A8] text-charcoal hover:bg-[#D8B27A] shadow-sm hover:shadow-md"
+                      : "border-2 border-charcoal/20 text-charcoal hover:bg-charcoal hover:text-white"
+                  )}>
                     {tier.cta} <ArrowRight className="h-4 w-4" />
                   </Link>
                 </div>
