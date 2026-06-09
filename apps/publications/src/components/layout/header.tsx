@@ -148,7 +148,7 @@ export function Header({ user }: HeaderProps) {
               <img
                 src="/logo.png"
                 alt="Statement Publications"
-                className="h-36 lg:h-[170px] w-auto"
+                className="h-10 lg:h-12 w-auto"
               />
             </Link>
 
