@@ -3,5 +3,5 @@ export default function PublicLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="pt-16">{children}</div>;
+  return <div className="pt-[116px]">{children}</div>;
 }

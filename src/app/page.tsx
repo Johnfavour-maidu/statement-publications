@@ -424,7 +424,7 @@ export default function Home() {
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative min-h-screen w-full overflow-hidden" style={{ background: "linear-gradient(135deg, #FDF6EE 0%, #FAF8F5 50%, #F2D8BE 100%)" }}>
         {/* Centered text */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-20">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-28 lg:pt-32">
           <div className="max-w-xl text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}

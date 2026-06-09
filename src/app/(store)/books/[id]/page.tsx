@@ -98,7 +98,7 @@ export default function BookDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-[116px]">
+    <div className="min-h-screen bg-white">
       {/* Cart Notification */}
       {cartNotification && (
         <motion.div

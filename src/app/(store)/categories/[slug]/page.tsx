@@ -168,7 +168,7 @@ export default function CategoryBooksPage() {
   }, [slug, sortBy]);
 
   return (
-    <div className="py-8">
+    <div className="pb-8">
       <nav className="flex items-center gap-1 text-sm text-muted-foreground mb-6">
         <Link href="/" className="hover:text-foreground transition-colors">
           Home

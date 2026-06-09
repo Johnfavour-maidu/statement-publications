@@ -139,7 +139,7 @@ const item = {
 
 export default function CategoriesPage() {
   return (
-    <div className="py-12">
+    <div className="pb-12">
       <div className="text-center mb-12 space-y-3">
         <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
           Browse Categories

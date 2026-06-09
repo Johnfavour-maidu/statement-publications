@@ -212,7 +212,7 @@ export default function StorePage() {
   const selectedCat = categories.find((c) => c.id === selectedCategory);
 
   return (
-    <div className="min-h-screen bg-white pt-[116px]">
+    <div className="min-h-screen bg-white">
       {/* Cart Success Notification */}
       <AnimatePresence>
         {cartNotification && (

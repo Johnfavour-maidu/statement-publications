@@ -3,5 +3,5 @@ export default function StoreLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <div className="pt-[116px]">{children}</div>;
 }
