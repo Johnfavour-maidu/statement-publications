@@ -23,7 +23,7 @@ export default function BlogHero({ onSearch, searchQuery }: BlogHeroProps) {
         {/* The Statement Blog — animated gradient background */}
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}
           className="relative inline-flex items-center gap-2 rounded-full border border-[#EBC9A8]/30 bg-white/60 backdrop-blur-sm px-4 py-1.5 text-sm text-[#8A6A4A] mb-6 overflow-hidden">
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#EBC9A8]/20 via-[#D8B27A]/30 to-[#F2D8BE]/20 animate-gradient bg-[length:200%_200%] opacity-60" />
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#EBC9A8]/10 via-[#D8B27A]/15 to-[#F2D8BE]/10 animate-gradient bg-[length:200%_200%]" />
           <Sparkles className="relative h-4 w-4" />
           <span className="relative">The Statement Blog</span>
         </motion.div>

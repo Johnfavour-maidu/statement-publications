@@ -145,13 +145,13 @@ export default function BlogPage() {
       <BlogHero onSearch={handleSearch} searchQuery={searchQuery} />
 
       {/* Explore Topics — brown background */}
-      <section className="py-12" style={{ background: "linear-gradient(135deg, #8A6A4A 0%, #A07850 50%, #8A6A4A 100%)" }}>
+      <section className="py-12" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 40%, #F2D8BE 100%)" }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-white" style={{ fontFamily: "var(--font-libre)" }}>
+            <h2 className="text-2xl sm:text-3xl font-bold text-charcoal" style={{ fontFamily: "var(--font-libre)" }}>
               Explore Topics
             </h2>
-            <p className="mt-2 text-white/70">Find articles on the topics that matter to you</p>
+            <p className="mt-2 text-dark-gray/60">Find articles on the topics that matter to you</p>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <CategoryShowcase categories={categories} />
