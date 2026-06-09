@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Search, Sparkles } from "lucide-react";
+import { useState } from "react";
 
 interface BlogHeroProps {
   onSearch: (query: string) => void;
@@ -9,8 +10,11 @@ interface BlogHeroProps {
 }
 
 export default function BlogHero({ onSearch, searchQuery }: BlogHeroProps) {
+  const [inputValue, setInputValue] = useState(searchQuery);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    onSearch(inputValue);
   };
 
   return (
@@ -61,8 +65,8 @@ export default function BlogHero({ onSearch, searchQuery }: BlogHeroProps) {
               <Search className="absolute left-4 h-5 w-5 text-dark-gray/30" />
               <input
                 type="text"
-                value={searchQuery}
-                onChange={(e) => onSearch(e.target.value)}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Search articles..."
                 className="w-full pl-12 pr-28 py-4 rounded-[14px] bg-transparent focus:outline-none text-sm"
               />
