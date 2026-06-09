@@ -45,6 +45,7 @@ export default function BlogPage() {
   const [sortOpen, setSortOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const mainContentRef = useRef<HTMLDivElement>(null);
+  const articlesSectionRef = useRef<HTMLDivElement>(null);
   const editorsPicks = getEditorsPicks();
   const trending = getTrendingPosts();
 
@@ -60,6 +61,7 @@ export default function BlogPage() {
       posts = posts.filter((p) =>
         p.title.toLowerCase().includes(q) ||
         p.excerpt.toLowerCase().includes(q) ||
+        p.content.toLowerCase().includes(q) ||
         p.author.name.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q) ||
         p.tags.some((t) => t.toLowerCase().includes(q))
@@ -102,26 +104,29 @@ export default function BlogPage() {
   const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
   const paginatedPosts = filteredPosts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE);
 
-  const scrollToTop = useCallback(() => {
-    if (mainContentRef.current) {
-      mainContentRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  const scrollToArticles = useCallback(() => {
+    if (articlesSectionRef.current) {
+      articlesSectionRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   }, []);
 
   const handleCategoryChange = (slug: string) => {
     setActiveCategory(slug);
     setCurrentPage(1);
-    scrollToTop();
+    scrollToArticles();
   };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    scrollToTop();
+    scrollToArticles();
   };
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     setCurrentPage(1);
+    if (query.trim()) {
+      setTimeout(() => scrollToArticles(), 100);
+    }
   };
 
   const getPageNumbers = () => {
@@ -160,11 +165,11 @@ export default function BlogPage() {
       </section>
 
       {/* Main Content + Sidebar */}
-      <section className="py-16 sm:py-20 bg-white">
+      <section className="py-16 sm:py-20 bg-white" ref={articlesSectionRef}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-10">
             {/* Main Content */}
-            <div className="lg:col-span-2" ref={mainContentRef}>
+            <div className="lg:col-span-2">
               {/* Filter Tabs */}
               <AnimatedSection className="mb-8">
                 <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">

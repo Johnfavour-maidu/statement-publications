@@ -31,6 +31,7 @@ export default function TopicPageClient({ slug }: TopicPageClientProps) {
     return topicPosts.filter((p) =>
       p.title.toLowerCase().includes(q) ||
       p.excerpt.toLowerCase().includes(q) ||
+      p.content.toLowerCase().includes(q) ||
       p.author.name.toLowerCase().includes(q) ||
       p.tags.some((t) => t.toLowerCase().includes(q))
     );
