@@ -282,7 +282,7 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-screen w-full overflow-hidden" style={{ background: "linear-gradient(135deg, #FDF6EE 0%, #F5EDE3 35%, #FAFAF7 70%, #FFFFFF 100%)" }}>
+      <section className="relative min-h-screen w-full overflow-hidden" style={{ background: "linear-gradient(to bottom right, #FDF6EE 0%, #FDF6EE 30%, rgba(253,246,238,0.5) 60%, white 100%)" }}>
 
         {/* Centered text */}
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-40 lg:pt-48">
@@ -595,7 +595,7 @@ export default function Home() {
       </section>
 
       {/* ── CTA Banner ──────────────────────────────────── */}
-      <section className="py-12 sm:py-16 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
+      <section className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
         <div className="absolute inset-0">
           <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-white/15 rounded-full blur-3xl" />
           <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gold/10 rounded-full blur-3xl" />
@@ -609,7 +609,7 @@ export default function Home() {
               Join thousands of authors who chose Statement to publish their
               books. Start your publishing journey today — it&apos;s free.
             </p>
-            <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <motion.div whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(29,29,29,0.4)" }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
                 <Button
                   size="lg"
