@@ -30,7 +30,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { AnimatedHeroBackground } from "@/components/animated-hero-background";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -284,8 +283,6 @@ export default function Home() {
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#FDF6EE] via-white to-white">
-        {/* Animated publishing elements background */}
-        <AnimatedHeroBackground />
 
         {/* Centered text */}
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-40 lg:pt-48">
@@ -336,7 +333,7 @@ export default function Home() {
               <Link
                 href="/register"
                 className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-white transition-all hover:shadow-lg"
-                style={{ fontFamily: "var(--font-libre)", backgroundColor: "#8A6A4A" }}
+                style={{ fontFamily: "var(--font-libre)", backgroundColor: "#D8B27A" }}
               >
                 Start Publishing
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
