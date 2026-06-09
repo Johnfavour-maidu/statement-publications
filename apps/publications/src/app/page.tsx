@@ -495,9 +495,9 @@ export default function Home() {
       </section>
 
       {/* ── Testimonials ────────────────────────────────── */}
-      <section className="py-16 sm:py-20 bg-white">
+      <section className="py-12 sm:py-16 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-10">
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
             <span className="text-sm font-semibold text-peach uppercase tracking-wider">
               Testimonials
             </span>
@@ -514,7 +514,7 @@ export default function Home() {
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
             variants={stagger}
-            className="grid grid-cols-1 md:grid-cols-3 gap-5"
+            className="grid grid-cols-1 md:grid-cols-3 gap-4"
           >
             {testimonials.map((testimonial) => (
               <motion.div
@@ -525,38 +525,40 @@ export default function Home() {
                 <motion.div
                   whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.25)" }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className={`group relative rounded-[14px] p-5 shadow-sm transition-all duration-300 ${testimonial.bg}`}
+                  className={`group relative rounded-[14px] p-4 shadow-sm transition-all duration-300 flex flex-col ${testimonial.bg}`}
                 >
-                  <Quote className={`h-6 w-6 ${testimonial.quoteColor} mb-3`} />
-                  <p className="text-sm leading-relaxed text-dark-gray/70 line-clamp-4">
+                  <Quote className={`h-5 w-5 ${testimonial.quoteColor} mb-2`} />
+                  <p className="text-xs leading-relaxed text-dark-gray/70 line-clamp-3">
                     &ldquo;{testimonial.quote}&rdquo;
                   </p>
-                  <div className="mt-4 flex items-center gap-3">
-                    <div
-                      className={cn(
-                        "h-9 w-9 rounded-full bg-gradient-to-br flex items-center justify-center text-xs font-bold text-white",
-                        testimonial.color
-                      )}
-                    >
-                      {testimonial.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
+                  <div className="mt-auto pt-3">
+                    <div className="flex items-center gap-2.5">
+                      <div
+                        className={cn(
+                          "h-8 w-8 rounded-full bg-gradient-to-br flex items-center justify-center text-[10px] font-bold text-white",
+                          testimonial.color
+                        )}
+                      >
+                        {testimonial.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-charcoal">{testimonial.name}</p>
+                        <p className="text-[10px] text-dark-gray/60">
+                          {testimonial.role}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold text-charcoal">{testimonial.name}</p>
-                      <p className="text-xs text-dark-gray/60">
-                        {testimonial.role}
-                      </p>
+                    <div className="mt-2 flex gap-0.5">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <Star
+                          key={i}
+                          className="h-2.5 w-2.5 fill-gold text-gold"
+                        />
+                      ))}
                     </div>
-                  </div>
-                  <div className="mt-2.5 flex gap-0.5">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className="h-3 w-3 fill-gold text-gold"
-                      />
-                    ))}
                   </div>
                 </motion.div>
               </motion.div>
