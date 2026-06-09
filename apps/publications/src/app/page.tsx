@@ -455,9 +455,6 @@ export default function Home() {
           </AnimatedSection>
 
           <div className="relative">
-            {/* connecting line */}
-            <div className="hidden lg:block absolute top-8 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-peach/20 via-gold/50 to-peach/20" />
-
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -483,7 +480,7 @@ export default function Home() {
                       <step.icon className={`h-4 w-4 ${step.iconColor}`} />
                     </div>
                     <h3 className="text-sm font-semibold mb-0.5 text-charcoal">{step.title}</h3>
-                    <p className="text-xs text-dark-gray/70 leading-relaxed">
+                    <p className="text-xs text-dark-gray/70 leading-relaxed line-clamp-2">
                       {step.description}
                     </p>
                   </motion.div>
