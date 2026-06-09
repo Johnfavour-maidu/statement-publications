@@ -436,7 +436,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-5xl sm:text-6xl md:text-7xl leading-[1.1] text-charcoal"
+              className="text-4xl sm:text-5xl md:text-6xl leading-[1.1] text-charcoal"
               style={{ fontFamily: "var(--font-libre)" }}
             >
               <span className="italic">Welcome to</span>
