@@ -154,7 +154,7 @@ export function Header({ user }: HeaderProps) {
                   className={cn(
                     "relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200",
                     pathname === link.href
-                      ? "text-charcoal"
+                      ? "text-white"
                       : "text-charcoal hover:text-brown hover:bg-peach/10"
                   )}
                 >
@@ -162,7 +162,7 @@ export function Header({ user }: HeaderProps) {
                   {pathname === link.href && (
                     <motion.div
                       layoutId="activeNav"
-                      className="absolute inset-0 rounded-lg bg-peach/20"
+                      className="absolute inset-0 rounded-lg bg-[#8A6A4A]"
                       transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                     />
                   )}
@@ -247,7 +247,7 @@ export function Header({ user }: HeaderProps) {
                       className={cn(
                         "rounded-lg px-4 py-3 text-sm font-medium transition-colors duration-200",
                         pathname === link.href
-                          ? "bg-peach/20 text-charcoal"
+                          ? "bg-[#8A6A4A] text-white"
                           : "text-charcoal hover:bg-peach/10 hover:text-brown"
                       )}
                     >

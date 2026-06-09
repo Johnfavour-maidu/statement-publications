@@ -422,17 +422,10 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-screen w-full overflow-hidden">
-        {/* Full-screen background image */}
-        <img
-          src="/hero-bg.jpg"
-          alt="Statement Publications — Empowering Authors"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-
-        {/* Text overlay on the left */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center">
-          <div className="max-w-xl py-20">
+      <section className="relative min-h-screen w-full overflow-hidden" style={{ background: "linear-gradient(135deg, #FDF6EE 0%, #FAF8F5 50%, #F2D8BE 100%)" }}>
+        {/* Centered text */}
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-20">
+          <div className="max-w-xl text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -469,7 +462,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-8 flex flex-wrap items-center gap-4"
+              className="mt-8 flex flex-wrap items-center justify-center gap-4"
             >
               <Link
                 href="/register"
@@ -494,7 +487,7 @@ export default function Home() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="mt-10 flex flex-wrap items-center gap-6 text-sm text-dark-gray/70"
+              className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-dark-gray/70"
             >
               <div className="flex items-center gap-2">
                 <svg className="h-5 w-5 text-[#EBC9A8]" fill="currentColor" viewBox="0 0 20 20">
