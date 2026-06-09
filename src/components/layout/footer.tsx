@@ -47,21 +47,21 @@ export function Footer() {
   return (
     <footer className="border-t border-gray-200" style={{ backgroundColor: "#FAF8F5" }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-        {/* 4-Column Grid */}
+        {/* 4-Column Grid — all columns start at the same top line */}
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
 
           {/* Column 1 — Logo + Description */}
-          <div className="space-y-3">
-            <Link href="/" className="inline-block">
-              <img src="/logo.png" alt="Statement Publications" className="h-36 lg:h-[170px] w-auto" />
+          <div className="flex flex-col">
+            <Link href="/" className="inline-block mb-3">
+              <img src="/logo.png" alt="Statement Publications" className="h-10 w-auto" />
             </Link>
-            <p className="text-sm text-charcoal/70 leading-relaxed max-w-[280px]">
+            <p className="text-sm text-charcoal/70 leading-relaxed">
               Empowering independent authors to share their voice and connect with millions of readers across the globe.
             </p>
           </div>
 
           {/* Column 2 — About */}
-          <div>
+          <div className="flex flex-col">
             <h3 className="text-sm font-bold text-charcoal mb-5">About</h3>
             <ul className="space-y-3.5">
               {footerLinks.about.map((link) => (
@@ -75,7 +75,7 @@ export function Footer() {
           </div>
 
           {/* Column 3 — Quick Links */}
-          <div>
+          <div className="flex flex-col">
             <h3 className="text-sm font-bold text-charcoal mb-5">Quick Links</h3>
             <ul className="space-y-3.5">
               {footerLinks.quickLinks.map((link) => (
@@ -89,14 +89,14 @@ export function Footer() {
           </div>
 
           {/* Column 4 — Stay In Touch */}
-          <div>
+          <div className="flex flex-col">
             <h3 className="text-sm font-bold text-charcoal mb-5">Stay In Touch</h3>
-            <p className="text-sm text-charcoal/70 mb-5 leading-relaxed">
+            <p className="text-sm text-charcoal/70 leading-relaxed">
               Connect with Statement Publications across our social platforms.
             </p>
 
             {/* Social Icons */}
-            <div className="flex flex-wrap gap-3 mb-8">
+            <div className="flex flex-wrap gap-3 mt-5">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
@@ -113,7 +113,7 @@ export function Footer() {
             </div>
 
             {/* Newsletter in Column 4 */}
-            <div>
+            <div className="mt-5">
               <h4 className="text-sm font-bold text-charcoal mb-2">Newsletter</h4>
               <form onSubmit={handleSubscribe} className="flex gap-2">
                 <Input
