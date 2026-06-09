@@ -20,12 +20,13 @@ export default function BlogHero({ onSearch, searchQuery }: BlogHeroProps) {
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D8B27A]/10 rounded-full blur-3xl" />
       </div>
       <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-        {/* The Statement Blog — animated gradient background */}
+        {/* The Statement Blog — animated gradient border */}
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}
-          className="relative inline-flex items-center gap-2 rounded-full border border-[#EBC9A8]/30 bg-white/60 backdrop-blur-sm px-4 py-1.5 text-sm text-[#8A6A4A] mb-6 overflow-hidden">
-          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#EBC9A8]/10 via-[#D8B27A]/15 to-[#F2D8BE]/10 animate-gradient bg-[length:200%_200%]" />
-          <Sparkles className="relative h-4 w-4" />
-          <span className="relative">The Statement Blog</span>
+          className="relative inline-flex mb-6 p-[2px] rounded-full bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE]">
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/80 backdrop-blur-sm px-4 py-1.5 text-sm text-[#8A6A4A]">
+            <Sparkles className="h-4 w-4" />
+            <span>The Statement Blog</span>
+          </div>
         </motion.div>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
