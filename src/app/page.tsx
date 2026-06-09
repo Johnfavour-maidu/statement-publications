@@ -34,6 +34,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
+import { AnimatedHeroBackground } from "@/components/animated-hero-background";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -423,11 +424,8 @@ export default function Home() {
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#FDF6EE] via-white to-white">
-        {/* Decorative blurred circles */}
-        <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#EBC9A8]/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D8B27A]/15 rounded-full blur-3xl" />
-        </div>
+        {/* Animated publishing elements background */}
+        <AnimatedHeroBackground />
 
         {/* Centered text */}
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-40 lg:pt-48">
