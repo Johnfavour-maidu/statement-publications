@@ -47,91 +47,95 @@ export function Footer() {
   return (
     <footer className="border-t border-gray-200" style={{ backgroundColor: "#FAF8F5" }}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20">
-        {/* 4-Column Grid — all columns start at the same top line */}
-        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+        <div className="flex flex-col lg:flex-row lg:gap-16">
 
-          {/* Column 1 — Logo + Description */}
-          <div className="flex flex-col">
-            <Link href="/" className="inline-block mb-3">
+          {/* Left — Logo + Description */}
+          <div className="lg:w-[35%] flex flex-col">
+            <Link href="/" className="inline-block">
               <img src="/logo.png" alt="Statement Publications" className="h-36 lg:h-[170px] w-auto" />
             </Link>
-            <p className="text-xs text-charcoal/60 leading-snug mt-1">
+            <p className="text-sm text-charcoal/70 leading-relaxed mt-4 max-w-sm">
               Empowering independent authors to share their voice and connect with millions of readers across the globe.
             </p>
           </div>
 
-          {/* Column 2 — About */}
-          <div className="flex flex-col">
-            <h3 className="text-sm font-bold text-charcoal mb-5">About</h3>
-            <ul className="space-y-3.5">
-              {footerLinks.about.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-charcoal/70 transition-colors hover:text-charcoal">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Right — 3-Column Links */}
+          <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-10 mt-12 lg:mt-0">
 
-          {/* Column 3 — Quick Links */}
-          <div className="flex flex-col">
-            <h3 className="text-sm font-bold text-charcoal mb-5">Quick Links</h3>
-            <ul className="space-y-3.5">
-              {footerLinks.quickLinks.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-sm text-charcoal/70 transition-colors hover:text-charcoal">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Column 4 — Stay In Touch */}
-          <div className="flex flex-col">
-            <h3 className="text-sm font-bold text-charcoal mb-5">Stay In Touch</h3>
-            <p className="text-sm text-charcoal/70 leading-relaxed">
-              Connect with Statement Publications across our social platforms.
-            </p>
-
-            {/* Social Icons */}
-            <div className="flex flex-wrap gap-3 mt-5">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={social.label}
-                  title={social.label}
-                  className={`flex h-10 w-10 items-center justify-center rounded-full text-white transition-all duration-300 hover:scale-110 hover:shadow-lg ${social.color}`}
-                >
-                  <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d={social.path} /></svg>
-                </a>
-              ))}
+            {/* About */}
+            <div className="flex flex-col">
+              <h3 className="text-sm font-bold text-charcoal mb-5">About</h3>
+              <ul className="space-y-3.5">
+                {footerLinks.about.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="text-sm text-charcoal/70 transition-colors hover:text-charcoal">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
 
-            {/* Newsletter in Column 4 */}
-            <div className="mt-5">
-              <h4 className="text-sm font-bold text-charcoal mb-2">Newsletter</h4>
-              <form onSubmit={handleSubscribe} className="flex gap-2">
-                <Input
-                  type="email"
-                  placeholder="Your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-11 text-sm border-gray-200 bg-white rounded-lg flex-1"
-                  required
-                />
-                <Button type="submit" size="icon" className="h-11 w-11 shrink-0 rounded-lg bg-[#EBC9A8] hover:bg-[#D8B27A] text-charcoal">
-                  <Send className="h-4 w-4" />
-                </Button>
-              </form>
-              {subscribed && (
-                <p className="text-xs text-green-600 mt-2">Thanks for subscribing!</p>
-              )}
+            {/* Quick Links */}
+            <div className="flex flex-col">
+              <h3 className="text-sm font-bold text-charcoal mb-5">Quick Links</h3>
+              <ul className="space-y-3.5">
+                {footerLinks.quickLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="text-sm text-charcoal/70 transition-colors hover:text-charcoal">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
+
+            {/* Stay In Touch */}
+            <div className="flex flex-col">
+              <h3 className="text-sm font-bold text-charcoal mb-5">Stay In Touch</h3>
+              <p className="text-sm text-charcoal/70 leading-relaxed">
+                Connect with Statement Publications across our social platforms.
+              </p>
+
+              {/* Social Icons */}
+              <div className="flex flex-wrap gap-3 mt-5">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    title={social.label}
+                    className={`flex h-10 w-10 items-center justify-center rounded-full text-white transition-all duration-300 hover:scale-110 hover:shadow-lg ${social.color}`}
+                  >
+                    <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d={social.path} /></svg>
+                  </a>
+                ))}
+              </div>
+
+              {/* Newsletter */}
+              <div className="mt-5">
+                <h4 className="text-sm font-bold text-charcoal mb-2">Newsletter</h4>
+                <form onSubmit={handleSubscribe} className="flex gap-2">
+                  <Input
+                    type="email"
+                    placeholder="Your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-11 text-sm border-gray-200 bg-white rounded-lg flex-1"
+                    required
+                  />
+                  <Button type="submit" size="icon" className="h-11 w-11 shrink-0 rounded-lg bg-[#EBC9A8] hover:bg-[#D8B27A] text-charcoal">
+                    <Send className="h-4 w-4" />
+                  </Button>
+                </form>
+                {subscribed && (
+                  <p className="text-xs text-green-600 mt-2">Thanks for subscribing!</p>
+                )}
+              </div>
+            </div>
+
           </div>
         </div>
 
