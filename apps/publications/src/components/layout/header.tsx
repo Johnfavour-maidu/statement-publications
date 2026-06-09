@@ -173,11 +173,21 @@ export function Header({ user }: HeaderProps) {
             </nav>
 
             <div className="flex items-center gap-3">
-              {/* My Account */}
-              <Link href="/login" className="flex flex-col items-center px-2 py-1 rounded-lg hover:bg-peach/10 transition-colors group">
-                <User className="h-6 w-6 text-charcoal group-hover:text-charcoal/70 transition-colors" />
-                <span className="text-[10px] font-semibold text-charcoal mt-0.5 hidden sm:block">My Account</span>
-              </Link>
+              {user ? (
+                <Link href="/author/dashboard" className="flex flex-col items-center px-2 py-1 rounded-lg hover:bg-peach/10 transition-colors group">
+                  <User className="h-6 w-6 text-charcoal group-hover:text-charcoal/70 transition-colors" />
+                  <span className="text-[10px] font-semibold text-charcoal mt-0.5 hidden sm:block">My Account</span>
+                </Link>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Link href="/login" className="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-charcoal border border-charcoal/20 hover:bg-charcoal hover:text-white transition-all">
+                    Sign In
+                  </Link>
+                  <Link href="/register" className="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-charcoal" style={{ backgroundColor: "#D8B27A" }}>
+                    Create Account
+                  </Link>
+                </div>
+              )}
 
               <Button
                 variant="ghost"

@@ -160,11 +160,11 @@ const steps = [
     title: "Upload Manuscript",
     description:
       "Upload your manuscript in any standard format. We accept DOCX, PDF, and more.",
-    bg: "bg-[#F2D8BE]",
-    iconColor: "text-[#8A6A4A]",
-    number: "text-[#8A6A4A]",
-    border: "border-[#EBC9A8]",
-    gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]",
+    bg: "bg-emerald-200",
+    iconColor: "text-emerald-800",
+    number: "text-emerald-700",
+    border: "border-emerald-300",
+    gradientBorder: "from-emerald-300 via-emerald-400 to-emerald-500",
   },
   {
     icon: Palette,
@@ -418,7 +418,7 @@ export default function Home() {
       <section className="py-10 sm:py-14" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
-            <span className="text-base font-bold uppercase tracking-wider text-[#8A6A4A]">
+            <span className="text-base font-bold uppercase tracking-wider text-charcoal">
               Simple Process
             </span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
@@ -554,18 +554,22 @@ export default function Home() {
           <AnimatedSection delay={0.1}>
             <Accordion type="single" collapsible className="space-y-2">
               {faqs.map((faq, index) => (
-                <AccordionItem
+                <div
                   key={index}
-                  value={`faq-${index}`}
-                  className="rounded-xl border border-peach/10 bg-white px-4 data-[state=open]:shadow-sm data-[state=open]:border-peach/20 transition-colors"
+                  className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE]"
                 >
-                  <AccordionTrigger className="text-left text-sm font-medium py-3 hover:no-underline hover:text-peach">
-                    {faq.question}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm text-dark-gray/70 leading-relaxed pb-3">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
+                  <AccordionItem
+                    value={`faq-${index}`}
+                    className="rounded-[10px] border-0 bg-white px-4 data-[state=open]:shadow-sm transition-colors"
+                  >
+                    <AccordionTrigger className="text-left text-sm font-medium py-3 hover:no-underline hover:text-[#D8B27A]">
+                      {faq.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm text-dark-gray/70 leading-relaxed pb-3">
+                      {faq.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                </div>
               ))}
             </Accordion>
           </AnimatedSection>
