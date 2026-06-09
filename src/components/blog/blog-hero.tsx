@@ -48,7 +48,7 @@ export default function BlogHero() {
           Expert advice on writing, publishing, marketing, and building your author career.
         </motion.p>
 
-        {/* Search */}
+        {/* Search with animated gradient border */}
         <motion.form
           onSubmit={handleSearch}
           initial={{ opacity: 0, y: 20 }}
@@ -56,21 +56,23 @@ export default function BlogHero() {
           transition={{ duration: 0.6, delay: 0.3 }}
           className="mt-8 max-w-lg mx-auto"
         >
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-dark-gray/30" />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search articles..."
-              className="w-full pl-12 pr-28 py-4 rounded-2xl border border-gray-200 bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-[#EBC9A8] focus:border-transparent text-sm"
-            />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 px-5 py-2.5 bg-[#EBC9A8] text-charcoal text-sm font-semibold rounded-xl hover:bg-[#D8B27A] transition-colors"
-            >
-              Search
-            </button>
+          <div className="relative p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE]">
+            <div className="relative flex items-center bg-white rounded-[14px]">
+              <Search className="absolute left-4 h-5 w-5 text-dark-gray/30" />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search articles..."
+                className="w-full pl-12 pr-28 py-4 rounded-[14px] bg-transparent focus:outline-none text-sm"
+              />
+              <button
+                type="submit"
+                className="absolute right-2 px-5 py-2.5 bg-[#EBC9A8] text-charcoal text-sm font-semibold rounded-xl hover:bg-[#D8B27A] transition-colors"
+              >
+                Search
+              </button>
+            </div>
           </div>
         </motion.form>
       </div>

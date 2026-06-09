@@ -4,6 +4,15 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { allAuthors } from "@/lib/blog-data";
 
+const authorColors = [
+  "border-amber-300 ring-amber-100",
+  "border-blue-300 ring-blue-100",
+  "border-rose-300 ring-rose-100",
+  "border-violet-300 ring-violet-100",
+  "border-teal-300 ring-teal-100",
+  "border-orange-300 ring-orange-100",
+];
+
 export default function AuthorSpotlight() {
   const spotlight = allAuthors.slice(0, 6);
 
@@ -16,9 +25,9 @@ export default function AuthorSpotlight() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: i * 0.05 }}
-          className="flex items-center gap-3 p-4 rounded-xl bg-white border border-gray-100 hover:border-[#EBC9A8] hover:shadow-md transition-all duration-300"
+          className={`flex items-center gap-3 p-4 rounded-xl bg-white border-2 ${authorColors[i]} hover:shadow-md transition-all duration-300`}
         >
-          <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 ring-[#EBC9A8]/20 shrink-0">
+          <div className="relative w-10 h-10 rounded-full overflow-hidden ring-2 shrink-0">
             <Image src={author.avatar} alt={author.name} fill className="object-cover" />
           </div>
           <div className="min-w-0">
