@@ -422,10 +422,16 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-screen w-full overflow-hidden" style={{ background: "linear-gradient(135deg, #FDF6EE 0%, #FAF8F5 50%, #F2D8BE 100%)" }}>
+      <section className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#FDF6EE] via-white to-white">
+        {/* Decorative blurred circles */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#EBC9A8]/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D8B27A]/15 rounded-full blur-3xl" />
+        </div>
+
         {/* Centered text */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-28 lg:pt-32">
-          <div className="max-w-xl text-center">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-32 lg:pt-36">
+          <div className="max-w-2xl text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -452,7 +458,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-5 text-base sm:text-lg text-dark-gray/80 max-w-lg leading-relaxed"
+              className="mt-5 text-base sm:text-lg text-dark-gray/80 max-w-lg mx-auto leading-relaxed"
               style={{ fontFamily: "var(--font-libre)" }}
             >
               Empowering independent authors to share their voice and connect with millions of readers across the globe.
@@ -474,12 +480,19 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </Link>
+              {/* Learn More — animated gradient border */}
               <Link
-                href="/books"
-                className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal px-6 py-3 text-base font-semibold text-charcoal transition-all hover:bg-charcoal hover:text-white"
-                style={{ fontFamily: "var(--font-libre)" }}
+                href="/about"
+                className="p-[2px] rounded-lg bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] transition-all hover:shadow-lg"
               >
-                Explore Books
+                <span className="inline-flex items-center gap-2 rounded-[6px] bg-white px-6 py-3 text-base font-semibold text-charcoal"
+                  style={{ fontFamily: "var(--font-libre)" }}
+                >
+                  Learn More
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                  </svg>
+                </span>
               </Link>
             </motion.div>
 
