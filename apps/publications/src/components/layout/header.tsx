@@ -146,7 +146,7 @@ export function Header({ user }: HeaderProps) {
           <div className="flex h-16 items-center justify-between lg:h-20">
             <Link href="/" className="flex items-center shrink-0">
               <img
-                src="/logo.svg"
+                src="/logo.png"
                 alt="Statement Publications"
                 className="h-36 lg:h-[170px] w-auto"
               />
