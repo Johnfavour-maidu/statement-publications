@@ -34,28 +34,28 @@ interface LayerConfig {
 
 const layers: LayerConfig[] = [
   {
-    speed: 0.12,
-    elementSize: 60,
-    opacity: 0.25,
+    speed: 0.15,
+    elementSize: 28,
+    opacity: 0.12,
     count: 8,
-    radius: 300,
+    radius: 320,
     elementKeys: ["book", "pen", "quill"],
   },
   {
-    speed: 0.07,
-    elementSize: 50,
-    opacity: 0.18,
+    speed: 0.08,
+    elementSize: 22,
+    opacity: 0.08,
     count: 10,
-    radius: 380,
+    radius: 400,
     elementKeys: ["page", "journal", "manuscript"],
     floatingWords: ["Story", "Publish", "Create"],
   },
   {
     speed: 0.04,
-    elementSize: 40,
-    opacity: 0.12,
+    elementSize: 18,
+    opacity: 0.05,
     count: 12,
-    radius: 460,
+    radius: 500,
     elementKeys: ["quote", "bookmark", "lightbulb", "glasses", "inkDrop"],
     floatingWords: ["Inspire", "Author", "Legacy", "Voice"],
   },
@@ -100,11 +100,11 @@ function FloatingElement({
 
       const rad = (currentAngle * Math.PI) / 180;
       const targetX = Math.cos(rad) * radius;
-      const targetY = Math.sin(rad) * radius;
+      const targetY = Math.sin(rad) * radius * 0.4;
 
       x.set(targetX);
       y.set(targetY);
-      rotate.set(currentAngle * 0.2);
+      rotate.set(currentAngle * 0.3);
 
       animFrame = requestAnimationFrame(tick);
     };
@@ -193,7 +193,7 @@ function FloatingWord({
 
       const rad = (currentAngle * Math.PI) / 180;
       x.set(Math.cos(rad) * radius);
-      y.set(Math.sin(rad) * radius);
+      y.set(Math.sin(rad) * radius * 0.3);
 
       animFrame = requestAnimationFrame(tick);
     };
