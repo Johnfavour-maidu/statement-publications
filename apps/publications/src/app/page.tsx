@@ -282,7 +282,7 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#FDF6EE] via-white to-white">
+      <section className="relative min-h-screen w-full overflow-hidden bg-gradient-to-br from-[#FDF6EE] via-[#FDF6EE] to-white">
 
         {/* Centered text */}
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-40 lg:pt-48">
@@ -332,7 +332,7 @@ export default function Home() {
             >
               <Link
                 href="/register"
-                className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-white transition-all hover:shadow-lg"
+                className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal transition-all hover:shadow-lg"
                 style={{ fontFamily: "var(--font-libre)", backgroundColor: "#D8B27A" }}
               >
                 Start Publishing
