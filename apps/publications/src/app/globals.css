@@ -210,3 +210,128 @@ body {
 .animate-gradient {
   animation: gradient 3s ease infinite;
 }
+
+/* Dark mode utility classes */
+.dark .bg-white {
+  background-color: #111111;
+}
+
+.dark .bg-[#FDF6EE] {
+  background-color: #1a1a1a;
+}
+
+.dark .bg-light-gray {
+  background-color: #111111;
+}
+
+.dark .text-charcoal {
+  color: #f5f5f5;
+}
+
+.dark .text-dark-gray {
+  color: #a3a3a3;
+}
+
+.dark .text-dark-gray\/70 {
+  color: rgba(163, 163, 163, 0.7);
+}
+
+.dark .text-dark-gray\/80 {
+  color: rgba(163, 163, 163, 0.8);
+}
+
+.dark .border-peach\/10 {
+  border-color: rgba(235, 201, 168, 0.2);
+}
+
+.dark .border-peach\/20 {
+  border-color: rgba(235, 201, 168, 0.3);
+}
+
+.dark .hover\:bg-peach\/10:hover {
+  background-color: rgba(235, 201, 168, 0.15);
+}
+
+.dark .hover\:text-peach:hover {
+  color: #EBC9A8;
+}
+
+.dark .hover\:text-brown:hover {
+  color: #D4A97A;
+}
+
+.dark .bg-[#FDF6EE]\/95 {
+  background-color: rgba(26, 26, 26, 0.95);
+}
+
+.dark .bg-white\/80 {
+  background-color: rgba(17, 17, 17, 0.8);
+}
+
+.dark .bg-white\/90 {
+  background-color: rgba(17, 17, 17, 0.9);
+}
+
+.dark .border-white\/30 {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark .border-white\/40 {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dark .text-white\/60 {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dark .text-white\/70 {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.dark .text-white\/90 {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.dark .from-white {
+  --tw-gradient-from: #111111;
+}
+
+.dark .to-transparent {
+  --tw-gradient-to: transparent;
+}
+
+.dark .from-\[\#FDF6EE\] {
+  --tw-gradient-from: #1a1a1a;
+}
+
+.dark .via-white {
+  --tw-gradient-via: #111111;
+}
+
+.dark .to-\[\#FDF6EE\] {
+  --tw-gradient-to: #1a1a1a;
+}
+
+.dark .from-\[\#FDF6EE\]\/50 {
+  --tw-gradient-from: rgba(26, 26, 26, 0.5);
+}
+
+.dark .bg-amber-200 {
+  background-color: rgba(217, 119, 6, 0.2);
+}
+
+.dark .bg-emerald-200 {
+  background-color: rgba(5, 150, 105, 0.2);
+}
+
+.dark .bg-blue-200 {
+  background-color: rgba(59, 130, 246, 0.2);
+}
+
+.dark .bg-rose-200 {
+  background-color: rgba(225, 29, 72, 0.2);
+}
+
+.dark .bg-violet-200 {
+  background-color: rgba(139, 92, 246, 0.2);
+}

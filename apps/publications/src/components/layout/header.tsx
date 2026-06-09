@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Globe, ChevronDown, User, LogOut, BookOpen } from "lucide-react";
+import { Menu, X, Globe, ChevronDown, User, LogOut, BookOpen, Sun, Moon } from "lucide-react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -54,6 +55,12 @@ interface HeaderProps {
 export function Header({ user }: HeaderProps) {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -107,6 +114,18 @@ export function Header({ user }: HeaderProps) {
 
             <span className="w-px h-3 bg-black/20" />
 
+            {mounted && (
+              <button
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="flex items-center gap-1.5 hover:opacity-70 transition-opacity cursor-pointer"
+              >
+                {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+                <span>{theme === "dark" ? "Light" : "Dark"}</span>
+              </button>
+            )}
+
+            <span className="w-px h-3 bg-black/20" />
+
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex items-center gap-1.5 hover:opacity-70 transition-opacity cursor-pointer">
@@ -137,7 +156,7 @@ export function Header({ user }: HeaderProps) {
       </div>
 
       {/* Main Navigation */}
-      <div className="bg-[#FDF6EE]/95 backdrop-blur-md shadow-sm">
+      <div className="bg-[#FDF6EE]/95 dark:bg-[#1a1a1a]/95 backdrop-blur-md shadow-sm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between lg:h-20">
             <Link href="/" className="flex items-center shrink-0">
@@ -208,7 +227,7 @@ export function Header({ user }: HeaderProps) {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: "100%" }}
               transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-              className="fixed inset-y-0 right-0 w-72 bg-[#FDF6EE] shadow-xl z-50 lg:hidden"
+              className="fixed inset-y-0 right-0 w-72 bg-[#FDF6EE] dark:bg-[#1a1a1a] shadow-xl z-50 lg:hidden"
             >
               <div className="flex flex-col h-full p-6">
                 <div className="flex justify-end mb-8">
