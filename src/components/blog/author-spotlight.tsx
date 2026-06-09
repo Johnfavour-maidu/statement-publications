@@ -5,12 +5,12 @@ import { motion } from "framer-motion";
 import { allAuthors } from "@/lib/blog-data";
 
 const authorColors = [
-  "border-amber-300 ring-amber-100",
-  "border-blue-300 ring-blue-100",
-  "border-rose-300 ring-rose-100",
-  "border-violet-300 ring-violet-100",
-  "border-teal-300 ring-teal-100",
-  "border-orange-300 ring-orange-100",
+  "border-[#8A6A4A] ring-amber-100",
+  "border-blue-600 ring-blue-100",
+  "border-[#D8B27A] ring-amber-50",
+  "border-emerald-600 ring-emerald-100",
+  "border-violet-600 ring-violet-100",
+  "border-rose-600 ring-rose-100",
 ];
 
 export default function AuthorSpotlight() {

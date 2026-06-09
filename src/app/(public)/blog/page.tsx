@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, Filter } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, ChevronDown } from "lucide-react";
 import BlogHero from "@/components/blog/blog-hero";
 import BlogCard from "@/components/blog/blog-card";
 import CategoryShowcase from "@/components/blog/category-showcase";
@@ -16,6 +15,18 @@ import { blogPosts, categories, getEditorsPicks, getTrendingPosts } from "@/lib/
 
 const POSTS_PER_PAGE = 6;
 const MAX_VISIBLE_PAGES = 5;
+
+const sortOptions = [
+  { label: "Trending Now", value: "trending" },
+  { label: "New Releases", value: "new-releases" },
+  { label: "Editor's Picks", value: "editors-picks" },
+  { label: "Most Viewed", value: "most-viewed" },
+  { label: "Most Popular", value: "most-popular" },
+  { label: "Most Commented", value: "most-commented" },
+  { label: "Recently Updated", value: "recently-updated" },
+  { label: "A-Z", value: "az" },
+  { label: "Z-A", value: "za" },
+];
 
 function AnimatedSection({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -30,19 +41,86 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
 export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState("trending");
+  const [sortOpen, setSortOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const mainContentRef = useRef<HTMLDivElement>(null);
   const editorsPicks = getEditorsPicks();
   const trending = getTrendingPosts();
 
   const filteredPosts = useMemo(() => {
-    if (activeCategory === "all") return blogPosts;
-    return blogPosts.filter((p) => p.category.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+$/, "") === activeCategory);
-  }, [activeCategory]);
+    let posts = [...blogPosts];
+
+    if (activeCategory !== "all") {
+      posts = posts.filter((p) => p.category.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/-+$/, "") === activeCategory);
+    }
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      posts = posts.filter((p) =>
+        p.title.toLowerCase().includes(q) ||
+        p.excerpt.toLowerCase().includes(q) ||
+        p.author.name.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q) ||
+        p.tags.some((t) => t.toLowerCase().includes(q))
+      );
+    }
+
+    switch (sortBy) {
+      case "trending":
+        posts.sort((a, b) => b.viewCount - a.viewCount);
+        break;
+      case "new-releases":
+        posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        break;
+      case "editors-picks":
+        posts = posts.filter((p) => p.isEditorsPick);
+        break;
+      case "most-viewed":
+        posts.sort((a, b) => b.viewCount - a.viewCount);
+        break;
+      case "most-popular":
+        posts.sort((a, b) => b.likeCount - a.likeCount);
+        break;
+      case "most-commented":
+        posts.sort((a, b) => b.commentCount - a.commentCount);
+        break;
+      case "recently-updated":
+        posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        break;
+      case "az":
+        posts.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "za":
+        posts.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+    }
+
+    return posts;
+  }, [activeCategory, sortBy, searchQuery]);
 
   const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
   const paginatedPosts = filteredPosts.slice((currentPage - 1) * POSTS_PER_PAGE, currentPage * POSTS_PER_PAGE);
 
+  const scrollToTop = useCallback(() => {
+    if (mainContentRef.current) {
+      mainContentRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, []);
+
   const handleCategoryChange = (slug: string) => {
     setActiveCategory(slug);
+    setCurrentPage(1);
+    scrollToTop();
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    scrollToTop();
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
     setCurrentPage(1);
   };
 
@@ -64,16 +142,16 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen">
-      <BlogHero />
+      <BlogHero onSearch={handleSearch} searchQuery={searchQuery} />
 
-      {/* Explore Topics — right below Hero */}
-      <section className="py-12 bg-[#FDF6EE]">
+      {/* Explore Topics — brown background */}
+      <section className="py-12" style={{ background: "linear-gradient(135deg, #8A6A4A 0%, #A07850 50%, #8A6A4A 100%)" }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-charcoal" style={{ fontFamily: "var(--font-libre)" }}>
+            <h2 className="text-2xl sm:text-3xl font-bold text-white" style={{ fontFamily: "var(--font-libre)" }}>
               Explore Topics
             </h2>
-            <p className="mt-2 text-dark-gray/60">Find articles on the topics that matter to you</p>
+            <p className="mt-2 text-white/70">Find articles on the topics that matter to you</p>
           </AnimatedSection>
           <AnimatedSection delay={0.1}>
             <CategoryShowcase categories={categories} />
@@ -86,7 +164,7 @@ export default function BlogPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-3 gap-10">
             {/* Main Content */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2" ref={mainContentRef}>
               {/* Filter Tabs */}
               <AnimatedSection className="mb-8">
                 <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
@@ -110,9 +188,21 @@ export default function BlogPage() {
 
               {/* Post Grid */}
               <div className="grid sm:grid-cols-2 gap-6">
-                {paginatedPosts.map((post, i) => (
-                  <BlogCard key={post.id} post={post} index={i} />
-                ))}
+                {paginatedPosts.length > 0 ? (
+                  paginatedPosts.map((post, i) => (
+                    <BlogCard key={post.id} post={post} index={i} />
+                  ))
+                ) : (
+                  <div className="sm:col-span-2 text-center py-16">
+                    <p className="text-dark-gray/50 text-lg">No articles found matching your criteria.</p>
+                    <button
+                      onClick={() => { setActiveCategory("all"); setSortBy("trending"); setSearchQuery(""); setCurrentPage(1); }}
+                      className="mt-4 px-6 py-2 bg-[#EBC9A8] text-charcoal rounded-lg font-semibold hover:bg-[#D8B27A] transition-colors"
+                    >
+                      Clear Filters
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Bookstore-Style Pagination */}
@@ -120,7 +210,7 @@ export default function BlogPage() {
                 <AnimatedSection className="mt-10">
                   <div className="flex items-center justify-center gap-2">
                     <button
-                      onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                      onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                       disabled={currentPage === 1}
                       className="px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium text-dark-gray/60 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                     >
@@ -132,7 +222,7 @@ export default function BlogPage() {
                       ) : (
                         <button
                           key={page}
-                          onClick={() => setCurrentPage(page)}
+                          onClick={() => handlePageChange(page)}
                           className={`min-w-[40px] h-10 rounded-lg text-sm font-semibold transition-all ${
                             currentPage === page
                               ? "bg-[#EBC9A8] text-charcoal shadow-md"
@@ -144,7 +234,7 @@ export default function BlogPage() {
                       )
                     )}
                     <button
-                      onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                      onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                       disabled={currentPage === totalPages}
                       className="px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium text-dark-gray/60 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all inline-flex items-center gap-1"
                     >
@@ -157,16 +247,50 @@ export default function BlogPage() {
 
             {/* Sidebar */}
             <div className="space-y-6">
+              {/* Sort Dropdown — above Trending Now */}
+              <AnimatedSection>
+                <div className="relative">
+                  <button
+                    onClick={() => setSortOpen(!sortOpen)}
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-medium text-dark-gray/70 hover:border-[#EBC9A8] hover:bg-[#FDF6EE] transition-all w-full justify-between"
+                  >
+                    <span>Sort By: {sortOptions.find((o) => o.value === sortBy)?.label}</span>
+                    <ChevronDown className={`h-4 w-4 transition-transform ${sortOpen ? "rotate-180" : ""}`} />
+                  </button>
+                  {sortOpen && (
+                    <div className="absolute left-0 right-0 top-full mt-1 bg-white rounded-xl border border-gray-200 shadow-xl z-50 py-1">
+                      {sortOptions.map((option) => (
+                        <button
+                          key={option.value}
+                          onClick={() => {
+                            setSortBy(option.value);
+                            setSortOpen(false);
+                            setCurrentPage(1);
+                          }}
+                          className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                            sortBy === option.value
+                              ? "bg-[#EBC9A8]/20 text-[#8A6A4A] font-semibold"
+                              : "text-dark-gray/70 hover:bg-gray-50"
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </AnimatedSection>
+
               <AnimatedSection delay={0.1}>
                 <TrendingSidebar posts={trending} />
               </AnimatedSection>
 
               {/* Editor's Picks — blue border */}
               <AnimatedSection delay={0.2}>
-                <div className="bg-white rounded-2xl border-2 border-blue-200 p-5">
+                <div className="bg-white rounded-2xl border-2 border-blue-400 p-5">
                   <div className="flex items-center gap-2 mb-5">
-                    <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
-                      <BookOpen className="h-4 w-4 text-blue-600" />
+                    <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
+                      <BookOpen className="h-4 w-4 text-white" />
                     </div>
                     <h3 className="text-sm font-bold text-charcoal">Editor&apos;s Picks</h3>
                   </div>

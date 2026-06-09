@@ -1,19 +1,16 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { Search, ArrowRight, Sparkles } from "lucide-react";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Search, Sparkles } from "lucide-react";
 
-export default function BlogHero() {
-  const [query, setQuery] = useState("");
-  const router = useRouter();
+interface BlogHeroProps {
+  onSearch: (query: string) => void;
+  searchQuery: string;
+}
 
+export default function BlogHero({ onSearch, searchQuery }: BlogHeroProps) {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) router.push(`/blog?q=${encodeURIComponent(query)}`);
   };
 
   return (
@@ -23,10 +20,12 @@ export default function BlogHero() {
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D8B27A]/10 rounded-full blur-3xl" />
       </div>
       <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+        {/* The Statement Blog — animated gradient background */}
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 rounded-full border border-[#EBC9A8]/30 bg-white/60 backdrop-blur-sm px-4 py-1.5 text-sm text-[#8A6A4A] mb-6">
-          <Sparkles className="h-4 w-4" />
-          The Statement Blog
+          className="relative inline-flex items-center gap-2 rounded-full border border-[#EBC9A8]/30 bg-white/60 backdrop-blur-sm px-4 py-1.5 text-sm text-[#8A6A4A] mb-6 overflow-hidden">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#EBC9A8]/20 via-[#D8B27A]/30 to-[#F2D8BE]/20 animate-gradient bg-[length:200%_200%] opacity-60" />
+          <Sparkles className="relative h-4 w-4" />
+          <span className="relative">The Statement Blog</span>
         </motion.div>
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -61,8 +60,8 @@ export default function BlogHero() {
               <Search className="absolute left-4 h-5 w-5 text-dark-gray/30" />
               <input
                 type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                value={searchQuery}
+                onChange={(e) => onSearch(e.target.value)}
                 placeholder="Search articles..."
                 className="w-full pl-12 pr-28 py-4 rounded-[14px] bg-transparent focus:outline-none text-sm"
               />

@@ -14,7 +14,7 @@ export default function NewsletterBannerCompact() {
   };
 
   return (
-    <div className="rounded-2xl overflow-hidden border-2 border-[#EBC9A8]" style={{ background: "linear-gradient(135deg, #FDF6EE 0%, #FAF8F5 100%)" }}>
+    <div className="rounded-2xl overflow-hidden border-2 border-[#8A6A4A]" style={{ background: "linear-gradient(135deg, #FDF6EE 0%, #FAF8F5 100%)" }}>
       <div className="px-6 py-8 text-center">
         <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
           <div className="inline-flex items-center gap-2 bg-[#EBC9A8]/20 px-3 py-1 rounded-full text-xs font-semibold text-[#8A6A4A] mb-4">
