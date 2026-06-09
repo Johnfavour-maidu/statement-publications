@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RollingMarquee } from "@/components/rolling-marquee";
+import { AnimatedHeroBackground } from "@/components/animated-hero-background";
 import {
   Accordion,
   AccordionContent,
@@ -287,6 +288,7 @@ export default function Home() {
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative min-h-screen w-full overflow-hidden dark:bg-[#0a0a0a]" style={{ background: "linear-gradient(to bottom right, #FDF6EE 0%, #FDF6EE 30%, rgba(253,246,238,0.5) 60%, white 100%)" }}>
+        <AnimatedHeroBackground />
 
         {/* Centered text */}
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-16 lg:pt-20">
