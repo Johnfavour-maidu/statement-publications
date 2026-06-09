@@ -12,17 +12,17 @@ const iconMap: Record<string, typeof BookOpen> = {
   "monitor": Monitor,
 };
 
-const categoryStyles: Record<string, { bg: string; border: string; iconBg: string; iconColor: string; hoverBorder: string; hoverShadow: string; ctaBg: string; ctaHover: string }> = {
-  "writing-tips": { bg: "bg-amber-50", border: "border-amber-400", iconBg: "bg-amber-100", iconColor: "text-amber-700", hoverBorder: "hover:border-amber-500", hoverShadow: "hover:shadow-amber-100", ctaBg: "bg-amber-100 text-amber-700", ctaHover: "group-hover:bg-amber-200" },
-  "self-publishing": { bg: "bg-blue-50", border: "border-blue-400", iconBg: "bg-blue-100", iconColor: "text-blue-700", hoverBorder: "hover:border-blue-500", hoverShadow: "hover:shadow-blue-100", ctaBg: "bg-blue-100 text-blue-700", ctaHover: "group-hover:bg-blue-200" },
-  "book-marketing": { bg: "bg-rose-50", border: "border-rose-400", iconBg: "bg-rose-100", iconColor: "text-rose-700", hoverBorder: "hover:border-rose-500", hoverShadow: "hover:shadow-rose-100", ctaBg: "bg-rose-100 text-rose-700", ctaHover: "group-hover:bg-rose-200" },
-  "author-success-stories": { bg: "bg-emerald-50", border: "border-emerald-400", iconBg: "bg-emerald-100", iconColor: "text-emerald-700", hoverBorder: "hover:border-emerald-500", hoverShadow: "hover:shadow-emerald-100", ctaBg: "bg-emerald-100 text-emerald-700", ctaHover: "group-hover:bg-emerald-200" },
-  "industry-news": { bg: "bg-violet-50", border: "border-violet-400", iconBg: "bg-violet-100", iconColor: "text-violet-700", hoverBorder: "hover:border-violet-500", hoverShadow: "hover:shadow-violet-100", ctaBg: "bg-violet-100 text-violet-700", ctaHover: "group-hover:bg-violet-200" },
-  "editing-proofreading": { bg: "bg-teal-50", border: "border-teal-400", iconBg: "bg-teal-100", iconColor: "text-teal-700", hoverBorder: "hover:border-teal-500", hoverShadow: "hover:shadow-teal-100", ctaBg: "bg-teal-100 text-teal-700", ctaHover: "group-hover:bg-teal-200" },
-  "book-design": { bg: "bg-orange-50", border: "border-orange-400", iconBg: "bg-orange-100", iconColor: "text-orange-700", hoverBorder: "hover:border-orange-500", hoverShadow: "hover:shadow-orange-100", ctaBg: "bg-orange-100 text-orange-700", ctaHover: "group-hover:bg-orange-200" },
-  "academic-publishing": { bg: "bg-indigo-50", border: "border-indigo-400", iconBg: "bg-indigo-100", iconColor: "text-indigo-700", hoverBorder: "hover:border-indigo-500", hoverShadow: "hover:shadow-indigo-100", ctaBg: "bg-indigo-100 text-indigo-700", ctaHover: "group-hover:bg-indigo-200" },
-  "research-journals": { bg: "bg-cyan-50", border: "border-cyan-400", iconBg: "bg-cyan-100", iconColor: "text-cyan-700", hoverBorder: "hover:border-cyan-500", hoverShadow: "hover:shadow-cyan-100", ctaBg: "bg-cyan-100 text-cyan-700", ctaHover: "group-hover:bg-cyan-200" },
-  "digital-publishing": { bg: "bg-pink-50", border: "border-pink-400", iconBg: "bg-pink-100", iconColor: "text-pink-700", hoverBorder: "hover:border-pink-500", hoverShadow: "hover:shadow-pink-100", ctaBg: "bg-pink-100 text-pink-700", ctaHover: "group-hover:bg-pink-200" },
+const categoryStyles: Record<string, { fill: string; gradientFrom: string; gradientVia: string; gradientTo: string; iconBg: string; iconColor: string; ctaBg: string; ctaHover: string }> = {
+  "writing-tips": { fill: "bg-amber-100", gradientFrom: "from-amber-400", gradientVia: "via-amber-500", gradientTo: "to-amber-600", iconBg: "bg-amber-200", iconColor: "text-amber-800", ctaBg: "bg-amber-200 text-amber-800", ctaHover: "group-hover:bg-amber-300" },
+  "self-publishing": { fill: "bg-blue-100", gradientFrom: "from-blue-400", gradientVia: "via-blue-500", gradientTo: "to-blue-600", iconBg: "bg-blue-200", iconColor: "text-blue-800", ctaBg: "bg-blue-200 text-blue-800", ctaHover: "group-hover:bg-blue-300" },
+  "book-marketing": { fill: "bg-rose-100", gradientFrom: "from-rose-400", gradientVia: "via-rose-500", gradientTo: "to-rose-600", iconBg: "bg-rose-200", iconColor: "text-rose-800", ctaBg: "bg-rose-200 text-rose-800", ctaHover: "group-hover:bg-rose-300" },
+  "author-success-stories": { fill: "bg-emerald-100", gradientFrom: "from-emerald-400", gradientVia: "via-emerald-500", gradientTo: "to-emerald-600", iconBg: "bg-emerald-200", iconColor: "text-emerald-800", ctaBg: "bg-emerald-200 text-emerald-800", ctaHover: "group-hover:bg-emerald-300" },
+  "industry-news": { fill: "bg-violet-100", gradientFrom: "from-violet-400", gradientVia: "via-violet-500", gradientTo: "to-violet-600", iconBg: "bg-violet-200", iconColor: "text-violet-800", ctaBg: "bg-violet-200 text-violet-800", ctaHover: "group-hover:bg-violet-300" },
+  "editing-proofreading": { fill: "bg-teal-100", gradientFrom: "from-teal-400", gradientVia: "via-teal-500", gradientTo: "to-teal-600", iconBg: "bg-teal-200", iconColor: "text-teal-800", ctaBg: "bg-teal-200 text-teal-800", ctaHover: "group-hover:bg-teal-300" },
+  "book-design": { fill: "bg-orange-100", gradientFrom: "from-orange-400", gradientVia: "via-orange-500", gradientTo: "to-orange-600", iconBg: "bg-orange-200", iconColor: "text-orange-800", ctaBg: "bg-orange-200 text-orange-800", ctaHover: "group-hover:bg-orange-300" },
+  "academic-publishing": { fill: "bg-indigo-100", gradientFrom: "from-indigo-400", gradientVia: "via-indigo-500", gradientTo: "to-indigo-600", iconBg: "bg-indigo-200", iconColor: "text-indigo-800", ctaBg: "bg-indigo-200 text-indigo-800", ctaHover: "group-hover:bg-indigo-300" },
+  "research-journals": { fill: "bg-cyan-100", gradientFrom: "from-cyan-400", gradientVia: "via-cyan-500", gradientTo: "to-cyan-600", iconBg: "bg-cyan-200", iconColor: "text-cyan-800", ctaBg: "bg-cyan-200 text-cyan-800", ctaHover: "group-hover:bg-cyan-300" },
+  "digital-publishing": { fill: "bg-pink-100", gradientFrom: "from-pink-400", gradientVia: "via-pink-500", gradientTo: "to-pink-600", iconBg: "bg-pink-200", iconColor: "text-pink-800", ctaBg: "bg-pink-200 text-pink-800", ctaHover: "group-hover:bg-pink-300" },
 };
 
 export default function CategoryShowcase({ categories }: { categories: BlogCategory[] }) {
@@ -40,15 +40,17 @@ export default function CategoryShowcase({ categories }: { categories: BlogCateg
             transition={{ delay: i * 0.05 }}
           >
             <Link href={`/blog/topic/${cat.slug}`}>
-              <div className={`group p-5 rounded-2xl border-2 ${style.border} ${style.bg} ${style.hoverBorder} hover:shadow-lg ${style.hoverShadow} transition-all duration-300 text-center h-full`}>
-                <div className={`w-11 h-11 rounded-xl ${style.iconBg} flex items-center justify-center mx-auto mb-3`}>
-                  <Icon className={`h-5 w-5 ${style.iconColor}`} />
+              <div className={`group p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${style.gradientFrom} ${style.gradientVia} ${style.gradientTo} hover:shadow-lg transition-all duration-300 text-center h-full`}>
+                <div className={`p-5 rounded-[14px] ${style.fill} h-full`}>
+                  <div className={`w-11 h-11 rounded-xl ${style.iconBg} flex items-center justify-center mx-auto mb-3`}>
+                    <Icon className={`h-5 w-5 ${style.iconColor}`} />
+                  </div>
+                  <h3 className="text-sm font-bold text-charcoal mb-1">{cat.name}</h3>
+                  <p className="text-[11px] text-dark-gray/60 mb-3">{cat.postCount} articles</p>
+                  <span className={`inline-flex items-center gap-1 text-[11px] font-semibold ${style.ctaBg} ${style.ctaHover} px-3 py-1 rounded-full transition-colors`}>
+                    Read More <ArrowRight className="h-3 w-3" />
+                  </span>
                 </div>
-                <h3 className="text-sm font-bold text-charcoal mb-1">{cat.name}</h3>
-                <p className="text-[11px] text-dark-gray/50 mb-3">{cat.postCount} articles</p>
-                <span className={`inline-flex items-center gap-1 text-[11px] font-semibold ${style.ctaBg} ${style.ctaHover} px-3 py-1 rounded-full transition-colors`}>
-                  Read More <ArrowRight className="h-3 w-3" />
-                </span>
               </div>
             </Link>
           </motion.div>
