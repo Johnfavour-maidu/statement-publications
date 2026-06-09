@@ -53,9 +53,9 @@ export function Footer() {
           {/* Column 1 — Logo + Description */}
           <div className="flex flex-col">
             <Link href="/" className="inline-block mb-3">
-              <img src="/logo.png" alt="Statement Publications" className="h-10 w-auto" />
+              <img src="/logo.png" alt="Statement Publications" className="h-36 lg:h-[170px] w-auto" />
             </Link>
-            <p className="text-sm text-charcoal/70 leading-relaxed">
+            <p className="text-xs text-charcoal/60 leading-snug mt-1">
               Empowering independent authors to share their voice and connect with millions of readers across the globe.
             </p>
           </div>
