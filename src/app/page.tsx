@@ -444,15 +444,20 @@ export default function Home() {
               <span className="italic font-bold mt-2 block">Statement Publications</span>
             </motion.h1>
 
-            <motion.p
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="mt-6 text-lg sm:text-xl font-bold text-charcoal"
-              style={{ fontFamily: "var(--font-libre)" }}
+              className="mt-6 border-t border-b py-3"
+              style={{ borderColor: "#D8B27A" }}
             >
-              Don&apos;t Just Publish, Make a Statement
-            </motion.p>
+              <p
+                className="text-lg sm:text-xl font-bold text-charcoal"
+                style={{ fontFamily: "var(--font-libre)" }}
+              >
+                Don&apos;t Just Publish, Make a Statement
+              </p>
+            </motion.div>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
