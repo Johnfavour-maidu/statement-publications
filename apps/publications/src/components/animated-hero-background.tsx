@@ -37,16 +37,16 @@ const layers: LayerConfig[] = [
     speed: 0.12,
     elementSize: 60,
     opacity: 0.25,
-    count: 8,
-    radius: 300,
+    count: 6,
+    radius: 320,
     elementKeys: ["book", "pen", "quill"],
   },
   {
     speed: 0.07,
     elementSize: 50,
     opacity: 0.18,
-    count: 10,
-    radius: 380,
+    count: 8,
+    radius: 420,
     elementKeys: ["page", "journal", "manuscript"],
     floatingWords: ["Story", "Publish", "Create"],
   },
@@ -54,8 +54,8 @@ const layers: LayerConfig[] = [
     speed: 0.04,
     elementSize: 40,
     opacity: 0.12,
-    count: 12,
-    radius: 460,
+    count: 10,
+    radius: 520,
     elementKeys: ["quote", "bookmark", "lightbulb", "glasses", "inkDrop"],
     floatingWords: ["Inspire", "Author", "Legacy", "Voice"],
   },
@@ -333,8 +333,8 @@ export function AnimatedHeroBackground() {
           {/* Floating elements */}
           {Array.from({ length: layer.count }).map((_, i) => {
             const elementKey = layer.elementKeys[i % layer.elementKeys.length];
-            const angle = (360 / layer.count) * i;
-            const delay = i * 0.3;
+            const angle = (360 / layer.count) * i + layerIndex * 60;
+            const delay = 0;
 
             return (
               <FloatingElement
@@ -360,10 +360,10 @@ export function AnimatedHeroBackground() {
               opacity={layer.opacity * 0.8}
               radius={layer.radius - 50 + i * 40}
               speed={layer.speed * 0.7}
-              angle={(360 / (layer.floatingWords?.length || 1)) * i + 90}
+              angle={(360 / (layer.floatingWords?.length || 1)) * i + layerIndex * 90 + 45}
               mouseX={mouseX}
               mouseY={mouseY}
-              delay={i * 0.5 + 1}
+              delay={0}
             />
           ))}
         </div>
