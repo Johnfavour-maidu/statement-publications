@@ -39,7 +39,7 @@ const navLinks = [
   { href: "/about", label: "About" },
   { href: "/services", label: "Services" },
   { href: "/blog", label: "Blog" },
-  { href: "/contact", label: "Contact" },
+  { href: "/support", label: "Support" },
 ];
 
 interface HeaderProps {
@@ -104,10 +104,6 @@ export function Header({ user }: HeaderProps) {
               <BookOpen className="h-3.5 w-3.5" />
               <span>Statement Books</span>
             </Link>
-
-            <span className="w-px h-3 bg-black/20" />
-
-            <Link href="/support" className="hover:opacity-70 transition-opacity">Support</Link>
 
             <span className="w-px h-3 bg-black/20" />
 
