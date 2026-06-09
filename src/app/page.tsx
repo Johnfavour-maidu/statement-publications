@@ -430,7 +430,7 @@ export default function Home() {
         </div>
 
         {/* Centered text */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-32 lg:pt-36">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-40 lg:pt-48">
           <div className="max-w-2xl text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
