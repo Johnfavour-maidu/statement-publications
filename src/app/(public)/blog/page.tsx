@@ -249,10 +249,10 @@ export default function BlogPage() {
             <div className="space-y-6">
               {/* Sort Dropdown — above Trending Now */}
               <AnimatedSection>
-                <div className="relative">
+                <div className="relative p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE]">
                   <button
                     onClick={() => setSortOpen(!sortOpen)}
-                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 border-gray-200 text-sm font-medium text-dark-gray/70 hover:border-[#EBC9A8] hover:bg-[#FDF6EE] transition-all w-full justify-between"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-[10px] bg-white text-sm font-medium text-dark-gray/70 hover:bg-[#FDF6EE] transition-all w-full justify-between"
                   >
                     <span>Sort By: {sortOptions.find((o) => o.value === sortBy)?.label}</span>
                     <ChevronDown className={`h-4 w-4 transition-transform ${sortOpen ? "rotate-180" : ""}`} />
@@ -285,27 +285,29 @@ export default function BlogPage() {
                 <TrendingSidebar posts={trending} />
               </AnimatedSection>
 
-              {/* Editor's Picks — blue border */}
+              {/* Editor's Picks — animated gradient border */}
               <AnimatedSection delay={0.2}>
-                <div className="bg-white rounded-2xl border-2 border-blue-400 p-5">
-                  <div className="flex items-center gap-2 mb-5">
-                    <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
-                      <BookOpen className="h-4 w-4 text-white" />
+                <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-blue-400 via-blue-500 to-blue-600">
+                  <div className="bg-white rounded-[14px] p-5">
+                    <div className="flex items-center gap-2 mb-5">
+                      <div className="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center">
+                        <BookOpen className="h-4 w-4 text-white" />
+                      </div>
+                      <h3 className="text-sm font-bold text-charcoal">Editor&apos;s Picks</h3>
                     </div>
-                    <h3 className="text-sm font-bold text-charcoal">Editor&apos;s Picks</h3>
-                  </div>
-                  <div className="space-y-4">
-                    {editorsPicks.slice(0, 3).map((post) => (
-                      <Link key={post.id} href={`/blog/${post.slug}`} className="flex gap-3 group">
-                        <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0">
-                          <Image src={post.coverImage} alt={post.title} fill className="object-cover" />
-                        </div>
-                        <div className="min-w-0">
-                          <h4 className="text-sm font-semibold text-charcoal line-clamp-2 group-hover:text-blue-600 transition-colors leading-snug">{post.title}</h4>
-                          <p className="text-[11px] text-dark-gray/40 mt-1">{post.author.name}</p>
-                        </div>
-                      </Link>
-                    ))}
+                    <div className="space-y-4">
+                      {editorsPicks.slice(0, 3).map((post) => (
+                        <Link key={post.id} href={`/blog/${post.slug}`} className="flex gap-3 group">
+                          <div className="relative w-16 h-16 rounded-lg overflow-hidden shrink-0">
+                            <Image src={post.coverImage} alt={post.title} fill className="object-cover" />
+                          </div>
+                          <div className="min-w-0">
+                            <h4 className="text-sm font-semibold text-charcoal line-clamp-2 group-hover:text-blue-600 transition-colors leading-snug">{post.title}</h4>
+                            <p className="text-[11px] text-dark-gray/40 mt-1">{post.author.name}</p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </AnimatedSection>

@@ -71,7 +71,7 @@ export default function TopicPageClient({ slug }: TopicPageClientProps) {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-charcoal mb-4">Topic Not Found</h1>
-          <Link href="/blog" className="text-[#8A6A4A] hover:underline">Back to Blog</Link>
+          <Link href="/blog" className="text-charcoal/70 hover:text-charcoal font-medium underline">Back to Blog</Link>
         </div>
       </div>
     );
@@ -80,15 +80,15 @@ export default function TopicPageClient({ slug }: TopicPageClientProps) {
   return (
     <div className="min-h-screen">
       {/* Hero */}
-      <section className="relative overflow-hidden py-16 sm:py-20" style={{ background: "linear-gradient(135deg, #8A6A4A 0%, #A07850 50%, #8A6A4A 100%)" }}>
+      <section className="relative overflow-hidden py-16 sm:py-20" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 40%, #F2D8BE 100%)" }}>
         <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-white/5 rounded-full blur-3xl" />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-white/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-white/20 rounded-full blur-3xl" />
         </div>
         <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm font-medium mb-6 transition-colors"
+            className="inline-flex items-center gap-2 text-charcoal/60 hover:text-charcoal text-sm font-medium mb-6 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Blog
@@ -96,7 +96,7 @@ export default function TopicPageClient({ slug }: TopicPageClientProps) {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-charcoal mb-4"
             style={{ fontFamily: "var(--font-libre)" }}
           >
             {category.name}
@@ -105,7 +105,7 @@ export default function TopicPageClient({ slug }: TopicPageClientProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-lg text-white/70 max-w-2xl"
+            className="text-lg text-charcoal/70 max-w-2xl"
           >
             {category.description}
           </motion.p>
@@ -113,7 +113,7 @@ export default function TopicPageClient({ slug }: TopicPageClientProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="text-sm text-white/50 mt-3"
+            className="text-sm text-charcoal/50 mt-3"
           >
             {filteredPosts.length} article{filteredPosts.length !== 1 ? "s" : ""}
           </motion.p>
