@@ -211,6 +211,7 @@ const testimonials = [
     quoteColor: "text-amber-700",
     bg: "bg-amber-200",
     border: "border-amber-300",
+    gradientBorder: "from-amber-300 via-amber-400 to-amber-500",
   },
   {
     name: "Kwame Poku",
@@ -222,6 +223,7 @@ const testimonials = [
     quoteColor: "text-[#8A6A4A]",
     bg: "bg-[#F2D8BE]",
     border: "border-[#EBC9A8]",
+    gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]",
   },
   {
     name: "Efua Mensah",
@@ -233,6 +235,7 @@ const testimonials = [
     quoteColor: "text-blue-700",
     bg: "bg-blue-200",
     border: "border-blue-300",
+    gradientBorder: "from-blue-300 via-blue-400 to-blue-500",
   },
 ];
 
@@ -492,9 +495,9 @@ export default function Home() {
       </section>
 
       {/* ── Testimonials ────────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-white">
+      <section className="py-16 sm:py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-10">
             <span className="text-sm font-semibold text-peach uppercase tracking-wider">
               Testimonials
             </span>
@@ -511,47 +514,51 @@ export default function Home() {
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
             variants={stagger}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-3 gap-5"
           >
             {testimonials.map((testimonial) => (
               <motion.div
                 key={testimonial.name}
                 variants={fadeInUp}
-                whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.25)" }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className={`group relative rounded-2xl border p-8 shadow-sm transition-all duration-300 ${testimonial.bg} ${testimonial.border}`}
+                className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${testimonial.gradientBorder} hover:shadow-lg transition-all duration-300`}
               >
-                <Quote className={`h-8 w-8 ${testimonial.quoteColor} mb-4`} />
-                <p className="text-sm leading-relaxed text-dark-gray/70">
-                  &ldquo;{testimonial.quote}&rdquo;
-                </p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div
-                    className={cn(
-                      "h-10 w-10 rounded-full bg-gradient-to-br flex items-center justify-center text-sm font-bold text-white",
-                      testimonial.color
-                    )}
-                  >
-                    {testimonial.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")}
+                <motion.div
+                  whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.25)" }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className={`group relative rounded-[14px] p-5 shadow-sm transition-all duration-300 ${testimonial.bg}`}
+                >
+                  <Quote className={`h-6 w-6 ${testimonial.quoteColor} mb-3`} />
+                  <p className="text-sm leading-relaxed text-dark-gray/70 line-clamp-4">
+                    &ldquo;{testimonial.quote}&rdquo;
+                  </p>
+                  <div className="mt-4 flex items-center gap-3">
+                    <div
+                      className={cn(
+                        "h-9 w-9 rounded-full bg-gradient-to-br flex items-center justify-center text-xs font-bold text-white",
+                        testimonial.color
+                      )}
+                    >
+                      {testimonial.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-charcoal">{testimonial.name}</p>
+                      <p className="text-xs text-dark-gray/60">
+                        {testimonial.role}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-semibold text-charcoal">{testimonial.name}</p>
-                    <p className="text-xs text-dark-gray/60">
-                      {testimonial.role}
-                    </p>
+                  <div className="mt-2.5 flex gap-0.5">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="h-3 w-3 fill-gold text-gold"
+                      />
+                    ))}
                   </div>
-                </div>
-                <div className="mt-3 flex gap-0.5">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-3.5 w-3.5 fill-gold text-gold"
-                    />
-                  ))}
-                </div>
+                </motion.div>
               </motion.div>
             ))}
           </motion.div>
