@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import {
   BookOpen,
   ShoppingCart,
@@ -15,14 +15,11 @@ import {
   ChevronDown,
   Star,
   Quote,
-  Mail,
   Pen,
   Upload,
   Palette,
   Rocket,
   Banknote,
-  Users,
-  BookMarked,
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -75,33 +72,6 @@ function AnimatedSection({
       {children}
     </motion.div>
   );
-}
-
-function useCountUp(target: number, duration = 2000) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true });
-  const hasStarted = useRef(false);
-
-  useEffect(() => {
-    if (!isInView || hasStarted.current) return;
-    hasStarted.current = true;
-    const steps = 60;
-    const increment = target / steps;
-    let current = 0;
-    const interval = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        setCount(target);
-        clearInterval(interval);
-      } else {
-        setCount(Math.floor(current));
-      }
-    }, duration / steps);
-    return () => clearInterval(interval);
-  }, [isInView, target, duration]);
-
-  return { count, ref };
 }
 
 const rotatingWords = ["Story", "Vision", "Legacy", "Masterpiece", "Voice", "Dream"];
@@ -221,114 +191,6 @@ const steps = [
   },
 ];
 
-const mockBooks = [
-  {
-    id: "1",
-    title: "Financial Freedom Unleashed",
-    author: "Sarah Mitchell",
-    rating: 4.8,
-    reviews: 234,
-    price: 14.99,
-    cover: "/cover1.jpg",
-  },
-  {
-    id: "2",
-    title: "Explore Your Creative Mind to Positivity",
-    author: "Rotyen Mercado",
-    rating: 4.6,
-    reviews: 189,
-    price: 12.99,
-    cover: "/cover2.webp",
-  },
-  {
-    id: "3",
-    title: "Made to Impress",
-    author: "Andrew Cris",
-    rating: 4.9,
-    reviews: 312,
-    price: 16.99,
-    cover: "/cover3.webp",
-  },
-  {
-    id: "4",
-    title: "The Mind of a Leader",
-    author: "Kevin Anderson",
-    rating: 4.7,
-    reviews: 156,
-    price: 13.99,
-    cover: "/cover4.webp",
-  },
-  {
-    id: "5",
-    title: "Rivers of Gold",
-    author: "Yaw Asante",
-    rating: 4.5,
-    reviews: 278,
-    price: 11.99,
-    cover: "/cover5.webp",
-  },
-  {
-    id: "6",
-    title: "Beneath the Stars",
-    author: "Esi Dankwa",
-    rating: 4.8,
-    reviews: 201,
-    price: 15.99,
-    cover: "/cover6.webp",
-  },
-  {
-    id: "7",
-    title: "Echoes of Tomorrow",
-    author: "Kofi Mensah",
-    rating: 4.6,
-    reviews: 189,
-    price: 12.99,
-    cover: "/cover7.webp",
-  },
-];
-
-const featuredAuthors = [
-  {
-    name: "Amara Osei",
-    books: 5,
-    bio: "Award-winning author of contemporary fiction exploring identity and belonging.",
-    rating: 4.8,
-    color: "from-amber-500 to-orange-600",
-    border: "border-amber-300",
-  },
-  {
-    name: "Kofi Mensah",
-    books: 3,
-    bio: "Sci-fi visionary crafting stories about technology and humanity.",
-    rating: 4.6,
-    color: "from-[#D8B27A] to-[#EBC9A8]",
-    border: "border-[#EBC9A8]",
-  },
-  {
-    name: "Nana Agyeman",
-    books: 7,
-    bio: "Bestselling thriller writer with a passion for suspense and mystery.",
-    rating: 4.9,
-    color: "from-blue-500 to-indigo-600",
-    border: "border-blue-300",
-  },
-  {
-    name: "Akosua Boateng",
-    books: 4,
-    bio: "Poet and storyteller weaving West African folklore into modern narratives.",
-    rating: 4.7,
-    color: "from-rose-500 to-pink-600",
-    border: "border-rose-300",
-  },
-];
-
-const stats = [
-  { label: "Books Published", value: 10000, suffix: "+", icon: BookMarked },
-  { label: "Active Authors", value: 5000, suffix: "+", icon: Users },
-  { label: "Countries Reached", value: 50, suffix: "+", icon: Globe },
-  { label: "Royalties Paid", value: 1, prefix: "$", suffix: "M+", icon: DollarSign },
-];
-
 const testimonials = [
   {
     name: "Adwoa Serwaa",
@@ -399,9 +261,6 @@ const faqs = [
 ];
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [wordIndex, setWordIndex] = useState(0);
 
   useEffect(() => {
@@ -410,15 +269,6 @@ export default function Home() {
     }, 2500);
     return () => clearInterval(interval);
   }, []);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email.trim()) {
-      setSubscribed(true);
-      setEmail("");
-      setTimeout(() => setSubscribed(false), 4000);
-    }
-  };
 
   return (
     <div className="overflow-hidden">
@@ -475,8 +325,8 @@ export default function Home() {
             >
               <Link
                 href="/register"
-                className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal transition-all hover:shadow-lg"
-                style={{ fontFamily: "var(--font-libre)", backgroundColor: "#EBC9A8" }}
+                className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-white transition-all hover:shadow-lg"
+                style={{ fontFamily: "var(--font-libre)", backgroundColor: "#D8B27A" }}
               >
                 Start Publishing
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -561,17 +411,21 @@ export default function Home() {
               <motion.div
                 key={feature.title}
                 variants={fadeInUp}
-                whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.3)" }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className={`group relative rounded-2xl border p-8 shadow-sm transition-all duration-300 ${feature.bg} ${feature.border}`}
+                className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] hover:shadow-lg transition-all duration-300"
               >
-                <div className={`mb-5 inline-flex items-center justify-center rounded-xl ${feature.iconBg} p-3`}>
-                  <feature.icon className={`h-6 w-6 ${feature.iconColor}`} />
-                </div>
-                <h3 className="text-lg font-semibold mb-2 text-charcoal">{feature.title}</h3>
-                <p className="text-sm text-dark-gray/70 leading-relaxed">
-                  {feature.description}
-                </p>
+                <motion.div
+                  whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.3)" }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                  className={`group relative rounded-[14px] p-8 shadow-sm transition-all duration-300 ${feature.bg}`}
+                >
+                  <div className={`mb-5 inline-flex items-center justify-center rounded-xl ${feature.iconBg} p-3`}>
+                    <feature.icon className={`h-6 w-6 ${feature.iconColor}`} />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2 text-charcoal">{feature.title}</h3>
+                  <p className="text-sm text-dark-gray/70 leading-relaxed">
+                    {feature.description}
+                  </p>
+                </motion.div>
               </motion.div>
             ))}
           </motion.div>
@@ -608,20 +462,24 @@ export default function Home() {
                 <motion.div
                   key={step.title}
                   variants={fadeInUp}
-                  whileHover={{ y: -4 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className={`relative text-center rounded-2xl border p-6 ${step.bg} ${step.border}`}
+                  className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] hover:shadow-lg transition-all duration-300"
                 >
-                  <div className={`relative z-10 mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border-2 border-current bg-white ${step.number} font-bold text-lg shadow-sm`}>
-                    {index + 1}
-                  </div>
-                  <div className="mb-3 flex justify-center">
-                    <step.icon className={`h-6 w-6 ${step.iconColor}`} />
-                  </div>
-                  <h3 className="text-base font-semibold mb-1 text-charcoal">{step.title}</h3>
-                  <p className="text-sm text-dark-gray/70 leading-relaxed">
-                    {step.description}
-                  </p>
+                  <motion.div
+                    whileHover={{ y: -4 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    className={`relative text-center rounded-[14px] p-6 ${step.bg}`}
+                  >
+                    <div className={`relative z-10 mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border-2 border-current bg-white ${step.number} font-bold text-lg shadow-sm`}>
+                      {index + 1}
+                    </div>
+                    <div className="mb-3 flex justify-center">
+                      <step.icon className={`h-6 w-6 ${step.iconColor}`} />
+                    </div>
+                    <h3 className="text-base font-semibold mb-1 text-charcoal">{step.title}</h3>
+                    <p className="text-sm text-dark-gray/70 leading-relaxed">
+                      {step.description}
+                    </p>
+                  </motion.div>
                 </motion.div>
               ))}
             </motion.div>
@@ -629,227 +487,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Popular Books ───────────────────────────────── */}
-      <section className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="flex items-end justify-between mb-12">
-            <div>
-              <span className="text-base font-bold uppercase tracking-wider text-[#8A6A4A]">
-                Discover
-              </span>
-              <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
-                Popular Books
-              </h2>
-            </div>
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-              <Button variant="outline" className="hidden sm:inline-flex border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white" asChild>
-                <Link href="/store">
-                  View All
-                  <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </Button>
-            </motion.div>
-          </AnimatedSection>
 
-          <div
-            ref={scrollContainerRef}
-            className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 sm:-mx-0 sm:px-0"
-            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-          >
-            {mockBooks.map((book) => (
-              <motion.div
-                key={book.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.3 }}
-                className="min-w-[220px] sm:min-w-[260px] snap-start"
-              >
-                <motion.div
-                  whileHover={{ y: -10, boxShadow: "0 20px 40px -15px rgba(216,178,122,0.3)" }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className="group relative overflow-hidden rounded-xl border border-charcoal/10 bg-white shadow-sm transition-colors duration-300 hover:border-gold/30"
-                >
-                  <div className="aspect-[3/4] relative overflow-hidden">
-                    <img
-                      src={book.cover}
-                      alt={book.title}
-                      className="h-full w-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-                    <div className="absolute top-3 right-3">
-                      <div className="flex items-center gap-1 rounded-full bg-black/30 backdrop-blur-sm px-2 py-1">
-                        <Star className="h-3 w-3 fill-gold text-gold" />
-                        <span className="text-xs font-medium text-white">{book.rating}</span>
-                      </div>
-                    </div>
-                    <div className="absolute bottom-3 left-3 right-3">
-                      <h3 className="text-sm font-bold text-white line-clamp-2 drop-shadow-md">
-                        {book.title}
-                      </h3>
-                    </div>
-                  </div>
-                  <div className="p-3.5 space-y-1.5">
-                    <p className="text-xs text-charcoal truncate font-medium">
-                      {book.author}
-                    </p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1">
-                        {[...Array(5)].map((_, i) => (
-                          <Star
-                            key={i}
-                            className={cn(
-                              "h-3 w-3",
-                              i < Math.round(book.rating)
-                                ? "fill-yellow-400 text-yellow-400"
-                                : "text-charcoal/20"
-                            )}
-                          />
-                        ))}
-                        <span className="text-[10px] text-charcoal/60 ml-1">
-                          ({book.reviews})
-                        </span>
-                      </div>
-                      <p className="text-sm font-bold text-charcoal">${book.price}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              </motion.div>
-            ))}
-          </div>
-
-          <div className="mt-6 text-center sm:hidden">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-              <Button variant="outline" className="border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white" asChild>
-                <Link href="/store">
-                  View All Books
-                  <ArrowRight className="h-4 w-4 ml-1" />
-                </Link>
-              </Button>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Featured Authors ────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-peach uppercase tracking-wider">
-              Meet Our Authors
-            </span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
-              Featured Authors
-            </h2>
-            <p className="mt-4 text-lg text-dark-gray/70">
-              Talented writers who chose Statement to bring their stories to the world.
-            </p>
-          </AnimatedSection>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
-            variants={stagger}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-          >
-            {featuredAuthors.map((author) => (
-              <motion.div
-                key={author.name}
-                variants={fadeInUp}
-                whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.3)" }}
-                transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className={`group rounded-2xl border bg-white p-6 text-center transition-colors duration-300 shadow-sm ${author.border}`}
-              >
-                <div
-                  className={cn(
-                    "mx-auto mb-4 h-20 w-20 rounded-full bg-gradient-to-br flex items-center justify-center text-2xl font-bold text-white",
-                    author.color
-                  )}
-                >
-                  {author.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </div>
-                <h3 className="font-semibold text-lg text-charcoal">{author.name}</h3>
-                <div className="mt-1 flex items-center justify-center gap-1 text-sm text-dark-gray/70">
-                  <Star className="h-3.5 w-3.5 fill-gold text-gold" />
-                  <span>{author.rating}</span>
-                  <span className="text-xs">·</span>
-                  <span>{author.books} books</span>
-                </div>
-                <p className="mt-3 text-sm text-dark-gray/70 leading-relaxed">
-                  {author.bio}
-                </p>
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} className="mt-4">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="text-peach hover:text-peach-dark hover:bg-peach/10"
-                    asChild
-                  >
-                    <Link href={`/store?author=${encodeURIComponent(author.name)}`}>
-                      View Books
-                      <ArrowRight className="h-3.5 w-3.5 ml-1" />
-                    </Link>
-                  </Button>
-                </motion.div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ── Statistics ──────────────────────────────────── */}
-      <section className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
-              Trusted by Authors Worldwide
-            </h2>
-            <p className="mt-4 text-lg text-charcoal/60">
-              Our growing community is making an impact.
-            </p>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => {
-              const { count, ref } = useCountUp(stat.value);
-              const colors = [
-                { bg: "bg-amber-100", icon: "text-amber-700", box: "bg-amber-200" },
-                { bg: "bg-[#F2D8BE]/40", icon: "text-[#8A6A4A]", box: "bg-[#F2D8BE]" },
-                { bg: "bg-blue-100", icon: "text-blue-700", box: "bg-blue-200" },
-                { bg: "bg-rose-100", icon: "text-rose-700", box: "bg-rose-200" },
-              ];
-              const c = colors[index % colors.length];
-              return (
-                <motion.div
-                  key={stat.label}
-                  ref={ref}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className={`text-center rounded-2xl p-6 shadow-sm ${c.bg}`}
-                >
-                  <div className={`inline-flex items-center justify-center rounded-2xl p-3 mb-4 ${c.box}`}>
-                    <stat.icon className={`h-6 w-6 ${c.icon}`} />
-                  </div>
-                  <div className="text-3xl sm:text-4xl font-bold text-charcoal">
-                    {stat.prefix || ""}
-                    {count.toLocaleString()}
-                    {stat.suffix}
-                  </div>
-                  <p className="mt-1 text-sm text-charcoal/60">{stat.label}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* ── Testimonials ────────────────────────────────── */}
       <section className="py-24 sm:py-32 bg-white">
@@ -951,62 +589,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Newsletter ──────────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-charcoal">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection>
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-white/5 via-white/[0.02] to-white/5 border border-white/10 p-8 sm:p-12 lg:p-16">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-              <div className="relative z-10 max-w-2xl mx-auto text-center">
-                <div className="inline-flex items-center justify-center rounded-2xl bg-gold/15 p-3 mb-6">
-                  <Mail className="h-6 w-6 text-gold" />
-                </div>
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white">
-                  Stay in the Loop
-                </h2>
-                <p className="mt-3 text-white/60">
-                  Get the latest books, author stories, and platform updates
-                  delivered straight to your inbox. No spam, ever.
-                </p>
-                <form
-                  onSubmit={handleSubscribe}
-                  className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto"
-                >
-                  <Input
-                    type="email"
-                    placeholder="Enter your email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="h-12 bg-white/10 border-white/10 text-white placeholder:text-white/40 focus:border-gold focus:ring-gold/20"
-                    required
-                  />
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-                    <Button type="submit" size="lg" className="h-12 shrink-0 bg-gold text-charcoal hover:bg-peach-dark font-semibold shadow-md">
-                      Subscribe
-                      <ArrowRight className="h-4 w-4 ml-1" />
-                    </Button>
-                  </motion.div>
-                </form>
-                <AnimatePresence>
-                  {subscribed && (
-                    <motion.p
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="mt-4 text-sm text-[#D8B27A] font-medium"
-                    >
-                      Thanks for subscribing! Check your inbox for a welcome email.
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-                <p className="mt-3 text-xs text-white/40">
-                  Join 5,000+ readers and authors. Unsubscribe anytime.
-                </p>
-              </div>
-            </div>
-          </AnimatedSection>
-        </div>
-      </section>
 
       {/* ── CTA Banner ──────────────────────────────────── */}
       <section className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
