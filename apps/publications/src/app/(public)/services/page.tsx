@@ -334,7 +334,7 @@ export default function ServicesPage() {
       </section>
 
       {/* ── CTA ─────────────────────────────────────────── */}
-      <section className="py-14 sm:py-20" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
+      <section className="py-24 sm:py-32" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
@@ -343,7 +343,7 @@ export default function ServicesPage() {
             <p className="mt-4 text-lg text-charcoal/70 max-w-2xl mx-auto">
               Join thousands of authors who chose Statement to bring their stories to the world.
             </p>
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/register" className="inline-flex items-center gap-2 rounded-lg bg-charcoal px-8 py-4 text-base font-semibold text-white hover:bg-dark-gray shadow-lg transition-all">
                 Create Account <ArrowRight className="h-5 w-5" />
               </Link>

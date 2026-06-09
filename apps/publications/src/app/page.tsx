@@ -443,7 +443,7 @@ export default function Home() {
       </section>
 
       {/* ── How It Works ────────────────────────────────── */}
-      <section className="py-10 sm:py-14" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 40%, #F2D8BE 100%)" }}>
+      <section className="py-10 sm:py-14 bg-[#EBC9A8]/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
             <span className="text-base font-bold uppercase tracking-wider text-[#8A6A4A]">
@@ -568,9 +568,9 @@ export default function Home() {
       </section>
 
       {/* ── FAQ ─────────────────────────────────────────── */}
-      <section className="py-12 sm:py-16 bg-light-gray">
+      <section className="py-24 sm:py-32 bg-light-gray">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-6">
+          <AnimatedSection className="text-center mb-12">
             <span className="text-sm font-semibold text-gold uppercase tracking-wider">
               FAQ
             </span>
@@ -585,12 +585,12 @@ export default function Home() {
                 <AccordionItem
                   key={index}
                   value={`faq-${index}`}
-                  className="rounded-xl border border-peach/10 bg-white px-4 data-[state=open]:shadow-sm data-[state=open]:border-peach/20 transition-colors"
+                  className="rounded-xl border border-peach/10 bg-white px-5 data-[state=open]:shadow-sm data-[state=open]:border-peach/20 transition-colors"
                 >
-                  <AccordionTrigger className="text-left text-sm font-medium py-3.5 hover:no-underline hover:text-peach">
+                  <AccordionTrigger className="text-left text-sm sm:text-base font-medium py-5 hover:no-underline hover:text-peach">
                     {faq.question}
                   </AccordionTrigger>
-                  <AccordionContent className="text-sm text-dark-gray/70 leading-relaxed pb-3.5">
+                  <AccordionContent className="text-sm text-dark-gray/70 leading-relaxed pb-5">
                     {faq.answer}
                   </AccordionContent>
                 </AccordionItem>
@@ -601,7 +601,7 @@ export default function Home() {
       </section>
 
       {/* ── CTA Banner ──────────────────────────────────── */}
-      <section className="py-14 sm:py-20 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
+      <section className="py-24 sm:py-32 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
         <div className="absolute inset-0">
           <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-white/15 rounded-full blur-3xl" />
           <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gold/10 rounded-full blur-3xl" />
@@ -611,11 +611,11 @@ export default function Home() {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-charcoal">
               Ready to Share Your Story?
             </h2>
-            <p className="mt-4 text-lg text-charcoal/70 max-w-2xl mx-auto">
+            <p className="mt-6 text-lg text-charcoal/70 max-w-2xl mx-auto">
               Join thousands of authors who chose Statement to publish their
               books. Start your publishing journey today — it&apos;s free.
             </p>
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <motion.div whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(29,29,29,0.4)" }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
                 <Button
                   size="lg"
