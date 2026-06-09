@@ -23,6 +23,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { RollingMarquee } from "@/components/rolling-marquee";
 import {
   Accordion,
   AccordionContent,
@@ -393,6 +394,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ── Rolling Marquee ──────────────────────────────── */}
+      <RollingMarquee />
 
       {/* ── Features ────────────────────────────────────── */}
       <section className="py-16 sm:py-20 bg-white">
