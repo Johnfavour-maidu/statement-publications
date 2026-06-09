@@ -392,9 +392,9 @@ export default function Home() {
       </section>
 
       {/* ── Features ────────────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-white">
+      <section className="py-16 sm:py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-10">
             <span className="text-base font-bold uppercase tracking-wider text-[#8A6A4A]">
               Everything You Need
             </span>
@@ -412,7 +412,7 @@ export default function Home() {
             whileInView="visible"
             viewport={{ once: true, margin: "-80px" }}
             variants={stagger}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
           >
             {features.map((feature) => (
               <motion.div
@@ -423,12 +423,12 @@ export default function Home() {
                 <motion.div
                   whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.3)" }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                  className={`group relative rounded-[14px] p-8 shadow-sm transition-all duration-300 ${feature.bg}`}
+                  className={`group relative rounded-[14px] p-5 shadow-sm transition-all duration-300 ${feature.bg}`}
                 >
-                  <div className={`mb-5 inline-flex items-center justify-center rounded-xl ${feature.iconBg} p-3`}>
-                    <feature.icon className={`h-6 w-6 ${feature.iconColor}`} />
+                  <div className={`mb-3 inline-flex items-center justify-center rounded-xl ${feature.iconBg} p-2.5`}>
+                    <feature.icon className={`h-5 w-5 ${feature.iconColor}`} />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2 text-charcoal">{feature.title}</h3>
+                  <h3 className="text-base font-semibold mb-1.5 text-charcoal">{feature.title}</h3>
                   <p className="text-sm text-dark-gray/70 leading-relaxed">
                     {feature.description}
                   </p>
