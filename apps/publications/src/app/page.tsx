@@ -23,7 +23,6 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { AnimatedShowcase } from "@/components/animated-showcase";
 import {
   Accordion,
   AccordionContent,
@@ -600,9 +599,6 @@ export default function Home() {
           </AnimatedSection>
         </div>
       </section>
-
-      {/* ── Animated Showcase ───────────────────────────── */}
-      <AnimatedShowcase />
 
       {/* ── CTA Banner ──────────────────────────────────── */}
       <section className="py-8 sm:py-10 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
