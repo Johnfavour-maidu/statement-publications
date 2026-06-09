@@ -90,10 +90,10 @@ export function RollingMarquee() {
   }, [isPaused]);
 
   return (
-    <section className="relative py-6 bg-gradient-to-r from-[#FDF6EE] via-white to-[#FDF6EE] overflow-hidden border-y border-[#EBC9A8]/20">
+    <section className="relative py-6 overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
       {/* Fade edges */}
-      <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-[#FDF6EE] to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-[#FDF6EE] to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-20 pointer-events-none" style={{ background: "linear-gradient(to right, #EBC9A8, transparent)" }} />
+      <div className="absolute right-0 top-0 bottom-0 w-20 pointer-events-none" style={{ background: "linear-gradient(to left, #D8B27A, transparent)" }} />
 
       <div
         className="overflow-hidden"

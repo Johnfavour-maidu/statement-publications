@@ -289,7 +289,7 @@ export default function Home() {
       <section className="relative min-h-screen w-full overflow-hidden" style={{ background: "linear-gradient(to bottom right, #FDF6EE 0%, #FDF6EE 30%, rgba(253,246,238,0.5) 60%, white 100%)" }}>
 
         {/* Centered text */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-40 lg:pt-48">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-20 lg:pt-24">
           <div className="max-w-3xl text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -358,38 +358,6 @@ export default function Home() {
                   </svg>
                 </span>
               </Link>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="mt-10 flex flex-wrap items-center justify-center gap-6 text-sm text-dark-gray/70"
-            >
-              <div className="flex items-center gap-2">
-                <svg className="h-5 w-5 text-[#EBC9A8]" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>Publish<br/>your book</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="h-5 w-5 text-[#EBC9A8]" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>Reach<br/>Global Readers</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="h-5 w-5 text-[#EBC9A8]" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>Earn<br/>Royalties</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="h-5 w-5 text-[#EBC9A8]" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>Leave Your<br/>Legacy</span>
-              </div>
             </motion.div>
           </div>
         </div>
