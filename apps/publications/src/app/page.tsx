@@ -289,7 +289,7 @@ export default function Home() {
       <section className="relative min-h-screen w-full overflow-hidden dark:bg-[#0a0a0a]" style={{ background: "linear-gradient(to bottom right, #FDF6EE 0%, #FDF6EE 30%, rgba(253,246,238,0.5) 60%, white 100%)" }}>
 
         {/* Centered text */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-16 lg:pt-20">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-8 lg:pt-12">
           <div className="max-w-3xl text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}

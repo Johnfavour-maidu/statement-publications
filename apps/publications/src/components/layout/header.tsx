@@ -163,7 +163,7 @@ export function Header({ user }: HeaderProps) {
               <img
                 src="/logo.png"
                 alt="Statement Publications"
-                className="h-10 lg:h-12 w-auto"
+                className="h-8 lg:h-10 w-auto"
               />
             </Link>
 
