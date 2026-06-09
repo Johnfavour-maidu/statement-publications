@@ -601,7 +601,7 @@ export default function Home() {
       </section>
 
       {/* ── CTA Banner ──────────────────────────────────── */}
-      <section className="py-12 sm:py-16 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
+      <section className="py-8 sm:py-10 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
         <div className="absolute inset-0">
           <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-white/15 rounded-full blur-3xl" />
           <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gold/10 rounded-full blur-3xl" />
@@ -611,11 +611,11 @@ export default function Home() {
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-charcoal">
               Ready to Share Your Story?
             </h2>
-            <p className="mt-4 text-lg text-charcoal/70 max-w-2xl mx-auto">
+            <p className="mt-3 text-lg text-charcoal/70 max-w-2xl mx-auto">
               Join thousands of authors who chose Statement to publish their
               books. Start your publishing journey today — it&apos;s free.
             </p>
-            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
               <motion.div whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(29,29,29,0.4)" }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
                 <Button
                   size="lg"
