@@ -24,7 +24,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RollingMarquee } from "@/components/rolling-marquee";
-import { HeroRevolvingIcons } from "@/components/hero-revolving-icons";
 import {
   Accordion,
   AccordionContent,
@@ -289,9 +288,6 @@ export default function Home() {
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative min-h-screen w-full overflow-hidden dark:bg-[#0a0a0a]" style={{ background: "linear-gradient(to bottom right, #FDF6EE 0%, #FDF6EE 30%, rgba(253,246,238,0.5) 60%, white 100%)" }}>
 
-        {/* Revolving author icons background */}
-        <HeroRevolvingIcons />
-
         {/* Centered text */}
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-8 lg:pt-12">
           <div className="max-w-3xl text-center">
@@ -340,8 +336,8 @@ export default function Home() {
             >
               <Link
                 href="/register"
-                className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal transition-all hover:shadow-lg"
-                style={{ fontFamily: "var(--font-libre)", backgroundColor: "#D8B27A" }}
+                className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal bg-[#D8B27A] transition-all duration-200 hover:bg-[#8A6A4A] hover:text-white hover:shadow-lg"
+                style={{ fontFamily: "var(--font-libre)" }}
               >
                 Start Publishing
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -351,9 +347,9 @@ export default function Home() {
               {/* Learn More — animated gradient border */}
               <Link
                 href="/about"
-                className="group p-[2px] rounded-lg bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] transition-all hover:shadow-lg"
+                className="group/btn p-[2px] rounded-lg bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] transition-all duration-200 hover:shadow-lg"
               >
-                <span className="inline-flex items-center gap-2 rounded-[6px] bg-white group-hover:bg-[#D8B27A] px-6 py-3 text-base font-semibold text-charcoal transition-colors duration-200"
+                <span className="inline-flex items-center gap-2 rounded-[6px] bg-white px-6 py-3 text-base font-semibold text-charcoal transition-all duration-200 group-hover/btn:bg-[#8A6A4A] group-hover/btn:text-white"
                   style={{ fontFamily: "var(--font-libre)" }}
                 >
                   Learn More
