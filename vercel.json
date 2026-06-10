@@ -1,0 +1,5 @@
+{
+  "buildCommand": "turbo build --filter=@statement/publications...",
+  "outputDirectory": "apps/publications/.next",
+  "installCommand": "pnpm install"
+}
