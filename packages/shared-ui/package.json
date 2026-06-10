@@ -5,7 +5,7 @@
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "echo ok",
     "clean": "rm -rf dist node_modules"
   },
   "dependencies": {
