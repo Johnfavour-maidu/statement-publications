@@ -25,6 +25,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { RollingMarquee } from "@/components/rolling-marquee";
 import { HeroRevolvingIcons } from "@/components/hero-revolving-icons";
+import { AnimatedHeroBackground } from "@/components/animated-hero-background";
 import {
   Accordion,
   AccordionContent,
@@ -288,6 +289,7 @@ export default function Home() {
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative min-h-screen w-full overflow-hidden dark:bg-[#0a0a0a]" style={{ background: "linear-gradient(to bottom right, #FDF6EE 0%, #FDF6EE 30%, rgba(253,246,238,0.5) 60%, white 100%)" }}>
+        <AnimatedHeroBackground />
 
         {/* Revolving author icons */}
         <HeroRevolvingIcons />
