@@ -107,7 +107,7 @@ export function Header({ user }: HeaderProps) {
 
             <span className="w-px h-3 bg-black/20" />
 
-            <Link href="https://books.statementpublications.com" className="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
+            <Link href="https://books-statement-publications.vercel.app" className="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
               <BookOpen className="h-3.5 w-3.5" />
               <span>Statement Books</span>
             </Link>
@@ -254,7 +254,7 @@ export function Header({ user }: HeaderProps) {
                 </nav>
 
                 <div className="mt-4 pt-4 border-t border-[#D8B27A]/20 space-y-1">
-                  <Link href="https://books.statementpublications.com" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[#1D1D1D] hover:bg-[#D8B27A]/10 hover:text-[#8A6A4A] transition-all duration-200">
+                  <Link href="https://books-statement-publications.vercel.app" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[#1D1D1D] hover:bg-[#D8B27A]/10 hover:text-[#8A6A4A] transition-all duration-200">
                     <BookOpen className="h-4 w-4" /> Statement Books
                   </Link>
                   <Link href="/author/dashboard" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[#1D1D1D] hover:bg-[#D8B27A]/10 hover:text-[#8A6A4A] transition-all duration-200">

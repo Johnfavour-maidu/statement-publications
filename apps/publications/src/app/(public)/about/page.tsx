@@ -124,7 +124,7 @@ export default function AboutPage() {
                 <Link href="/register" className="inline-flex items-center gap-2 rounded-lg bg-[#EBC9A8] px-6 py-3 text-base font-semibold text-charcoal hover:bg-[#D8B27A] hover:shadow-lg transition-all">
                   Create Account <ArrowRight className="h-5 w-5" />
                 </Link>
-                <Link href="/books" className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal px-6 py-3 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-white transition-all">
+                <Link href="https://books-statement-publications.vercel.app" className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal px-6 py-3 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-white transition-all">
                   Explore Books
                 </Link>
               </div>
@@ -132,20 +132,38 @@ export default function AboutPage() {
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.2 }} className="hidden lg:block">
               <div className="relative">
                 <div className="absolute -inset-4 bg-gradient-to-r from-[#EBC9A8]/30 to-[#D8B27A]/30 rounded-3xl blur-2xl" />
-                <div className="relative bg-white rounded-2xl shadow-2xl p-8 border border-[#EBC9A8]/20">
-                  <div className="grid grid-cols-2 gap-4">
-                    {[
-                      { icon: BookOpen, label: "Books Published", value: "10,000+" },
-                      { icon: Users, label: "Active Authors", value: "5,000+" },
-                      { icon: Globe, label: "Countries", value: "50+" },
-                      { icon: TrendingUp, label: "Royalties Paid", value: "$1M+" },
-                    ].map((stat) => (
-                      <div key={stat.label} className="text-center p-4 rounded-xl bg-[#FDF6EE]">
-                        <stat.icon className="h-6 w-6 mx-auto mb-2 text-[#8A6A4A]" />
-                        <div className="text-2xl font-bold text-charcoal">{stat.value}</div>
-                        <div className="text-xs text-dark-gray/60">{stat.label}</div>
+                <div className="p-[3px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] shadow-2xl">
+                  <div className="relative rounded-[13px] bg-white p-8">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE]">
+                        <div className="text-center p-4 rounded-[10px] bg-white">
+                          <BookOpen className="h-6 w-6 mx-auto mb-2 text-[#8A6A4A]" />
+                          <div className="text-2xl font-bold text-charcoal">10,000+</div>
+                          <div className="text-xs text-dark-gray/60">Books Published</div>
+                        </div>
                       </div>
-                    ))}
+                      <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">
+                        <div className="text-center p-4 rounded-[10px] bg-white">
+                          <Users className="h-6 w-6 mx-auto mb-2 text-[#8A6A4A]" />
+                          <div className="text-2xl font-bold text-charcoal">5,000+</div>
+                          <div className="text-xs text-dark-gray/60">Active Authors</div>
+                        </div>
+                      </div>
+                      <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500">
+                        <div className="text-center p-4 rounded-[10px] bg-white">
+                          <Globe className="h-6 w-6 mx-auto mb-2 text-[#8A6A4A]" />
+                          <div className="text-2xl font-bold text-charcoal">50+</div>
+                          <div className="text-xs text-dark-gray/60">Countries</div>
+                        </div>
+                      </div>
+                      <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-blue-300 via-blue-400 to-blue-500">
+                        <div className="text-center p-4 rounded-[10px] bg-white">
+                          <TrendingUp className="h-6 w-6 mx-auto mb-2 text-[#8A6A4A]" />
+                          <div className="text-2xl font-bold text-charcoal">$1M+</div>
+                          <div className="text-xs text-dark-gray/60">Royalties Paid</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -164,27 +182,58 @@ export default function AboutPage() {
             </h2>
           </AnimatedSection>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: BookOpen, value: 10000, suffix: "+", label: "Books Published", bg: "bg-[#FDF6EE]", border: "border-[#EBC9A8]", iconColor: "text-[#8A6A4A]" },
-              { icon: Users, value: 5000, suffix: "+", label: "Active Authors", bg: "bg-blue-50", border: "border-blue-200", iconColor: "text-blue-600" },
-              { icon: Globe, value: 50, suffix: "+", label: "Countries Reached", bg: "bg-emerald-50", border: "border-emerald-200", iconColor: "text-emerald-600" },
-              { icon: TrendingUp, value: 1, prefix: "$", suffix: "M+", label: "Royalties Paid", bg: "bg-amber-50", border: "border-amber-200", iconColor: "text-amber-600" },
-            ].map((stat) => (
-              <AnimatedSection key={stat.label}>
-                <div className={cn(
-                  "text-center rounded-2xl p-6 shadow-sm border-2 hover:shadow-md transition-all duration-300 hover:-translate-y-1",
-                  stat.bg, stat.border
-                )}>
-                  <div className={cn("inline-flex items-center justify-center rounded-2xl bg-white/60 p-3 mb-4", stat.iconColor)}>
-                    <stat.icon className="h-6 w-6" />
+            <AnimatedSection>
+              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="text-center rounded-[14px] bg-white p-6">
+                  <div className="inline-flex items-center justify-center rounded-2xl bg-[#FDF6EE] p-3 mb-4 text-[#8A6A4A]">
+                    <BookOpen className="h-6 w-6" />
                   </div>
                   <div className="text-3xl sm:text-4xl font-bold text-charcoal">
-                    {stat.prefix || ""}<CountUp target={stat.value} />{stat.suffix}
+                    <CountUp target={10000} />+
                   </div>
-                  <p className="mt-1 text-sm text-charcoal/60 font-medium">{stat.label}</p>
+                  <p className="mt-1 text-sm text-charcoal/60 font-medium">Books Published</p>
                 </div>
-              </AnimatedSection>
-            ))}
+              </div>
+            </AnimatedSection>
+            <AnimatedSection>
+              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-blue-300 via-blue-400 to-blue-500 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="text-center rounded-[14px] bg-white p-6">
+                  <div className="inline-flex items-center justify-center rounded-2xl bg-blue-50 p-3 mb-4 text-blue-600">
+                    <Users className="h-6 w-6" />
+                  </div>
+                  <div className="text-3xl sm:text-4xl font-bold text-charcoal">
+                    <CountUp target={5000} />+
+                  </div>
+                  <p className="mt-1 text-sm text-charcoal/60 font-medium">Active Authors</p>
+                </div>
+              </div>
+            </AnimatedSection>
+            <AnimatedSection>
+              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="text-center rounded-[14px] bg-white p-6">
+                  <div className="inline-flex items-center justify-center rounded-2xl bg-emerald-50 p-3 mb-4 text-emerald-600">
+                    <Globe className="h-6 w-6" />
+                  </div>
+                  <div className="text-3xl sm:text-4xl font-bold text-charcoal">
+                    <CountUp target={50} />+
+                  </div>
+                  <p className="mt-1 text-sm text-charcoal/60 font-medium">Countries Reached</p>
+                </div>
+              </div>
+            </AnimatedSection>
+            <AnimatedSection>
+              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                <div className="text-center rounded-[14px] bg-white p-6">
+                  <div className="inline-flex items-center justify-center rounded-2xl bg-amber-50 p-3 mb-4 text-amber-600">
+                    <TrendingUp className="h-6 w-6" />
+                  </div>
+                  <div className="text-3xl sm:text-4xl font-bold text-charcoal">
+                    $<CountUp target={1} />M+
+                  </div>
+                  <p className="mt-1 text-sm text-charcoal/60 font-medium">Royalties Paid</p>
+                </div>
+              </div>
+            </AnimatedSection>
           </div>
         </div>
       </section>
@@ -464,7 +513,7 @@ export default function AboutPage() {
               <Link href="/register" className="inline-flex items-center gap-2 rounded-lg bg-charcoal px-8 py-4 text-base font-semibold text-white hover:bg-dark-gray shadow-lg transition-all">
                 Create Account <ArrowRight className="h-5 w-5" />
               </Link>
-              <Link href="/books" className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal/30 px-8 py-4 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-white transition-all">
+              <Link href="https://books-statement-publications.vercel.app" className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal/30 px-8 py-4 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-white transition-all">
                 Explore Books
               </Link>
             </div>
