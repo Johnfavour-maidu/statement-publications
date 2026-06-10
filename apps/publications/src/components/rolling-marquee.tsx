@@ -41,13 +41,13 @@ function MarqueeCard({ item }: { item: (typeof marqueeItems)[0] }) {
   const Icon = item.icon;
   return (
     <div className="flex-shrink-0 mx-2.5">
-      <div className="group flex items-center gap-3 rounded-xl border border-[#EBC9A8]/30 bg-white/80 backdrop-blur-sm px-5 py-3 shadow-sm hover:shadow-md hover:border-[#D8B27A]/50 transition-all duration-300 cursor-default">
+      <div className="group flex items-center gap-3 rounded-xl border border-white/40 bg-white/80 backdrop-blur-sm px-5 py-3 shadow-sm hover:shadow-md hover:border-[#D8B27A]/60 transition-all duration-300 cursor-default">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#EBC9A8] to-[#F2D8BE]">
           <Icon className="h-4.5 w-4.5 text-[#8A6A4A]" />
         </div>
         <div className="whitespace-nowrap">
-          <p className="text-sm font-semibold text-charcoal leading-tight">{item.label}</p>
-          <p className="text-[11px] text-charcoal/50">{item.sub}</p>
+          <p className="text-sm font-semibold text-[#1D1D1D] leading-tight">{item.label}</p>
+          <p className="text-[11px] text-[#1D1D1D]/50">{item.sub}</p>
         </div>
       </div>
     </div>
@@ -90,7 +90,7 @@ export function RollingMarquee() {
   }, [isPaused]);
 
   return (
-    <section className="relative py-6 overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
+    <section className="relative py-8 overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
       {/* Fade edges */}
       <div className="absolute left-0 top-0 bottom-0 w-20 pointer-events-none" style={{ background: "linear-gradient(to right, #EBC9A8, transparent)" }} />
       <div className="absolute right-0 top-0 bottom-0 w-20 pointer-events-none" style={{ background: "linear-gradient(to left, #D8B27A, transparent)" }} />

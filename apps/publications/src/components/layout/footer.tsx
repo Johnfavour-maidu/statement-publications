@@ -115,7 +115,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 aria-label={social.label}
                 title={social.label}
-                className={`flex h-10 w-10 items-center justify-center rounded-full border text-white transition-all duration-300 hover:scale-110 ${social.color}`}
+                className={`social-icon flex h-10 w-10 items-center justify-center rounded-full border text-white hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white ${social.color}`}
               >
                 <svg className="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="currentColor"><path d={social.path} /></svg>
               </a>

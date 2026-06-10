@@ -156,7 +156,7 @@ export function Header({ user }: HeaderProps) {
       </div>
 
       {/* Main Navigation */}
-      <div className="bg-[#FDF6EE]/95 dark:bg-[#1a1a1a]/95 backdrop-blur-md shadow-sm">
+      <div className="bg-[#FDF6EE]/95 dark:bg-[#1a1a1a]/95 backdrop-blur-md border-b border-[#D8B27A]/10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between lg:h-20">
             <Link href="/" className="flex items-center shrink-0">
@@ -167,16 +167,16 @@ export function Header({ user }: HeaderProps) {
               />
             </Link>
 
-            <nav className="hidden lg:flex items-center gap-1">
+            <nav className="hidden lg:flex items-center gap-0.5">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "relative px-4 py-2 text-sm font-medium rounded-lg transition-colors duration-200 z-10",
+                    "relative px-4 py-2 text-sm font-medium rounded-lg z-10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#D8B27A]",
                     pathname === link.href
                       ? "text-charcoal"
-                      : "text-charcoal hover:text-brown hover:bg-peach/10"
+                      : "text-charcoal hover:text-brown hover:bg-[#D8B27A]/10"
                   )}
                 >
                   <span className="relative z-10">{link.label}</span>
@@ -193,16 +193,16 @@ export function Header({ user }: HeaderProps) {
 
             <div className="flex items-center gap-3">
               {user ? (
-                <Link href="/author/dashboard" className="flex flex-col items-center px-2 py-1 rounded-lg hover:bg-peach/10 transition-colors group">
-                  <User className="h-6 w-6 text-charcoal group-hover:text-charcoal/70 transition-colors" />
+                <Link href="/author/dashboard" className="flex flex-col items-center px-2 py-1 rounded-lg hover:bg-[#D8B27A]/10 transition-all duration-200 group">
+                  <User className="h-6 w-6 text-charcoal group-hover:text-[#8A6A4A] transition-colors duration-200" />
                   <span className="text-[10px] font-semibold text-charcoal mt-0.5 hidden sm:block">My Account</span>
                 </Link>
               ) : (
                 <div className="flex items-center gap-2">
-                  <Link href="/login" className="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-charcoal border border-charcoal/20 hover:bg-charcoal hover:text-white transition-all">
+                  <Link href="/login" className="btn-outline inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-charcoal border border-[#1D1D1D]/20 hover:bg-[#1D1D1D] hover:text-white">
                     Sign In
                   </Link>
-                  <Link href="/register" className="inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-charcoal" style={{ backgroundColor: "#D8B27A" }}>
+                  <Link href="/register" className="btn-primary inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-charcoal bg-[#D8B27A] hover:bg-[#8A6A4A] hover:text-white">
                     Create Account
                   </Link>
                 </div>
@@ -242,10 +242,10 @@ export function Header({ user }: HeaderProps) {
                       key={link.href}
                       href={link.href}
                       className={cn(
-                        "rounded-lg px-4 py-3 text-sm font-medium transition-colors duration-200",
+                        "rounded-lg px-4 py-3 text-sm font-medium transition-all duration-200",
                         pathname === link.href
-                          ? "bg-[#D8B27A] text-charcoal"
-                          : "text-charcoal hover:bg-peach/10 hover:text-brown"
+                          ? "bg-[#D8B27A] text-[#1D1D1D] shadow-sm"
+                          : "text-[#1D1D1D] hover:bg-[#D8B27A]/10 hover:text-[#8A6A4A]"
                       )}
                     >
                       {link.label}
@@ -253,24 +253,24 @@ export function Header({ user }: HeaderProps) {
                   ))}
                 </nav>
 
-                <div className="mt-4 pt-4 border-t border-peach/30 space-y-1">
-                  <Link href="https://books.statementpublications.com" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal hover:bg-peach/10 transition-colors">
+                <div className="mt-4 pt-4 border-t border-[#D8B27A]/20 space-y-1">
+                  <Link href="https://books.statementpublications.com" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[#1D1D1D] hover:bg-[#D8B27A]/10 hover:text-[#8A6A4A] transition-all duration-200">
                     <BookOpen className="h-4 w-4" /> Statement Books
                   </Link>
-                  <Link href="/author/dashboard" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal hover:bg-peach/10 transition-colors">
+                  <Link href="/author/dashboard" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[#1D1D1D] hover:bg-[#D8B27A]/10 hover:text-[#8A6A4A] transition-all duration-200">
                     Author Dashboard
                   </Link>
-                  <Link href="/support" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-charcoal hover:bg-peach/10 transition-colors">
+                  <Link href="/support" className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-[#1D1D1D] hover:bg-[#D8B27A]/10 hover:text-[#8A6A4A] transition-all duration-200">
                     Support
                   </Link>
                 </div>
 
                 {!user && (
-                  <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-peach/30">
-                    <Button variant="outline" asChild className="w-full border-peach text-brown hover:bg-peach/10">
+                  <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-[#D8B27A]/20">
+                    <Button variant="outline" asChild className="w-full border-[#D8B27A]/30 text-[#8A6A4A] hover:bg-[#D8B27A]/10 hover:border-[#D8B27A]/50 transition-all duration-200">
                       <Link href="/login">Sign In</Link>
                     </Button>
-                    <Button asChild className="w-full bg-peach text-charcoal hover:bg-peach-dark">
+                    <Button asChild className="w-full bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#8A6A4A] hover:text-white transition-all duration-200">
                       <Link href="/register">Create Account</Link>
                     </Button>
                   </div>
