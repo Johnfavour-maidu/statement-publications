@@ -73,7 +73,7 @@ export function HeroRevolvingIcons() {
               >
                 <div className="w-15 h-15 rounded-full flex items-center justify-center bg-white/90 border border-[#D8B27A]/30 shadow-lg">
                   <svg
-                    className="w-7 h-7 text-[#8A6A4A]"
+                    className="w-7 h-7 text-black"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
