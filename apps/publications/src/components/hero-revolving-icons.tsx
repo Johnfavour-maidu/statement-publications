@@ -47,7 +47,7 @@ export function HeroRevolvingIcons() {
       />
 
       {/* Orbit container */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center" style={{ zIndex: 1 }}>
         <div
           className="hero-orbit relative"
           style={{ width: radius * 2, height: radius * 2 }}
@@ -65,15 +65,15 @@ export function HeroRevolvingIcons() {
                 style={{
                   left: "50%",
                   top: "50%",
-                  marginLeft: -28,
-                  marginTop: -28,
+                  marginLeft: -30,
+                  marginTop: -30,
                   transform: `translate(${x}px, ${y}px)`,
                   animationDelay: `${-(angle / 360) * 60}s`,
                 }}
               >
-                <div className="w-14 h-14 rounded-full flex items-center justify-center bg-white/70 backdrop-blur-sm border border-[#D8B27A]/25 shadow-md">
+                <div className="w-15 h-15 rounded-full flex items-center justify-center bg-white/90 border border-[#D8B27A]/30 shadow-lg">
                   <svg
-                    className="w-7 h-7 text-[#8A6A4A]/45"
+                    className="w-7 h-7 text-[#8A6A4A]"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
