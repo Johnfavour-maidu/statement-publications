@@ -9,26 +9,35 @@ interface Bubble {
   delay: string;
   duration: string;
   opacity: number;
+  color: string;
 }
 
-export function FloatingBubbles({ className = "" }: { className?: string }) {
+const COLORS = [
+  "from-[#D8B27A] to-[#EBC9A8]",
+  "from-[#EBC9A8] to-[#F2D8BE]",
+  "from-amber-300 to-amber-400",
+  "from-[#D8B27A]/60 to-[#EBC9A8]/60",
+];
+
+export function FloatingBubbles({ count = 18, className = "" }: { count?: number; className?: string }) {
   const bubbles: Bubble[] = useMemo(() => {
-    return Array.from({ length: 12 }, (_, i) => ({
+    return Array.from({ length: count }, (_, i) => ({
       id: i,
-      size: 6 + Math.random() * 18,
-      left: `${5 + Math.random() * 90}%`,
-      delay: `${Math.random() * 6}s`,
-      duration: `${10 + Math.random() * 8}s`,
-      opacity: 0.6 + Math.random() * 0.1,
+      size: 4 + Math.random() * 22,
+      left: `${2 + Math.random() * 96}%`,
+      delay: `${Math.random() * 8}s`,
+      duration: `${9 + Math.random() * 10}s`,
+      opacity: 0.85 + Math.random() * 0.05,
+      color: COLORS[i % COLORS.length],
     }));
-  }, []);
+  }, [count]);
 
   return (
     <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`}>
       {bubbles.map((bubble) => (
         <div
           key={bubble.id}
-          className="absolute rounded-full bg-gradient-to-br from-[#D8B27A] to-[#EBC9A8] animate-bubble-float-burst"
+          className={`absolute rounded-full bg-gradient-to-br ${bubble.color} animate-bubble-float-burst`}
           style={{
             width: `${bubble.size}px`,
             height: `${bubble.size}px`,
@@ -37,7 +46,7 @@ export function FloatingBubbles({ className = "" }: { className?: string }) {
             opacity: bubble.opacity,
             animationDelay: bubble.delay,
             animationDuration: bubble.duration,
-            filter: "blur(2px)",
+            filter: bubble.size > 14 ? "blur(3px)" : "blur(1.5px)",
           }}
         />
       ))}
