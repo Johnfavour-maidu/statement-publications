@@ -288,6 +288,10 @@ export default function Home() {
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative min-h-screen w-full bg-gradient-to-br from-[#FDF6EE] via-white to-white dark:from-[#0a0a0a] dark:via-[#111111] dark:to-[#0a0a0a]">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#EBC9A8]/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D8B27A]/15 rounded-full blur-3xl" />
+        </div>
         {/* Centered text */}
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-24 pb-12 lg:pt-28">
           <div className="max-w-3xl text-center">
