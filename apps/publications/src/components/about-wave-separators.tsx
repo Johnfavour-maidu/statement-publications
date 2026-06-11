@@ -25,19 +25,19 @@ export function AboutHeroWaveBottom() {
 
 export function AboutCoreValuesWaveTop() {
   return (
-    <div className="absolute top-0 left-0 w-full leading-none pointer-events-none rotate-180" style={{ height: "130px" }}>
-      <svg viewBox="0 0 1440 130" preserveAspectRatio="none" className="block w-full h-full animate-wave-drift-medium">
+    <div className="absolute top-0 left-0 w-full leading-none pointer-events-none rotate-180" style={{ height: "100px" }}>
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="block w-full h-full animate-wave-drift-medium">
         <path
-          d="M0,50 C180,90 360,105 540,85 C720,65 900,30 1080,40 C1260,50 1380,72 1440,80 L1440,130 L0,130 Z"
+          d="M0,40 C180,72 360,84 540,68 C720,52 900,26 1080,32 C1260,38 1380,58 1440,64 L1440,100 L0,100 Z"
           fill="white"
         />
         <path
-          d="M0,68 C220,98 440,108 660,82 C880,56 1100,44 1300,58 L1440,68 L1440,130 L0,130 Z"
+          d="M0,54 C220,78 440,86 660,66 C880,46 1100,36 1300,48 L1440,54 L1440,100 L0,100 Z"
           fill="white"
           opacity="0.5"
         />
         <path
-          d="M0,85 C280,105 560,98 840,72 C1040,55 1240,62 1440,75 L1440,130 L0,130 Z"
+          d="M0,68 C280,84 560,78 840,58 C1040,44 1240,50 1440,60 L1440,100 L0,100 Z"
           fill="white"
           opacity="0.25"
         />
@@ -71,19 +71,19 @@ export function AboutCoreValuesWaveBottom() {
 
 export function AboutTestimonialsWaveTop() {
   return (
-    <div className="absolute top-0 left-0 w-full leading-none pointer-events-none rotate-180" style={{ height: "130px" }}>
-      <svg viewBox="0 0 1440 130" preserveAspectRatio="none" className="block w-full h-full animate-wave-drift-medium">
+    <div className="absolute top-0 left-0 w-full leading-none pointer-events-none rotate-180" style={{ height: "100px" }}>
+      <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="block w-full h-full animate-wave-drift-medium">
         <path
-          d="M0,42 C240,85 480,102 720,78 C960,54 1200,48 1380,60 L1440,56 L1440,130 L0,130 Z"
+          d="M0,34 C240,70 480,82 720,64 C960,46 1200,40 1380,50 L1440,48 L1440,100 L0,100 Z"
           fill="white"
         />
         <path
-          d="M0,68 C280,98 560,105 840,78 C1040,58 1240,68 1440,78 L1440,130 L0,130 Z"
+          d="M0,56 C280,78 560,84 840,62 C1040,46 1240,54 1440,62 L1440,100 L0,100 Z"
           fill="white"
           opacity="0.5"
         />
         <path
-          d="M0,85 C320,105 640,95 960,70 C1160,55 1360,72 1440,82 L1440,130 L0,130 Z"
+          d="M0,68 C320,84 640,76 960,56 C1160,44 1360,58 1440,66 L1440,100 L0,100 Z"
           fill="white"
           opacity="0.25"
         />
