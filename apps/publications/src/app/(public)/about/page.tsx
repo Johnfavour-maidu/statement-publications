@@ -170,7 +170,6 @@ export default function AboutPage() {
 
       {/* ── Mission & Vision ──────────────────────────────── */}
       <section className="relative py-12 sm:py-16 bg-white">
-        <FloatingBubbles />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <AnimatedSection>
@@ -233,7 +232,6 @@ export default function AboutPage() {
 
       {/* ── Why Authors Choose Us ────────────────────────── */}
       <section className="relative py-10 sm:py-14 bg-white">
-        <FloatingBubbles />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
             <span className="text-base font-bold uppercase tracking-wider text-[#8A6A4A]">Why Authors Choose Us</span>
@@ -301,7 +299,6 @@ export default function AboutPage() {
 
       {/* ── Leadership Team ─────────────────────────────── */}
       <section className="relative py-10 sm:py-14 bg-white">
-        <FloatingBubbles />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
             <span className="text-base font-bold uppercase tracking-wider text-[#8A6A4A]">Our Team</span>

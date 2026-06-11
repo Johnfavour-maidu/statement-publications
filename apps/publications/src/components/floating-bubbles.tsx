@@ -15,8 +15,7 @@ interface Bubble {
 const COLORS = [
   "from-[#D8B27A] to-[#EBC9A8]",
   "from-[#EBC9A8] to-[#F2D8BE]",
-  "from-amber-300 to-amber-400",
-  "from-[#D8B27A]/60 to-[#EBC9A8]/60",
+  "from-[#C9A06A] to-[#D8B27A]",
 ];
 
 export function FloatingBubbles({ count = 18, className = "" }: { count?: number; className?: string }) {
