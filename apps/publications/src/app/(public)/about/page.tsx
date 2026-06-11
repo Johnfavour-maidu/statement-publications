@@ -27,7 +27,7 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
 
 const coreValues = [
   { icon: Sparkles, title: "Excellence", description: "We hold ourselves to the highest standards in every manuscript we publish, every service we provide, and every interaction we have with authors.", bg: "bg-amber-200", iconColor: "text-amber-800", iconBg: "bg-amber-300", gradientBorder: "from-amber-300 via-amber-400 to-amber-500" },
-  { icon: Lightbulb, title: "Innovation", description: "We continuously push the boundaries of publishing technology to give authors cutting-edge tools and global reach for their work.", bg: "bg-[#F2D8BE]", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#F2D8BE]", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]" },
+  { icon: Lightbulb, title: "Innovation", description: "We continuously push the boundaries of publishing technology to give authors cutting-edge tools and global reach for their work.", bg: "bg-emerald-200", iconColor: "text-emerald-800", iconBg: "bg-emerald-300", gradientBorder: "from-emerald-300 via-emerald-400 to-emerald-500" },
   { icon: Shield, title: "Integrity", description: "Transparency and honesty are at the core of everything we do — from royalty structures to author contracts and communication.", bg: "bg-blue-200", iconColor: "text-blue-800", iconBg: "bg-blue-300", gradientBorder: "from-blue-300 via-blue-400 to-blue-500" },
   { icon: Users, title: "Community", description: "We believe in the power of connecting authors with readers, fostering a supportive network of storytellers and literary enthusiasts.", bg: "bg-rose-200", iconColor: "text-rose-800", iconBg: "bg-rose-300", gradientBorder: "from-rose-300 via-rose-400 to-rose-500" },
   { icon: Palette, title: "Creativity", description: "We celebrate the creative spirit in every author and provide tools that let their unique voice shine through in every published work.", bg: "bg-violet-200", iconColor: "text-violet-800", iconBg: "bg-violet-300", gradientBorder: "from-violet-300 via-violet-400 to-violet-500" },
@@ -36,7 +36,7 @@ const coreValues = [
 
 const whyChooseUs = [
   { icon: Globe, title: "Global Distribution", description: "Distribute your book to readers in 50+ countries through our worldwide network of retailers, libraries, and distributors.", bg: "bg-amber-200", iconColor: "text-amber-800", iconBg: "bg-amber-300", gradientBorder: "from-amber-300 via-amber-400 to-amber-500" },
-  { icon: TrendingUp, title: "Higher Royalty Earnings", description: "Earn up to 70% royalties on every sale — among the highest in the industry. Weekly payouts with full transparency.", bg: "bg-[#F2D8BE]", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#F2D8BE]", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]" },
+  { icon: TrendingUp, title: "Higher Royalty Earnings", description: "Earn up to 70% royalties on every sale — among the highest in the industry. Weekly payouts with full transparency.", bg: "bg-[#F2D8BE]", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#D8B27A]", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]" },
   { icon: Zap, title: "Easy Publishing Tools", description: "Upload, format, and publish your book in minutes with our intuitive platform. No technical skills required.", bg: "bg-blue-200", iconColor: "text-blue-800", iconBg: "bg-blue-300", gradientBorder: "from-blue-300 via-blue-400 to-blue-500" },
   { icon: Award, title: "Professional Support", description: "Get expert guidance from our team of publishing professionals at every step of your publishing journey.", bg: "bg-violet-200", iconColor: "text-violet-800", iconBg: "bg-violet-300", gradientBorder: "from-violet-300 via-violet-400 to-violet-500" },
   { icon: Rocket, title: "Marketing Opportunities", description: "Leverage our marketing tools, featured placements, and promotional campaigns to maximize your book's visibility.", bg: "bg-rose-200", iconColor: "text-rose-800", iconBg: "bg-rose-300", gradientBorder: "from-rose-300 via-rose-400 to-rose-500" },
@@ -60,6 +60,10 @@ const leadership = [
     slug: "chief-executive-officer",
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
     expertise: ["Publishing Strategy", "Business Development", "Author Relations"],
+    accent: "blue",
+    gradientBorder: "from-blue-300 via-blue-400 to-blue-500",
+    imageBorder: "border-blue-400",
+    buttonBorder: "border-blue-400 text-blue-600 hover:bg-blue-50",
   },
   {
     name: "Kwame Asante",
@@ -68,6 +72,10 @@ const leadership = [
     slug: "chief-technology-officer",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
     expertise: ["Platform Architecture", "AI & Machine Learning", "Product Innovation"],
+    accent: "emerald",
+    gradientBorder: "from-emerald-300 via-emerald-400 to-emerald-500",
+    imageBorder: "border-emerald-400",
+    buttonBorder: "border-emerald-400 text-emerald-600 hover:bg-emerald-50",
   },
   {
     name: "Efua Mensah",
@@ -76,6 +84,10 @@ const leadership = [
     slug: "head-of-author-relations",
     image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face",
     expertise: ["Community Building", "Author Support", "Creative Writing"],
+    accent: "amber",
+    gradientBorder: "from-amber-300 via-amber-400 to-amber-500",
+    imageBorder: "border-amber-400",
+    buttonBorder: "border-amber-400 text-amber-600 hover:bg-amber-50",
   },
 ];
 
@@ -156,9 +168,9 @@ export default function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <AnimatedSection>
-              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 h-full hover:shadow-lg transition-all duration-300">
-                <div className="rounded-[14px] bg-gradient-to-br from-[#FDF6EE] to-amber-50 p-6 h-full">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-200 flex items-center justify-center mb-4">
+              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 h-full hover:shadow-lg transition-all duration-300">
+                <div className="rounded-[14px] bg-gradient-to-br from-amber-50 to-amber-100/50 p-6 h-full">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-300 flex items-center justify-center mb-4">
                     <Target className="h-6 w-6 text-amber-800" />
                   </div>
                   <h3 className="text-xl font-bold text-charcoal mb-3">Our Mission</h3>
@@ -198,12 +210,12 @@ export default function AboutPage() {
             {coreValues.map((value, index) => (
               <AnimatedSection key={value.title} delay={index * 0.05}>
                 <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${value.gradientBorder} hover:shadow-lg transition-all duration-300`}>
-                  <div className={`group rounded-[14px] p-4 ${value.bg} transition-all duration-300`}>
-                    <div className={`mb-3 inline-flex items-center justify-center rounded-xl ${value.iconBg} p-2.5`}>
+                  <div className={`group rounded-[14px] p-4 ${value.bg} flex flex-col transition-all duration-300`}>
+                    <div className={`mb-3 inline-flex items-center justify-center rounded-xl ${value.iconBg} p-2.5 self-start`}>
                       <value.icon className={`h-5 w-5 ${value.iconColor}`} />
                     </div>
                     <h3 className="text-base font-semibold mb-1.5 text-charcoal">{value.title}</h3>
-                    <p className="text-sm text-dark-gray/70 leading-relaxed">{value.description}</p>
+                    <p className="text-sm text-dark-gray/70 leading-relaxed mt-auto">{value.description}</p>
                   </div>
                 </div>
               </AnimatedSection>
@@ -225,12 +237,12 @@ export default function AboutPage() {
             {whyChooseUs.map((item, index) => (
               <AnimatedSection key={item.title} delay={index * 0.05}>
                 <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${item.gradientBorder} hover:shadow-lg transition-all duration-300`}>
-                  <div className={`group rounded-[14px] p-4 ${item.bg} transition-all duration-300`}>
-                    <div className={`mb-3 inline-flex items-center justify-center rounded-xl ${item.iconBg} p-2.5`}>
+                  <div className={`group rounded-[14px] p-4 ${item.bg} flex flex-col transition-all duration-300`}>
+                    <div className={`mb-3 inline-flex items-center justify-center rounded-xl ${item.iconBg} p-2.5 self-start`}>
                       <item.icon className={`h-5 w-5 ${item.iconColor}`} />
                     </div>
                     <h3 className="text-base font-semibold mb-1.5 text-charcoal">{item.title}</h3>
-                    <p className="text-sm text-dark-gray/70 leading-relaxed">{item.description}</p>
+                    <p className="text-sm text-dark-gray/70 leading-relaxed mt-auto">{item.description}</p>
                   </div>
                 </div>
               </AnimatedSection>
@@ -256,7 +268,7 @@ export default function AboutPage() {
                     <p className="text-sm text-dark-gray/70 leading-relaxed mb-4 flex-1">
                       &ldquo;{t.quote}&rdquo;
                     </p>
-                    <div className="flex items-center gap-2.5 pt-3 border-t border-white/40">
+                    <div className="flex items-center gap-2.5 pt-3 border-t border-black/20">
                       <div className={`h-9 w-9 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-[10px] font-bold text-white`}>
                         {t.name.split(" ").map((n) => n[0]).join("")}
                       </div>
@@ -290,9 +302,9 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
             {leadership.map((person, index) => (
               <AnimatedSection key={person.name} delay={index * 0.1}>
-                <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] hover:shadow-lg transition-all duration-300">
-                  <div className="text-center rounded-[14px] p-5 bg-white group">
-                    <div className="relative mx-auto mb-4 w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg group-hover:shadow-xl transition-shadow">
+                <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${person.gradientBorder} hover:shadow-lg transition-all duration-300 h-full`}>
+                  <div className="text-center rounded-[14px] p-5 bg-white group flex flex-col h-full">
+                    <div className={`relative mx-auto mb-4 w-24 h-24 rounded-full overflow-hidden border-4 ${person.imageBorder} shadow-lg group-hover:shadow-xl transition-shadow`}>
                       <img
                         src={person.image}
                         alt={person.name}
@@ -311,7 +323,7 @@ export default function AboutPage() {
                     </div>
                     <Link
                       href={`/about/leadership/${person.slug}`}
-                      className="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-[#8A6A4A] hover:text-[#D8B27A] transition-colors"
+                      className={`inline-flex items-center gap-1 mt-3 text-xs font-semibold border rounded-lg px-3 py-1.5 ${person.buttonBorder} transition-colors self-center`}
                     >
                       View Profile <ChevronRight className="h-3 w-3" />
                     </Link>
