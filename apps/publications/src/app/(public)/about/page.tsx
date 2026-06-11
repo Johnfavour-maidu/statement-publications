@@ -258,7 +258,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Testimonials ────────────────────────────────── */}
-      <section className="relative py-10 sm:py-14 bg-[#FDF6EE] overflow-hidden">
+      <section className="relative py-10 sm:py-14 overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
         <AboutTestimonialsWaveTop />
         <FloatingBubbles />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -345,7 +345,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA ─────────────────────────────────────────── */}
-      <section className="relative py-16 sm:py-20 overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
+      <section className="relative py-10 sm:py-12 overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
         <AboutCTAWaveTop />
         <FloatingBubbles />
         <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
