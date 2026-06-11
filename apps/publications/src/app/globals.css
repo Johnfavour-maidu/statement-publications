@@ -400,28 +400,4 @@ button, a, input, textarea, select {
   background-color: rgba(139, 92, 246, 0.2);
 }
 
-/* Hero revolving icons */
-@keyframes hero-orbit {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
 
-@keyframes hero-orbit-reverse {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-360deg); }
-}
-
-.hero-orbit {
-  animation: hero-orbit 60s linear infinite;
-}
-
-.hero-icon {
-  animation: hero-orbit-reverse 60s linear infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-orbit,
-  .hero-icon {
-    animation: none;
-  }
-}

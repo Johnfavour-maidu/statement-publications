@@ -24,8 +24,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RollingMarquee } from "@/components/rolling-marquee";
-import { HeroRevolvingIcons } from "@/components/hero-revolving-icons";
-import { AnimatedHeroBackground } from "@/components/animated-hero-background";
+
 import {
   Accordion,
   AccordionContent,
@@ -288,14 +287,10 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-screen w-full overflow-hidden dark:bg-[#0a0a0a]" style={{ background: "linear-gradient(to bottom right, #FDF6EE 0%, #FDF6EE 30%, rgba(253,246,238,0.5) 60%, white 100%)" }}>
-        <AnimatedHeroBackground />
-
-        {/* Revolving author icons */}
-        <HeroRevolvingIcons />
+      <section className="relative min-h-screen w-full bg-white dark:bg-[#0a0a0a]">
 
         {/* Centered text */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-8 lg:pt-12">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-20 lg:pt-24">
           <div className="max-w-3xl text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -342,7 +337,7 @@ export default function Home() {
             >
               <Link
                 href="/register"
-                className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal bg-[#D8B27A] transition-all duration-200 hover:bg-[#8A6A4A] hover:text-white hover:shadow-lg"
+                className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal bg-[#D8B27A] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-lg"
                 style={{ fontFamily: "var(--font-libre)" }}
               >
                 Start Publishing
@@ -355,7 +350,7 @@ export default function Home() {
                 href="/about"
                 className="group/btn p-[2px] rounded-lg bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] transition-all duration-200 hover:shadow-lg"
               >
-                <span className="inline-flex items-center gap-2 rounded-[6px] bg-white px-6 py-3 text-base font-semibold text-charcoal transition-all duration-200 group-hover/btn:bg-[#8A6A4A] group-hover/btn:text-white"
+                <span className="inline-flex items-center gap-2 rounded-[6px] bg-white px-6 py-3 text-base font-semibold text-charcoal transition-all duration-200 group-hover/btn:bg-black group-hover/btn:text-white"
                   style={{ fontFamily: "var(--font-libre)" }}
                 >
                   Learn More
