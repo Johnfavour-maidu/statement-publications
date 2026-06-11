@@ -47,7 +47,7 @@ const whyChooseUs = [
 
 const testimonials = [
   { name: "Kofi Asante", role: "Independent Author", quote: "Statement Publications gave me complete creative control over my work. The publishing process was straightforward, and I had my book live within a week. The royalty structure is the fairest I've seen.", rating: 5, color: "from-amber-500 to-orange-600", bg: "bg-amber-200/80", gradientBorder: "from-amber-300 via-amber-400 to-amber-500", separatorColor: "border-amber-400" },
-  { name: "Abena Osei", role: "Business Author", quote: "As a business consultant, I needed a professional platform to publish my leadership book. Statement delivered exceptional quality — from formatting to global distribution across 40+ countries.", rating: 5, color: "from-[#D8B27A] to-[#EBC9A8]", bg: "bg-[#F2D8BE]/80", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]", separatorColor: "border-[#D8B27A]" },
+  { name: "Abena Osei", role: "Business Author", quote: "As a business consultant, I needed a professional platform to publish my leadership book. Statement delivered exceptional quality — from formatting to global distribution across 40+ countries.", rating: 5, color: "from-emerald-500 to-green-600", bg: "bg-emerald-200/80", gradientBorder: "from-emerald-300 via-emerald-400 to-emerald-500", separatorColor: "border-emerald-400" },
   { name: "Dr. Emmanuel Mensah", role: "Academic Researcher", quote: "Publishing my research through Statement was seamless. The platform handled complex formatting with ease, and my academic work is now accessible to readers and institutions worldwide.", rating: 5, color: "from-blue-500 to-indigo-600", bg: "bg-blue-200/80", gradientBorder: "from-blue-300 via-blue-400 to-blue-500", separatorColor: "border-blue-400" },
   { name: "Nana Ama Brown", role: "Children's Book Author", quote: "My children's picture book required special attention to illustrations and layout. Statement's tools made it easy to showcase vibrant artwork. The response from parents and educators has been overwhelming.", rating: 5, color: "from-rose-500 to-pink-600", bg: "bg-rose-200/80", gradientBorder: "from-rose-300 via-rose-400 to-rose-500", separatorColor: "border-rose-400" },
   { name: "Pastor Samuel Koomson", role: "Faith-Based Author", quote: "Statement Publications understood my vision for reaching a global faith community. My devotional book is now available in bookstores across three continents. The support team was exceptional throughout.", rating: 5, color: "from-violet-500 to-purple-600", bg: "bg-violet-200/80", gradientBorder: "from-violet-300 via-violet-400 to-violet-500", separatorColor: "border-violet-400" },
@@ -258,7 +258,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Testimonials ────────────────────────────────── */}
-      <section className="relative py-10 sm:py-14 bg-[#FDF6EE] overflow-hidden">
+      <section className="relative py-10 sm:py-14 overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
         <AboutTestimonialsWaveTop />
         <FloatingBubbles />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
