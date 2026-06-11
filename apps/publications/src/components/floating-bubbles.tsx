@@ -25,7 +25,7 @@ export function FloatingBubbles({ count = 18, className = "" }: { count?: number
       size: 4 + Math.random() * 22,
       left: `${2 + Math.random() * 96}%`,
       delay: `${Math.random() * 8}s`,
-      duration: `${9 + Math.random() * 10}s`,
+      duration: `${3 + Math.random() * 3.3}s`,
       opacity: 0.85 + Math.random() * 0.05,
       color: COLORS[i % COLORS.length],
     }));
