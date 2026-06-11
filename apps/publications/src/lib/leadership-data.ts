@@ -10,6 +10,11 @@ export interface Leader {
   philosophy: string;
   achievements: string[];
   social?: { platform: string; url: string }[];
+  accentBorder: string;
+  accentGlow: string;
+  accentBg: string;
+  accentText: string;
+  accentIcon: string;
 }
 
 export const leaders: Leader[] = [
@@ -34,6 +39,11 @@ export const leaders: Leader[] = [
       { platform: "Twitter", url: "https://twitter.com" },
       { platform: "LinkedIn", url: "https://linkedin.com" },
     ],
+    accentBorder: "border-blue-400",
+    accentGlow: "shadow-blue-400/30",
+    accentBg: "bg-blue-50",
+    accentText: "text-blue-700",
+    accentIcon: "text-blue-600",
   },
   {
     slug: "chief-technology-officer",
@@ -56,6 +66,11 @@ export const leaders: Leader[] = [
       { platform: "LinkedIn", url: "https://linkedin.com" },
       { platform: "GitHub", url: "https://github.com" },
     ],
+    accentBorder: "border-emerald-400",
+    accentGlow: "shadow-emerald-400/30",
+    accentBg: "bg-emerald-50",
+    accentText: "text-emerald-700",
+    accentIcon: "text-emerald-600",
   },
   {
     slug: "head-of-author-relations",
@@ -78,6 +93,11 @@ export const leaders: Leader[] = [
       { platform: "Twitter", url: "https://twitter.com" },
       { platform: "LinkedIn", url: "https://linkedin.com" },
     ],
+    accentBorder: "border-amber-400",
+    accentGlow: "shadow-amber-400/30",
+    accentBg: "bg-amber-50",
+    accentText: "text-amber-700",
+    accentIcon: "text-amber-600",
   },
 ];
 

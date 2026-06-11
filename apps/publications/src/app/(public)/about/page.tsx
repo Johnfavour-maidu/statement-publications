@@ -63,6 +63,7 @@ const leadership = [
     accent: "blue",
     gradientBorder: "from-blue-300 via-blue-400 to-blue-500",
     imageBorder: "border-blue-400",
+    imageGlow: "shadow-[0_0_15px_rgba(96,165,250,0.4)]",
     buttonBorder: "border-blue-400 text-blue-600 hover:bg-blue-50",
   },
   {
@@ -75,6 +76,7 @@ const leadership = [
     accent: "emerald",
     gradientBorder: "from-emerald-300 via-emerald-400 to-emerald-500",
     imageBorder: "border-emerald-400",
+    imageGlow: "shadow-[0_0_15px_rgba(52,211,153,0.4)]",
     buttonBorder: "border-emerald-400 text-emerald-600 hover:bg-emerald-50",
   },
   {
@@ -87,6 +89,7 @@ const leadership = [
     accent: "amber",
     gradientBorder: "from-amber-300 via-amber-400 to-amber-500",
     imageBorder: "border-amber-400",
+    imageGlow: "shadow-[0_0_15px_rgba(251,191,36,0.4)]",
     buttonBorder: "border-amber-400 text-amber-600 hover:bg-amber-50",
   },
 ];
@@ -304,7 +307,7 @@ export default function AboutPage() {
               <AnimatedSection key={person.name} delay={index * 0.1}>
                 <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${person.gradientBorder} hover:shadow-lg transition-all duration-300 h-full`}>
                   <div className="text-center rounded-[14px] p-5 bg-white group flex flex-col h-full">
-                    <div className={`relative mx-auto mb-4 w-24 h-24 rounded-full overflow-hidden border-4 ${person.imageBorder} shadow-lg group-hover:shadow-xl transition-shadow`}>
+                    <div className={`relative mx-auto mb-4 w-24 h-24 rounded-full overflow-hidden border-4 ${person.imageBorder} ${person.imageGlow} group-hover:scale-105 transition-all duration-300`}>
                       <img
                         src={person.image}
                         alt={person.name}
