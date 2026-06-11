@@ -2,7 +2,7 @@
 
 export function AboutHeroWaveBottom() {
   return (
-    <div className="absolute bottom-0 left-0 w-full leading-none pointer-events-none" style={{ height: "100px" }}>
+    <div className="absolute bottom-0 left-0 w-full leading-none pointer-events-none overflow-hidden" style={{ height: "100px" }}>
       <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="block w-full h-full animate-wave-drift-slow">
         <path
           d="M0,50 C120,80 240,90 360,75 C480,60 600,30 720,22 C840,14 960,40 1080,55 C1200,70 1320,62 1380,56 L1440,50 L1440,100 L0,100 Z"
@@ -25,7 +25,7 @@ export function AboutHeroWaveBottom() {
 
 export function AboutCoreValuesWaveTop() {
   return (
-    <div className="absolute top-0 left-0 w-full leading-none pointer-events-none rotate-180" style={{ height: "100px" }}>
+    <div className="absolute top-0 left-0 w-full leading-none pointer-events-none rotate-180 overflow-hidden" style={{ height: "100px" }}>
       <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="block w-full h-full animate-wave-drift-medium">
         <path
           d="M0,40 C180,72 360,84 540,68 C720,52 900,26 1080,32 C1260,38 1380,58 1440,64 L1440,100 L0,100 Z"
@@ -48,7 +48,7 @@ export function AboutCoreValuesWaveTop() {
 
 export function AboutCoreValuesWaveBottom() {
   return (
-    <div className="absolute bottom-0 left-0 w-full leading-none pointer-events-none" style={{ height: "100px" }}>
+    <div className="absolute bottom-0 left-0 w-full leading-none pointer-events-none overflow-hidden" style={{ height: "100px" }}>
       <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="block w-full h-full animate-wave-drift-slow">
         <path
           d="M0,46 C200,78 400,86 600,70 C800,54 1000,26 1200,36 C1340,42 1400,60 1440,68 L1440,100 L0,100 Z"
@@ -71,7 +71,7 @@ export function AboutCoreValuesWaveBottom() {
 
 export function AboutTestimonialsWaveTop() {
   return (
-    <div className="absolute top-0 left-0 w-full leading-none pointer-events-none rotate-180" style={{ height: "100px" }}>
+    <div className="absolute top-0 left-0 w-full leading-none pointer-events-none rotate-180 overflow-hidden" style={{ height: "100px" }}>
       <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="block w-full h-full animate-wave-drift-medium">
         <path
           d="M0,34 C240,70 480,82 720,64 C960,46 1200,40 1380,50 L1440,48 L1440,100 L0,100 Z"
@@ -94,7 +94,7 @@ export function AboutTestimonialsWaveTop() {
 
 export function AboutTestimonialsWaveBottom() {
   return (
-    <div className="absolute bottom-0 left-0 w-full leading-none pointer-events-none" style={{ height: "100px" }}>
+    <div className="absolute bottom-0 left-0 w-full leading-none pointer-events-none overflow-hidden" style={{ height: "100px" }}>
       <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="block w-full h-full animate-wave-drift-slow">
         <path
           d="M0,42 C180,74 360,84 540,68 C720,52 900,24 1080,30 C1260,36 1380,56 1440,62 L1440,100 L0,100 Z"
@@ -117,7 +117,7 @@ export function AboutTestimonialsWaveBottom() {
 
 export function AboutCTAWaveTop() {
   return (
-    <div className="absolute top-0 left-0 w-full leading-none pointer-events-none rotate-180" style={{ height: "100px" }}>
+    <div className="absolute top-0 left-0 w-full leading-none pointer-events-none rotate-180 overflow-hidden" style={{ height: "100px" }}>
       <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="block w-full h-full animate-wave-drift-medium">
         <path
           d="M0,36 C200,70 400,82 600,64 C800,46 1000,30 1200,40 C1340,48 1400,58 1440,64 L1440,100 L0,100 Z"
