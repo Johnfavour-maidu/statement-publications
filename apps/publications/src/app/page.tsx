@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RollingMarquee } from "@/components/rolling-marquee";
+import { AboutCTAWaveTop } from "@/components/about-wave-separators";
 
 import {
   Accordion,
@@ -581,20 +582,21 @@ export default function Home() {
       </section>
 
       {/* ── CTA Banner ──────────────────────────────────── */}
-      <section className="py-8 sm:py-10" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+      <section className="relative pt-12 pb-8 sm:pt-16 sm:pb-10 overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
+        <AboutCTAWaveTop />
+        <div className="relative z-10 mx-auto max-w-4xl px-5 sm:px-6 lg:px-8 text-center">
           <AnimatedSection>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               Ready To Share Your Story?
             </h2>
-            <p className="mt-3 text-lg text-charcoal/70 max-w-2xl mx-auto">
+            <p className="mt-3 text-lg text-charcoal/80 max-w-2xl mx-auto">
               Join thousands of authors who chose Statement to bring their stories to the world.
             </p>
             <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/register" className="inline-flex items-center gap-2 rounded-lg bg-charcoal px-8 py-4 text-base font-semibold text-white hover:bg-dark-gray shadow-lg transition-all">
+              <Link href="/register" className="inline-flex items-center gap-2 rounded-lg bg-charcoal px-8 py-3.5 text-base font-semibold text-white hover:bg-dark-gray shadow-lg transition-all duration-300 hover:scale-[1.05] hover:shadow-xxl">
                 Create Account <ArrowRight className="h-5 w-5" />
               </Link>
-              <Link href="/books" className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal/30 px-8 py-4 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-white transition-all">
+              <Link href="https://books-statement-publications.vercel.app" className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal/30 px-8 py-3.5 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-white transition-all duration-300 hover:scale-[1.05]">
                 Explore Books
               </Link>
             </div>
