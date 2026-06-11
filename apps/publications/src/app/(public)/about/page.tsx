@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { CountUp } from "@/components/count-up";
 import { FloatingBubbles } from "@/components/floating-bubbles";
+import { AboutHeroWaveBottom, AboutCoreValuesWaveTop, AboutCoreValuesWaveBottom, AboutTestimonialsWaveTop, AboutTestimonialsWaveBottom, AboutCTAWaveTop } from "@/components/about-wave-separators";
 
 function AnimatedSection({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -164,11 +165,10 @@ export default function AboutPage() {
                 </div>
               </div>
             </motion.div>
-          </div>
+           </div>
         </div>
+        <AboutHeroWaveBottom />
       </section>
-
-      {/* ── Mission & Vision ──────────────────────────────── */}
       <section className="relative py-12 sm:py-16 bg-white">
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -204,6 +204,7 @@ export default function AboutPage() {
 
       {/* ── Core Values ──────────────────────────────────── */}
       <section className="relative py-10 sm:py-14" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
+        <AboutCoreValuesWaveTop />
         <FloatingBubbles />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
@@ -228,9 +229,8 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
+        <AboutCoreValuesWaveBottom />
       </section>
-
-      {/* ── Why Authors Choose Us ────────────────────────── */}
       <section className="relative py-10 sm:py-14 bg-white">
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
@@ -259,6 +259,7 @@ export default function AboutPage() {
 
       {/* ── Testimonials ────────────────────────────────── */}
       <section className="relative py-10 sm:py-14 bg-[#FDF6EE]">
+        <AboutTestimonialsWaveTop />
         <FloatingBubbles />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
@@ -295,6 +296,7 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
+        <AboutTestimonialsWaveBottom />
       </section>
 
       {/* ── Leadership Team ─────────────────────────────── */}
@@ -344,6 +346,7 @@ export default function AboutPage() {
 
       {/* ── CTA ─────────────────────────────────────────── */}
       <section className="relative py-8 sm:py-10" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
+        <AboutCTAWaveTop />
         <FloatingBubbles />
         <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection>

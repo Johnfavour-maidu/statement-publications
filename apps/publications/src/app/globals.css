@@ -448,4 +448,22 @@ button, a, input, textarea, select {
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 12px 24px -8px rgba(0, 0, 0, 0.15);
 }
 
+@keyframes wave-drift-slow {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(-2%); }
+}
+
+@keyframes wave-drift-medium {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(2%); }
+}
+
+.animate-wave-drift-slow {
+  animation: wave-drift-slow 20s ease-in-out infinite;
+}
+
+.animate-wave-drift-medium {
+  animation: wave-drift-medium 15s ease-in-out infinite;
+}
+
 
