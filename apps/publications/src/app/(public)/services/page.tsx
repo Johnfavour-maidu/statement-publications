@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { HeroWaveBottom, ServicesGridWaveBottom, PricingWaveBottom, CTAWaveTop } from "@/components/wave-separators";
 
 function AnimatedSection({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -180,10 +181,11 @@ export default function ServicesPage() {
             </Link>
           </motion.div>
         </div>
+        <HeroWaveBottom />
       </section>
 
       {/* ── Services Grid ────────────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-white">
+      <section className="relative py-24 sm:py-32 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">Our Services</span>
@@ -221,10 +223,11 @@ export default function ServicesPage() {
             ))}
           </div>
         </div>
+        <ServicesGridWaveBottom />
       </section>
 
       {/* ── Pricing ──────────────────────────────────────── */}
-      <section id="pricing" className="py-24 sm:py-32 bg-[#FDF6EE]">
+      <section id="pricing" className="relative py-24 sm:py-32 bg-[#FDF6EE]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
             <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">Pricing</span>
@@ -279,6 +282,7 @@ export default function ServicesPage() {
             ))}
           </div>
         </div>
+        <PricingWaveBottom />
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────── */}
@@ -334,8 +338,9 @@ export default function ServicesPage() {
       </section>
 
       {/* ── CTA ─────────────────────────────────────────── */}
-      <section className="py-8 sm:py-10" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+      <section className="relative py-8 sm:py-10" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
+        <CTAWaveTop />
+        <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               Ready To Share Your Story?
