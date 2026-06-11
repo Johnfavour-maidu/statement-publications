@@ -6,12 +6,13 @@ import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   ArrowRight, BookOpen, PenTool, CheckCircle2, Palette, Printer,
   Megaphone, Feather, UserCheck, Headphones, Newspaper, GraduationCap,
-  FileText, Check, HelpCircle, Star, ChevronDown, Globe, TrendingUp,
+  FileText, Check, Star, ChevronDown, Globe, TrendingUp,
   Zap, Shield, Heart, Award, Crown, Rocket, Sparkles, Clock,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { HeroWaveBottom, ServicesGridWaveBottom, PricingWaveBottom, FAQWaveTop, CTAWaveTop } from "@/components/wave-separators";
+import { HeroWaveBottom, ServicesGridWaveBottom, PricingWaveBottom, FAQWaveTop } from "@/components/wave-separators";
 import { AboutCTAWaveTop } from "@/components/about-wave-separators";
+import { FloatingBubbles } from "@/components/floating-bubbles";
 
 function AnimatedSection({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -30,18 +31,18 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
 }
 
 const services = [
-  { icon: BookOpen, title: "Book Publishing", description: "End-to-end publishing for eBooks, paperbacks, and hardcovers with global distribution.", cardBg: "bg-amber-100/80", iconColor: "text-amber-800", iconBg: "bg-amber-300", btnBg: "bg-amber-200 hover:bg-amber-300 text-amber-800", gradientBorder: "from-amber-300 via-amber-400 to-amber-500", slug: "book-publishing" },
-  { icon: PenTool, title: "Book Editing", description: "Professional developmental editing, copyediting, and line editing by genre specialists.", cardBg: "bg-[#F2D8BE]/60", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#EBC9A8]", btnBg: "bg-[#EBC9A8]/60 hover:bg-[#EBC9A8] text-[#8A6A4A]", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]", slug: "book-editing" },
-  { icon: CheckCircle2, title: "Proofreading", description: "Meticulous final-pass proofreading to catch every typo and formatting inconsistency.", cardBg: "bg-blue-100/80", iconColor: "text-blue-800", iconBg: "bg-blue-300", btnBg: "bg-blue-200 hover:bg-blue-300 text-blue-800", gradientBorder: "from-blue-300 via-blue-400 to-blue-500", slug: "proofreading" },
-  { icon: FileText, title: "ISBN Registration", description: "We handle the entire ISBN registration process for retail and library distribution.", cardBg: "bg-rose-100/80", iconColor: "text-rose-800", iconBg: "bg-rose-300", btnBg: "bg-rose-200 hover:bg-rose-300 text-rose-800", gradientBorder: "from-rose-300 via-rose-400 to-rose-500", slug: "isbn-registration" },
-  { icon: Palette, title: "Cover Design", description: "Custom cover designs by professional artists who understand genre trends.", cardBg: "bg-violet-100/80", iconColor: "text-violet-800", iconBg: "bg-violet-300", btnBg: "bg-violet-200 hover:bg-violet-300 text-violet-800", gradientBorder: "from-violet-300 via-violet-400 to-violet-500", slug: "cover-design" },
-  { icon: Printer, title: "Book Formatting", description: "Interior formatting for print and digital formats on every device and edition.", cardBg: "bg-teal-100/80", iconColor: "text-teal-800", iconBg: "bg-teal-300", btnBg: "bg-teal-200 hover:bg-teal-300 text-teal-800", gradientBorder: "from-teal-300 via-teal-400 to-teal-500", slug: "book-formatting" },
-  { icon: Megaphone, title: "Marketing Services", description: "Strategic marketing campaigns including social media, book launches, and advertising.", cardBg: "bg-orange-100/80", iconColor: "text-orange-800", iconBg: "bg-orange-300", btnBg: "bg-orange-200 hover:bg-orange-300 text-orange-800", gradientBorder: "from-orange-300 via-orange-400 to-orange-500", slug: "marketing" },
-  { icon: Feather, title: "Ghostwriting", description: "Skilled ghostwriters who bring your ideas to life while maintaining your voice.", cardBg: "bg-pink-100/80", iconColor: "text-pink-800", iconBg: "bg-pink-300", btnBg: "bg-pink-200 hover:bg-pink-300 text-pink-800", gradientBorder: "from-pink-300 via-pink-400 to-pink-500", slug: "ghostwriting" },
-  { icon: UserCheck, title: "Author Branding", description: "Build your author brand with professional headshots, bio, and social media strategy.", cardBg: "bg-indigo-100/80", iconColor: "text-indigo-800", iconBg: "bg-indigo-300", btnBg: "bg-indigo-200 hover:bg-indigo-300 text-indigo-800", gradientBorder: "from-indigo-300 via-indigo-400 to-indigo-500", slug: "author-branding" },
-  { icon: Headphones, title: "Audiobook Publishing", description: "Professional narration, production, and distribution to Audible and Apple Books.", cardBg: "bg-cyan-100/80", iconColor: "text-cyan-800", iconBg: "bg-cyan-300", btnBg: "bg-cyan-200 hover:bg-cyan-300 text-cyan-800", gradientBorder: "from-cyan-300 via-cyan-400 to-cyan-500", slug: "audiobook" },
-  { icon: GraduationCap, title: "Academic Publishing", description: "Specialized publishing for academic texts, dissertations, and scholarly works.", cardBg: "bg-amber-100/80", iconColor: "text-amber-800", iconBg: "bg-amber-300", btnBg: "bg-amber-200 hover:bg-amber-300 text-amber-800", gradientBorder: "from-amber-300 via-amber-400 to-amber-500", slug: "academic" },
-  { icon: Newspaper, title: "Magazine Publishing", description: "Full-service magazine publishing from layout design to digital distribution.", cardBg: "bg-[#F2D8BE]/60", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#EBC9A8]", btnBg: "bg-[#EBC9A8]/60 hover:bg-[#EBC9A8] text-[#8A6A4A]", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]", slug: "magazine" },
+  { icon: BookOpen, title: "Book Publishing", description: "End-to-end publishing for eBooks, paperbacks, and hardcovers with global distribution.", cardBg: "bg-amber-100/80", iconColor: "text-amber-800", iconBg: "bg-amber-300", btnBg: "bg-amber-600 hover:bg-amber-700 text-white", gradientBorder: "from-amber-300 via-amber-400 to-amber-500", slug: "book-publishing" },
+  { icon: PenTool, title: "Book Editing", description: "Professional developmental editing, copyediting, and line editing by genre specialists.", cardBg: "bg-[#F2D8BE]/60", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#EBC9A8]", btnBg: "bg-[#8A6A4A] hover:bg-[#6B5238] text-white", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]", slug: "book-editing" },
+  { icon: CheckCircle2, title: "Proofreading", description: "Meticulous final-pass proofreading to catch every typo and formatting inconsistency.", cardBg: "bg-blue-100/80", iconColor: "text-blue-800", iconBg: "bg-blue-300", btnBg: "bg-blue-600 hover:bg-blue-700 text-white", gradientBorder: "from-blue-300 via-blue-400 to-blue-500", slug: "proofreading" },
+  { icon: FileText, title: "ISBN Registration", description: "We handle the entire ISBN registration process for retail and library distribution.", cardBg: "bg-rose-100/80", iconColor: "text-rose-800", iconBg: "bg-rose-300", btnBg: "bg-rose-600 hover:bg-rose-700 text-white", gradientBorder: "from-rose-300 via-rose-400 to-rose-500", slug: "isbn-registration" },
+  { icon: Palette, title: "Cover Design", description: "Custom cover designs by professional artists who understand genre trends.", cardBg: "bg-violet-100/80", iconColor: "text-violet-800", iconBg: "bg-violet-300", btnBg: "bg-violet-600 hover:bg-violet-700 text-white", gradientBorder: "from-violet-300 via-violet-400 to-violet-500", slug: "cover-design" },
+  { icon: Printer, title: "Book Formatting", description: "Interior formatting for print and digital formats on every device and edition.", cardBg: "bg-teal-100/80", iconColor: "text-teal-800", iconBg: "bg-teal-300", btnBg: "bg-teal-600 hover:bg-teal-700 text-white", gradientBorder: "from-teal-300 via-teal-400 to-teal-500", slug: "book-formatting" },
+  { icon: Megaphone, title: "Marketing Services", description: "Strategic marketing campaigns including social media, book launches, and advertising.", cardBg: "bg-orange-100/80", iconColor: "text-orange-800", iconBg: "bg-orange-300", btnBg: "bg-orange-600 hover:bg-orange-700 text-white", gradientBorder: "from-orange-300 via-orange-400 to-orange-500", slug: "marketing" },
+  { icon: Feather, title: "Ghostwriting", description: "Skilled ghostwriters who bring your ideas to life while maintaining your voice.", cardBg: "bg-pink-100/80", iconColor: "text-pink-800", iconBg: "bg-pink-300", btnBg: "bg-pink-600 hover:bg-pink-700 text-white", gradientBorder: "from-pink-300 via-pink-400 to-pink-500", slug: "ghostwriting" },
+  { icon: UserCheck, title: "Author Branding", description: "Build your author brand with professional headshots, bio, and social media strategy.", cardBg: "bg-indigo-100/80", iconColor: "text-indigo-800", iconBg: "bg-indigo-300", btnBg: "bg-indigo-600 hover:bg-indigo-700 text-white", gradientBorder: "from-indigo-300 via-indigo-400 to-indigo-500", slug: "author-branding" },
+  { icon: Headphones, title: "Audiobook Publishing", description: "Professional narration, production, and distribution to Audible and Apple Books.", cardBg: "bg-cyan-100/80", iconColor: "text-cyan-800", iconBg: "bg-cyan-300", btnBg: "bg-cyan-600 hover:bg-cyan-700 text-white", gradientBorder: "from-cyan-300 via-cyan-400 to-cyan-500", slug: "audiobook" },
+  { icon: GraduationCap, title: "Academic Publishing", description: "Specialized publishing for academic texts, dissertations, and scholarly works.", cardBg: "bg-amber-100/80", iconColor: "text-amber-800", iconBg: "bg-amber-300", btnBg: "bg-amber-600 hover:bg-amber-700 text-white", gradientBorder: "from-amber-300 via-amber-400 to-amber-500", slug: "academic" },
+  { icon: Newspaper, title: "Magazine Publishing", description: "Full-service magazine publishing from layout design to digital distribution.", cardBg: "bg-[#F2D8BE]/60", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#EBC9A8]", btnBg: "bg-[#8A6A4A] hover:bg-[#6B5238] text-white", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]", slug: "magazine" },
 ];
 
 const pricingTiers = [
@@ -53,6 +54,8 @@ const pricingTiers = [
     accent: "bg-blue-100 text-blue-700",
     icon: BookOpen,
     gradientBorder: "from-blue-300 via-blue-400 to-blue-500",
+    btnBg: "bg-blue-600 hover:bg-blue-700 text-white",
+    checkColor: "text-blue-500",
     features: ["eBook publishing", "Basic cover templates", "ISBN registration", "Author dashboard", "Standard royalties (up to 50%)", "Email support"],
     cta: "Start Free",
     popular: false,
@@ -65,6 +68,8 @@ const pricingTiers = [
     accent: "bg-amber-100 text-amber-700",
     icon: PenTool,
     gradientBorder: "from-amber-300 via-amber-400 to-amber-500",
+    btnBg: "bg-amber-600 hover:bg-amber-700 text-white",
+    checkColor: "text-amber-500",
     features: ["Everything in Starter", "Professional formatting", "Cover design consultation", "Metadata optimization", "Enhanced royalties (up to 60%)", "Priority email support"],
     cta: "Get Basic",
     popular: false,
@@ -77,6 +82,8 @@ const pricingTiers = [
     accent: "bg-[#EBC9A8]/20 text-[#8A6A4A]",
     icon: Star,
     gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]",
+    btnBg: "bg-[#EBC9A8] hover:bg-[#D8B27A] text-charcoal",
+    checkColor: "text-[#D8B27A]",
     features: ["Everything in Basic", "Custom cover design", "Professional editing", "Print-on-demand setup", "Marketing consultation", "Audiobook production", "Priority support", "Enhanced royalties (up to 70%)"],
     cta: "Go Professional",
     popular: true,
@@ -89,6 +96,8 @@ const pricingTiers = [
     accent: "bg-orange-100 text-orange-700",
     icon: Award,
     gradientBorder: "from-orange-300 via-orange-400 to-orange-500",
+    btnBg: "bg-orange-600 hover:bg-orange-700 text-white",
+    checkColor: "text-orange-500",
     features: ["Everything in Professional", "Author branding package", "Social media strategy", "Book launch campaign", "Press release distribution", "Dedicated editor", "Premium royalties (up to 75%)", "48-hour support"],
     cta: "Go Premium",
     popular: false,
@@ -101,6 +110,8 @@ const pricingTiers = [
     accent: "bg-violet-100 text-violet-700",
     icon: Crown,
     gradientBorder: "from-violet-300 via-violet-400 to-violet-500",
+    btnBg: "bg-violet-600 hover:bg-violet-700 text-white",
+    checkColor: "text-violet-500",
     features: ["Everything in Premium", "Multi-format publishing", "Global distribution setup", "Advanced marketing campaigns", "Author website design", "Newsletter setup", "Maximum royalties (up to 80%)", "Dedicated account manager"],
     cta: "Go Author Pro",
     popular: false,
@@ -113,6 +124,8 @@ const pricingTiers = [
     accent: "bg-emerald-100 text-emerald-700",
     icon: Rocket,
     gradientBorder: "from-emerald-300 via-emerald-400 to-emerald-500",
+    btnBg: "bg-emerald-600 hover:bg-emerald-700 text-white",
+    checkColor: "text-emerald-500",
     features: ["Everything in Author Pro", "Bulk publishing tools", "Custom branding package", "Advanced analytics dashboard", "API access", "White-label options", "Negotiable royalties", "Dedicated support team"],
     cta: "Contact Sales",
     popular: false,
@@ -142,7 +155,7 @@ const faqs = [
 
 export default function ServicesPage() {
   const [activeFaqCategory, setActiveFaqCategory] = useState("publishing");
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const filteredFaqs = faqs.filter((f) => f.category === activeFaqCategory);
 
@@ -150,6 +163,7 @@ export default function ServicesPage() {
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
       <section className="relative min-h-[80vh] flex items-center overflow-hidden bg-gradient-to-br from-[#FDF6EE] via-white to-white">
+        <FloatingBubbles />
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#EBC9A8]/20 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D8B27A]/15 rounded-full blur-3xl" />
@@ -234,7 +248,7 @@ export default function ServicesPage() {
       </section>
 
       {/* ── Pricing ──────────────────────────────────────── */}
-      <section id="pricing" className="relative py-14 sm:py-18 bg-[#FDF6EE]">
+      <section id="pricing" className="relative py-14 sm:py-18" style={{ background: "linear-gradient(180deg, #F2D8BE 0%, #FDF6EE 100%)" }}>
         <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-10">
             <span className="text-sm font-bold uppercase tracking-widest text-[#8A6A4A]">Pricing</span>
@@ -272,16 +286,14 @@ export default function ServicesPage() {
                     <ul className="space-y-2 mb-6 flex-1">
                       {tier.features.map((f) => (
                         <li key={f} className="flex items-start gap-2 text-sm text-dark-gray/70">
-                          <Check className="h-4 w-4 text-[#D8B27A] mt-0.5 shrink-0" />
+                          <Check className={cn("h-4 w-4 mt-0.5 shrink-0", tier.checkColor)} />
                           {f}
                         </li>
                       ))}
                     </ul>
                     <Link href="/register" className={cn(
-                      "w-full inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-all duration-300",
-                      tier.popular
-                        ? "bg-[#EBC9A8] text-charcoal hover:bg-[#D8B27A] shadow-sm hover:shadow-md"
-                        : "border-2 border-charcoal/20 text-charcoal hover:bg-charcoal hover:text-white"
+                      "w-full inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md",
+                      tier.btnBg
                     )}>
                       {tier.cta} <ArrowRight className="h-4 w-4" />
                     </Link>
@@ -295,40 +307,42 @@ export default function ServicesPage() {
       </section>
 
       {/* ── FAQ ──────────────────────────────────────────── */}
-      <section className="relative py-14 sm:py-18 bg-white">
+      <section className="relative py-10 sm:py-14 bg-white">
         <FAQWaveTop />
         <div className="mx-auto max-w-4xl px-5 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-8">
+          <AnimatedSection className="text-center mb-6">
             <span className="text-sm font-bold uppercase tracking-widest text-[#8A6A4A]">FAQ</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               Frequently Asked Questions
             </h2>
           </AnimatedSection>
 
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
             {faqCategories.map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => { setActiveFaqCategory(cat.id); setOpenFaq(0); }}
+                onClick={() => { setActiveFaqCategory(cat.id); setOpenFaq(null); }}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm font-medium transition-all duration-300",
+                  "px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300",
                   activeFaqCategory === cat.id
-                    ? "bg-[#EBC9A8] text-charcoal shadow-sm"
-                    : "bg-gray-100 text-dark-gray/60 hover:bg-gray-200 hover:text-dark-gray/80"
+                    ? "p-[2px] bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] text-charcoal shadow-sm"
+                    : "bg-gray-100 text-dark-gray/60 hover:bg-[#FDF6EE] hover:text-[#8A6A4A] hover:shadow-sm"
                 )}
               >
-                {cat.label}
+                {activeFaqCategory === cat.id ? (
+                  <span className="block px-3 py-0.5 rounded-full bg-white">{cat.label}</span>
+                ) : cat.label}
               </button>
             ))}
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             {filteredFaqs.map((faq, index) => (
               <div key={index} className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE]">
                 <div className="border-0 rounded-[10px] overflow-hidden bg-white">
                   <button
                     onClick={() => setOpenFaq(openFaq === index ? null : index)}
-                    className="w-full flex items-center justify-between p-5 text-left hover:bg-[#FDF6EE]/50 transition-colors"
+                    className="w-full flex items-center justify-between p-4 text-left hover:bg-[#FDF6EE]/50 transition-colors"
                   >
                     <span className="text-sm font-semibold text-charcoal pr-4">{faq.question}</span>
                     <ChevronDown className={cn("h-5 w-5 text-dark-gray/40 shrink-0 transition-transform duration-300", openFaq === index && "rotate-180")} />
@@ -341,7 +355,7 @@ export default function ServicesPage() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <div className="px-5 pb-5 text-sm text-dark-gray/70 leading-relaxed">
+                        <div className="px-4 pb-4 text-sm text-dark-gray/70 leading-relaxed">
                           {faq.answer}
                         </div>
                       </motion.div>
