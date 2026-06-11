@@ -287,10 +287,9 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-screen w-full bg-white dark:bg-[#0a0a0a]">
-
+      <section className="relative min-h-screen w-full bg-gradient-to-br from-[#FDF6EE] via-white to-white dark:from-[#0a0a0a] dark:via-[#111111] dark:to-[#0a0a0a]">
         {/* Centered text */}
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-20 lg:pt-24">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center justify-center pt-24 pb-12 lg:pt-28">
           <div className="max-w-3xl text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
