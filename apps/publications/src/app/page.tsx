@@ -581,46 +581,22 @@ export default function Home() {
       </section>
 
       {/* ── CTA Banner ──────────────────────────────────── */}
-      <section className="py-8 sm:py-10 relative overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
-        <div className="absolute inset-0">
-          <div className="absolute top-1/3 left-1/4 w-72 h-72 bg-white/15 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gold/10 rounded-full blur-3xl" />
-        </div>
-        <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+      <section className="py-8 sm:py-10" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
+        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-charcoal">
-              Ready to Share Your Story?
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
+              Ready To Share Your Story?
             </h2>
             <p className="mt-3 text-lg text-charcoal/70 max-w-2xl mx-auto">
-              Join thousands of authors who chose Statement to publish their
-              books. Start your publishing journey today — it&apos;s free.
+              Join thousands of authors who chose Statement to bring their stories to the world.
             </p>
             <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <motion.div whileHover={{ scale: 1.05, boxShadow: "0 10px 30px -10px rgba(29,29,29,0.4)" }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-                <Button
-                  size="lg"
-                  className="text-base px-8 h-14 bg-charcoal text-white hover:bg-dark-gray font-semibold shadow-lg"
-                  asChild
-                >
-                  <Link href="/register">
-                    Get Started for Free
-                    <ArrowRight className="h-5 w-5 ml-1" />
-                  </Link>
-                </Button>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="text-base px-8 h-14 border-2 border-charcoal/30 text-charcoal hover:bg-charcoal hover:text-white font-semibold"
-                  asChild
-                >
-                  <Link href="/services">
-                    Learn More
-                    <ChevronRight className="h-5 w-5 ml-1" />
-                  </Link>
-                </Button>
-              </motion.div>
+              <Link href="/register" className="inline-flex items-center gap-2 rounded-lg bg-charcoal px-8 py-4 text-base font-semibold text-white hover:bg-dark-gray shadow-lg transition-all">
+                Create Account <ArrowRight className="h-5 w-5" />
+              </Link>
+              <Link href="/books" className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal/30 px-8 py-4 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-white transition-all">
+                Explore Books
+              </Link>
             </div>
           </AnimatedSection>
         </div>
