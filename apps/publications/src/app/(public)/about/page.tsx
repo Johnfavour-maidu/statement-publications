@@ -114,14 +114,14 @@ export default function AboutPage() {
                 Don&apos;t Just Publish,<br />
                 <span className="text-[#8A6A4A]">Make A Statement</span>
               </h1>
-              <p className="mt-6 text-lg text-dark-gray/80 leading-relaxed max-w-lg">
+              <p className="mt-6 text-lg text-dark-gray/90 leading-relaxed max-w-lg">
                 Statement Publications empowers independent authors to publish, distribute, and monetize their work globally. We provide the tools, support, and reach you need to share your voice with millions of readers across the globe.
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
-                <Link href="/register" className="inline-flex items-center gap-2 rounded-lg bg-[#EBC9A8] px-6 py-3 text-base font-semibold text-charcoal hover:bg-[#D8B27A] hover:shadow-lg transition-all duration-300 hover:scale-[1.02]">
+                <Link href="/register" className="inline-flex items-center gap-2 rounded-lg bg-[#EBC9A8] px-6 py-3 text-base font-semibold text-charcoal hover:bg-[#D8B27A] hover:shadow-lg transition-all duration-300 hover:scale-[1.05]">
                   Create Account <ArrowRight className="h-5 w-5" />
                 </Link>
-                <Link href="https://books-statement-publications.vercel.app" className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal px-6 py-3 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-white transition-all duration-300 hover:scale-[1.02]">
+                <Link href="https://books-statement-publications.vercel.app" className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal px-6 py-3 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-white transition-all duration-300 hover:scale-[1.05]">
                   Explore Books
                 </Link>
               </div>
@@ -175,26 +175,26 @@ export default function AboutPage() {
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <AnimatedSection>
-              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 h-full hover:shadow-xl transition-all duration-300 hover:scale-[1.01]">
+              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 h-full hover:shadow-xxl transition-all duration-300 hover:scale-[1.01]">
                 <div className="rounded-[14px] bg-gradient-to-br from-amber-50 to-amber-100/50 p-6 h-full">
                   <div className="w-12 h-12 rounded-2xl bg-amber-300 flex items-center justify-center mb-4 shadow-sm">
                     <Target className="h-6 w-6 text-amber-800" />
                   </div>
                   <h3 className="text-xl font-bold text-charcoal mb-3">Our Mission</h3>
-                  <p className="text-sm text-dark-gray/80 leading-relaxed">
+                  <p className="text-sm text-dark-gray/90 leading-relaxed">
                     To democratize publishing by providing independent authors with professional tools, global distribution, and fair royalties — making it possible for every voice to be heard and every story to find its readers.
                   </p>
                 </div>
               </div>
             </AnimatedSection>
             <AnimatedSection delay={0.1}>
-              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-blue-400 via-indigo-400 to-blue-500 h-full hover:shadow-xl transition-all duration-300 hover:scale-[1.01]">
+              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-blue-400 via-indigo-400 to-blue-500 h-full hover:shadow-xxl transition-all duration-300 hover:scale-[1.01]">
                 <div className="rounded-[14px] bg-gradient-to-br from-blue-50 to-indigo-50 p-6 h-full">
                   <div className="w-12 h-12 rounded-2xl bg-blue-200 flex items-center justify-center mb-4 shadow-sm">
                     <Eye className="h-6 w-6 text-blue-800" />
                   </div>
                   <h3 className="text-xl font-bold text-charcoal mb-3">Our Vision</h3>
-                  <p className="text-sm text-dark-gray/80 leading-relaxed">
+                  <p className="text-sm text-dark-gray/90 leading-relaxed">
                     To become the world&apos;s most trusted publishing platform for independent authors — a place where creativity thrives, stories connect, and every author has the opportunity to make a statement.
                   </p>
                 </div>
@@ -217,13 +217,13 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {coreValues.map((value, index) => (
               <AnimatedSection key={value.title} delay={index * 0.05}>
-                <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${value.gradientBorder} hover:shadow-xl transition-all duration-300 hover:scale-[1.02]`}>
+                <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${value.gradientBorder} hover:shadow-xxl transition-all duration-300 hover:scale-[1.05]`}>
                   <div className={`group rounded-[14px] p-4 ${value.bg} flex flex-col transition-all duration-300`}>
                     <div className={`mb-3 inline-flex items-center justify-center rounded-xl ${value.iconBg} p-2.5 self-start shadow-sm`}>
                       <value.icon className={`h-5 w-5 ${value.iconColor}`} />
                     </div>
                     <h3 className="text-base font-semibold mb-1.5 text-charcoal">{value.title}</h3>
-                    <p className="text-sm text-dark-gray/80 leading-relaxed mt-auto">{value.description}</p>
+                    <p className="text-sm text-dark-gray/90 leading-relaxed mt-auto">{value.description}</p>
                   </div>
                 </div>
               </AnimatedSection>
@@ -245,13 +245,13 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {whyChooseUs.map((item, index) => (
               <AnimatedSection key={item.title} delay={index * 0.05} className="h-full">
-                <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${item.gradientBorder} hover:shadow-xl transition-all duration-300 h-full hover:scale-[1.02]`}>
+                <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${item.gradientBorder} hover:shadow-xxl transition-all duration-300 h-full hover:scale-[1.05]`}>
                   <div className={`group rounded-[14px] p-4 ${item.bg} flex flex-col transition-all duration-300 h-full`}>
                     <div className={`mb-3 inline-flex items-center justify-center rounded-xl ${item.iconBg} p-2.5 self-start shadow-sm`}>
                       <item.icon className={`h-5 w-5 ${item.iconColor}`} />
                     </div>
                     <h3 className="text-base font-semibold mb-1.5 text-charcoal">{item.title}</h3>
-                    <p className="text-sm text-dark-gray/80 leading-relaxed">{item.description}</p>
+                    <p className="text-sm text-dark-gray/90 leading-relaxed">{item.description}</p>
                   </div>
                 </div>
               </AnimatedSection>
@@ -273,9 +273,9 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {testimonials.map((t, index) => (
               <AnimatedSection key={t.name} delay={index * 0.08}>
-                <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${t.gradientBorder} hover:shadow-xl transition-all duration-300 hover:scale-[1.02]`}>
+                <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${t.gradientBorder} hover:shadow-xxl transition-all duration-300 hover:scale-[1.05]`}>
                   <div className={`rounded-[14px] p-4 ${t.bg} flex flex-col h-full`}>
-                    <p className="text-sm text-dark-gray/80 leading-relaxed mb-4 flex-1">
+                    <p className="text-sm text-dark-gray/90 leading-relaxed mb-4 flex-1">
                       &ldquo;{t.quote}&rdquo;
                     </p>
                     <div className={`flex items-center gap-2.5 pt-3 border-t-2 ${t.separatorColor}`}>
@@ -313,7 +313,7 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
             {leadership.map((person, index) => (
               <AnimatedSection key={person.name} delay={index * 0.1}>
-                <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${person.gradientBorder} hover:shadow-xl transition-all duration-300 h-full hover:scale-[1.02]`}>
+                <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${person.gradientBorder} hover:shadow-xxl transition-all duration-300 h-full hover:scale-[1.05]`}>
                   <div className="text-center rounded-[14px] p-5 bg-white group flex flex-col h-full">
                     <div className={`relative mx-auto mb-4 w-24 h-24 rounded-full overflow-hidden border-4 ${person.imageBorder} ${person.imageGlow} group-hover:scale-105 transition-all duration-300`}>
                       <img
@@ -324,7 +324,7 @@ export default function AboutPage() {
                     </div>
                     <h3 className="text-base font-bold text-charcoal">{person.name}</h3>
                     <p className="text-xs text-[#8A6A4A] font-medium mt-1">{person.role}</p>
-                    <p className="mt-2 text-xs text-dark-gray/80 leading-relaxed">{person.bio}</p>
+                    <p className="mt-2 text-xs text-dark-gray/90 leading-relaxed">{person.bio}</p>
                     <div className="flex flex-wrap gap-1 justify-center mt-3">
                       {person.expertise.map((skill) => (
                         <span key={skill} className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-[#FDF6EE] text-[#8A6A4A] border border-[#EBC9A8]/30">
@@ -358,10 +358,10 @@ export default function AboutPage() {
               Join thousands of authors who chose Statement to bring their stories to the world.
             </p>
             <div className="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/register" className="inline-flex items-center gap-2 rounded-lg bg-charcoal px-8 py-4 text-base font-semibold text-white hover:bg-dark-gray shadow-lg transition-all duration-300 hover:scale-[1.02] hover:shadow-xl">
+              <Link href="/register" className="inline-flex items-center gap-2 rounded-lg bg-charcoal px-8 py-4 text-base font-semibold text-white hover:bg-dark-gray shadow-lg transition-all duration-300 hover:scale-[1.05] hover:shadow-xxl">
                 Create Account <ArrowRight className="h-5 w-5" />
               </Link>
-              <Link href="https://books-statement-publications.vercel.app" className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal/30 px-8 py-4 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-white transition-all duration-300 hover:scale-[1.02]">
+              <Link href="https://books-statement-publications.vercel.app" className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal/30 px-8 py-4 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-white transition-all duration-300 hover:scale-[1.05]">
                 Explore Books
               </Link>
             </div>

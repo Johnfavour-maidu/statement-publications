@@ -13,13 +13,13 @@ interface Bubble {
 
 export function FloatingBubbles({ className = "" }: { className?: string }) {
   const bubbles: Bubble[] = useMemo(() => {
-    return Array.from({ length: 8 }, (_, i) => ({
+    return Array.from({ length: 12 }, (_, i) => ({
       id: i,
-      size: 4 + Math.random() * 12,
-      left: `${10 + Math.random() * 80}%`,
-      delay: `${Math.random() * 8}s`,
-      duration: `${12 + Math.random() * 10}s`,
-      opacity: 0.03 + Math.random() * 0.05,
+      size: 6 + Math.random() * 18,
+      left: `${5 + Math.random() * 90}%`,
+      delay: `${Math.random() * 6}s`,
+      duration: `${10 + Math.random() * 8}s`,
+      opacity: 0.6 + Math.random() * 0.1,
     }));
   }, []);
 
@@ -28,16 +28,16 @@ export function FloatingBubbles({ className = "" }: { className?: string }) {
       {bubbles.map((bubble) => (
         <div
           key={bubble.id}
-          className="absolute rounded-full bg-gradient-to-br from-[#D8B27A] to-[#EBC9A8] animate-bubble-float"
+          className="absolute rounded-full bg-gradient-to-br from-[#D8B27A] to-[#EBC9A8] animate-bubble-float-burst"
           style={{
             width: `${bubble.size}px`,
             height: `${bubble.size}px`,
             left: bubble.left,
-            bottom: "-20px",
+            bottom: "-30px",
             opacity: bubble.opacity,
             animationDelay: bubble.delay,
             animationDuration: bubble.duration,
-            filter: "blur(1px)",
+            filter: "blur(2px)",
           }}
         />
       ))}
