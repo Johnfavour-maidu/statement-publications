@@ -5,10 +5,8 @@ import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import {
   ArrowRight, Target, Eye, Sparkles, Lightbulb, Shield, Users, Palette, Globe,
-  CheckCircle2, BookOpen, PenTool, Rocket, Star, Quote, ChevronRight, Heart,
-  TrendingUp, Award, Zap, Clock, ArrowUpRight,
+  BookOpen, TrendingUp, Award, Rocket, Heart, ChevronRight, Star, Zap,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 function AnimatedSection({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
@@ -25,25 +23,6 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
       {children}
     </motion.div>
   );
-}
-
-function CountUp({ target, suffix = "" }: { target: number; suffix?: string }) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true });
-  useEffect(() => {
-    if (!isInView) return;
-    let start = 0;
-    const duration = 2000;
-    const increment = target / (duration / 16);
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= target) { setCount(target); clearInterval(timer); }
-      else setCount(Math.floor(start));
-    }, 16);
-    return () => clearInterval(timer);
-  }, [isInView, target]);
-  return <div ref={ref}>{count.toLocaleString()}{suffix}</div>;
 }
 
 const coreValues = [
@@ -77,7 +56,6 @@ const leadership = [
     bio: "A former literary agent with over 15 years in the publishing industry, Ama founded Statement Publications to democratize publishing for every author.",
     slug: "chief-executive-officer",
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=face",
-    color: "from-amber-500 to-orange-600",
     expertise: ["Publishing Strategy", "Business Development", "Author Relations"],
   },
   {
@@ -86,7 +64,6 @@ const leadership = [
     bio: "A tech visionary with a passion for digital publishing, Kwame leads the engineering team in building the most intuitive author platform in the industry.",
     slug: "chief-technology-officer",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
-    color: "from-[#D8B27A] to-[#EBC9A8]",
     expertise: ["Platform Architecture", "AI & Machine Learning", "Product Innovation"],
   },
   {
@@ -95,7 +72,6 @@ const leadership = [
     bio: "With a background in creative writing and community building, Efua ensures every author receives personalized support and guidance throughout their journey.",
     slug: "head-of-author-relations",
     image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face",
-    color: "from-blue-500 to-indigo-600",
     expertise: ["Community Building", "Author Support", "Creative Writing"],
   },
 ];
@@ -136,29 +112,29 @@ export default function AboutPage() {
                   <div className="relative rounded-[13px] bg-white p-8">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE]">
-                        <div className="text-center p-4 rounded-[10px] bg-white">
+                        <div className="text-center p-4 rounded-[10px] bg-[#FDF6EE]">
                           <BookOpen className="h-6 w-6 mx-auto mb-2 text-[#8A6A4A]" />
                           <div className="text-2xl font-bold text-charcoal">10,000+</div>
                           <div className="text-xs text-dark-gray/60">Books Published</div>
                         </div>
                       </div>
                       <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">
-                        <div className="text-center p-4 rounded-[10px] bg-white">
-                          <Users className="h-6 w-6 mx-auto mb-2 text-[#8A6A4A]" />
+                        <div className="text-center p-4 rounded-[10px] bg-amber-50">
+                          <Users className="h-6 w-6 mx-auto mb-2 text-amber-700" />
                           <div className="text-2xl font-bold text-charcoal">5,000+</div>
                           <div className="text-xs text-dark-gray/60">Active Authors</div>
                         </div>
                       </div>
                       <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500">
-                        <div className="text-center p-4 rounded-[10px] bg-white">
-                          <Globe className="h-6 w-6 mx-auto mb-2 text-[#8A6A4A]" />
+                        <div className="text-center p-4 rounded-[10px] bg-emerald-50">
+                          <Globe className="h-6 w-6 mx-auto mb-2 text-emerald-700" />
                           <div className="text-2xl font-bold text-charcoal">50+</div>
                           <div className="text-xs text-dark-gray/60">Countries</div>
                         </div>
                       </div>
                       <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-blue-300 via-blue-400 to-blue-500">
-                        <div className="text-center p-4 rounded-[10px] bg-white">
-                          <TrendingUp className="h-6 w-6 mx-auto mb-2 text-[#8A6A4A]" />
+                        <div className="text-center p-4 rounded-[10px] bg-blue-50">
+                          <TrendingUp className="h-6 w-6 mx-auto mb-2 text-blue-700" />
                           <div className="text-2xl font-bold text-charcoal">$1M+</div>
                           <div className="text-xs text-dark-gray/60">Royalties Paid</div>
                         </div>
@@ -172,198 +148,44 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Achievement Boxes (Enhanced) ──────────────────── */}
-      <section className="py-20 sm:py-24 bg-white">
+      {/* ── Mission & Vision ──────────────────────────────── */}
+      <section className="py-12 sm:py-16 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-14">
-            <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">Our Impact</span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
-              Numbers That Speak
-            </h2>
-          </AnimatedSection>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <AnimatedSection>
-              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <div className="text-center rounded-[14px] bg-white p-6">
-                  <div className="inline-flex items-center justify-center rounded-2xl bg-[#FDF6EE] p-3 mb-4 text-[#8A6A4A]">
-                    <BookOpen className="h-6 w-6" />
+              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 h-full hover:shadow-lg transition-all duration-300">
+                <div className="rounded-[14px] bg-gradient-to-br from-[#FDF6EE] to-amber-50 p-6 h-full">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-200 flex items-center justify-center mb-4">
+                    <Target className="h-6 w-6 text-amber-800" />
                   </div>
-                  <div className="text-3xl sm:text-4xl font-bold text-charcoal">
-                    <CountUp target={10000} />+
-                  </div>
-                  <p className="mt-1 text-sm text-charcoal/60 font-medium">Books Published</p>
-                </div>
-              </div>
-            </AnimatedSection>
-            <AnimatedSection>
-              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-blue-300 via-blue-400 to-blue-500 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <div className="text-center rounded-[14px] bg-white p-6">
-                  <div className="inline-flex items-center justify-center rounded-2xl bg-blue-50 p-3 mb-4 text-blue-600">
-                    <Users className="h-6 w-6" />
-                  </div>
-                  <div className="text-3xl sm:text-4xl font-bold text-charcoal">
-                    <CountUp target={5000} />+
-                  </div>
-                  <p className="mt-1 text-sm text-charcoal/60 font-medium">Active Authors</p>
-                </div>
-              </div>
-            </AnimatedSection>
-            <AnimatedSection>
-              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <div className="text-center rounded-[14px] bg-white p-6">
-                  <div className="inline-flex items-center justify-center rounded-2xl bg-emerald-50 p-3 mb-4 text-emerald-600">
-                    <Globe className="h-6 w-6" />
-                  </div>
-                  <div className="text-3xl sm:text-4xl font-bold text-charcoal">
-                    <CountUp target={50} />+
-                  </div>
-                  <p className="mt-1 text-sm text-charcoal/60 font-medium">Countries Reached</p>
-                </div>
-              </div>
-            </AnimatedSection>
-            <AnimatedSection>
-              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <div className="text-center rounded-[14px] bg-white p-6">
-                  <div className="inline-flex items-center justify-center rounded-2xl bg-amber-50 p-3 mb-4 text-amber-600">
-                    <TrendingUp className="h-6 w-6" />
-                  </div>
-                  <div className="text-3xl sm:text-4xl font-bold text-charcoal">
-                    $<CountUp target={1} />M+
-                  </div>
-                  <p className="mt-1 text-sm text-charcoal/60 font-medium">Royalties Paid</p>
-                </div>
-              </div>
-            </AnimatedSection>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Our Story (Redesigned) ────────────────────────── */}
-      <section className="py-24 sm:py-32 bg-[#FDF6EE]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
-            <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">Our Story</span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
-              A Platform Built for Authors
-            </h2>
-          </AnimatedSection>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-            {/* Left: Story + Timeline */}
-            <AnimatedSection>
-              <div className="space-y-8">
-                <div>
-                  <h3 className="text-2xl font-bold text-charcoal mb-4">From Vision to Reality</h3>
-                  <p className="text-dark-gray/70 leading-relaxed mb-4">
-                    Statement Publications was born from a simple belief: every author deserves a fair chance to share their story with the world. We saw an industry that was often exclusive, complex, and unfair to independent voices.
-                  </p>
-                  <p className="text-dark-gray/70 leading-relaxed">
-                    Today, we&apos;re changing that narrative — one author at a time. Our platform combines cutting-edge technology with a deep passion for literature, giving every storyteller the tools they need to succeed.
+                  <h3 className="text-xl font-bold text-charcoal mb-3">Our Mission</h3>
+                  <p className="text-sm text-dark-gray/70 leading-relaxed">
+                    To democratize publishing by providing independent authors with professional tools, global distribution, and fair royalties — making it possible for every voice to be heard and every story to find its readers.
                   </p>
                 </div>
-
-                {/* Compact Timeline */}
-                <div className="space-y-4">
-                  {[
-                    { year: "2021", title: "The Idea", description: "Founded on the belief that every author deserves a fair chance.", color: "bg-[#EBC9A8]" },
-                    { year: "2022", title: "Building the Platform", description: "Developed a world-class publishing platform with professional tools.", color: "bg-blue-200" },
-                    { year: "2023", title: "Going Live", description: "Launched globally, connecting authors with readers across continents.", color: "bg-amber-200" },
-                    { year: "2024", title: "Global Impact", description: "Thousands of authors trust us to publish and monetize their work.", color: "bg-violet-200" },
-                  ].map((item, index) => (
-                    <div key={item.title} className="flex items-start gap-4">
-                      <div className={cn("flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center text-sm font-bold text-charcoal", item.color)}>
-                        {item.year}
-                      </div>
-                      <div className="pt-1">
-                        <h4 className="font-semibold text-charcoal">{item.title}</h4>
-                        <p className="text-sm text-dark-gray/70">{item.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </AnimatedSection>
-
-            {/* Right: Visual Imagery */}
-            <AnimatedSection delay={0.15}>
-              <div className="relative">
-                <div className="absolute -inset-4 bg-gradient-to-br from-[#EBC9A8]/30 to-[#D8B27A]/20 rounded-3xl blur-2xl" />
-                <div className="relative space-y-4">
-                  <div className="rounded-2xl overflow-hidden shadow-lg border border-[#EBC9A8]/20">
-                    <img
-                      src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&h=350&fit=crop"
-                      alt="Books on shelves"
-                      className="w-full h-56 object-cover"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="rounded-2xl overflow-hidden shadow-lg border border-[#EBC9A8]/20">
-                      <img
-                        src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=300&h=200&fit=crop"
-                        alt="Author writing"
-                        className="w-full h-36 object-cover"
-                      />
-                    </div>
-                    <div className="rounded-2xl overflow-hidden shadow-lg border border-[#EBC9A8]/20">
-                      <img
-                        src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=200&fit=crop"
-                        alt="Library"
-                        className="w-full h-36 object-cover"
-                      />
-                    </div>
-                  </div>
-                  <div className="bg-white rounded-2xl p-6 shadow-lg border border-[#EBC9A8]/20">
-                    <div className="flex items-center gap-4">
-                      <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#EBC9A8] flex items-center justify-center">
-                        <BookOpen className="h-6 w-6 text-[#8A6A4A]" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-charcoal">Publishing Since 2021</p>
-                        <p className="text-xs text-dark-gray/60">Empowering authors worldwide</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </AnimatedSection>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Mission & Vision (Differentiated) ──────────────── */}
-      <section className="py-24 sm:py-32 bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <AnimatedSection>
-              <div className="bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-8 border-2 border-amber-200 h-full hover:shadow-lg transition-all duration-300">
-                <div className="w-14 h-14 rounded-2xl bg-amber-100 flex items-center justify-center mb-6">
-                  <Target className="h-7 w-7 text-amber-700" />
-                </div>
-                <h3 className="text-2xl font-bold text-charcoal mb-4">Our Mission</h3>
-                <p className="text-dark-gray/70 leading-relaxed">
-                  To democratize publishing by providing independent authors with professional tools, global distribution, and fair royalties — making it possible for every voice to be heard and every story to find its readers.
-                </p>
               </div>
             </AnimatedSection>
             <AnimatedSection delay={0.1}>
-              <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border-2 border-blue-200 h-full hover:shadow-lg transition-all duration-300">
-                <div className="w-14 h-14 rounded-2xl bg-blue-100 flex items-center justify-center mb-6">
-                  <Eye className="h-7 w-7 text-blue-700" />
+              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-blue-400 via-indigo-400 to-blue-500 h-full hover:shadow-lg transition-all duration-300">
+                <div className="rounded-[14px] bg-gradient-to-br from-blue-50 to-indigo-50 p-6 h-full">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-200 flex items-center justify-center mb-4">
+                    <Eye className="h-6 w-6 text-blue-800" />
+                  </div>
+                  <h3 className="text-xl font-bold text-charcoal mb-3">Our Vision</h3>
+                  <p className="text-sm text-dark-gray/70 leading-relaxed">
+                    To become the world&apos;s most trusted publishing platform for independent authors — a place where creativity thrives, stories connect, and every author has the opportunity to make a statement.
+                  </p>
                 </div>
-                <h3 className="text-2xl font-bold text-charcoal mb-4">Our Vision</h3>
-                <p className="text-dark-gray/70 leading-relaxed">
-                  To become the world&apos;s most trusted publishing platform for independent authors — a place where creativity thrives, stories connect, and every author has the opportunity to make a statement.
-                </p>
               </div>
             </AnimatedSection>
           </div>
         </div>
       </section>
 
-      {/* ── Core Values (Colored Borders) ──────────────────── */}
-      <section className="py-24 sm:py-32 bg-[#FDF6EE]">
+      {/* ── Core Values ──────────────────────────────────── */}
+      <section className="py-20 sm:py-24 bg-[#FDF6EE]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-14">
             <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">Core Values</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               What We Stand For
@@ -388,10 +210,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Why Authors Choose Us (6 Cards) ────────────────── */}
-      <section className="py-24 sm:py-32 bg-white">
+      {/* ── Why Authors Choose Us ────────────────────────── */}
+      <section className="py-20 sm:py-24 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-14">
             <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">Why Authors Choose Us</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               The Statement Difference
@@ -416,10 +238,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Testimonials (Standardized) ────────────────────── */}
-      <section className="py-24 sm:py-32 bg-[#FDF6EE]">
+      {/* ── Testimonials ────────────────────────────────── */}
+      <section className="py-20 sm:py-24 bg-[#FDF6EE]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-14">
             <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">Testimonials</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               What Authors Say
@@ -456,10 +278,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Leadership Team (Enhanced) ─────────────────────── */}
-      <section className="py-24 sm:py-32 bg-white">
+      {/* ── Leadership Team ─────────────────────────────── */}
+      <section className="py-20 sm:py-24 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-16">
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-14">
             <span className="text-sm font-semibold text-[#8A6A4A] uppercase tracking-wider">Our Team</span>
             <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               Leadership
