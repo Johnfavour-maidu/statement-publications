@@ -268,7 +268,7 @@ export default function AboutPage() {
                     <p className="text-sm text-dark-gray/70 leading-relaxed mb-4 flex-1">
                       &ldquo;{t.quote}&rdquo;
                     </p>
-                    <div className="flex items-center gap-2.5 pt-3 border-t-2 border-black/30">
+                    <div className="flex items-center gap-2.5 pt-3 border-t-2 border-black">
                       <div className={`h-9 w-9 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-[10px] font-bold text-white`}>
                         {t.name.split(" ").map((n) => n[0]).join("")}
                       </div>
