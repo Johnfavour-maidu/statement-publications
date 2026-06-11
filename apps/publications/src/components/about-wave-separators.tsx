@@ -98,16 +98,16 @@ export function AboutTestimonialsWaveBottom() {
       <svg viewBox="0 0 1440 100" preserveAspectRatio="none" className="block w-full h-full animate-wave-drift-slow">
         <path
           d="M0,42 C180,74 360,84 540,68 C720,52 900,24 1080,30 C1260,36 1380,56 1440,62 L1440,100 L0,100 Z"
-          fill="white"
+          fill="#D8B27A"
         />
         <path
           d="M0,58 C220,78 440,86 660,64 C880,42 1100,38 1300,52 L1440,58 L1440,100 L0,100 Z"
-          fill="white"
+          fill="#D8B27A"
           opacity="0.5"
         />
         <path
           d="M0,72 C280,84 560,74 840,54 C1040,40 1240,52 1440,64 L1440,100 L0,100 Z"
-          fill="white"
+          fill="#D8B27A"
           opacity="0.25"
         />
       </svg>
