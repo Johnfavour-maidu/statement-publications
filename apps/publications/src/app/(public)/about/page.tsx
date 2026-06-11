@@ -345,9 +345,8 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA ─────────────────────────────────────────── */}
-      <section className="relative py-10 sm:py-12 overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
+      <section className="relative pt-16 pb-10 sm:pt-20 sm:pb-12 overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
         <AboutCTAWaveTop />
-        <FloatingBubbles />
         <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
           <AnimatedSection>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
