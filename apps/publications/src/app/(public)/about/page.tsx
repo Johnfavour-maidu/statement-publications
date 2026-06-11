@@ -235,9 +235,9 @@ export default function AboutPage() {
           </AnimatedSection>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {whyChooseUs.map((item, index) => (
-              <AnimatedSection key={item.title} delay={index * 0.05}>
-                <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${item.gradientBorder} hover:shadow-lg transition-all duration-300`}>
-                  <div className={`group rounded-[14px] p-4 ${item.bg} flex flex-col transition-all duration-300`}>
+              <AnimatedSection key={item.title} delay={index * 0.05} className="h-full">
+                <div className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${item.gradientBorder} hover:shadow-lg transition-all duration-300 h-full`}>
+                  <div className={`group rounded-[14px] p-4 ${item.bg} flex flex-col transition-all duration-300 h-full`}>
                     <div className={`mb-3 inline-flex items-center justify-center rounded-xl ${item.iconBg} p-2.5 self-start`}>
                       <item.icon className={`h-5 w-5 ${item.iconColor}`} />
                     </div>
@@ -268,7 +268,7 @@ export default function AboutPage() {
                     <p className="text-sm text-dark-gray/70 leading-relaxed mb-4 flex-1">
                       &ldquo;{t.quote}&rdquo;
                     </p>
-                    <div className="flex items-center gap-2.5 pt-3 border-t border-black/20">
+                    <div className="flex items-center gap-2.5 pt-3 border-t-2 border-black/30">
                       <div className={`h-9 w-9 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-[10px] font-bold text-white`}>
                         {t.name.split(" ").map((n) => n[0]).join("")}
                       </div>
