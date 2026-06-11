@@ -13,6 +13,7 @@
     "db:studio": "pnpm --filter @statement/database db:studio"
   },
   "devDependencies": {
+    "next": "16.2.7",
     "turbo": "^2.5.0"
   },
   "packageManager": "pnpm@10.0.0",
