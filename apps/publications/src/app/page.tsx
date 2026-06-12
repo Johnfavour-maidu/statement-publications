@@ -293,7 +293,7 @@ export default function Home() {
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#EBC9A8]/20 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D8B27A]/15 rounded-full blur-3xl" />
         </div>
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-24 pb-8 sm:pt-28 sm:pb-10 lg:pt-32 lg:pb-12 flex items-center justify-center">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 pb-8 sm:pt-32 sm:pb-10 lg:pt-36 lg:pb-12 flex items-center justify-center">
           <div className="max-w-3xl text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
