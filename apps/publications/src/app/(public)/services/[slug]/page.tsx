@@ -7,10 +7,11 @@ import {
   ArrowRight, BookOpen, PenTool, CheckCircle2, Palette, Printer,
   Megaphone, Feather, UserCheck, Headphones, Newspaper, GraduationCap,
   FileText, Check, Star, Shield, Heart, Award, Crown, Rocket, Sparkles,
-  Globe, Clock, TrendingUp, ChevronDown,
+  Globe, Clock, TrendingUp,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AboutCTAWaveTop } from "@/components/about-wave-separators";
+import { FloatingBubbles } from "@/components/floating-bubbles";
 
 const serviceData: Record<string, {
   title: string;
@@ -21,6 +22,8 @@ const serviceData: Record<string, {
   colorBg: string;
   heroGradient: string;
   gradientBorder: string;
+  blurColor1: string;
+  blurColor2: string;
   features: string[];
   process: { step: string; title: string; desc: string }[];
   benefits: { icon: React.ComponentType<{ className?: string }>; title: string; desc: string }[];
@@ -35,6 +38,8 @@ const serviceData: Record<string, {
     colorBg: "bg-amber-100",
     heroGradient: "from-amber-50 to-orange-50",
     gradientBorder: "from-amber-300 via-amber-400 to-amber-500",
+    blurColor1: "bg-amber-200/30",
+    blurColor2: "bg-orange-200/20",
     features: ["ePub, MOBI, PDF formats", "Print-on-demand (paperback & hardcover)", "Global distribution to 100+ retailers", "ISBN & barcode registration", "Library distribution", "Amazon KDP, Apple Books, Kobo & more"],
     process: [
       { step: "1", title: "Submit Manuscript", desc: "Upload your manuscript in any common format (DOCX, PDF, or plain text)." },
@@ -61,6 +66,8 @@ const serviceData: Record<string, {
     colorBg: "bg-[#F2D8BE]/40",
     heroGradient: "from-[#FDF6EE] to-[#F2D8BE]/20",
     gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]",
+    blurColor1: "bg-[#EBC9A8]/30",
+    blurColor2: "bg-[#D8B27A]/20",
     features: ["Developmental editing", "Line editing", "Copyediting", "Genre-specialist editors", "Track changes & comments", "Two rounds of revision"],
     process: [
       { step: "1", title: "Manuscript Review", desc: "Our editors read your full manuscript and provide a detailed assessment." },
@@ -87,6 +94,8 @@ const serviceData: Record<string, {
     colorBg: "bg-blue-100",
     heroGradient: "from-blue-50 to-indigo-50",
     gradientBorder: "from-blue-300 via-blue-400 to-blue-500",
+    blurColor1: "bg-blue-200/30",
+    blurColor2: "bg-indigo-200/20",
     features: ["Typo & spelling correction", "Grammar & punctuation fixes", "Consistency checks", "Formatting verification", "Final quality assurance", "Style guide compliance"],
     process: [
       { step: "1", title: "Initial Pass", desc: "Proofreader reads through the entire manuscript carefully." },
@@ -113,6 +122,8 @@ const serviceData: Record<string, {
     colorBg: "bg-rose-100",
     heroGradient: "from-rose-50 to-pink-50",
     gradientBorder: "from-rose-300 via-rose-400 to-rose-500",
+    blurColor1: "bg-rose-200/30",
+    blurColor2: "bg-pink-200/20",
     features: ["ISBN assignment", "Barcode generation", "Bowker registration", "Library of Congress info", "ISBN on cover & metadata", "Multi-format ISBNs"],
     process: [
       { step: "1", title: "Application", desc: "We complete the ISBN application on your behalf." },
@@ -139,6 +150,8 @@ const serviceData: Record<string, {
     colorBg: "bg-violet-100",
     heroGradient: "from-violet-50 to-purple-50",
     gradientBorder: "from-violet-300 via-violet-400 to-violet-500",
+    blurColor1: "bg-violet-200/30",
+    blurColor2: "bg-purple-200/20",
     features: ["Custom cover concepts", "Genre-specific design", "Typography expertise", "Print & digital formats", "Unlimited revisions", "High-resolution files"],
     process: [
       { step: "1", title: "Brief & Research", desc: "We discuss your vision and research trending covers in your genre." },
@@ -165,6 +178,8 @@ const serviceData: Record<string, {
     colorBg: "bg-teal-100",
     heroGradient: "from-teal-50 to-emerald-50",
     gradientBorder: "from-teal-300 via-teal-400 to-teal-500",
+    blurColor1: "bg-teal-200/30",
+    blurColor2: "bg-emerald-200/20",
     features: ["Interior layout design", "Print & eBook formatting", "Table of contents", "Chapter headings", "Font & spacing optimization", "KDP & IngramSpark ready"],
     process: [
       { step: "1", title: "Style Selection", desc: "Choose your preferred formatting style and layout options." },
@@ -191,6 +206,8 @@ const serviceData: Record<string, {
     colorBg: "bg-orange-100",
     heroGradient: "from-orange-50 to-amber-50",
     gradientBorder: "from-orange-300 via-orange-400 to-orange-500",
+    blurColor1: "bg-orange-200/30",
+    blurColor2: "bg-amber-200/20",
     features: ["Social media campaigns", "Book launch planning", "Email marketing", "PR & press releases", "Book trailer production", "Advertising management"],
     process: [
       { step: "1", title: "Strategy Session", desc: "We develop a marketing plan tailored to your book and audience." },
@@ -217,6 +234,8 @@ const serviceData: Record<string, {
     colorBg: "bg-pink-100",
     heroGradient: "from-pink-50 to-rose-50",
     gradientBorder: "from-pink-300 via-pink-400 to-pink-500",
+    blurColor1: "bg-pink-200/30",
+    blurColor2: "bg-rose-200/20",
     features: ["Full manuscript writing", "Chapter assistance", "Voice matching", "Research & interviews", "Confidential process", "Unlimited revisions"],
     process: [
       { step: "1", title: "Discovery", desc: "We learn about your idea, voice, and goals for the book." },
@@ -243,6 +262,8 @@ const serviceData: Record<string, {
     colorBg: "bg-indigo-100",
     heroGradient: "from-indigo-50 to-blue-50",
     gradientBorder: "from-indigo-300 via-indigo-400 to-indigo-500",
+    blurColor1: "bg-indigo-200/30",
+    blurColor2: "bg-blue-200/20",
     features: ["Author bio writing", "Professional headshots", "Social media profiles", "Author website design", "Brand guidelines", "Press kit creation"],
     process: [
       { step: "1", title: "Brand Discovery", desc: "We explore your unique story, voice, and target audience." },
@@ -269,6 +290,8 @@ const serviceData: Record<string, {
     colorBg: "bg-cyan-100",
     heroGradient: "from-cyan-50 to-teal-50",
     gradientBorder: "from-cyan-300 via-cyan-400 to-cyan-500",
+    blurColor1: "bg-cyan-200/30",
+    blurColor2: "bg-teal-200/20",
     features: ["Professional narration", "Studio-quality recording", "Audio editing & mastering", "ACX & Findaway ready", "Audible & Apple Books", "Unlimited narrator auditions"],
     process: [
       { step: "1", title: "Narrator Selection", desc: "Audition professional narrators until you find the perfect voice." },
@@ -295,6 +318,8 @@ const serviceData: Record<string, {
     colorBg: "bg-amber-100",
     heroGradient: "from-amber-50 to-yellow-50",
     gradientBorder: "from-amber-300 via-amber-400 to-amber-500",
+    blurColor1: "bg-amber-200/30",
+    blurColor2: "bg-yellow-200/20",
     features: ["Dissertation formatting", "Academic style guides", "Citation management", "Peer review support", "Journal submission", "Library distribution"],
     process: [
       { step: "1", title: "Academic Review", desc: "We review your manuscript against academic publishing standards." },
@@ -321,6 +346,8 @@ const serviceData: Record<string, {
     colorBg: "bg-[#F2D8BE]/40",
     heroGradient: "from-[#FDF6EE] to-[#F2D8BE]/20",
     gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]",
+    blurColor1: "bg-[#EBC9A8]/30",
+    blurColor2: "bg-[#D8B27A]/20",
     features: ["Magazine layout design", "Cover design", "Article formatting", "Digital distribution", "Print-on-demand", "Subscription management"],
     process: [
       { step: "1", title: "Concept & Planning", desc: "We define the magazine's format, style, and distribution channels." },
@@ -363,25 +390,26 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
   return (
     <div className="overflow-hidden">
       {/* Hero */}
-      <section className={cn("relative min-h-[50vh] flex items-center bg-gradient-to-br to-white", service.heroGradient)}>
+      <section className={cn("relative min-h-[60vh] flex items-center overflow-hidden bg-gradient-to-br to-white", service.heroGradient)}>
+        <FloatingBubbles />
         <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#EBC9A8]/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D8B27A]/15 rounded-full blur-3xl" />
+          <div className={cn("absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-3xl", service.blurColor1)} />
+          <div className={cn("absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full blur-3xl", service.blurColor2)} />
         </div>
-        <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-20">
-          <Link href="/services" className="inline-flex items-center gap-2 text-sm text-[#8A6A4A] hover:text-[#D8B27A] mb-8 transition-colors">
+        <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-24">
+          <Link href="/services" className="inline-flex items-center gap-2 text-sm text-[#8A6A4A] hover:text-[#D8B27A] mb-8 transition-colors font-semibold">
             <ArrowRight className="h-4 w-4 rotate-180" /> Back to All Services
           </Link>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="relative inline-flex mb-6 p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE]">
-              <div className={cn("w-20 h-20 rounded-[14px] flex items-center justify-center shadow-lg", service.colorBg)}>
-                <Icon className={cn("h-10 w-10", service.color)} />
+            <div className={cn("relative inline-flex mb-8 p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r", service.gradientBorder)}>
+              <div className={cn("w-24 h-24 rounded-[14px] flex items-center justify-center shadow-lg", service.colorBg)}>
+                <Icon className={cn("h-12 w-12", service.color)} />
               </div>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-charcoal mb-4" style={{ fontFamily: "var(--font-libre)" }}>
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-charcoal mb-5" style={{ fontFamily: "var(--font-libre)" }}>
               {service.title}
             </h1>
-            <p className="text-xl text-dark-gray/70 max-w-3xl">{service.tagline}</p>
+            <p className="text-xl text-dark-gray/70 max-w-3xl leading-relaxed">{service.tagline}</p>
           </motion.div>
         </div>
       </section>
@@ -391,7 +419,7 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
         <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }}>
-              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r h-full" style={{ backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))` }}>
+              <div className={cn("p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r h-full", service.gradientBorder)}>
                 <div className={cn("rounded-[14px] p-6 sm:p-8 h-full", service.colorBg)}>
                   <h2 className="text-2xl sm:text-3xl font-bold text-charcoal mb-6">What&apos;s Included</h2>
                   <p className="text-dark-gray/70 leading-relaxed mb-8">{service.description}</p>
@@ -432,7 +460,7 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
           <div className="grid sm:grid-cols-3 gap-6">
             {service.benefits.map((b, i) => (
               <motion.div key={b.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-                <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r h-full hover:shadow-xxl transition-all duration-300 hover:scale-[1.02]" style={{ backgroundImage: `linear-gradient(to right, var(--tw-gradient-stops))` }}>
+                <div className={cn("p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r h-full hover:shadow-xxl transition-all duration-300 hover:scale-[1.02]", service.gradientBorder)}>
                   <div className="bg-white rounded-[14px] p-6 text-center h-full">
                     <div className={cn("w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-sm", service.colorBg)}>
                       <b.icon className={cn("h-7 w-7", service.color)} />
@@ -463,6 +491,13 @@ export default function ServiceDetailPage({ params }: { params: Promise<{ slug: 
           </div>
         </div>
       </section>
+
+      {/* Bottom Back to Services */}
+      <div className="flex justify-center py-6 bg-white">
+        <Link href="/services" className="inline-flex items-center gap-2 rounded-lg border-2 border-charcoal/20 px-8 py-3.5 text-base font-semibold text-charcoal hover:bg-charcoal hover:text-white transition-all duration-300 hover:scale-[1.05]">
+          <ArrowRight className="h-5 w-5 rotate-180" /> Back to All Services
+        </Link>
+      </div>
 
       {/* CTA */}
       <section className="relative pt-12 pb-8 sm:pt-16 sm:pb-10 overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>

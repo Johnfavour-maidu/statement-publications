@@ -31,18 +31,18 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
 }
 
 const services = [
-  { icon: BookOpen, title: "Book Publishing", description: "End-to-end publishing for eBooks, paperbacks, and hardcovers with global distribution.", cardBg: "bg-amber-100/80", iconColor: "text-amber-800", iconBg: "bg-amber-300", btnBg: "bg-amber-600 hover:bg-amber-700 text-white", gradientBorder: "from-amber-300 via-amber-400 to-amber-500", slug: "book-publishing" },
-  { icon: PenTool, title: "Book Editing", description: "Professional developmental editing, copyediting, and line editing by genre specialists.", cardBg: "bg-[#F2D8BE]/60", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#EBC9A8]", btnBg: "bg-[#8A6A4A] hover:bg-[#6B5238] text-white", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]", slug: "book-editing" },
   { icon: CheckCircle2, title: "Proofreading", description: "Meticulous final-pass proofreading to catch every typo and formatting inconsistency.", cardBg: "bg-blue-100/80", iconColor: "text-blue-800", iconBg: "bg-blue-300", btnBg: "bg-blue-600 hover:bg-blue-700 text-white", gradientBorder: "from-blue-300 via-blue-400 to-blue-500", slug: "proofreading" },
-  { icon: FileText, title: "ISBN Registration", description: "We handle the entire ISBN registration process for retail and library distribution.", cardBg: "bg-rose-100/80", iconColor: "text-rose-800", iconBg: "bg-rose-300", btnBg: "bg-rose-600 hover:bg-rose-700 text-white", gradientBorder: "from-rose-300 via-rose-400 to-rose-500", slug: "isbn-registration" },
-  { icon: Palette, title: "Cover Design", description: "Custom cover designs by professional artists who understand genre trends.", cardBg: "bg-violet-100/80", iconColor: "text-violet-800", iconBg: "bg-violet-300", btnBg: "bg-violet-600 hover:bg-violet-700 text-white", gradientBorder: "from-violet-300 via-violet-400 to-violet-500", slug: "cover-design" },
-  { icon: Printer, title: "Book Formatting", description: "Interior formatting for print and digital formats on every device and edition.", cardBg: "bg-teal-100/80", iconColor: "text-teal-800", iconBg: "bg-teal-300", btnBg: "bg-teal-600 hover:bg-teal-700 text-white", gradientBorder: "from-teal-300 via-teal-400 to-teal-500", slug: "book-formatting" },
-  { icon: Megaphone, title: "Marketing Services", description: "Strategic marketing campaigns including social media, book launches, and advertising.", cardBg: "bg-orange-100/80", iconColor: "text-orange-800", iconBg: "bg-orange-300", btnBg: "bg-orange-600 hover:bg-orange-700 text-white", gradientBorder: "from-orange-300 via-orange-400 to-orange-500", slug: "marketing" },
-  { icon: Feather, title: "Ghostwriting", description: "Skilled ghostwriters who bring your ideas to life while maintaining your voice.", cardBg: "bg-pink-100/80", iconColor: "text-pink-800", iconBg: "bg-pink-300", btnBg: "bg-pink-600 hover:bg-pink-700 text-white", gradientBorder: "from-pink-300 via-pink-400 to-pink-500", slug: "ghostwriting" },
   { icon: UserCheck, title: "Author Branding", description: "Build your author brand with professional headshots, bio, and social media strategy.", cardBg: "bg-indigo-100/80", iconColor: "text-indigo-800", iconBg: "bg-indigo-300", btnBg: "bg-indigo-600 hover:bg-indigo-700 text-white", gradientBorder: "from-indigo-300 via-indigo-400 to-indigo-500", slug: "author-branding" },
   { icon: Headphones, title: "Audiobook Publishing", description: "Professional narration, production, and distribution to Audible and Apple Books.", cardBg: "bg-cyan-100/80", iconColor: "text-cyan-800", iconBg: "bg-cyan-300", btnBg: "bg-cyan-600 hover:bg-cyan-700 text-white", gradientBorder: "from-cyan-300 via-cyan-400 to-cyan-500", slug: "audiobook" },
+  { icon: BookOpen, title: "Book Publishing", description: "End-to-end publishing for eBooks, paperbacks, and hardcovers with global distribution.", cardBg: "bg-amber-100/80", iconColor: "text-amber-800", iconBg: "bg-amber-300", btnBg: "bg-charcoal hover:bg-dark-gray text-white", gradientBorder: "from-amber-300 via-amber-400 to-amber-500", slug: "book-publishing" },
   { icon: GraduationCap, title: "Academic Publishing", description: "Specialized publishing for academic texts, dissertations, and scholarly works.", cardBg: "bg-amber-100/80", iconColor: "text-amber-800", iconBg: "bg-amber-300", btnBg: "bg-amber-600 hover:bg-amber-700 text-white", gradientBorder: "from-amber-300 via-amber-400 to-amber-500", slug: "academic" },
-  { icon: Newspaper, title: "Magazine Publishing", description: "Full-service magazine publishing from layout design to digital distribution.", cardBg: "bg-[#F2D8BE]/60", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#EBC9A8]", btnBg: "bg-[#8A6A4A] hover:bg-[#6B5238] text-white", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]", slug: "magazine" },
+  { icon: PenTool, title: "Book Editing", description: "Professional developmental editing, copyediting, and line editing by genre specialists.", cardBg: "bg-[#F2D8BE]/60", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#EBC9A8]", btnBg: "bg-[#8A6A4A] hover:bg-[#6B5238] text-white", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]", slug: "book-editing" },
+  { icon: FileText, title: "ISBN Registration", description: "We handle the entire ISBN registration process for retail and library distribution.", cardBg: "bg-rose-100/80", iconColor: "text-rose-800", iconBg: "bg-rose-300", btnBg: "bg-rose-600 hover:bg-rose-700 text-white", gradientBorder: "from-rose-300 via-rose-400 to-rose-500", slug: "isbn-registration" },
+  { icon: Palette, title: "Cover Design", description: "Custom cover designs by professional artists who understand genre trends.", cardBg: "bg-violet-100/80", iconColor: "text-violet-800", iconBg: "bg-violet-300", btnBg: "bg-violet-600 hover:bg-violet-700 text-white", gradientBorder: "from-violet-300 via-violet-400 to-violet-500", slug: "cover-design" },
+  { icon: Feather, title: "Ghostwriting", description: "Skilled ghostwriters who bring your ideas to life while maintaining your voice.", cardBg: "bg-pink-100/80", iconColor: "text-pink-800", iconBg: "bg-pink-300", btnBg: "bg-pink-600 hover:bg-pink-700 text-white", gradientBorder: "from-pink-300 via-pink-400 to-pink-500", slug: "ghostwriting" },
+  { icon: Megaphone, title: "Marketing Services", description: "Strategic marketing campaigns including social media, book launches, and advertising.", cardBg: "bg-orange-100/80", iconColor: "text-orange-800", iconBg: "bg-orange-300", btnBg: "bg-orange-600 hover:bg-orange-700 text-white", gradientBorder: "from-orange-300 via-orange-400 to-orange-500", slug: "marketing" },
+  { icon: Newspaper, title: "Magazine Publishing", description: "Full-service magazine publishing from layout design to digital distribution.", cardBg: "bg-[#F2D8BE]/60", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#EBC9A8]", btnBg: "bg-charcoal hover:bg-dark-gray text-white", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]", slug: "magazine" },
+  { icon: Printer, title: "Book Formatting", description: "Interior formatting for print and digital formats on every device and edition.", cardBg: "bg-teal-100/80", iconColor: "text-teal-800", iconBg: "bg-teal-300", btnBg: "bg-teal-600 hover:bg-teal-700 text-white", gradientBorder: "from-teal-300 via-teal-400 to-teal-500", slug: "book-formatting" },
 ];
 
 const pricingTiers = [
@@ -201,14 +201,14 @@ export default function ServicesPage() {
       </section>
 
       {/* ── Services Grid ────────────────────────────────── */}
-      <section className="relative py-14 sm:py-18 bg-white">
+      <section className="relative py-10 sm:py-14 bg-white">
         <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center max-w-3xl mx-auto mb-10">
+          <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
             <span className="text-sm font-bold uppercase tracking-widest text-[#8A6A4A]">Our Services</span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
+            <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
               Professional Publishing Solutions
             </h2>
-            <p className="mt-4 text-lg text-dark-gray/70">
+            <p className="mt-3 text-base text-dark-gray/70">
               Choose individual services or comprehensive publishing packages.
             </p>
           </AnimatedSection>
@@ -222,20 +222,20 @@ export default function ServicesPage() {
                     "hover:shadow-xxl transition-all duration-300 h-full cursor-pointer hover:scale-[1.02]"
                   )}>
                     <div className={cn(
-                      "rounded-[14px] p-5 flex flex-col h-full transition-all duration-300",
+                      "rounded-[14px] p-4 flex flex-col h-full transition-all duration-300",
                       service.cardBg
                     )}>
-                      <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center mb-4 shadow-sm", service.iconBg)}>
-                        <service.icon className={cn("h-6 w-6", service.iconColor)} />
+                      <div className={cn("w-10 h-10 rounded-lg flex items-center justify-center mb-3 shadow-sm", service.iconBg)}>
+                        <service.icon className={cn("h-5 w-5", service.iconColor)} />
                       </div>
-                      <h3 className="text-base font-bold text-charcoal mb-1.5 group-hover:text-[#8A6A4A] transition-colors">{service.title}</h3>
-                      <p className="text-sm text-dark-gray/70 leading-relaxed mb-4 flex-1">{service.description}</p>
+                      <h3 className="text-sm font-bold text-charcoal mb-1 group-hover:text-[#8A6A4A] transition-colors">{service.title}</h3>
+                      <p className="text-xs text-dark-gray/70 leading-relaxed mb-3 flex-1">{service.description}</p>
                       <div className={cn(
-                        "inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition-all duration-300 self-start",
+                        "inline-flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all duration-300 self-start",
                         "shadow-sm group-hover:shadow-md",
                         service.btnBg
                       )}>
-                        Learn More <ArrowRight className="h-4 w-4" />
+                        Learn More <ArrowRight className="h-3.5 w-3.5" />
                       </div>
                     </div>
                   </div>
@@ -291,7 +291,7 @@ export default function ServicesPage() {
                         </li>
                       ))}
                     </ul>
-                    <Link href="/register" className={cn(
+                    <Link href={`/checkout?package=${tier.name.toLowerCase()}`} className={cn(
                       "w-full inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md",
                       tier.btnBg
                     )}>
@@ -323,15 +323,13 @@ export default function ServicesPage() {
                 key={cat.id}
                 onClick={() => { setActiveFaqCategory(cat.id); setOpenFaq(null); }}
                 className={cn(
-                  "px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300",
+                  "px-4 py-2 rounded-full text-sm font-semibold transition-all duration-300 border",
                   activeFaqCategory === cat.id
-                    ? "p-[2px] bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] text-charcoal shadow-sm"
-                    : "bg-gray-100 text-dark-gray/60 hover:bg-[#FDF6EE] hover:text-[#8A6A4A] hover:shadow-sm"
+                    ? "bg-[#8A6A4A] text-white border-[#8A6A4A] shadow-sm"
+                    : "bg-white text-dark-gray/60 border-gray-200 hover:bg-[#FDF6EE] hover:text-[#8A6A4A] hover:border-[#EBC9A8]"
                 )}
               >
-                {activeFaqCategory === cat.id ? (
-                  <span className="block px-3 py-0.5 rounded-full bg-white">{cat.label}</span>
-                ) : cat.label}
+                {cat.label}
               </button>
             ))}
           </div>
