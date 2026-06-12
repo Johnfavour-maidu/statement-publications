@@ -25,7 +25,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { RollingMarquee } from "@/components/rolling-marquee";
 import { AboutCTAWaveTop, HowItWorksWaveTop, HowItWorksWaveBottom } from "@/components/about-wave-separators";
-import HeroIllustration from "@/components/hero-illustration";
 
 import {
   Accordion,
@@ -294,89 +293,74 @@ export default function Home() {
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#EBC9A8]/20 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D8B27A]/15 rounded-full blur-3xl" />
         </div>
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-8 sm:pt-24 sm:pb-10 lg:pt-28 lg:pb-12">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center w-full">
-            {/* Left: Hero Content (35-40%) */}
-            <div className="lg:col-span-5 flex flex-col justify-center">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-4xl sm:text-5xl md:text-6xl leading-[1.1] text-charcoal"
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-8 sm:pt-24 sm:pb-10 lg:pt-28 lg:pb-12 flex items-center justify-center">
+          <div className="max-w-3xl text-center">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-4xl sm:text-5xl md:text-6xl leading-[1.1] text-charcoal"
+              style={{ fontFamily: "var(--font-libre)" }}
+            >
+              <span className="italic">Welcome to</span>
+              <br />
+              <span className="italic font-bold mt-2 block">Statement Publications</span>
+            </motion.h1>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="mt-6 border-t border-b py-3"
+              style={{ borderColor: "#D8B27A" }}
+            >
+              <p
+                className="text-lg sm:text-xl font-bold text-charcoal"
                 style={{ fontFamily: "var(--font-libre)" }}
               >
-                <span className="italic">Welcome to</span>
-                <br />
-                <span className="italic font-bold mt-2 block">Statement Publications</span>
-              </motion.h1>
+                Don&apos;t Just Publish, Make a Statement
+              </p>
+            </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="mt-6 border-t border-b py-3"
-                style={{ borderColor: "#D8B27A" }}
-              >
-                <p
-                  className="text-lg sm:text-xl font-bold text-charcoal"
-                  style={{ fontFamily: "var(--font-libre)" }}
-                >
-                  Don&apos;t Just Publish, Make a Statement
-                </p>
-              </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mt-5 text-base sm:text-lg text-dark-gray/80 max-w-lg mx-auto leading-relaxed"
+              style={{ fontFamily: "var(--font-libre)" }}
+            >
+              Empowering independent authors to share their voice and connect with millions of readers across the globe.
+            </motion.p>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="mt-5 text-base sm:text-lg text-dark-gray/80 max-w-lg leading-relaxed"
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-8 flex flex-wrap items-center justify-center gap-4"
+            >
+              <Link
+                href="/register"
+                className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal bg-[#D8B27A] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-lg"
                 style={{ fontFamily: "var(--font-libre)" }}
               >
-                Empowering independent authors to share their voice and connect with millions of readers across the globe.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                className="mt-8 flex flex-wrap items-center gap-4"
+                Start Publishing
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
+              </Link>
+              <Link
+                href="/about"
+                className="group/btn p-[2px] rounded-lg bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] transition-all duration-200 hover:shadow-lg"
               >
-                <Link
-                  href="/register"
-                  className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal bg-[#D8B27A] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-lg"
+                <span className="inline-flex items-center gap-2 rounded-[6px] bg-white px-6 py-3 text-base font-semibold text-charcoal transition-all duration-200 group-hover/btn:bg-black group-hover/btn:text-white"
                   style={{ fontFamily: "var(--font-libre)" }}
                 >
-                  Start Publishing
+                  Learn More
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </Link>
-                <Link
-                  href="/about"
-                  className="group/btn p-[2px] rounded-lg bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] transition-all duration-200 hover:shadow-lg"
-                >
-                  <span className="inline-flex items-center gap-2 rounded-[6px] bg-white px-6 py-3 text-base font-semibold text-charcoal transition-all duration-200 group-hover/btn:bg-black group-hover/btn:text-white"
-                    style={{ fontFamily: "var(--font-libre)" }}
-                  >
-                    Learn More
-                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </span>
-                </Link>
-              </motion.div>
-            </div>
-
-            {/* Right: Hero Illustration (60-65%) */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="lg:col-span-7 flex items-center justify-center"
-            >
-              <div className="w-full max-w-2xl lg:max-w-none">
-                <HeroIllustration />
-              </div>
+                </span>
+              </Link>
             </motion.div>
           </div>
         </div>
