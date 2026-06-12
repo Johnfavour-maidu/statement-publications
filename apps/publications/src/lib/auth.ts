@@ -39,7 +39,7 @@ export const {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          return null;
+          throw new Error("Please provide email and password");
         }
 
         const email = credentials.email as string;
@@ -50,17 +50,21 @@ export const {
         });
 
         if (!user || !user.password) {
-          return null;
+          throw new Error("No account found with this email address");
         }
 
         if (!user.isActive) {
-          return null;
+          throw new Error("Your account has been deactivated. Please contact support.");
+        }
+
+        if (!user.emailVerified) {
+          throw new Error("Email not verified. Please verify your email before signing in.");
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
-          return null;
+          throw new Error("Incorrect password. Please try again.");
         }
 
         return {
