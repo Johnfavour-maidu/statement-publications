@@ -13,7 +13,7 @@ import TrendingSidebar from "@/components/blog/trending-sidebar";
 import NewsletterBannerCompact from "@/components/blog/newsletter-banner-compact";
 import { blogPosts, categories, getEditorsPicks, getTrendingPosts } from "@/lib/blog-data";
 import { fuzzySearch, getSuggestion } from "@/lib/fuzzy-search";
-import { BlogTopicsWaveTop } from "@/components/blog/blog-wave-separators";
+import { BlogTopicsWaveTop, BlogTopicsWaveBottom } from "@/components/blog/blog-wave-separators";
 import { FloatingBubbles } from "@/components/floating-bubbles";
 
 const POSTS_PER_PAGE = 6;
@@ -183,6 +183,7 @@ export default function BlogPage() {
             <CategoryShowcase categories={categories} />
           </AnimatedSection>
         </div>
+        <BlogTopicsWaveBottom />
       </section>
 
       {/* Main Content + Sidebar */}
