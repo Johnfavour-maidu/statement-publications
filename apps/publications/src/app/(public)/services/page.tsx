@@ -248,7 +248,7 @@ export default function ServicesPage() {
       </section>
 
       {/* ── Pricing ──────────────────────────────────────── */}
-      <section id="pricing" className="relative py-14 sm:py-18" style={{ background: "linear-gradient(180deg, #F2D8BE 0%, #FDF6EE 100%)" }}>
+      <section id="pricing" className="relative py-14 sm:py-18 bg-gradient-to-b from-[#FDF6EE] to-white">
         <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-10">
             <span className="text-sm font-bold uppercase tracking-widest text-[#8A6A4A]">Pricing</span>

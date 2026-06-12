@@ -85,7 +85,7 @@ export default function CheckoutPage({ searchParams }: { searchParams: Promise<{
   const Icon = details.icon;
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-[#FDF6EE] px-5">
+    <div className="min-h-[80vh] flex items-center justify-center bg-[#FDF6EE] px-5 pt-[64px] lg:pt-[116px]">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
