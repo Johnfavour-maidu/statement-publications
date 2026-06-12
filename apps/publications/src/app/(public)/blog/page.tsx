@@ -12,6 +12,7 @@ import AuthorSpotlight from "@/components/blog/author-spotlight";
 import TrendingSidebar from "@/components/blog/trending-sidebar";
 import NewsletterBannerCompact from "@/components/blog/newsletter-banner-compact";
 import { blogPosts, categories, getEditorsPicks, getTrendingPosts } from "@/lib/blog-data";
+import { fuzzySearch, getSuggestion } from "@/lib/fuzzy-search";
 
 const POSTS_PER_PAGE = 6;
 const MAX_VISIBLE_PAGES = 5;
@@ -44,10 +45,13 @@ export default function BlogPage() {
   const [sortBy, setSortBy] = useState("trending");
   const [sortOpen, setSortOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchSuggestion, setSearchSuggestion] = useState<string | null>(null);
   const mainContentRef = useRef<HTMLDivElement>(null);
   const articlesSectionRef = useRef<HTMLDivElement>(null);
   const editorsPicks = getEditorsPicks();
   const trending = getTrendingPosts();
+
+  const allTitles = useMemo(() => blogPosts.map((p) => p.title), []);
 
   const filteredPosts = useMemo(() => {
     let posts = [...blogPosts];
@@ -57,15 +61,17 @@ export default function BlogPage() {
     }
 
     if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      posts = posts.filter((p) =>
-        p.title.toLowerCase().includes(q) ||
-        p.excerpt.toLowerCase().includes(q) ||
-        p.content.toLowerCase().includes(q) ||
-        p.author.name.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q) ||
-        p.tags.some((t) => t.toLowerCase().includes(q))
+      const fuzzyResults = fuzzySearch(
+        posts,
+        searchQuery,
+        (p) => [p.title, p.excerpt, p.content, p.author.name, p.category, ...p.tags],
+        0.25
       );
+      posts = fuzzyResults.map((r) => r.item);
+      const suggestion = getSuggestion(searchQuery, allTitles);
+      setSearchSuggestion(suggestion !== searchQuery ? suggestion : null);
+    } else {
+      setSearchSuggestion(null);
     }
 
     switch (sortBy) {
@@ -125,8 +131,19 @@ export default function BlogPage() {
     setSearchQuery(query);
     setCurrentPage(1);
     if (query.trim()) {
+      const suggestion = getSuggestion(query, allTitles);
+      setSearchSuggestion(suggestion !== query ? suggestion : null);
       setTimeout(() => scrollToArticles(), 100);
+    } else {
+      setSearchSuggestion(null);
     }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setSearchQuery(suggestion);
+    setSearchSuggestion(null);
+    setCurrentPage(1);
+    setTimeout(() => scrollToArticles(), 100);
   };
 
   const getPageNumbers = () => {
@@ -150,9 +167,9 @@ export default function BlogPage() {
       <BlogHero onSearch={handleSearch} searchQuery={searchQuery} />
 
       {/* Explore Topics — brown background */}
-      <section className="py-12" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 40%, #F2D8BE 100%)" }}>
+      <section className="py-14 sm:py-16" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 40%, #F2D8BE 100%)" }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-8">
+          <AnimatedSection className="text-center mb-10">
             <h2 className="text-2xl sm:text-3xl font-bold text-charcoal" style={{ fontFamily: "var(--font-libre)" }}>
               Explore Topics
             </h2>
@@ -175,7 +192,7 @@ export default function BlogPage() {
                 <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
                   <button
                     onClick={() => handleCategoryChange("all")}
-                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${activeCategory === "all" ? "bg-[#EBC9A8] text-charcoal" : "bg-gray-100 text-dark-gray/60 hover:bg-gray-200"}`}
+                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${activeCategory === "all" ? "bg-[#8A6A4A] text-white shadow-md shadow-[#8A6A4A]/20" : "bg-gray-100 text-dark-gray/60 hover:bg-gray-200 hover:text-dark-gray/80"}`}
                   >
                     All Articles
                   </button>
@@ -183,7 +200,7 @@ export default function BlogPage() {
                     <button
                       key={cat.slug}
                       onClick={() => handleCategoryChange(cat.slug)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${activeCategory === cat.slug ? "bg-[#EBC9A8] text-charcoal" : "bg-gray-100 text-dark-gray/60 hover:bg-gray-200"}`}
+                      className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${activeCategory === cat.slug ? "bg-[#8A6A4A] text-white shadow-md shadow-[#8A6A4A]/20" : "bg-gray-100 text-dark-gray/60 hover:bg-gray-200 hover:text-dark-gray/80"}`}
                     >
                       {cat.name}
                     </button>
@@ -199,9 +216,21 @@ export default function BlogPage() {
                   ))
                 ) : (
                   <div className="sm:col-span-2 text-center py-16">
-                    <p className="text-dark-gray/50 text-lg">No articles found matching your criteria.</p>
+                    <p className="text-dark-gray/50 text-lg">No articles found matching &ldquo;{searchQuery}&rdquo;</p>
+                    {searchSuggestion && (
+                      <p className="mt-2 text-sm text-dark-gray/40">
+                        Did you mean{" "}
+                        <button
+                          onClick={() => handleSuggestionClick(searchSuggestion)}
+                          className="text-[#8A6A4A] font-semibold hover:underline"
+                        >
+                          {searchSuggestion}
+                        </button>
+                        ?
+                      </p>
+                    )}
                     <button
-                      onClick={() => { setActiveCategory("all"); setSortBy("trending"); setSearchQuery(""); setCurrentPage(1); }}
+                      onClick={() => { setActiveCategory("all"); setSortBy("trending"); setSearchQuery(""); setSearchSuggestion(null); setCurrentPage(1); }}
                       className="mt-4 px-6 py-2 bg-[#EBC9A8] text-charcoal rounded-lg font-semibold hover:bg-[#D8B27A] transition-colors"
                     >
                       Clear Filters
@@ -212,12 +241,12 @@ export default function BlogPage() {
 
               {/* Bookstore-Style Pagination */}
               {totalPages > 1 && (
-                <AnimatedSection className="mt-10">
+                <AnimatedSection className="mt-12">
                   <div className="flex items-center justify-center gap-2">
                     <button
                       onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                       disabled={currentPage === 1}
-                      className="px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium text-dark-gray/60 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+                      className="px-3 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-dark-gray/60 hover:bg-gray-50 hover:border-gray-300 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200"
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </button>
@@ -228,10 +257,10 @@ export default function BlogPage() {
                         <button
                           key={page}
                           onClick={() => handlePageChange(page)}
-                          className={`min-w-[40px] h-10 rounded-lg text-sm font-semibold transition-all ${
+                          className={`min-w-[40px] h-10 rounded-lg text-sm font-semibold transition-all duration-200 ${
                             currentPage === page
-                              ? "bg-[#EBC9A8] text-charcoal shadow-md"
-                              : "border border-gray-200 text-dark-gray/60 hover:bg-gray-50"
+                              ? "bg-[#8A6A4A] text-white shadow-md shadow-[#8A6A4A]/20"
+                              : "border border-gray-200 text-dark-gray/60 hover:bg-gray-50 hover:border-gray-300"
                           }`}
                         >
                           {page}
@@ -241,7 +270,7 @@ export default function BlogPage() {
                     <button
                       onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                       disabled={currentPage === totalPages}
-                      className="px-3 py-2 rounded-lg border border-gray-200 text-sm font-medium text-dark-gray/60 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all inline-flex items-center gap-1"
+                      className="px-3 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-dark-gray/60 hover:bg-gray-50 hover:border-gray-300 disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 inline-flex items-center gap-1"
                     >
                       Next <ChevronRight className="h-4 w-4" />
                     </button>
@@ -327,9 +356,9 @@ export default function BlogPage() {
       </section>
 
       {/* Author Spotlight */}
-      <section className="py-16 bg-[#FDF6EE]">
+      <section className="py-18 bg-[#FDF6EE]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-10">
+          <AnimatedSection className="text-center mb-12">
             <h2 className="text-2xl sm:text-3xl font-bold text-charcoal" style={{ fontFamily: "var(--font-libre)" }}>
               Meet Our Authors
             </h2>

@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { motion } from "framer-motion";
-import { TrendingUp, Eye, Clock } from "lucide-react";
-import { BlogPost, formatDate } from "@/lib/blog-data";
+import { TrendingUp, Eye } from "lucide-react";
+import { BlogPost } from "@/lib/blog-data";
 
 export default function TrendingSidebar({ posts }: { posts: BlogPost[] }) {
   return (
@@ -16,7 +15,7 @@ export default function TrendingSidebar({ posts }: { posts: BlogPost[] }) {
           </div>
           <h3 className="text-sm font-bold text-charcoal">Trending Now</h3>
         </div>
-        <div className="space-y-4">
+        <div className="space-y-0 divide-y divide-gray-50">
           {posts.slice(0, 5).map((post, i) => (
             <motion.div
               key={post.id}
@@ -24,9 +23,10 @@ export default function TrendingSidebar({ posts }: { posts: BlogPost[] }) {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.05 }}
+              className="py-3 first:pt-0 last:pb-0"
             >
               <Link href={`/blog/${post.slug}`} className="flex gap-3 group">
-                <span className="text-2xl font-bold text-orange-500 w-7 shrink-0 leading-none pt-1">{String(i + 1).padStart(2, "0")}</span>
+                <span className="text-lg font-bold text-orange-400/60 w-6 shrink-0 leading-none pt-0.5">{String(i + 1).padStart(2, "0")}</span>
                 <div className="min-w-0">
                   <h4 className="text-sm font-semibold text-charcoal line-clamp-2 group-hover:text-orange-600 transition-colors leading-snug">{post.title}</h4>
                   <div className="flex items-center gap-2 mt-1.5 text-[11px] text-dark-gray/40">
