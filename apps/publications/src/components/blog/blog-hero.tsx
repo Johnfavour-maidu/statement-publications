@@ -6,6 +6,7 @@ import { useState, useRef, useEffect, useMemo } from "react";
 import { blogPosts } from "@/lib/blog-data";
 import { fuzzySearch, getSuggestion } from "@/lib/fuzzy-search";
 import Link from "next/link";
+import { FloatingBubbles } from "@/components/floating-bubbles";
 
 interface BlogHeroProps {
   onSearch: (query: string) => void;
@@ -74,6 +75,7 @@ export default function BlogHero({ onSearch, searchQuery }: BlogHeroProps) {
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#EBC9A8]/15 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D8B27A]/10 rounded-full blur-3xl" />
       </div>
+      <FloatingBubbles />
       <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}
           className="relative inline-flex mb-6 p-[2px] rounded-full bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE]">

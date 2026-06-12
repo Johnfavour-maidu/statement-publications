@@ -13,6 +13,7 @@ import TrendingSidebar from "@/components/blog/trending-sidebar";
 import NewsletterBannerCompact from "@/components/blog/newsletter-banner-compact";
 import { blogPosts, categories, getEditorsPicks, getTrendingPosts } from "@/lib/blog-data";
 import { fuzzySearch, getSuggestion } from "@/lib/fuzzy-search";
+import { BlogTopicsWaveTop, BlogTopicsWaveBottom } from "@/components/blog/blog-wave-separators";
 
 const POSTS_PER_PAGE = 6;
 const MAX_VISIBLE_PAGES = 5;
@@ -166,9 +167,11 @@ export default function BlogPage() {
     <div className="min-h-screen">
       <BlogHero onSearch={handleSearch} searchQuery={searchQuery} />
 
-      {/* Explore Topics — brown background */}
-      <section className="py-14 sm:py-16" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 40%, #F2D8BE 100%)" }}>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {/* Explore Topics — brown background with wave separators */}
+      <section className="relative py-14 sm:py-16" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 40%, #F2D8BE 100%)" }}>
+        <BlogTopicsWaveTop />
+        <BlogTopicsWaveBottom />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-10">
             <h2 className="text-2xl sm:text-3xl font-bold text-charcoal" style={{ fontFamily: "var(--font-libre)" }}>
               Explore Topics

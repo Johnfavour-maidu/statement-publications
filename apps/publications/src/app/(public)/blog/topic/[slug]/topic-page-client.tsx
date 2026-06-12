@@ -3,12 +3,27 @@
 import { useState, useMemo, useRef, useCallback } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, Search, ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
+import { ArrowLeft, ArrowRight, Search, ChevronLeft, ChevronRight, BookOpen } from "lucide-react";
 import BlogCard from "@/components/blog/blog-card";
 import { blogPosts, categories } from "@/lib/blog-data";
 import { fuzzySearch } from "@/lib/fuzzy-search";
 
 const POSTS_PER_PAGE = 6;
+
+const categoryColorMap: Record<string, { gradient: string; iconBg: string; iconColor: string; badgeBg: string; searchGradient: string }> = {
+  "writing-tips": { gradient: "linear-gradient(135deg, #F59E0B 0%, #D97706 50%, #B45309 100%)", iconBg: "bg-amber-200", iconColor: "text-amber-800", badgeBg: "bg-amber-200/60", searchGradient: "from-amber-400 via-amber-500 to-amber-600" },
+  "self-publishing": { gradient: "linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%)", iconBg: "bg-blue-200", iconColor: "text-blue-800", badgeBg: "bg-blue-200/60", searchGradient: "from-blue-400 via-blue-500 to-blue-600" },
+  "book-marketing": { gradient: "linear-gradient(135deg, #F43F5E 0%, #E11D48 50%, #BE123C 100%)", iconBg: "bg-rose-200", iconColor: "text-rose-800", badgeBg: "bg-rose-200/60", searchGradient: "from-rose-400 via-rose-500 to-rose-600" },
+  "author-success-stories": { gradient: "linear-gradient(135deg, #10B981 0%, #059669 50%, #047857 100%)", iconBg: "bg-emerald-200", iconColor: "text-emerald-800", badgeBg: "bg-emerald-200/60", searchGradient: "from-emerald-400 via-emerald-500 to-emerald-600" },
+  "industry-news": { gradient: "linear-gradient(135deg, #8B5CF6 0%, #7C3AED 50%, #6D28D9 100%)", iconBg: "bg-violet-200", iconColor: "text-violet-800", badgeBg: "bg-violet-200/60", searchGradient: "from-violet-400 via-violet-500 to-violet-600" },
+  "editing-proofreading": { gradient: "linear-gradient(135deg, #14B8A6 0%, #0D9488 50%, #0F766E 100%)", iconBg: "bg-teal-200", iconColor: "text-teal-800", badgeBg: "bg-teal-200/60", searchGradient: "from-teal-400 via-teal-500 to-teal-600" },
+  "book-design": { gradient: "linear-gradient(135deg, #F97316 0%, #EA580C 50%, #C2410C 100%)", iconBg: "bg-orange-200", iconColor: "text-orange-800", badgeBg: "bg-orange-200/60", searchGradient: "from-orange-400 via-orange-500 to-orange-600" },
+  "academic-publishing": { gradient: "linear-gradient(135deg, #6366F1 0%, #4F46E5 50%, #4338CA 100%)", iconBg: "bg-indigo-200", iconColor: "text-indigo-800", badgeBg: "bg-indigo-200/60", searchGradient: "from-indigo-400 via-indigo-500 to-indigo-600" },
+  "research-journals": { gradient: "linear-gradient(135deg, #06B6D4 0%, #0891B2 50%, #0E7490 100%)", iconBg: "bg-cyan-200", iconColor: "text-cyan-800", badgeBg: "bg-cyan-200/60", searchGradient: "from-cyan-400 via-cyan-500 to-cyan-600" },
+  "digital-publishing": { gradient: "linear-gradient(135deg, #EC4899 0%, #DB2777 50%, #BE185D 100%)", iconBg: "bg-pink-200", iconColor: "text-pink-800", badgeBg: "bg-pink-200/60", searchGradient: "from-pink-400 via-pink-500 to-pink-600" },
+};
+
+const defaultColors = { gradient: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 40%, #F2D8BE 100%)", iconBg: "bg-[#EBC9A8]/20", iconColor: "text-[#8A6A4A]", badgeBg: "bg-[#EBC9A8]/30", searchGradient: "from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE]" };
 
 interface TopicPageClientProps {
   slug: string;
@@ -17,9 +32,11 @@ interface TopicPageClientProps {
 export default function TopicPageClient({ slug }: TopicPageClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const topRef = useRef<HTMLDivElement>(null);
 
   const category = categories.find((c) => c.slug === slug);
+  const colors = categoryColorMap[slug] || defaultColors;
 
   const topicPosts = useMemo(() => {
     if (!category) return [];
@@ -87,7 +104,7 @@ export default function TopicPageClient({ slug }: TopicPageClientProps) {
   return (
     <div className="min-h-screen">
       {/* Hero */}
-      <section className="relative overflow-hidden py-20 sm:py-24" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 40%, #F2D8BE 100%)" }}>
+      <section className="relative overflow-hidden py-20 sm:py-24" style={{ background: colors.gradient }}>
         <div className="absolute inset-0">
           <div className="absolute top-20 left-[15%] w-[400px] h-[400px] bg-white/20 rounded-full blur-[100px]" />
           <div className="absolute bottom-10 right-[15%] w-[350px] h-[350px] bg-white/15 rounded-full blur-[80px]" />
@@ -95,7 +112,7 @@ export default function TopicPageClient({ slug }: TopicPageClientProps) {
         <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-charcoal/60 hover:text-charcoal text-sm font-semibold mb-8 transition-colors group"
+            className="inline-flex items-center gap-2 text-white/70 hover:text-white text-sm font-semibold mb-8 transition-colors group"
           >
             <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
             Back to Blog
@@ -105,21 +122,21 @@ export default function TopicPageClient({ slug }: TopicPageClientProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/30 backdrop-blur-sm rounded-full text-xs font-bold uppercase tracking-widest text-charcoal/70 mb-4">
+            <div className={`inline-flex items-center gap-2 px-3 py-1.5 ${colors.badgeBg} backdrop-blur-sm rounded-full text-xs font-bold uppercase tracking-widest text-white/90 mb-4`}>
               <BookOpen className="h-3.5 w-3.5" />
               Topic
             </div>
             <h1
-              className="text-4xl sm:text-5xl md:text-6xl font-bold text-charcoal mb-5 leading-[1.1]"
+              className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-5 leading-[1.1]"
               style={{ fontFamily: "var(--font-libre)" }}
             >
               {category.name}
             </h1>
-            <p className="text-lg text-charcoal/70 max-w-2xl leading-relaxed">
+            <p className="text-lg text-white/80 max-w-2xl leading-relaxed">
               {category.description}
             </p>
-            <div className="mt-4 flex items-center gap-2 text-sm text-charcoal/50">
-              <span className="font-semibold text-charcoal/70">{filteredPosts.length}</span>
+            <div className="mt-4 flex items-center gap-2 text-sm text-white/60">
+              <span className="font-semibold text-white/80">{filteredPosts.length}</span>
               <span>article{filteredPosts.length !== 1 ? "s" : ""}</span>
             </div>
           </motion.div>
@@ -132,14 +149,20 @@ export default function TopicPageClient({ slug }: TopicPageClientProps) {
           {/* Search within topic */}
           <div className="mb-10">
             <div className="relative max-w-md">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-dark-gray/30" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
-                placeholder={`Search in ${category.name}...`}
-                className="w-full pl-11 pr-4 py-3.5 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#EBC9A8] focus:border-transparent transition-all duration-200 hover:border-gray-300"
-              />
+              <div className={`relative p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${colors.searchGradient} transition-shadow duration-300 ${isSearchFocused ? "shadow-lg" : ""}`}>
+                <div className="relative flex items-center bg-white rounded-[10px]">
+                  <Search className="absolute left-4 h-4 w-4 text-dark-gray/30" />
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => { setSearchQuery(e.target.value); setCurrentPage(1); }}
+                    onFocus={() => setIsSearchFocused(true)}
+                    onBlur={() => setIsSearchFocused(false)}
+                    placeholder={`Search in ${category.name}...`}
+                    className="w-full pl-11 pr-4 py-3.5 rounded-[10px] bg-transparent text-sm focus:outline-none"
+                  />
+                </div>
+              </div>
             </div>
           </div>
 
@@ -204,6 +227,18 @@ export default function TopicPageClient({ slug }: TopicPageClientProps) {
               </div>
             </div>
           )}
+
+          {/* Back to Blog */}
+          <div className="mt-16 text-center">
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] text-charcoal rounded-xl font-bold hover:scale-[1.03] transition-all duration-300 shadow-lg shadow-[#EBC9A8]/20"
+            >
+              <ArrowLeft className="h-5 w-5" />
+              Back to Blog
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+          </div>
         </div>
       </section>
     </div>
