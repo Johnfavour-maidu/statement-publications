@@ -24,7 +24,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RollingMarquee } from "@/components/rolling-marquee";
-import { AboutCTAWaveTop } from "@/components/about-wave-separators";
+import { AboutCTAWaveTop, HowItWorksWaveTop, HowItWorksWaveBottom } from "@/components/about-wave-separators";
 import HeroIllustration from "@/components/hero-illustration";
 
 import {
@@ -289,12 +289,12 @@ export default function Home() {
   return (
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative min-h-screen w-full bg-gradient-to-br from-[#FDF6EE] via-white to-white dark:from-[#0a0a0a] dark:via-[#111111] dark:to-[#0a0a0a]">
+      <section className="relative w-full bg-gradient-to-br from-[#FDF6EE] via-white to-white dark:from-[#0a0a0a] dark:via-[#111111] dark:to-[#0a0a0a]">
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#EBC9A8]/20 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D8B27A]/15 rounded-full blur-3xl" />
         </div>
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 min-h-screen flex items-center pt-24 pb-12 lg:pt-28">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-8 sm:pt-24 sm:pb-10 lg:pt-28 lg:pb-12">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-4 items-center w-full">
             {/* Left: Hero Content (35-40%) */}
             <div className="lg:col-span-5 flex flex-col justify-center">
@@ -434,8 +434,10 @@ export default function Home() {
       </section>
 
       {/* ── How It Works ────────────────────────────────── */}
-      <section className="py-10 sm:py-14" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="relative py-10 sm:py-14 overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
+        <HowItWorksWaveTop />
+        <HowItWorksWaveBottom />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
             <span className="text-base font-bold uppercase tracking-wider text-charcoal">
               Simple Process
@@ -559,7 +561,7 @@ export default function Home() {
       </section>
 
       {/* ── FAQ ─────────────────────────────────────────── */}
-      <section className="py-10 sm:py-14 bg-light-gray dark:bg-[#1a1a1a]">
+      <section className="py-10 sm:py-14 bg-white dark:bg-[#111111]">
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center mb-6">
             <span className="text-base font-bold uppercase tracking-wider text-[#8A6A4A]">
