@@ -321,7 +321,7 @@ export default function AdminTestimonialsPage() {
       const saved = localStorage.getItem("testimonials_data");
       if (saved) { try {
         const parsed = JSON.parse(saved);
-        if (parsed.length > 0 && parsed[0].customerReputation && parsed[0].engagementTimeline && "featuredStartDate" in parsed[0]) {
+        if (parsed.length > 0 && parsed[0].customerReputation && parsed[0].engagementTimeline) {
           const now = Date.now();
           return parsed.map((t: TestimonialRecord) => {
             if (t.featured && t.featuredEndDate && now > new Date(t.featuredEndDate).getTime()) {
