@@ -10,6 +10,7 @@ import {
   FileText, User, FileUp, Activity, Zap, Video, Shield,
   TrendingUp, Share2, MousePointerClick, Award,
   Globe, ExternalLink, Send,
+  Monitor, Smartphone, Tablet, Calendar,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -65,6 +66,8 @@ interface TestimonialRecord {
     timestamp: string;
   }>;
   websiteUrl?: string;
+  featuredStartDate?: string;
+  featuredEndDate?: string;
 }
 
 const SORT_OPTIONS = [
@@ -210,6 +213,8 @@ function generateDemoTestimonials(): TestimonialRecord[] {
     const averageRatingGiven = Math.round((3.5 + Math.random() * 1.5) * 10) / 10;
     const servicesPurchased = Math.floor(Math.random() * 6) + 1;
     const websiteUrl = i < 20 ? "https://statementpublications.com" : undefined;
+    const featuredStartDate = i < 12 ? new Date(Date.now() - Math.floor(Math.random() * 30) * 86400000).toISOString() : undefined;
+    const featuredEndDate = i < 12 ? new Date(Date.now() + Math.floor(Math.random() * 60 + 7) * 86400000).toISOString() : undefined;
     const timelineBase = date.getTime();
     const engagementTimeline = [
       { event: "submitted" as const, timestamp: new Date(timelineBase).toISOString() },
@@ -243,6 +248,8 @@ function generateDemoTestimonials(): TestimonialRecord[] {
       customerReputation: { totalTestimonialsSubmitted, averageRatingGiven, servicesPurchased, booksPublished: publishedBooks },
       engagementTimeline,
       websiteUrl,
+      featuredStartDate,
+      featuredEndDate,
     });
   }
   videoTestimonials.forEach((vt, i) => {
@@ -295,6 +302,8 @@ function generateDemoTestimonials(): TestimonialRecord[] {
       },
       engagementTimeline: vtTimeline,
       websiteUrl: "https://statementpublications.com",
+      featuredStartDate: new Date(Date.now() - Math.floor(Math.random() * 14) * 86400000).toISOString(),
+      featuredEndDate: new Date(Date.now() + Math.floor(Math.random() * 30 + 7) * 86400000).toISOString(),
     });
   });
   return testimonials;
@@ -310,7 +319,7 @@ export default function AdminTestimonialsPage() {
       const saved = localStorage.getItem("testimonials_data");
       if (saved) { try {
         const parsed = JSON.parse(saved);
-        if (parsed.length > 0 && parsed[0].customerReputation && parsed[0].engagementTimeline) return parsed;
+        if (parsed.length > 0 && parsed[0].customerReputation && parsed[0].engagementTimeline && "featuredStartDate" in parsed[0]) return parsed;
       } catch {} }
     }
     return allTestimonials;
@@ -352,6 +361,13 @@ export default function AdminTestimonialsPage() {
     ];
   });
   const [activityExpanded, setActivityExpanded] = useState(false);
+  const [previewModalOpen, setPreviewModalOpen] = useState(false);
+  const [previewTestimonial, setPreviewTestimonial] = useState<TestimonialRecord | null>(null);
+  const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile">("desktop");
+  const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [scheduleTestimonial, setScheduleTestimonial] = useState<TestimonialRecord | null>(null);
+  const [scheduleStartDate, setScheduleStartDate] = useState("");
+  const [scheduleEndDate, setScheduleEndDate] = useState("");
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -421,17 +437,59 @@ export default function AdminTestimonialsPage() {
   useEffect(() => { localStorage.setItem("testimonials_data", JSON.stringify(testimonials)); }, [testimonials]);
   useEffect(() => { localStorage.setItem("testimonials_activity", JSON.stringify(activityLog)); }, [activityLog]);
 
-  const toggleFeature = useCallback((id: string) => {
+  // Auto-expire featured scheduling
+  useEffect(() => {
+    const now = Date.now();
+    setTestimonials((prev) => {
+      let changed = false;
+      const next = prev.map((t) => {
+        if (t.featured && t.featuredEndDate) {
+          const endDate = new Date(t.featuredEndDate).getTime();
+          if (now > endDate) {
+            changed = true;
+            return { ...t, featured: false, featuredEndDate: undefined, featuredStartDate: undefined, updatedAt: new Date().toISOString() };
+          }
+        }
+        return t;
+      });
+      return changed ? next : prev;
+    });
+  }, []);
+
+  const openScheduleModal = useCallback((testimonial: TestimonialRecord) => {
+    setScheduleTestimonial(testimonial);
+    if (testimonial.featured && testimonial.featuredStartDate && testimonial.featuredEndDate) {
+      setScheduleStartDate(testimonial.featuredStartDate.split("T")[0]);
+      setScheduleEndDate(testimonial.featuredEndDate.split("T")[0]);
+    } else {
+      const today = new Date().toISOString().split("T")[0];
+      const nextMonth = new Date(Date.now() + 30 * 86400000).toISOString().split("T")[0];
+      setScheduleStartDate(today);
+      setScheduleEndDate(nextMonth);
+    }
+    setScheduleModalOpen(true);
+  }, []);
+
+  const applySchedule = useCallback(() => {
+    if (!scheduleTestimonial) return;
+    const newFeatured = !scheduleTestimonial.featured;
     setTestimonials((prev) => prev.map((t) => {
-      if (t.id === id) {
-        const newFeatured = !t.featured;
+      if (t.id === scheduleTestimonial.id) {
         addActivity(newFeatured ? "feature" : "edit", `${newFeatured ? "Featured" : "Unfeatured"} testimonial from ${t.name}`);
-        return { ...t, featured: newFeatured, updatedAt: new Date().toISOString() };
+        return {
+          ...t,
+          featured: newFeatured,
+          featuredStartDate: newFeatured ? new Date(scheduleStartDate).toISOString() : undefined,
+          featuredEndDate: newFeatured ? new Date(scheduleEndDate).toISOString() : undefined,
+          updatedAt: new Date().toISOString(),
+        };
       }
       return t;
     }));
-    showToast("Testimonial updated");
-  }, [addActivity, showToast]);
+    setScheduleModalOpen(false);
+    setScheduleTestimonial(null);
+    showToast(newFeatured ? "Testimonial featured with schedule" : "Testimonial unfeatured");
+  }, [scheduleTestimonial, scheduleStartDate, scheduleEndDate, addActivity, showToast]);
 
   const toggleStatus = useCallback((id: string) => {
     setTestimonials((prev) => prev.map((t) => {
@@ -481,6 +539,8 @@ export default function AdminTestimonialsPage() {
           { event: "submitted", timestamp: new Date().toISOString() },
           ...(editForm.status === "published" ? [{ event: "approved" as const, timestamp: new Date().toISOString() }] : []),
         ],
+        featuredStartDate: undefined,
+        featuredEndDate: undefined,
       };
       setTestimonials((prev) => [newTestimonial, ...prev]);
       addActivity("create", `Added testimonial from ${editForm.name}`);
@@ -845,8 +905,9 @@ export default function AdminTestimonialsPage() {
                     <TableCell>
                       <div className="flex items-center gap-1">
                         <button onClick={() => { setDrawerTestimonial(t); setDrawerOpen(true); }} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title="View"><Eye className="h-4 w-4" /></button>
+                        <button onClick={() => { setPreviewTestimonial(t); setPreviewModalOpen(true); }} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title="Preview on Website"><Globe className="h-4 w-4" /></button>
                         <button onClick={() => openEditModal(t)} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title="Edit"><Edit3 className="h-4 w-4" /></button>
-                        <button onClick={() => toggleFeature(t.id)} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title={t.featured ? "Unfeature" : "Feature"}><Star className={`h-4 w-4 ${t.featured ? "fill-amber-500 text-amber-500" : ""}`} /></button>
+                        <button onClick={() => openScheduleModal(t)} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title={t.featured ? "Unfeature" : "Feature"}><Star className={`h-4 w-4 ${t.featured ? "fill-amber-500 text-amber-500" : ""}`} /></button>
                         <button onClick={() => { setDeleteTarget(t.id); setDeleteModalOpen(true); }} className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition-colors" title="Delete"><Trash2 className="h-4 w-4" /></button>
                       </div>
                     </TableCell>
@@ -953,6 +1014,14 @@ export default function AdminTestimonialsPage() {
                     <div className="p-2 rounded-lg bg-[#F5EDE3]/50"><span className="text-[#5C4A3D]">Featured</span><p className="font-medium text-[#111111]">{drawerTestimonial.featured ? "Yes" : "No"}</p></div>
                     <div className="p-2 rounded-lg bg-[#F5EDE3]/50"><span className="text-[#5C4A3D]">Views</span><p className="font-medium text-[#111111]">{drawerTestimonial.views}</p></div>
                   </div>
+                  {drawerTestimonial.featured && drawerTestimonial.featuredStartDate && drawerTestimonial.featuredEndDate && (
+                    <div className="p-2 rounded-lg bg-amber-50 border border-amber-200">
+                      <div className="flex items-center gap-1.5 text-xs text-amber-700">
+                        <Calendar className="h-3.5 w-3.5" />
+                        <span>Featured: {new Date(drawerTestimonial.featuredStartDate).toLocaleDateString()} — {new Date(drawerTestimonial.featuredEndDate).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  )}
 
                   {/* Customer Reputation */}
                   <div className="p-4 rounded-lg border border-[#E8DDD0] bg-[#F5EDE3]/20">
@@ -1089,7 +1158,8 @@ export default function AdminTestimonialsPage() {
 
                   <div className="flex gap-2">
                     <Button onClick={() => { setDrawerOpen(false); openEditModal(drawerTestimonial); }} className="flex-1 bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]"><Edit3 className="h-4 w-4 mr-1" /> Edit</Button>
-                    <Button onClick={() => toggleFeature(drawerTestimonial.id)} variant="outline" className="border-[#E8DDD0]"><Star className={`h-4 w-4 ${drawerTestimonial.featured ? "fill-amber-500 text-amber-500" : ""}`} /></Button>
+                    <Button onClick={() => { setDrawerOpen(false); setPreviewTestimonial(drawerTestimonial); setPreviewModalOpen(true); }} variant="outline" className="border-[#E8DDD0]"><Globe className="h-4 w-4 mr-1" /> Preview</Button>
+                    <Button onClick={() => openScheduleModal(drawerTestimonial)} variant="outline" className="border-[#E8DDD0]"><Star className={`h-4 w-4 ${drawerTestimonial.featured ? "fill-amber-500 text-amber-500" : ""}`} /></Button>
                   </div>
                 </div>
               </div>
@@ -1238,6 +1308,142 @@ export default function AdminTestimonialsPage() {
                 <div className="flex gap-2">
                   <Button onClick={() => { exportPDF(); setReportModalOpen(false); }} className="flex-1 bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]"><Download className="h-4 w-4 mr-1" /> PDF</Button>
                   <Button onClick={() => { exportCSV(); setReportModalOpen(false); }} variant="outline" className="flex-1 border-[#E8DDD0]"><Download className="h-4 w-4 mr-1" /> CSV</Button>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Website Preview Modal */}
+      <AnimatePresence>
+        {previewModalOpen && previewTestimonial && (
+          <>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPreviewModalOpen(false)} className="fixed inset-0 bg-black/50 z-40" />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="fixed inset-0 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-[#E8DDD0]">
+                  <div>
+                    <h2 className="text-lg font-bold text-[#111111]">Preview on Website</h2>
+                    <p className="text-xs text-[#5C4A3D]">{previewTestimonial.name} — {previewTestimonial.company}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center bg-[#F5EDE3] rounded-lg p-0.5">
+                      {([
+                        { key: "desktop" as const, icon: Monitor, label: "Desktop", width: "w-full" },
+                        { key: "tablet" as const, icon: Tablet, label: "Tablet", width: "w-[768px]" },
+                        { key: "mobile" as const, icon: Smartphone, label: "Mobile", width: "w-[375px]" },
+                      ]).map((d) => (
+                        <button key={d.key} onClick={() => setPreviewDevice(d.key)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${previewDevice === d.key ? "bg-white shadow-sm text-[#111111]" : "text-[#5C4A3D] hover:text-[#111111]"}`}>
+                          <d.icon className="h-3.5 w-3.5" />{d.label}
+                        </button>
+                      ))}
+                    </div>
+                    <button onClick={() => setPreviewModalOpen(false)} className="p-2 rounded-lg hover:bg-[#F5EDE3]"><X className="h-4 w-4" /></button>
+                  </div>
+                </div>
+                <div className="flex-1 overflow-auto bg-gray-100 p-6 flex justify-center">
+                  <div className={`bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-300 ${previewDevice === "desktop" ? "w-full" : previewDevice === "tablet" ? "w-[768px]" : "w-[375px]"}`}>
+                    {/* Simulated website header */}
+                    <div className="bg-[#1D1D1D] px-6 py-3 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="h-6 w-6 rounded bg-[#D8B27A]" />
+                        <span className="text-white text-sm font-semibold">Statement Publications</span>
+                      </div>
+                      <div className="hidden md:flex items-center gap-4 text-xs text-gray-400">
+                        <span>Home</span><span>About</span><span>Services</span><span>Blog</span><span>Contact</span>
+                      </div>
+                    </div>
+                    {/* Testimonial display */}
+                    <div className="p-8">
+                      <div className="max-w-2xl mx-auto">
+                        <div className="text-center mb-6">
+                          <p className="text-xs uppercase tracking-wider text-[#8A6A4A] font-semibold mb-2">What Our Authors Say</p>
+                          <h3 className="text-2xl font-bold text-[#1D1D1D]">Featured Testimonials</h3>
+                        </div>
+                        <div className="bg-[#FDF6EE] rounded-xl p-6 border border-[#E8DDD0]">
+                          {previewTestimonial.type === "video" && previewTestimonial.videoUrl && (
+                            <div className="rounded-lg overflow-hidden mb-4 bg-black">
+                              <video controls className="w-full h-auto max-h-[240px]">
+                                <source src={previewTestimonial.videoUrl} type="video/mp4" />
+                              </video>
+                            </div>
+                          )}
+                          <div className="flex items-center gap-1 mb-3">
+                            {[1, 2, 3, 4, 5].map((s) => (
+                              <Star key={s} className={`h-4 w-4 ${s <= previewTestimonial.rating ? "text-[#D8B27A] fill-[#D8B27A]" : "text-gray-300"}`} />
+                            ))}
+                          </div>
+                          <p className="text-[#1D1D1D] leading-relaxed italic mb-4">&ldquo;{previewTestimonial.content}&rdquo;</p>
+                          <div className="flex items-center gap-3 pt-3 border-t border-[#E8DDD0]">
+                            <div className="h-10 w-10 rounded-full bg-[#8A6A4A]/10 flex items-center justify-center">
+                              <User className="h-5 w-5 text-[#8A6A4A]" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-[#1D1D1D]">{previewTestimonial.name}</p>
+                              <p className="text-xs text-[#5C4A3D]">{previewTestimonial.role} at {previewTestimonial.company}</p>
+                            </div>
+                            {previewTestimonial.verifiedAuthor && (
+                              <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[9px] ml-auto flex items-center gap-0.5"><CheckCircle2 className="h-2.5 w-2.5" />Verified Author</Badge>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Simulated footer */}
+                    <div className="bg-[#1D1D1D] px-6 py-4 text-center">
+                      <p className="text-xs text-gray-500">&copy; 2026 Statement Publications. All rights reserved.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Featured Schedule Modal */}
+      <AnimatePresence>
+        {scheduleModalOpen && scheduleTestimonial && (
+          <>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setScheduleModalOpen(false)} className="fixed inset-0 bg-black/40 z-40" />
+            <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }} className="fixed inset-0 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-bold text-[#111111]">{scheduleTestimonial.featured ? "Unfeature Testimonial" : "Feature Testimonial"}</h2>
+                  <button onClick={() => setScheduleModalOpen(false)} className="p-2 rounded-lg hover:bg-[#F5EDE3]"><X className="h-4 w-4" /></button>
+                </div>
+                {scheduleTestimonial.featured ? (
+                  <p className="text-sm text-[#5C4A3D]">Are you sure you want to unfeature this testimonial from {scheduleTestimonial.name}?</p>
+                ) : (
+                  <>
+                    <p className="text-sm text-[#5C4A3D]">Set the scheduling period for featuring this testimonial from {scheduleTestimonial.name}.</p>
+                    <div className="space-y-3">
+                      <div>
+                        <label className="text-xs font-medium text-[#5C4A3D] mb-1 block">Start Date</label>
+                        <Input type="date" value={scheduleStartDate} onChange={(e) => setScheduleStartDate(e.target.value)} className="text-sm border-[#E8DDD0]" />
+                      </div>
+                      <div>
+                        <label className="text-xs font-medium text-[#5C4A3D] mb-1 block">End Date</label>
+                        <Input type="date" value={scheduleEndDate} onChange={(e) => setScheduleEndDate(e.target.value)} className="text-sm border-[#E8DDD0]" />
+                      </div>
+                      {scheduleStartDate && scheduleEndDate && (
+                        <div className="p-3 rounded-lg bg-[#F5EDE3]/50 border border-[#E8DDD0]">
+                          <div className="flex items-center gap-1.5 text-xs text-[#5C4A3D]">
+                            <Calendar className="h-3.5 w-3.5 text-[#8A6A4A]" />
+                            <span>Featured from <strong className="text-[#111111]">{new Date(scheduleStartDate).toLocaleDateString()}</strong> to <strong className="text-[#111111]">{new Date(scheduleEndDate).toLocaleDateString()}</strong></span>
+                          </div>
+                          <p className="text-[10px] text-[#5C4A3D]/70 mt-1 ml-5">Status will be automatically removed after the end date.</p>
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+                <div className="flex gap-2 pt-2">
+                  <Button variant="outline" onClick={() => setScheduleModalOpen(false)} className="flex-1 border-[#E8DDD0]">Cancel</Button>
+                  <Button onClick={applySchedule} className={`flex-1 ${scheduleTestimonial.featured ? "bg-red-500 hover:bg-red-600 text-white" : "bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]"}`}>
+                    {scheduleTestimonial.featured ? "Unfeature" : "Feature with Schedule"}
+                  </Button>
                 </div>
               </div>
             </motion.div>
