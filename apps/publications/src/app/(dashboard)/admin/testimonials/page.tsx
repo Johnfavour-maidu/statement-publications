@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Plus, Trash2, Eye, RefreshCw, Star, BarChart3,
@@ -308,7 +308,10 @@ export default function AdminTestimonialsPage() {
   const [testimonials, setTestimonials] = useState<TestimonialRecord[]>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("testimonials_data");
-      if (saved) { try { return JSON.parse(saved); } catch {} }
+      if (saved) { try {
+        const parsed = JSON.parse(saved);
+        if (parsed.length > 0 && parsed[0].customerReputation && parsed[0].engagementTimeline) return parsed;
+      } catch {} }
     }
     return allTestimonials;
   });
@@ -561,11 +564,11 @@ export default function AdminTestimonialsPage() {
       {/* Summary Cards */}
       <motion.div variants={item} className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
         {[
-          { id: "total", label: "TOTAL TESTIMONIALS", value: testimonials.length, icon: Quote, tab: "all" },
-          { id: "published", label: "APPROVED TESTIMONIALS", value: stats.published, icon: CheckCircle2, tab: "published" },
-          { id: "pending", label: "PENDING APPROVAL", value: stats.pending, icon: Clock, tab: "pending" },
-          { id: "featured", label: "FEATURED TESTIMONIALS", value: stats.featured, icon: Star, tab: "featured" },
-          { id: "rating", label: "PLATFORM AVG RATING", value: `${stats.avgRating}★`, icon: Star, iconColor: "text-amber-500", tab: "all" },
+          { id: "total", label: "TOTAL TESTIMONIALS", value: testimonials.length, icon: Quote, iconColor: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", tab: "all" },
+          { id: "published", label: "APPROVED TESTIMONIALS", value: stats.published, icon: CheckCircle2, iconColor: "text-emerald-600", bg: "bg-emerald-50", tab: "published" },
+          { id: "pending", label: "PENDING APPROVAL", value: stats.pending, icon: Clock, iconColor: "text-orange-500", bg: "bg-orange-50", tab: "pending" },
+          { id: "featured", label: "FEATURED TESTIMONIALS", value: stats.featured, icon: Star, iconColor: "text-amber-500", bg: "bg-amber-50", tab: "featured" },
+          { id: "rating", label: "PLATFORM AVG RATING", value: `${stats.avgRating}★`, icon: Star, iconColor: "text-rose-500", bg: "bg-rose-50", tab: "all" },
         ].map((stat) => {
           const isActive = activeSummaryCard === stat.id;
           return (
@@ -577,7 +580,7 @@ export default function AdminTestimonialsPage() {
                       <p className="text-[10px] font-semibold uppercase tracking-wider text-[#111111] mb-1">{stat.label}</p>
                       <p className="text-2xl font-bold text-[#111111]">{stat.value}</p>
                     </div>
-                    <div className={`rounded-lg bg-[#F2D8BE]/40 p-2 ${(stat as Record<string, unknown>).iconColor as string || "text-[#8A6A4A]"}`}><stat.icon className="h-4 w-4" /></div>
+                    <div className={`rounded-lg ${stat.bg} p-2 ${stat.iconColor}`}><stat.icon className="h-4 w-4" /></div>
                   </div>
                 </CardContent>
               </Card>
@@ -617,45 +620,6 @@ export default function AdminTestimonialsPage() {
                       </div>
                     </div>
 
-                    {/* Trust Score Distribution */}
-                    <div className="rounded-lg border border-[#D8B27A]/15 p-4 bg-[#F2D8BE]/5">
-                      <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-3 flex items-center gap-1.5"><Shield className="h-3.5 w-3.5" />Trust Score Distribution</h4>
-                      <div className="space-y-2.5">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[11px] text-[#5C4A3D] w-24 truncate">Highly Trusted</span>
-                          <div className="flex-1 h-4 bg-white rounded overflow-hidden border border-[#E8DDD0]">
-                            <div className="h-full bg-emerald-500 rounded" style={{ width: `${Math.min((stats.highlyTrusted / testimonials.length) * 100 * 3, 100)}%` }} />
-                          </div>
-                          <span className="text-[10px] font-medium text-[#111111] w-8 text-right">{stats.highlyTrusted}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[11px] text-[#5C4A3D] w-24 truncate">Trusted</span>
-                          <div className="flex-1 h-4 bg-white rounded overflow-hidden border border-[#E8DDD0]">
-                            <div className="h-full bg-blue-500 rounded" style={{ width: `${Math.min((stats.trusted / testimonials.length) * 100 * 3, 100)}%` }} />
-                          </div>
-                          <span className="text-[10px] font-medium text-[#111111] w-8 text-right">{stats.trusted}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[11px] text-[#5C4A3D] w-24 truncate">Moderate</span>
-                          <div className="flex-1 h-4 bg-white rounded overflow-hidden border border-[#E8DDD0]">
-                            <div className="h-full bg-amber-500 rounded" style={{ width: `${Math.min((stats.moderate / testimonials.length) * 100 * 3, 100)}%` }} />
-                          </div>
-                          <span className="text-[10px] font-medium text-[#111111] w-8 text-right">{stats.moderate}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[11px] text-[#5C4A3D] w-24 truncate">Review Needed</span>
-                          <div className="flex-1 h-4 bg-white rounded overflow-hidden border border-[#E8DDD0]">
-                            <div className="h-full bg-red-500 rounded" style={{ width: `${Math.min((stats.reviewNeeded / testimonials.length) * 100 * 3, 100)}%` }} />
-                          </div>
-                          <span className="text-[10px] font-medium text-[#111111] w-8 text-right">{stats.reviewNeeded}</span>
-                        </div>
-                      </div>
-                      <div className="mt-3 pt-2 border-t border-[#D8B27A]/15 flex items-center justify-between text-[9px] text-[#5C4A3D]">
-                        <span>Average Trust Score</span>
-                        <span className="font-bold text-[#111111]">{stats.avgTrustScore}/100</span>
-                      </div>
-                    </div>
-
                     {/* Top Performing Testimonials */}
                     <div className="rounded-lg border border-[#D8B27A]/15 p-4 bg-[#F2D8BE]/5">
                       <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-3 flex items-center gap-1.5"><TrendingUp className="h-3.5 w-3.5" />Top Performing Testimonials</h4>
@@ -679,29 +643,6 @@ export default function AdminTestimonialsPage() {
                       </div>
                     </div>
 
-                    {/* Performance Overview */}
-                    <div className="rounded-lg border border-[#D8B27A]/15 p-4 bg-[#F2D8BE]/5">
-                      <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-3 flex items-center gap-1.5"><BarChart3 className="h-3.5 w-3.5" />Performance Overview</h4>
-                      <div className="space-y-3">
-                        <div>
-                          <div className="flex justify-between text-[11px] mb-1"><span className="text-[#5C4A3D]">Total Views</span><span className="font-bold text-[#111111]">{stats.totalViews.toLocaleString()}</span></div>
-                          <div className="h-2 bg-white rounded-full overflow-hidden border border-[#E8DDD0]"><div className="h-full bg-violet-500 rounded-full" style={{ width: `${Math.min((stats.totalViews / 25000) * 100, 100)}%` }} /></div>
-                        </div>
-                        <div>
-                          <div className="flex justify-between text-[11px] mb-1"><span className="text-[#5C4A3D]">Total Clicks</span><span className="font-bold text-[#111111]">{stats.totalClicks.toLocaleString()}</span></div>
-                          <div className="h-2 bg-white rounded-full overflow-hidden border border-[#E8DDD0]"><div className="h-full bg-blue-500 rounded-full" style={{ width: `${Math.min((stats.totalClicks / 10000) * 100, 100)}%` }} /></div>
-                        </div>
-                        <div>
-                          <div className="flex justify-between text-[11px] mb-1"><span className="text-[#5C4A3D]">Total Shares</span><span className="font-bold text-[#111111]">{stats.totalShares.toLocaleString()}</span></div>
-                          <div className="h-2 bg-white rounded-full overflow-hidden border border-[#E8DDD0]"><div className="h-full bg-emerald-500 rounded-full" style={{ width: `${Math.min((stats.totalShares / 3000) * 100, 100)}%` }} /></div>
-                        </div>
-                        <div>
-                          <div className="flex justify-between text-[11px] mb-1"><span className="text-[#5C4A3D]">Video Testimonials</span><span className="font-bold text-[#111111]">{stats.videoCount}</span></div>
-                          <div className="h-2 bg-white rounded-full overflow-hidden border border-[#E8DDD0]"><div className="h-full bg-rose-500 rounded-full" style={{ width: `${Math.min((stats.videoCount / 10) * 100, 100)}%` }} /></div>
-                        </div>
-                      </div>
-                    </div>
-
                     {/* Engagement Overview */}
                     <div className="rounded-lg border border-[#D8B27A]/15 p-4 bg-[#F2D8BE]/5">
                       <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-3">Engagement Overview</h4>
@@ -722,29 +663,6 @@ export default function AdminTestimonialsPage() {
                           <div className="flex justify-between text-[11px] mb-1"><span className="text-[#5C4A3D]">Avg Trust Score</span><span className="font-bold text-[#111111]">{stats.avgTrustScore}/100</span></div>
                           <div className="h-2 bg-white rounded-full overflow-hidden border border-[#E8DDD0]"><div className="h-full bg-emerald-500 rounded-full" style={{ width: `${stats.avgTrustScore}%` }} /></div>
                         </div>
-                      </div>
-                    </div>
-
-                    {/* Top Trusted */}
-                    <div className="rounded-lg border border-[#D8B27A]/15 p-4 bg-[#F2D8BE]/5">
-                      <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-3 flex items-center gap-1.5"><Award className="h-3.5 w-3.5" />Top Trusted Authors</h4>
-                      <div className="space-y-2">
-                        {topTrusted.map((t) => {
-                          const score = calculateTrustScore(t);
-                          const level = getTrustLevel(score);
-                          return (
-                            <div key={t.id} className="flex items-center gap-2">
-                              <div className="h-6 w-6 rounded bg-emerald-500/10 flex items-center justify-center flex-shrink-0"><Shield className="h-3 w-3 text-emerald-600" /></div>
-                              <div className="flex-1 min-w-0">
-                                <p className="text-[11px] font-medium text-[#111111] truncate">{t.name}</p>
-                                <div className="flex items-center gap-2 text-[9px] text-[#5C4A3D]">
-                                  <span>Score: {score}</span>
-                                  <span className={`font-medium ${level.color}`}>{level.label}</span>
-                                </div>
-                              </div>
-                            </div>
-                          );
-                        })}
                       </div>
                     </div>
                   </div>
@@ -892,59 +810,44 @@ export default function AdminTestimonialsPage() {
             <TableHeader>
               <TableRow className="border-b border-[#E8DDD0] bg-white">
                 <TableHead className="w-10"><input type="checkbox" checked={selectedIds.size === displayedTestimonials.length && displayedTestimonials.length > 0} onChange={toggleSelectAll} className="rounded" /></TableHead>
-                <TableHead className="text-[#111111] font-semibold text-xs">Author</TableHead>
-                <TableHead className="text-[#111111] font-semibold text-xs">Rating</TableHead>
-                <TableHead className="text-[#111111] font-semibold text-xs">Trust Score</TableHead>
-                <TableHead className="text-[#111111] font-semibold text-xs">Status</TableHead>
-                <TableHead className="text-[#111111] font-semibold text-xs">Featured</TableHead>
-                <TableHead className="text-[#111111] font-semibold text-xs">Submitted</TableHead>
-                <TableHead className="text-[#111111] font-semibold text-xs">Actions</TableHead>
+                <TableHead className="text-[#111111] font-semibold text-sm">Author</TableHead>
+                <TableHead className="text-[#111111] font-semibold text-sm">Rating</TableHead>
+                <TableHead className="text-[#111111] font-semibold text-sm">Status</TableHead>
+                <TableHead className="text-[#111111] font-semibold text-sm">Submitted</TableHead>
+                <TableHead className="text-[#111111] font-semibold text-sm">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {displayedTestimonials.length === 0 ? (
-                <TableRow><TableCell colSpan={8} className="text-center py-16 bg-white"><Quote className="h-12 w-12 mx-auto text-muted-foreground/30 mb-3" /><p className="text-sm text-muted-foreground">No testimonials found</p></TableCell></TableRow>
+                <TableRow><TableCell colSpan={6} className="text-center py-16 bg-white"><Quote className="h-12 w-12 mx-auto text-muted-foreground/30 mb-3" /><p className="text-sm text-muted-foreground">No testimonials found</p></TableCell></TableRow>
               ) : (
                 displayedTestimonials.map((t) => {
-                  const trustScore = calculateTrustScore(t);
-                  const trustLevel = getTrustLevel(trustScore);
                   return (
                   <TableRow key={t.id} className="border-b border-[#E8DDD0] hover:bg-[#F5EDE3]/30 transition-colors">
                     <TableCell><input type="checkbox" checked={selectedIds.has(t.id)} onChange={() => { const next = new Set(selectedIds); next.has(t.id) ? next.delete(t.id) : next.add(t.id); setSelectedIds(next); }} className="rounded" /></TableCell>
                     <TableCell>
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <p className="text-xs font-semibold text-[#111111]">{t.name}</p>
-                          {t.type === "video" && <Badge className="bg-violet-100 text-violet-700 border border-violet-200 text-[8px] h-3.5 px-1 flex items-center gap-0.5"><Video className="h-2.5 w-2.5" />Video</Badge>}
-                          {t.verifiedAuthor && <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[8px] h-3.5 px-1 flex items-center gap-0.5"><CheckCircle2 className="h-2.5 w-2.5" />Verified</Badge>}
+                          <p className="text-sm font-semibold text-[#111111]">{t.name}</p>
+                          {t.type === "video" && <Badge className="bg-violet-100 text-violet-700 border border-violet-200 text-[10px] h-4 px-1.5 flex items-center gap-0.5"><Video className="h-3 w-3" />Video</Badge>}
+                          {t.verifiedAuthor && <Badge className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] h-4 px-1.5 flex items-center gap-0.5"><CheckCircle2 className="h-3 w-3" />Verified</Badge>}
                         </div>
-                        <p className="text-[10px] text-[#5C4A3D]">{t.role} at {t.company}</p>
+                        <p className="text-[11px] text-[#5C4A3D]">{t.role} at {t.company}</p>
                       </div>
                     </TableCell>
-                    <TableCell><span className="text-amber-500 text-xs">{"★".repeat(t.rating)}{"☆".repeat(5 - t.rating)}</span></TableCell>
+                    <TableCell><span className="text-amber-500 text-sm">{"★".repeat(t.rating)}{"☆".repeat(5 - t.rating)}</span></TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1.5">
-                        <div className={`px-1.5 py-0.5 rounded text-[10px] font-bold border ${trustLevel.bgColor} ${trustLevel.color}`}>{trustScore}</div>
-                        <span className="text-[9px] text-[#5C4A3D] hidden lg:inline">{trustLevel.label}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="secondary" className={`text-[9px] border ${t.status === "published" ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-orange-50 text-orange-700 border-orange-200"}`}>
+                      <Badge variant="secondary" className={`text-[10px] border ${t.status === "published" ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-orange-50 text-orange-700 border-orange-200"}`}>
                         {t.status === "published" ? "Approved" : "Pending"}
                       </Badge>
                     </TableCell>
-                    <TableCell>
-                      <button onClick={() => toggleFeature(t.id)} className={`transition-colors ${t.featured ? "text-amber-500" : "text-[#5C4A3D]/40 hover:text-amber-500"}`}>
-                        <Star className={`h-4 w-4 ${t.featured ? "fill-current" : ""}`} />
-                      </button>
-                    </TableCell>
-                    <TableCell className="text-[11px] text-[#5C4A3D]">{new Date(t.submittedAt).toLocaleDateString()}</TableCell>
+                    <TableCell className="text-sm text-[#5C4A3D]">{new Date(t.submittedAt).toLocaleDateString()}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
-                        <button onClick={() => { setDrawerTestimonial(t); setDrawerOpen(true); }} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title="View"><Eye className="h-3.5 w-3.5" /></button>
-                        <button onClick={() => openEditModal(t)} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title="Edit"><Edit3 className="h-3.5 w-3.5" /></button>
-                        <button onClick={() => toggleFeature(t.id)} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title={t.featured ? "Unfeature" : "Feature"}><Star className={`h-3.5 w-3.5 ${t.featured ? "fill-amber-500 text-amber-500" : ""}`} /></button>
-                        <button onClick={() => { setDeleteTarget(t.id); setDeleteModalOpen(true); }} className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition-colors" title="Delete"><Trash2 className="h-3.5 w-3.5" /></button>
+                        <button onClick={() => { setDrawerTestimonial(t); setDrawerOpen(true); }} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title="View"><Eye className="h-4 w-4" /></button>
+                        <button onClick={() => openEditModal(t)} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title="Edit"><Edit3 className="h-4 w-4" /></button>
+                        <button onClick={() => toggleFeature(t.id)} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title={t.featured ? "Unfeature" : "Feature"}><Star className={`h-4 w-4 ${t.featured ? "fill-amber-500 text-amber-500" : ""}`} /></button>
+                        <button onClick={() => { setDeleteTarget(t.id); setDeleteModalOpen(true); }} className="p-1.5 rounded-lg hover:bg-red-50 text-red-500 transition-colors" title="Delete"><Trash2 className="h-4 w-4" /></button>
                       </div>
                     </TableCell>
                   </TableRow>

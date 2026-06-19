@@ -751,12 +751,11 @@ export default function AdminBlogPage() {
       <motion.div variants={item} className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         {[
           { id: "total-posts", label: "TOTAL POSTS", value: allPosts.length, icon: FileText, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", tab: "all" },
-          { id: "published", label: "PUBLISHED POSTS", value: stats.published, icon: CheckCircle2, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", tab: "published" },
-          { id: "total-categories", label: "TOTAL CATEGORIES", value: blogCategories.length, icon: Tag, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", tab: "all" },
-          { id: "featured", label: "FEATURED POSTS", value: stats.featured, icon: Star, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", tab: "featured" },
-          { id: "total-views", label: "TOTAL VIEWS", value: stats.totalViews.toLocaleString(), icon: EyeIcon, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", tab: "sort-most-viewed" },
-          { id: "total-comments", label: "TOTAL COMMENTS", value: stats.totalComments.toLocaleString(), icon: MessageSquare, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", tab: "sort-most-comments" },
-          { id: "avg-rating", label: "PLATFORM AVG RATING", value: `${avgRating}★`, icon: Star, color: "text-amber-500", bg: "bg-amber-50", tab: "all" },
+          { id: "published", label: "PUBLISHED POSTS", value: stats.published, icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50", tab: "published" },
+          { id: "total-categories", label: "TOTAL CATEGORIES", value: blogCategories.length, icon: Tag, color: "text-blue-600", bg: "bg-blue-50", tab: "all" },
+          { id: "featured", label: "FEATURED POSTS", value: stats.featured, icon: Star, color: "text-amber-500", bg: "bg-amber-50", tab: "featured" },
+          { id: "total-views", label: "TOTAL VIEWS", value: stats.totalViews.toLocaleString(), icon: EyeIcon, color: "text-violet-600", bg: "bg-violet-50", tab: "sort-most-viewed" },
+          { id: "total-comments", label: "TOTAL COMMENTS", value: stats.totalComments.toLocaleString(), icon: MessageSquare, color: "text-rose-500", bg: "bg-rose-50", tab: "sort-most-comments" },
         ].map((stat) => {
           const isActive = activeSummaryCard === stat.id;
           return (
