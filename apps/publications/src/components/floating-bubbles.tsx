@@ -10,6 +10,7 @@ interface Bubble {
   duration: string;
   opacity: number;
   color: string;
+  direction: "up" | "down";
 }
 
 const COLORS = [
@@ -28,6 +29,7 @@ export function FloatingBubbles({ count = 18, className = "" }: { count?: number
       duration: `${3 + Math.random() * 3.3}s`,
       opacity: 0.85 + Math.random() * 0.05,
       color: COLORS[i % COLORS.length],
+      direction: i % 2 === 0 ? "up" : "down",
     }));
   }, [count]);
 
@@ -36,12 +38,14 @@ export function FloatingBubbles({ count = 18, className = "" }: { count?: number
       {bubbles.map((bubble) => (
         <div
           key={bubble.id}
-          className={`absolute rounded-full bg-gradient-to-br ${bubble.color} animate-bubble-float-burst`}
+          className={`absolute rounded-full bg-gradient-to-br ${bubble.color} ${
+            bubble.direction === "up" ? "animate-bubble-float-burst" : "animate-bubble-float-top"
+          }`}
           style={{
             width: `${bubble.size}px`,
             height: `${bubble.size}px`,
             left: bubble.left,
-            bottom: "-30px",
+            ...(bubble.direction === "up" ? { bottom: "-30px" } : { top: "-30px" }),
             opacity: bubble.opacity,
             animationDelay: bubble.delay,
             animationDuration: bubble.duration,

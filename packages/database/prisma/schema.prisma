@@ -113,6 +113,8 @@ model User {
   phone         String?
   bio           String?   @db.Text
   socialLinks   Json?
+  verificationToken          String?
+  verificationTokenExpires   DateTime?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 

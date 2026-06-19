@@ -6,6 +6,7 @@ import { PanelLeftClose, PanelLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "./sidebar";
 import { DashboardTopBar } from "./dashboard-topbar";
+import { ToastProvider } from "@/components/ui/action-toast";
 import type { Role } from "@/types";
 
 interface DashboardLayoutProps {
@@ -34,7 +35,8 @@ export function DashboardLayout({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <ToastProvider>
+    <div className="flex h-screen overflow-hidden bg-[#F5EDE3]">
       <div className="hidden lg:flex">
         <Sidebar
           user={user}
@@ -76,11 +78,12 @@ export function DashboardLayout({
         />
 
         <main className="flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-[1600px] px-4 py-6 sm:px-6 lg:px-8">
             {children}
           </div>
         </main>
       </div>
     </div>
+    </ToastProvider>
   );
 }

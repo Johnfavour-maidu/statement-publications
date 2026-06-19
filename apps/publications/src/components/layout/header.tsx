@@ -199,7 +199,7 @@ export function Header({ user }: HeaderProps) {
                 </Link>
               ) : (
                 <div className="flex items-center gap-2">
-                  <Link href="/login" className="btn-outline inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-charcoal border border-[#1D1D1D]/20 hover:bg-[#1D1D1D] hover:text-white">
+                  <Link href="/login" className="btn-outline inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-charcoal border border-[#1D1D1D]/20 hover:bg-[#1D1D1D] hover:text-white hover:border-[#1D1D1D] transition-all duration-200">
                     Sign In
                   </Link>
                   <Link href="/register" className="btn-primary inline-flex items-center rounded-lg px-4 py-2 text-sm font-semibold text-charcoal bg-[#D8B27A] hover:bg-[#8A6A4A] hover:text-white">
@@ -267,7 +267,7 @@ export function Header({ user }: HeaderProps) {
 
                 {!user && (
                   <div className="flex flex-col gap-3 mt-auto pt-6 border-t border-[#D8B27A]/20">
-                    <Button variant="outline" asChild className="w-full border-[#D8B27A]/30 text-[#8A6A4A] hover:bg-[#D8B27A]/10 hover:border-[#D8B27A]/50 transition-all duration-200">
+                    <Button variant="outline" asChild className="w-full border-[#D8B27A]/30 text-[#8A6A4A] hover:bg-[#1D1D1D] hover:text-white hover:border-[#1D1D1D] transition-all duration-200">
                       <Link href="/login">Sign In</Link>
                     </Button>
                     <Button asChild className="w-full bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#8A6A4A] hover:text-white transition-all duration-200">

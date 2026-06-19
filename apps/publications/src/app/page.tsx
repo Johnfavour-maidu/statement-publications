@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
   BookOpen,
   ShoppingCart,
@@ -24,6 +24,8 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { RollingMarquee } from "@/components/rolling-marquee";
+import { FeaturedBooks } from "@/components/featured-books";
+import { FloatingBubbles } from "@/components/floating-bubbles";
 import { AboutCTAWaveTop, HowItWorksWaveTop, HowItWorksWaveBottom } from "@/components/about-wave-separators";
 
 import {
@@ -77,72 +79,90 @@ function AnimatedSection({
 
 const rotatingWords = ["Story", "Vision", "Legacy", "Masterpiece", "Voice", "Dream"];
 
+const heroRotatingMessages = [
+  "Write Your Story. Publish Your Book. Inspire The World.",
+  "From Manuscript To Marketplace.",
+  "Reach Readers. Build Your Legacy. Earn Royalties.",
+];
+
 const features = [
   {
     icon: BookOpen,
     title: "Publish Books",
     description:
       "Transform your manuscript into a professionally published book available to readers worldwide.",
-    bg: "bg-amber-200",
-    iconColor: "text-amber-800",
-    iconBg: "bg-amber-300",
-    border: "border-amber-300",
-    gradientBorder: "from-amber-300 via-amber-400 to-amber-500",
+    bg: "bg-[#E0CDB4]",
+    iconColor: "text-[#6A3F26]",
+    iconBg: "bg-[#A56D45]/20",
+    border: "border-[#C4976F]/30",
+    gradientBorder: "from-[#C4976F] via-[#D7C0A1] to-[#E0CDB4]",
+    titleColor: "text-[#1E1E1E]",
+    descColor: "text-[#5C4A3D]",
   },
   {
     icon: ShoppingCart,
     title: "Sell Books",
     description:
       "Set your own prices and sell directly to readers through our built-in marketplace.",
-    bg: "bg-[#F2D8BE]",
-    iconColor: "text-[#8A6A4A]",
-    iconBg: "bg-[#F2D8BE]",
-    border: "border-[#EBC9A8]",
-    gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]",
+    bg: "bg-[#D7C0A1]",
+    iconColor: "text-[#6A3F26]",
+    iconBg: "bg-[#B88259]/20",
+    border: "border-[#B88259]/30",
+    gradientBorder: "from-[#B88259] via-[#CFAE8B] to-[#D7C0A1]",
+    titleColor: "text-[#1E1E1E]",
+    descColor: "text-[#5C4A3D]",
   },
   {
     icon: DollarSign,
     title: "Earn Royalties",
     description:
       "Earn competitive royalties on every sale with transparent, timely payouts.",
-    bg: "bg-blue-200",
-    iconColor: "text-blue-800",
-    iconBg: "bg-blue-300",
-    border: "border-blue-300",
-    gradientBorder: "from-blue-300 via-blue-400 to-blue-500",
+    bg: "bg-[#CFAE8B]",
+    iconColor: "text-[#4A3220]",
+    iconBg: "bg-[#A56D45]/20",
+    border: "border-[#A56D45]/30",
+    gradientBorder: "from-[#A56D45] via-[#C4976F] to-[#CFAE8B]",
+    titleColor: "text-[#1E1E1E]",
+    descColor: "text-[#5C4A3D]",
   },
   {
     icon: Globe,
     title: "Reach Global Readers",
     description:
       "Distribute your book across multiple platforms and reach millions of readers worldwide.",
-    bg: "bg-rose-200",
-    iconColor: "text-rose-800",
-    iconBg: "bg-rose-300",
-    border: "border-rose-300",
-    gradientBorder: "from-rose-300 via-rose-400 to-rose-500",
+    bg: "bg-[#C4976F]",
+    iconColor: "text-[#F5EDE3]",
+    iconBg: "bg-[#F5EDE3]/20",
+    border: "border-[#8E5A36]/30",
+    gradientBorder: "from-[#8E5A36] via-[#B88259] to-[#C4976F]",
+    titleColor: "text-[#FFFFFF]",
+    descColor: "text-[#F5EDE3]",
   },
   {
     icon: LayoutDashboard,
     title: "Author Dashboard",
     description:
       "Track sales, royalties, reviews, and reader engagement from one powerful dashboard.",
-    bg: "bg-violet-200",
-    iconColor: "text-violet-800",
-    iconBg: "bg-violet-300",
-    border: "border-violet-300",
-    gradientBorder: "from-violet-300 via-violet-400 to-violet-500",
+    bg: "bg-[#B88259]",
+    iconColor: "text-[#F5EDE3]",
+    iconBg: "bg-[#F5EDE3]/20",
+    border: "border-[#7B4A2D]/30",
+    gradientBorder: "from-[#7B4A2D] via-[#A56D45] to-[#B88259]",
+    titleColor: "text-[#FFFFFF]",
+    descColor: "text-[#F5EDE3]",
   },
   {
     icon: Layers,
     title: "Digital Distribution",
     description:
       "Publish in multiple formats — eBook, paperback, and hardcover — with automatic distribution.",
-    bg: "bg-teal-200",
-    iconColor: "text-teal-800",
-    iconBg: "bg-teal-300",
-    border: "border-teal-300",
-    gradientBorder: "from-teal-300 via-teal-400 to-teal-500",
+    bg: "bg-[#A56D45]",
+    iconColor: "text-[#F5EDE3]",
+    iconBg: "bg-[#F5EDE3]/20",
+    border: "border-[#6A3F26]/30",
+    gradientBorder: "from-[#6A3F26] via-[#8E5A36] to-[#A56D45]",
+    titleColor: "text-[#FFFFFF]",
+    descColor: "text-[#F5EDE3]",
   },
 ];
 
@@ -151,55 +171,70 @@ const steps = [
     icon: Pen,
     title: "Create Account",
     description: "Create account for free and set up your author profile in minutes.",
-    bg: "bg-amber-200",
-    iconColor: "text-amber-800",
-    number: "text-amber-700",
-    border: "border-amber-300",
-    gradientBorder: "from-amber-300 via-amber-400 to-amber-500",
+    bg: "bg-[#F5EDE3]",
+    iconColor: "text-[#8B5E34]",
+    number: "text-[#FFFFFF]",
+    numberBg: "bg-[#C79A6B]",
+    border: "border-[#8B5E34]/30",
+    gradientBorder: "from-[#8B5E34] via-[#C79A6B] to-[#F5EDE3]",
+    titleColor: "#1E1E1E",
+    descColor: "#5C4A3D",
   },
   {
     icon: Upload,
     title: "Upload Manuscript",
     description:
       "Upload your manuscript in any standard format. We accept DOCX, PDF, and more.",
-    bg: "bg-emerald-200",
-    iconColor: "text-emerald-800",
-    number: "text-emerald-700",
-    border: "border-emerald-300",
-    gradientBorder: "from-emerald-300 via-emerald-400 to-emerald-500",
+    bg: "bg-[#F5EDE3]",
+    iconColor: "text-[#8B5E34]",
+    number: "text-[#FFFFFF]",
+    numberBg: "bg-[#C79A6B]",
+    border: "border-[#8B5E34]/30",
+    gradientBorder: "from-[#8B5E34] via-[#C79A6B] to-[#F5EDE3]",
+    titleColor: "#1E1E1E",
+    descColor: "#5C4A3D",
   },
   {
     icon: Palette,
     title: "Design Your Book",
     description:
       "Choose from professional templates or upload your own cover design.",
-    bg: "bg-blue-200",
-    iconColor: "text-blue-800",
-    number: "text-blue-700",
-    border: "border-blue-300",
-    gradientBorder: "from-blue-300 via-blue-400 to-blue-500",
+    bg: "bg-[#F5EDE3]",
+    iconColor: "text-[#8B5E34]",
+    number: "text-[#FFFFFF]",
+    numberBg: "bg-[#C79A6B]",
+    border: "border-[#8B5E34]/30",
+    gradientBorder: "from-[#8B5E34] via-[#C79A6B] to-[#F5EDE3]",
+    titleColor: "#1E1E1E",
+    descColor: "#5C4A3D",
   },
   {
     icon: Rocket,
     title: "Publish",
     description:
       "Review, preview, and hit publish. Your book goes live within 24 hours.",
-    bg: "bg-rose-200",
-    iconColor: "text-rose-800",
-    number: "text-rose-700",
-    border: "border-rose-300",
-    gradientBorder: "from-rose-300 via-rose-400 to-rose-500",
+    bg: "bg-[#F5EDE3]",
+    iconColor: "text-[#8B5E34]",
+    number: "text-[#FFFFFF]",
+    numberBg: "bg-[#C79A6B]",
+    border: "border-[#8B5E34]/30",
+    gradientBorder: "from-[#8B5E34] via-[#C79A6B] to-[#F5EDE3]",
+    titleColor: "#1E1E1E",
+    descColor: "#5C4A3D",
   },
   {
     icon: Banknote,
     title: "Earn Royalties",
     description:
       "Start earning competitive royalties on every sale with weekly payouts.",
-    bg: "bg-violet-200",
-    iconColor: "text-violet-800",
-    number: "text-violet-700",
-    border: "border-violet-300",
-    gradientBorder: "from-violet-300 via-violet-400 to-violet-500",
+    bg: "bg-[#F5EDE3]",
+    iconColor: "text-[#8B5E34]",
+    number: "text-[#FFFFFF]",
+    numberBg: "bg-[#C79A6B]",
+    border: "border-[#8B5E34]/30",
+    gradientBorder: "from-[#8B5E34] via-[#C79A6B] to-[#F5EDE3]",
+    titleColor: "#1E1E1E",
+    descColor: "#5C4A3D",
   },
 ];
 
@@ -210,11 +245,11 @@ const testimonials = [
     quote:
       "Statement Publications made publishing my debut novel effortless. The platform is intuitive, the support team is incredible, and I earned my first royalty within the first month.",
     rating: 5,
-    color: "from-amber-500 to-orange-600",
-    quoteColor: "text-amber-700",
-    bg: "bg-amber-200",
-    border: "border-amber-300",
-    gradientBorder: "from-amber-300 via-amber-400 to-amber-500",
+    color: "from-[#C79A6B] to-[#8B5E34]",
+    quoteColor: "text-[#8B5E34]",
+    bg: "bg-[#F5EDE3]",
+    border: "border-[#C79A6B]",
+    gradientBorder: "from-[#C79A6B] via-[#B67C4B] to-[#F5EDE3]",
   },
   {
     name: "Kwame Poku",
@@ -222,11 +257,11 @@ const testimonials = [
     quote:
       "I've tried other platforms, but none compare. The author dashboard gives me full visibility into my sales and royalties. The design tools are top-notch.",
     rating: 5,
-    color: "from-[#D8B27A] to-[#EBC9A8]",
-    quoteColor: "text-[#8A6A4A]",
-    bg: "bg-[#F2D8BE]",
-    border: "border-[#EBC9A8]",
-    gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]",
+    color: "from-[#B67C4B] to-[#8B5E34]",
+    quoteColor: "text-[#8B5E34]",
+    bg: "bg-[#EBD8C0]",
+    border: "border-[#B67C4B]",
+    gradientBorder: "from-[#B67C4B] via-[#C79A6B] to-[#EBD8C0]",
   },
   {
     name: "Efua Mensah",
@@ -234,11 +269,11 @@ const testimonials = [
     quote:
       "From manuscript upload to global distribution, everything was seamless. My book is now available in 30+ countries. I couldn't be happier with the results.",
     rating: 5,
-    color: "from-blue-500 to-indigo-600",
-    quoteColor: "text-blue-700",
-    bg: "bg-blue-200",
-    border: "border-blue-300",
-    gradientBorder: "from-blue-300 via-blue-400 to-blue-500",
+    color: "from-[#8B5E34] to-[#6A4E37]",
+    quoteColor: "text-[#8B5E34]",
+    bg: "bg-[#E0C9AE]",
+    border: "border-[#8B5E34]",
+    gradientBorder: "from-[#8B5E34] via-[#B67C4B] to-[#E0C9AE]",
   },
 ];
 
@@ -277,6 +312,7 @@ const faqs = [
 
 export default function Home() {
   const [wordIndex, setWordIndex] = useState(0);
+  const [heroMsgIndex, setHeroMsgIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -285,15 +321,23 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setHeroMsgIndex((prev) => (prev + 1) % heroRotatingMessages.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="overflow-hidden">
       {/* ── Hero ─────────────────────────────────────────── */}
-      <section className="relative w-full bg-gradient-to-br from-[#FDF6EE] via-white to-white dark:from-[#0a0a0a] dark:via-[#111111] dark:to-[#0a0a0a]">
+      <section className="relative w-full min-h-[80vh] flex items-center overflow-hidden bg-gradient-to-br from-[#FDF6EE] via-white to-white dark:from-[#0a0a0a] dark:via-[#111111] dark:to-[#0a0a0a]">
+        <FloatingBubbles count={30} className="opacity-70" />
         <div className="absolute inset-0">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#EBC9A8]/20 rounded-full blur-3xl" />
           <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[#D8B27A]/15 rounded-full blur-3xl" />
         </div>
-        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-28 pb-8 sm:pt-32 sm:pb-10 lg:pt-36 lg:pb-12 flex items-center justify-center">
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-32 pb-16 sm:pt-36 sm:pb-20 lg:pt-40 lg:pb-24 flex items-center justify-center">
           <div className="max-w-3xl text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -311,15 +355,22 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="mt-6 border-t border-b py-3"
-              style={{ borderColor: "#D8B27A" }}
+              className="mt-6 border-t border-b py-3 relative overflow-hidden"
+              style={{ borderColor: "#D8B27A", minHeight: "52px" }}
             >
-              <p
-                className="text-lg sm:text-xl font-bold text-charcoal"
-                style={{ fontFamily: "var(--font-libre)" }}
-              >
-                Don&apos;t Just Publish, Make a Statement
-              </p>
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={heroMsgIndex}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -12 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="text-lg sm:text-xl font-bold text-charcoal absolute inset-0 flex items-center justify-center"
+                  style={{ fontFamily: "var(--font-libre)" }}
+                >
+                  {heroRotatingMessages[heroMsgIndex]}
+                </motion.p>
+              </AnimatePresence>
             </motion.div>
 
             <motion.p
@@ -340,7 +391,7 @@ export default function Home() {
             >
               <Link
                 href="/register"
-                className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal bg-[#D8B27A] transition-all duration-200 hover:bg-black hover:text-white hover:shadow-lg"
+                className="inline-flex items-center gap-2 rounded-lg px-6 py-3 text-base font-semibold text-charcoal bg-[#D8B27A]"
                 style={{ fontFamily: "var(--font-libre)" }}
               >
                 Start Publishing
@@ -352,7 +403,7 @@ export default function Home() {
                 href="/about"
                 className="group/btn p-[2px] rounded-lg bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE] transition-all duration-200 hover:shadow-lg"
               >
-                <span className="inline-flex items-center gap-2 rounded-[6px] bg-white px-6 py-3 text-base font-semibold text-charcoal transition-all duration-200 group-hover/btn:bg-black group-hover/btn:text-white"
+                <span className="inline-flex items-center gap-2 rounded-[6px] bg-white px-6 py-3 text-base font-semibold text-charcoal transition-all duration-200 group-hover/btn:bg-[#1D1D1D] group-hover/btn:text-white"
                   style={{ fontFamily: "var(--font-libre)" }}
                 >
                   Learn More
@@ -368,6 +419,9 @@ export default function Home() {
 
       {/* ── Rolling Marquee ──────────────────────────────── */}
       <RollingMarquee />
+
+      {/* ── Featured Books ──────────────────────────────── */}
+      <FeaturedBooks />
 
       {/* ── Features ────────────────────────────────────── */}
       <section className="py-16 sm:py-20 bg-white dark:bg-[#111111]">
@@ -392,22 +446,22 @@ export default function Home() {
             variants={stagger}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
           >
-            {features.map((feature) => (
+              {features.map((feature) => (
               <motion.div
                 key={feature.title}
                 variants={fadeInUp}
-                className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${feature.gradientBorder} hover:shadow-lg transition-all duration-300`}
+                className={`p-[2.5px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${feature.gradientBorder} hover:shadow-lg transition-all duration-300`}
               >
                 <motion.div
-                  whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.3)" }}
+                  whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(139,94,52,0.3)" }}
                   transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   className={`group relative rounded-[14px] p-5 shadow-sm transition-all duration-300 ${feature.bg}`}
                 >
                   <div className={`mb-3 inline-flex items-center justify-center rounded-xl ${feature.iconBg} p-2.5`}>
                     <feature.icon className={`h-5 w-5 ${feature.iconColor}`} />
                   </div>
-                  <h3 className="text-base font-semibold mb-1.5 text-charcoal">{feature.title}</h3>
-                  <p className="text-sm text-dark-gray/70 leading-relaxed">
+                  <h3 className={`text-base font-semibold mb-1.5 ${feature.titleColor}`}>{feature.title}</h3>
+                  <p className={`text-sm leading-relaxed ${feature.descColor}`}>
                     {feature.description}
                   </p>
                 </motion.div>
@@ -418,18 +472,18 @@ export default function Home() {
       </section>
 
       {/* ── How It Works ────────────────────────────────── */}
-      <section className="relative py-10 sm:py-14 overflow-hidden" style={{ background: "linear-gradient(135deg, #EBC9A8 0%, #F2D8BE 50%, #D8B27A 100%)" }}>
+      <section className="relative py-10 sm:py-14 overflow-hidden" style={{ background: "linear-gradient(135deg, #D8B27A 0%, #EBC9A8 50%, #F2D8BE 100%)" }}>
         <HowItWorksWaveTop />
         <HowItWorksWaveBottom />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
-            <span className="text-base font-bold uppercase tracking-wider text-charcoal">
+            <span className="text-base font-bold uppercase tracking-wider" style={{ color: "#8B5E34" }}>
               Simple Process
             </span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
+            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight" style={{ color: "#1E1E1E" }}>
               How It Works
             </h2>
-            <p className="mt-4 text-lg text-dark-gray/70">
+            <p className="mt-4 text-lg" style={{ color: "#5C4A3D" }}>
               Five simple steps from manuscript to published author.
             </p>
           </AnimatedSection>
@@ -446,21 +500,21 @@ export default function Home() {
                 <motion.div
                   key={step.title}
                   variants={fadeInUp}
-                  className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${step.gradientBorder} hover:shadow-lg transition-all duration-300`}
+                  className={`p-[2.5px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${step.gradientBorder} hover:shadow-lg transition-all duration-300`}
                 >
                   <motion.div
                     whileHover={{ y: -4 }}
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                     className={`relative text-center rounded-[14px] p-4 ${step.bg}`}
                   >
-                    <div className={`relative z-10 mx-auto mb-2 flex h-9 w-9 items-center justify-center rounded-full bg-white ${step.number} font-bold text-xs shadow-sm`}>
+                    <div className={`relative z-10 mx-auto mb-2 flex h-9 w-9 items-center justify-center rounded-full ${step.numberBg} ${step.number} font-bold text-xs shadow-sm`}>
                       {index + 1}
                     </div>
                     <div className="mb-1.5 flex justify-center">
                       <step.icon className={`h-4 w-4 ${step.iconColor}`} />
                     </div>
-                    <h3 className="text-sm font-semibold mb-0.5 text-charcoal">{step.title}</h3>
-                    <p className="text-xs text-dark-gray/70 leading-relaxed line-clamp-2">
+                    <h3 className="text-sm font-semibold mb-0.5" style={{ color: step.titleColor }}>{step.title}</h3>
+                    <p className="text-xs leading-relaxed line-clamp-2" style={{ color: step.descColor }}>
                       {step.description}
                     </p>
                   </motion.div>
@@ -472,16 +526,16 @@ export default function Home() {
       </section>
 
       {/* ── Testimonials ────────────────────────────────── */}
-      <section className="py-12 sm:py-16 bg-white dark:bg-[#111111]">
+      <section className="py-12 sm:py-16 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <AnimatedSection className="text-center max-w-3xl mx-auto mb-8">
-            <span className="text-base font-bold uppercase tracking-wider text-[#8A6A4A]">
+            <span className="text-base font-bold uppercase tracking-wider" style={{ color: "#8B5E34" }}>
               Testimonials
             </span>
-            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight text-charcoal">
+            <h2 className="mt-3 text-3xl sm:text-4xl font-bold tracking-tight" style={{ color: "#1E1E1E" }}>
               Loved by Authors
             </h2>
-            <p className="mt-4 text-lg text-dark-gray/70">
+            <p className="mt-4 text-lg" style={{ color: "#5C4A3D" }}>
               Hear from writers who turned their manuscripts into published books.
             </p>
           </AnimatedSection>
@@ -493,11 +547,11 @@ export default function Home() {
             variants={stagger}
             className="grid grid-cols-1 md:grid-cols-3 gap-4"
           >
-            {testimonials.map((testimonial) => (
+              {testimonials.map((testimonial) => (
               <motion.div
                 key={testimonial.name}
                 variants={fadeInUp}
-                className={`p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${testimonial.gradientBorder} hover:shadow-lg transition-all duration-300`}
+                className={`p-[2.5px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${testimonial.gradientBorder} hover:shadow-lg transition-all duration-300`}
               >
                 <motion.div
                   whileHover={{ y: -6, boxShadow: "0 12px 24px -8px rgba(235,201,168,0.25)" }}
@@ -505,9 +559,10 @@ export default function Home() {
                   className={`group relative rounded-[14px] p-4 shadow-sm transition-all duration-300 flex flex-col ${testimonial.bg}`}
                 >
                   <Quote className={`h-5 w-5 ${testimonial.quoteColor} mb-2`} />
-                  <p className="text-xs leading-relaxed text-dark-gray/70 line-clamp-3">
+                  <p className="text-xs leading-relaxed line-clamp-3" style={{ color: "#4B3A2F" }}>
                     &ldquo;{testimonial.quote}&rdquo;
                   </p>
+                  <div className="mt-3 border-t" style={{ borderColor: "#4B3A2F" }} />
                   <div className="mt-auto pt-3">
                     <div className="flex items-center gap-2.5">
                       <div
@@ -522,8 +577,8 @@ export default function Home() {
                           .join("")}
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-charcoal">{testimonial.name}</p>
-                        <p className="text-[10px] text-dark-gray/60">
+                        <p className="text-xs font-semibold" style={{ color: "#1E1E1E" }}>{testimonial.name}</p>
+                        <p className="text-[10px]" style={{ color: "#6A4E37" }}>
                           {testimonial.role}
                         </p>
                       </div>
@@ -558,10 +613,19 @@ export default function Home() {
 
           <AnimatedSection delay={0.1}>
             <Accordion type="single" collapsible className="space-y-2">
-              {faqs.map((faq, index) => (
+              {faqs.map((faq, index) => {
+                const gradients = [
+                  "from-[#C9A06A] via-[#EBC9A8] to-[#F2D8BE]",
+                  "from-[#D8B27A] via-[#D4A97A] to-[#F5E6D3]",
+                  "from-[#B8925E] via-[#D8B27A] to-[#EBC9A8]",
+                  "from-[#D4A97A] via-[#EBC9A8] to-[#F0E0CC]",
+                  "from-[#A6824E] via-[#C9A06A] to-[#F2D8BE]",
+                  "from-[#EBC9A8] via-[#D8B27A] to-[#F5E6D3]",
+                ];
+                return (
                 <div
                   key={index}
-                  className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#EBC9A8] via-[#D8B27A] to-[#F2D8BE]"
+                  className={`p-[2.5px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r ${gradients[index % gradients.length]}`}
                 >
                   <AccordionItem
                     value={`faq-${index}`}
@@ -575,7 +639,8 @@ export default function Home() {
                     </AccordionContent>
                   </AccordionItem>
                 </div>
-              ))}
+                );
+              })}
             </Accordion>
           </AnimatedSection>
         </div>

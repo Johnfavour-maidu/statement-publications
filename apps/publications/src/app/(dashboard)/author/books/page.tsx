@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -13,9 +13,10 @@ import {
   ArrowUpDown,
   BookOpen,
   Star,
-  Filter,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,9 +36,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
-type BookStatus = "PUBLISHED" | "DRAFT" | "UNDER_REVIEW" | "REJECTED";
+type BookStatus = "PUBLISHED" | "DRAFT" | "SUBMITTED" | "REJECTED";
 
-interface MockBook {
+interface Book {
   id: string;
   title: string;
   coverImage: string | null;
@@ -48,154 +49,16 @@ interface MockBook {
   totalReviews: number;
   createdAt: string;
   format: string;
+  category?: { name: string } | null;
 }
 
-const mockBooks: MockBook[] = [
-  {
-    id: "1",
-    title: "The Last Horizon",
-    coverImage: null,
-    status: "PUBLISHED",
-    totalSales: 487,
-    totalRevenue: 6327.13,
-    averageRating: 4.8,
-    totalReviews: 124,
-    createdAt: new Date(Date.now() - 86400000 * 30).toISOString(),
-    format: "EBOOK",
-  },
-  {
-    id: "2",
-    title: "Echoes of Tomorrow",
-    coverImage: null,
-    status: "PUBLISHED",
-    totalSales: 312,
-    totalRevenue: 4991.88,
-    averageRating: 4.6,
-    totalReviews: 89,
-    createdAt: new Date(Date.now() - 86400000 * 60).toISOString(),
-    format: "PAPERBACK",
-  },
-  {
-    id: "3",
-    title: "Whispers in the Dark",
-    coverImage: null,
-    status: "PUBLISHED",
-    totalSales: 198,
-    totalRevenue: 1977.02,
-    averageRating: 4.9,
-    totalReviews: 67,
-    createdAt: new Date(Date.now() - 86400000 * 90).toISOString(),
-    format: "EBOOK",
-  },
-  {
-    id: "4",
-    title: "Beyond the Stars",
-    coverImage: null,
-    status: "UNDER_REVIEW",
-    totalSales: 0,
-    totalRevenue: 0,
-    averageRating: 0,
-    totalReviews: 0,
-    createdAt: new Date(Date.now() - 86400000 * 7).toISOString(),
-    format: "HARDCOVER",
-  },
-  {
-    id: "5",
-    title: "Crimson Tide",
-    coverImage: null,
-    status: "DRAFT",
-    totalSales: 0,
-    totalRevenue: 0,
-    averageRating: 0,
-    totalReviews: 0,
-    createdAt: new Date(Date.now() - 86400000 * 3).toISOString(),
-    format: "EBOOK",
-  },
-  {
-    id: "6",
-    title: "The Silent Witness",
-    coverImage: null,
-    status: "PUBLISHED",
-    totalSales: 56,
-    totalRevenue: 559.44,
-    averageRating: 4.3,
-    totalReviews: 18,
-    createdAt: new Date(Date.now() - 86400000 * 120).toISOString(),
-    format: "EBOOK",
-  },
-  {
-    id: "7",
-    title: "Midnight Solitude",
-    coverImage: null,
-    status: "DRAFT",
-    totalSales: 0,
-    totalRevenue: 0,
-    averageRating: 0,
-    totalReviews: 0,
-    createdAt: new Date(Date.now() - 86400000 * 1).toISOString(),
-    format: "EBOOK",
-  },
-  {
-    id: "8",
-    title: "Fractured Dreams",
-    coverImage: null,
-    status: "REJECTED",
-    totalSales: 0,
-    totalRevenue: 0,
-    averageRating: 0,
-    totalReviews: 0,
-    createdAt: new Date(Date.now() - 86400000 * 14).toISOString(),
-    format: "PAPERBACK",
-  },
-  {
-    id: "9",
-    title: "River of Shadows",
-    coverImage: null,
-    status: "PUBLISHED",
-    totalSales: 234,
-    totalRevenue: 3038.66,
-    averageRating: 4.7,
-    totalReviews: 78,
-    createdAt: new Date(Date.now() - 86400000 * 45).toISOString(),
-    format: "PAPERBACK",
-  },
-  {
-    id: "10",
-    title: "The Forgotten Kingdom",
-    coverImage: null,
-    status: "UNDER_REVIEW",
-    totalSales: 0,
-    totalRevenue: 0,
-    averageRating: 0,
-    totalReviews: 0,
-    createdAt: new Date(Date.now() - 86400000 * 5).toISOString(),
-    format: "EBOOK",
-  },
-  {
-    id: "11",
-    title: "Autumn Whispers",
-    coverImage: null,
-    status: "PUBLISHED",
-    totalSales: 89,
-    totalRevenue: 889.11,
-    averageRating: 4.4,
-    totalReviews: 31,
-    createdAt: new Date(Date.now() - 86400000 * 75).toISOString(),
-    format: "EBOOK",
-  },
-  {
-    id: "12",
-    title: "Starlight Memoirs",
-    coverImage: null,
-    status: "DRAFT",
-    totalSales: 0,
-    totalRevenue: 0,
-    averageRating: 0,
-    totalReviews: 0,
-    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-    format: "HARDCOVER",
-  },
-];
+interface BooksResponse {
+  items: Book[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
 
 const statusConfig: Record<
   BookStatus,
@@ -203,41 +66,64 @@ const statusConfig: Record<
 > = {
   PUBLISHED: { label: "Published", variant: "success" },
   DRAFT: { label: "Draft", variant: "secondary" },
-  UNDER_REVIEW: { label: "Under Review", variant: "warning" },
+  SUBMITTED: { label: "Under Review", variant: "warning" },
   REJECTED: { label: "Rejected", variant: "destructive" },
 };
 
 export default function AuthorBooksPage() {
+  const [booksData, setBooksData] = useState<BooksResponse | null>(null);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [activeTab, setActiveTab] = useState("all");
+  const [page, setPage] = useState(1);
 
-  const filteredBooks = useMemo(() => {
-    let books = [...mockBooks];
+  useEffect(() => {
+    fetchBooks();
+  }, [page, search, sortBy, sortOrder, activeTab]);
 
-    if (search) {
-      books = books.filter((b) =>
-        b.title.toLowerCase().includes(search.toLowerCase())
-      );
-    }
+  const fetchBooks = async () => {
+    setLoading(true);
+    try {
+      const params = new URLSearchParams({
+        page: page.toString(),
+        pageSize: "10",
+        sortBy,
+        sortOrder,
+      });
 
-    books.sort((a, b) => {
-      const aVal = a[sortBy as keyof MockBook] ?? 0;
-      const bVal = b[sortBy as keyof MockBook] ?? 0;
-      if (typeof aVal === "number" && typeof bVal === "number") {
-        return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
+      if (search) params.set("search", search);
+      if (activeTab !== "all") {
+        const statusMap: Record<string, string> = {
+          published: "PUBLISHED",
+          draft: "DRAFT",
+          under_review: "SUBMITTED",
+          rejected: "REJECTED",
+        };
+        params.set("status", statusMap[activeTab] || "");
       }
-      return sortOrder === "asc"
-        ? String(aVal).localeCompare(String(bVal))
-        : String(bVal).localeCompare(String(aVal));
-    });
 
-    return books;
-  }, [search, sortBy, sortOrder]);
+      const response = await fetch(`/api/author/books?${params.toString()}`);
+      const json = await response.json();
+      if (json.success) {
+        setBooksData(json.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch books:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const getBooksByStatus = (status?: BookStatus) => {
-    if (!status) return filteredBooks;
-    return filteredBooks.filter((b) => b.status === status);
+  const handleSearch = (value: string) => {
+    setSearch(value);
+    setPage(1);
+  };
+
+  const handleTabChange = (value: string) => {
+    setActiveTab(value);
+    setPage(1);
   };
 
   const toggleSort = (field: string) => {
@@ -248,6 +134,9 @@ export default function AuthorBooksPage() {
       setSortOrder("desc");
     }
   };
+
+  const books = booksData?.items || [];
+  const totalPages = booksData?.totalPages || 1;
 
   return (
     <motion.div
@@ -262,7 +151,7 @@ export default function AuthorBooksPage() {
             Manage and track all your published books.
           </p>
         </div>
-        <Button asChild>
+        <Button asChild className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]">
           <Link href="/author/books/new">
             <Plus className="h-4 w-4" />
             Upload New Book
@@ -276,7 +165,7 @@ export default function AuthorBooksPage() {
           <Input
             placeholder="Search books..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => handleSearch(e.target.value)}
             className="pl-9"
           />
         </div>
@@ -289,9 +178,9 @@ export default function AuthorBooksPage() {
             <SelectContent>
               <SelectItem value="createdAt">Date Created</SelectItem>
               <SelectItem value="title">Title</SelectItem>
-              <SelectItem value="totalSales">Sales</SelectItem>
-              <SelectItem value="totalRevenue">Revenue</SelectItem>
-              <SelectItem value="averageRating">Rating</SelectItem>
+              <SelectItem value="sales">Sales</SelectItem>
+              <SelectItem value="revenue">Revenue</SelectItem>
+              <SelectItem value="rating">Rating</SelectItem>
             </SelectContent>
           </Select>
           <Button
@@ -304,40 +193,72 @@ export default function AuthorBooksPage() {
         </div>
       </div>
 
-      <Tabs defaultValue="all">
+      <Tabs value={activeTab} onValueChange={handleTabChange}>
         <TabsList>
           <TabsTrigger value="all">
-            All ({filteredBooks.length})
+            All ({booksData?.total || 0})
           </TabsTrigger>
           <TabsTrigger value="published">
-            Published ({getBooksByStatus("PUBLISHED").length})
+            Published
           </TabsTrigger>
           <TabsTrigger value="draft">
-            Draft ({getBooksByStatus("DRAFT").length})
+            Draft
           </TabsTrigger>
           <TabsTrigger value="under_review">
-            Under Review ({getBooksByStatus("UNDER_REVIEW").length})
+            Under Review
+          </TabsTrigger>
+          <TabsTrigger value="rejected">
+            Rejected
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="all" className="mt-4">
-          <BooksTable books={filteredBooks} />
-        </TabsContent>
-        <TabsContent value="published" className="mt-4">
-          <BooksTable books={getBooksByStatus("PUBLISHED")} />
-        </TabsContent>
-        <TabsContent value="draft" className="mt-4">
-          <BooksTable books={getBooksByStatus("DRAFT")} />
-        </TabsContent>
-        <TabsContent value="under_review" className="mt-4">
-          <BooksTable books={getBooksByStatus("UNDER_REVIEW")} />
+        <TabsContent value={activeTab} className="mt-4">
+          {loading ? (
+            <Card>
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  {[1, 2, 3, 4, 5].map((i) => (
+                    <div key={i} className="h-16 bg-muted animate-pulse rounded" />
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <BooksTable books={books} />
+          )}
         </TabsContent>
       </Tabs>
+
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">
+            Page {page} of {totalPages}
+          </p>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setPage(Math.max(1, page - 1))}
+              disabled={page === 1}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setPage(Math.min(totalPages, page + 1))}
+              disabled={page === totalPages}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 }
 
-function BooksTable({ books }: { books: MockBook[] }) {
+function BooksTable({ books }: { books: Book[] }) {
   if (books.length === 0) {
     return (
       <Card>
@@ -347,6 +268,12 @@ function BooksTable({ books }: { books: MockBook[] }) {
           <p className="text-sm text-muted-foreground">
             Try adjusting your search or filters.
           </p>
+          <Button asChild className="mt-4 bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]">
+            <Link href="/author/books/new">
+              <Plus className="h-4 w-4" />
+              Upload New Book
+            </Link>
+          </Button>
         </CardContent>
       </Card>
     );
@@ -364,6 +291,9 @@ function BooksTable({ books }: { books: MockBook[] }) {
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
                   Title
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
+                  Category
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">
                   Status
@@ -384,16 +314,24 @@ function BooksTable({ books }: { books: MockBook[] }) {
             </thead>
             <tbody>
               {books.map((book) => {
-                const status = statusConfig[book.status];
+                const status = statusConfig[book.status] || statusConfig.DRAFT;
                 return (
                   <tr
                     key={book.id}
                     className="border-b transition-colors hover:bg-muted/50"
                   >
                     <td className="px-4 py-3">
-                      <div className="flex h-12 w-9 items-center justify-center rounded-md bg-muted">
-                        <BookOpen className="h-5 w-5 text-muted-foreground" />
-                      </div>
+                      {book.coverImage ? (
+                        <img
+                          src={book.coverImage}
+                          alt={book.title}
+                          className="h-12 w-9 rounded-md object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-12 w-9 items-center justify-center rounded-md bg-muted">
+                          <BookOpen className="h-5 w-5 text-muted-foreground" />
+                        </div>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <div>
@@ -403,6 +341,9 @@ function BooksTable({ books }: { books: MockBook[] }) {
                           {formatDate(book.createdAt)}
                         </p>
                       </div>
+                    </td>
+                    <td className="px-4 py-3 text-sm">
+                      {book.category?.name || "—"}
                     </td>
                     <td className="px-4 py-3">
                       <Badge variant={status.variant}>{status.label}</Badge>

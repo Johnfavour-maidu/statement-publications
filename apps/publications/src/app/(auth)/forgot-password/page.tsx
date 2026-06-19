@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowLeft, Mail, Send } from "lucide-react";
+import { ArrowLeft, Mail, Send, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,14 +12,34 @@ export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
+
+    try {
+      const res = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || "Something went wrong. Please try again.");
+        setIsLoading(false);
+        return;
+      }
+
       setIsSubmitted(true);
-    }, 2000);
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -55,13 +75,13 @@ export default function ForgotPasswordPage() {
             <div className="space-y-2">
               <h2 className="font-semibold">Check your email</h2>
               <p className="text-sm text-muted-foreground">
-                We&apos;ve sent a password reset link to{" "}
-                <span className="font-medium text-foreground">{email}</span>.
-                Please check your inbox.
+                If an account exists with{" "}
+                <span className="font-medium text-foreground">{email}</span>,
+                we&apos;ve sent a password reset link. Please check your inbox.
               </p>
             </div>
             <div className="space-y-3">
-              <Button variant="outline" className="w-full" onClick={() => setIsSubmitted(false)}>
+              <Button variant="outline" className="w-full" onClick={() => { setIsSubmitted(false); setEmail(""); }}>
                 Try a different email
               </Button>
               <Link
@@ -75,6 +95,12 @@ export default function ForgotPasswordPage() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700">
+                {error}
+              </div>
+            )}
+
             <div className="space-y-2">
               <Label htmlFor="email">Email address</Label>
               <div className="relative">
@@ -85,14 +111,26 @@ export default function ForgotPasswordPage() {
                   placeholder="you@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-9"
+                  className="pl-9 focus-visible:ring-[#D8B27A]"
                   required
+                  disabled={isLoading}
                 />
               </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Sending reset link..." : "Send Reset Link"}
+            <Button
+              type="submit"
+              className="w-full bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#D8B27A]/90"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Sending reset link...
+                </>
+              ) : (
+                "Send Reset Link"
+              )}
             </Button>
 
             <div className="text-center">

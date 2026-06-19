@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   Globe,
@@ -10,6 +10,7 @@ import {
   ToggleLeft,
   Save,
   Upload,
+  Loader2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -23,10 +24,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const container = {
   hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.05 },
-  },
+  show: { opacity: 1, transition: { staggerChildren: 0.05 } },
 };
 
 const item = {
@@ -35,6 +33,9 @@ const item = {
 };
 
 export default function AdminSettingsPage() {
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState("");
+
   const [platformSettings, setPlatformSettings] = useState({
     name: "Statement Publications",
     tagline: "Discover African Literature at Its Finest",
@@ -84,110 +85,111 @@ export default function AdminSettingsPage() {
     betaFeatures: false,
   });
 
+  const fetchSettings = useCallback(async () => {
+    try {
+      const res = await fetch("/api/admin/settings");
+      const json = await res.json();
+      if (json.success) {
+        const d = json.data;
+        setPlatformSettings((prev) => ({ ...prev, ...d.platform }));
+        setPaymentSettings(d.payment);
+        setEmailSettings(d.email);
+        setCommissionRates(d.commission);
+        setFeatureToggles(d.features);
+      }
+    } catch {
+      // use defaults
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSettings();
+  }, [fetchSettings]);
+
+  const handleSave = async (section: string) => {
+    setSaving(true);
+    setMessage("");
+    try {
+      const body: Record<string, unknown> = {};
+      if (section === "platform") body.platform = platformSettings;
+      if (section === "payment") body.payment = paymentSettings;
+      if (section === "email") body.email = emailSettings;
+      if (section === "commission") body.commission = commissionRates;
+      if (section === "features") body.features = featureToggles;
+
+      const res = await fetch("/api/admin/settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setMessage("Settings saved successfully.");
+        setTimeout(() => setMessage(""), 3000);
+      }
+    } catch {
+      setMessage("Failed to save settings.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
-      <motion.div variants={item}>
-        <h1 className="text-2xl font-bold tracking-tight">Platform Settings</h1>
-        <p className="text-muted-foreground">
-          Configure platform settings, payment options, and feature toggles.
-        </p>
+      <motion.div variants={item} className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Platform Settings</h1>
+          <p className="text-muted-foreground">Configure platform settings, payment options, and feature toggles.</p>
+        </div>
+        {message && (
+          <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">{message}</span>
+        )}
       </motion.div>
 
       <motion.div variants={item}>
         <Tabs defaultValue="platform">
           <TabsList>
-            <TabsTrigger value="platform">
-              <Globe className="mr-1 h-3.5 w-3.5" />
-              Platform
-            </TabsTrigger>
-            <TabsTrigger value="payment">
-              <CreditCard className="mr-1 h-3.5 w-3.5" />
-              Payment
-            </TabsTrigger>
-            <TabsTrigger value="email">
-              <Mail className="mr-1 h-3.5 w-3.5" />
-              Email
-            </TabsTrigger>
-            <TabsTrigger value="commission">
-              <Percent className="mr-1 h-3.5 w-3.5" />
-              Commission
-            </TabsTrigger>
-            <TabsTrigger value="features">
-              <ToggleLeft className="mr-1 h-3.5 w-3.5" />
-              Features
-            </TabsTrigger>
+            <TabsTrigger value="platform"><Globe className="mr-1 h-3.5 w-3.5" />Platform</TabsTrigger>
+            <TabsTrigger value="payment"><CreditCard className="mr-1 h-3.5 w-3.5" />Payment</TabsTrigger>
+            <TabsTrigger value="email"><Mail className="mr-1 h-3.5 w-3.5" />Email</TabsTrigger>
+            <TabsTrigger value="commission"><Percent className="mr-1 h-3.5 w-3.5" />Commission</TabsTrigger>
+            <TabsTrigger value="features"><ToggleLeft className="mr-1 h-3.5 w-3.5" />Features</TabsTrigger>
           </TabsList>
 
           <TabsContent value="platform" className="mt-6">
             <Card>
               <CardHeader>
                 <CardTitle>Platform Settings</CardTitle>
-                <CardDescription>
-                  Configure your platform name, description, and general settings.
-                </CardDescription>
+                <CardDescription>Configure your platform name, description, and general settings.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex items-center gap-6">
                   <Avatar className="h-20 w-20">
-                    <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">
-                      SP
-                    </AvatarFallback>
+                    <AvatarFallback className="bg-primary/10 text-primary text-2xl font-bold">SP</AvatarFallback>
                   </Avatar>
                   <div>
-                    <Button variant="outline" size="sm">
-                      <Upload className="mr-1 h-4 w-4" />
-                      Upload Logo
-                    </Button>
-                    <p className="mt-2 text-xs text-muted-foreground">
-                      Recommended: 512x512px PNG or SVG
-                    </p>
+                    <Button variant="outline" size="sm"><Upload className="mr-1 h-4 w-4" />Upload Logo</Button>
+                    <p className="mt-2 text-xs text-muted-foreground">Recommended: 512x512px PNG or SVG</p>
                   </div>
                 </div>
-
                 <div className="space-y-2">
                   <Label>Platform Name</Label>
-                  <Input
-                    value={platformSettings.name}
-                    onChange={(e) =>
-                      setPlatformSettings({ ...platformSettings, name: e.target.value })
-                    }
-                  />
+                  <Input value={platformSettings.name} onChange={(e) => setPlatformSettings({ ...platformSettings, name: e.target.value })} />
                 </div>
-
                 <div className="space-y-2">
                   <Label>Tagline</Label>
-                  <Input
-                    value={platformSettings.tagline}
-                    onChange={(e) =>
-                      setPlatformSettings({ ...platformSettings, tagline: e.target.value })
-                    }
-                  />
+                  <Input value={platformSettings.tagline} onChange={(e) => setPlatformSettings({ ...platformSettings, tagline: e.target.value })} />
                 </div>
-
                 <div className="space-y-2">
                   <Label>Description</Label>
-                  <Textarea
-                    value={platformSettings.description}
-                    onChange={(e) =>
-                      setPlatformSettings({ ...platformSettings, description: e.target.value })
-                    }
-                    rows={3}
-                  />
+                  <Textarea value={platformSettings.description} onChange={(e) => setPlatformSettings({ ...platformSettings, description: e.target.value })} rows={3} />
                 </div>
-
                 <div className="space-y-2">
                   <Label>Support Email</Label>
-                  <Input
-                    type="email"
-                    value={platformSettings.supportEmail}
-                    onChange={(e) =>
-                      setPlatformSettings({ ...platformSettings, supportEmail: e.target.value })
-                    }
-                  />
+                  <Input type="email" value={platformSettings.supportEmail} onChange={(e) => setPlatformSettings({ ...platformSettings, supportEmail: e.target.value })} />
                 </div>
-
-                <Button>
-                  <Save className="mr-2 h-4 w-4" />
+                <Button onClick={() => handleSave("platform")} disabled={saving}>
+                  {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                   Save Changes
                 </Button>
               </CardContent>
@@ -199,9 +201,7 @@ export default function AdminSettingsPage() {
               <Card>
                 <CardHeader>
                   <CardTitle>Payment Gateways</CardTitle>
-                  <CardDescription>
-                    Enable or disable payment methods for your platform.
-                  </CardDescription>
+                  <CardDescription>Enable or disable payment methods for your platform.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {[
@@ -213,60 +213,35 @@ export default function AdminSettingsPage() {
                     <div key={gateway.key} className="flex items-center justify-between rounded-lg border p-4">
                       <div className="space-y-0.5">
                         <p className="font-medium">{gateway.label}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {gateway.description}
-                        </p>
+                        <p className="text-sm text-muted-foreground">{gateway.description}</p>
                       </div>
                       <Switch
                         checked={paymentSettings[gateway.key as keyof typeof paymentSettings] as boolean}
-                        onCheckedChange={(checked) =>
-                          setPaymentSettings({ ...paymentSettings, [gateway.key]: checked })
-                        }
+                        onCheckedChange={(checked) => setPaymentSettings({ ...paymentSettings, [gateway.key]: checked })}
                       />
                     </div>
                   ))}
                 </CardContent>
               </Card>
-
               <Card>
                 <CardHeader>
                   <CardTitle>Payout Settings</CardTitle>
-                  <CardDescription>
-                    Configure how authors receive their earnings.
-                  </CardDescription>
+                  <CardDescription>Configure how authors receive their earnings.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label>Minimum Payout Amount ($)</Label>
-                    <Input
-                      type="number"
-                      value={paymentSettings.minimumPayout}
-                      onChange={(e) =>
-                        setPaymentSettings({
-                          ...paymentSettings,
-                          minimumPayout: Number(e.target.value),
-                        })
-                      }
-                    />
+                    <Input type="number" value={paymentSettings.minimumPayout} onChange={(e) => setPaymentSettings({ ...paymentSettings, minimumPayout: Number(e.target.value) })} />
                   </div>
-
                   <div className="flex items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                       <p className="font-medium">Automatic Payouts</p>
-                      <p className="text-sm text-muted-foreground">
-                        Automatically process payouts on schedule
-                      </p>
+                      <p className="text-sm text-muted-foreground">Automatically process payouts on schedule</p>
                     </div>
-                    <Switch
-                      checked={paymentSettings.autoPayout}
-                      onCheckedChange={(checked) =>
-                        setPaymentSettings({ ...paymentSettings, autoPayout: checked })
-                      }
-                    />
+                    <Switch checked={paymentSettings.autoPayout} onCheckedChange={(checked) => setPaymentSettings({ ...paymentSettings, autoPayout: checked })} />
                   </div>
-
-                  <Button>
-                    <Save className="mr-2 h-4 w-4" />
+                  <Button onClick={() => handleSave("payment")} disabled={saving}>
+                    {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                     Save Changes
                   </Button>
                 </CardContent>
@@ -279,9 +254,7 @@ export default function AdminSettingsPage() {
               <Card>
                 <CardHeader>
                   <CardTitle>Email Notifications</CardTitle>
-                  <CardDescription>
-                    Configure which email notifications are sent to users.
-                  </CardDescription>
+                  <CardDescription>Configure which email notifications are sent to users.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {[
@@ -295,52 +268,34 @@ export default function AdminSettingsPage() {
                     <div key={notification.key} className="flex items-center justify-between rounded-lg border p-4">
                       <div className="space-y-0.5">
                         <p className="font-medium">{notification.label}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {notification.description}
-                        </p>
+                        <p className="text-sm text-muted-foreground">{notification.description}</p>
                       </div>
                       <Switch
                         checked={emailSettings[notification.key as keyof typeof emailSettings] as boolean}
-                        onCheckedChange={(checked) =>
-                          setEmailSettings({ ...emailSettings, [notification.key]: checked })
-                        }
+                        onCheckedChange={(checked) => setEmailSettings({ ...emailSettings, [notification.key]: checked })}
                       />
                     </div>
                   ))}
                 </CardContent>
               </Card>
-
               <Card>
                 <CardHeader>
                   <CardTitle>SMTP Configuration</CardTitle>
-                  <CardDescription>
-                    Configure your email server settings.
-                  </CardDescription>
+                  <CardDescription>Configure your email server settings.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>SMTP Host</Label>
-                      <Input
-                        value={emailSettings.smtpHost}
-                        onChange={(e) =>
-                          setEmailSettings({ ...emailSettings, smtpHost: e.target.value })
-                        }
-                      />
+                      <Input value={emailSettings.smtpHost} onChange={(e) => setEmailSettings({ ...emailSettings, smtpHost: e.target.value })} />
                     </div>
                     <div className="space-y-2">
                       <Label>SMTP Port</Label>
-                      <Input
-                        value={emailSettings.smtpPort}
-                        onChange={(e) =>
-                          setEmailSettings({ ...emailSettings, smtpPort: e.target.value })
-                        }
-                      />
+                      <Input value={emailSettings.smtpPort} onChange={(e) => setEmailSettings({ ...emailSettings, smtpPort: e.target.value })} />
                     </div>
                   </div>
-
-                  <Button>
-                    <Save className="mr-2 h-4 w-4" />
+                  <Button onClick={() => handleSave("email")} disabled={saving}>
+                    {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                     Save Changes
                   </Button>
                 </CardContent>
@@ -352,100 +307,37 @@ export default function AdminSettingsPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Commission Rates</CardTitle>
-                <CardDescription>
-                  Set the platform commission rates for different book formats and author tiers.
-                </CardDescription>
+                <CardDescription>Set the platform commission rates for different book formats and author tiers.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label>Standard Commission Rate (%)</Label>
-                    <Input
-                      type="number"
-                      value={commissionRates.standardRate}
-                      onChange={(e) =>
-                        setCommissionRates({
-                          ...commissionRates,
-                          standardRate: Number(e.target.value),
-                        })
-                      }
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Applied to all standard authors
-                    </p>
+                    <Input type="number" value={commissionRates.standardRate} onChange={(e) => setCommissionRates({ ...commissionRates, standardRate: Number(e.target.value) })} />
+                    <p className="text-xs text-muted-foreground">Applied to all standard authors</p>
                   </div>
-
                   <div className="space-y-2">
                     <Label>Premium Author Rate (%)</Label>
-                    <Input
-                      type="number"
-                      value={commissionRates.premiumAuthorRate}
-                      onChange={(e) =>
-                        setCommissionRates({
-                          ...commissionRates,
-                          premiumAuthorRate: Number(e.target.value),
-                        })
-                      }
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      For authors exceeding threshold
-                    </p>
+                    <Input type="number" value={commissionRates.premiumAuthorRate} onChange={(e) => setCommissionRates({ ...commissionRates, premiumAuthorRate: Number(e.target.value) })} />
+                    <p className="text-xs text-muted-foreground">For authors exceeding threshold</p>
                   </div>
-
                   <div className="space-y-2">
                     <Label>Audiobook Commission (%)</Label>
-                    <Input
-                      type="number"
-                      value={commissionRates.audiobookRate}
-                      onChange={(e) =>
-                        setCommissionRates({
-                          ...commissionRates,
-                          audiobookRate: Number(e.target.value),
-                        })
-                      }
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Applied to audiobook sales
-                    </p>
+                    <Input type="number" value={commissionRates.audiobookRate} onChange={(e) => setCommissionRates({ ...commissionRates, audiobookRate: Number(e.target.value) })} />
+                    <p className="text-xs text-muted-foreground">Applied to audiobook sales</p>
                   </div>
-
                   <div className="space-y-2">
                     <Label>Print Book Commission (%)</Label>
-                    <Input
-                      type="number"
-                      value={commissionRates.printRate}
-                      onChange={(e) =>
-                        setCommissionRates({
-                          ...commissionRates,
-                          printRate: Number(e.target.value),
-                        })
-                      }
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Applied to print book sales
-                    </p>
+                    <Input type="number" value={commissionRates.printRate} onChange={(e) => setCommissionRates({ ...commissionRates, printRate: Number(e.target.value) })} />
+                    <p className="text-xs text-muted-foreground">Applied to print book sales</p>
                   </div>
                 </div>
-
                 <div className="space-y-2">
                   <Label>Premium Author Threshold (total sales $)</Label>
-                  <Input
-                    type="number"
-                    value={commissionRates.premiumThreshold}
-                    onChange={(e) =>
-                      setCommissionRates({
-                        ...commissionRates,
-                        premiumThreshold: Number(e.target.value),
-                      })
-                    }
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Authors reaching this sales threshold qualify for premium rates
-                  </p>
+                  <Input type="number" value={commissionRates.premiumThreshold} onChange={(e) => setCommissionRates({ ...commissionRates, premiumThreshold: Number(e.target.value) })} />
+                  <p className="text-xs text-muted-foreground">Authors reaching this sales threshold qualify for premium rates</p>
                 </div>
-
                 <Separator />
-
                 <div className="rounded-lg bg-muted/50 p-4">
                   <h4 className="font-medium mb-2">Commission Preview</h4>
                   <div className="grid grid-cols-2 gap-4 text-sm">
@@ -467,9 +359,8 @@ export default function AdminSettingsPage() {
                     </div>
                   </div>
                 </div>
-
-                <Button>
-                  <Save className="mr-2 h-4 w-4" />
+                <Button onClick={() => handleSave("commission")} disabled={saving}>
+                  {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                   Save Changes
                 </Button>
               </CardContent>
@@ -480,9 +371,7 @@ export default function AdminSettingsPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Feature Toggles</CardTitle>
-                <CardDescription>
-                  Enable or disable platform features.
-                </CardDescription>
+                <CardDescription>Enable or disable platform features.</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {[
@@ -498,21 +387,16 @@ export default function AdminSettingsPage() {
                   <div key={feature.key} className="flex items-center justify-between rounded-lg border p-4">
                     <div className="space-y-0.5">
                       <p className="font-medium">{feature.label}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {feature.description}
-                      </p>
+                      <p className="text-sm text-muted-foreground">{feature.description}</p>
                     </div>
                     <Switch
                       checked={featureToggles[feature.key as keyof typeof featureToggles]}
-                      onCheckedChange={(checked) =>
-                        setFeatureToggles({ ...featureToggles, [feature.key]: checked })
-                      }
+                      onCheckedChange={(checked) => setFeatureToggles({ ...featureToggles, [feature.key]: checked })}
                     />
                   </div>
                 ))}
-
-                <Button>
-                  <Save className="mr-2 h-4 w-4" />
+                <Button onClick={() => handleSave("features")} disabled={saving}>
+                  {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
                   Save Changes
                 </Button>
               </CardContent>

@@ -1,52 +1,47 @@
 "use client";
 
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
-
-const mockUser = {
-  name: "John Admin",
-  email: "admin@statementpub.com",
-  image: null,
-  role: "ADMIN" as const,
-};
-
-const mockNotifications = [
-  {
-    id: "1",
-    title: "New Book Submission",
-    message: "Amara Okafor submitted 'The Silent Echo' for review.",
-    isRead: false,
-    createdAt: new Date(Date.now() - 1800000).toISOString(),
-  },
-  {
-    id: "2",
-    title: "Withdrawal Request",
-    message: "David Mensah requested a withdrawal of $245.00.",
-    isRead: false,
-    createdAt: new Date(Date.now() - 3600000).toISOString(),
-  },
-  {
-    id: "3",
-    title: "New Author Registration",
-    message: "Nadia El-Amin registered as a new author.",
-    isRead: false,
-    createdAt: new Date(Date.now() - 7200000).toISOString(),
-  },
-  {
-    id: "4",
-    title: "Payout Processed",
-    message: "Monthly payouts totaling $4,320.00 have been processed.",
-    isRead: true,
-    createdAt: new Date(Date.now() - 86400000).toISOString(),
-  },
-];
 
 export default function AdminDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+    if (status === "authenticated" && (session?.user as { role?: string })?.role !== "ADMIN" && (session?.user as { role?: string })?.role !== "SUPER_ADMIN") {
+      router.push("/author/dashboard");
+    }
+  }, [status, session, router]);
+
+  if (status === "loading") {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-[#8A6A4A]" />
+      </div>
+    );
+  }
+
+  if (!session) return null;
+
+  const user = {
+    name: session.user?.name,
+    email: session.user?.email,
+    image: session.user?.image,
+    role: (session.user as { role?: string })?.role as "ADMIN" | "SUPER_ADMIN",
+  };
+
   return (
-    <DashboardLayout user={mockUser} notifications={mockNotifications}>
+    <DashboardLayout user={user}>
       {children}
     </DashboardLayout>
   );

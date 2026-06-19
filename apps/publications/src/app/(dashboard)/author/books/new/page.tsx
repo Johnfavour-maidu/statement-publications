@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   ArrowRight,
@@ -82,6 +83,7 @@ interface FormData {
   discount: string;
   royaltyRate: string;
   currency: string;
+  tags: string[];
 }
 
 const initialFormData: FormData = {
@@ -99,13 +101,16 @@ const initialFormData: FormData = {
   discount: "",
   royaltyRate: "70",
   currency: "USD",
+  tags: [],
 };
 
 export default function NewBookPage() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isDragOver, setIsDragOver] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const updateField = (field: keyof FormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -245,6 +250,92 @@ export default function NewBookPage() {
     }
   };
 
+  const uploadFile = async (file: File): Promise<string | null> => {
+    const formDataObj = new FormData();
+    formDataObj.append("file", file);
+
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formDataObj,
+      });
+      const data = await response.json();
+      if (data.success) {
+        return data.data.url;
+      }
+      return null;
+    } catch (error) {
+      console.error("Upload failed:", error);
+      return null;
+    }
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+
+    try {
+      let coverUrl = null;
+      let manuscriptUrl = null;
+
+      if (formData.coverFile) {
+        coverUrl = await uploadFile(formData.coverFile);
+      }
+
+      if (formData.manuscriptFile) {
+        manuscriptUrl = await uploadFile(formData.manuscriptFile);
+      }
+
+      const categoryResponse = await fetch("/api/categories");
+      const categoryData = await categoryResponse.json();
+      let categoryId = null;
+
+      if (categoryData.success) {
+        const category = categoryData.data.find(
+          (c: { name: string }) => c.name === formData.category
+        );
+        if (category) {
+          categoryId = category.id;
+        }
+      }
+
+      const response = await fetch("/api/books", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: formData.title,
+          subtitle: formData.subtitle || undefined,
+          description: formData.description,
+          categoryId,
+          isbn: formData.isbn || undefined,
+          language: formData.language,
+          coverImage: coverUrl,
+          manuscriptFile: manuscriptUrl,
+          format: "EBOOK",
+          price: parseFloat(formData.price),
+          discountPrice: formData.discount ? parseFloat(formData.discount) : undefined,
+          currency: formData.currency,
+          royaltyRate: parseInt(formData.royaltyRate),
+          tags: formData.tags,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        router.push("/author/books");
+      } else {
+        alert(data.error || "Failed to create book");
+      }
+    } catch (error) {
+      console.error("Submit failed:", error);
+      alert("Failed to create book. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const progress = (currentStep / steps.length) * 100;
 
   return (
@@ -277,9 +368,9 @@ export default function NewBookPage() {
                   className={cn(
                     "flex h-8 w-8 items-center justify-center rounded-full border-2 text-xs font-medium transition-colors",
                     currentStep > step.id
-                      ? "border-primary bg-primary text-primary-foreground"
+                      ? "border-[#D8B27A] bg-[#D8B27A] text-[#1D1D1D]"
                       : currentStep === step.id
-                        ? "border-primary bg-primary/10 text-primary"
+                        ? "border-[#D8B27A] bg-[#D8B27A]/10 text-[#D8B27A]"
                         : "border-muted text-muted-foreground"
                   )}
                 >
@@ -423,7 +514,7 @@ export default function NewBookPage() {
                   className={cn(
                     "flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-12 transition-colors",
                     isDragOver
-                      ? "border-primary bg-primary/5"
+                      ? "border-[#D8B27A] bg-[#D8B27A]/5"
                       : "border-muted-foreground/25",
                     errors.manuscript && "border-destructive"
                   )}
@@ -436,8 +527,8 @@ export default function NewBookPage() {
                 >
                   {formData.manuscriptFile ? (
                     <div className="flex flex-col items-center gap-3">
-                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                        <FileText className="h-8 w-8 text-primary" />
+                      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#D8B27A]/10">
+                        <FileText className="h-8 w-8 text-[#D8B27A]" />
                       </div>
                       <div className="text-center">
                         <p className="font-medium">{formData.manuscriptName}</p>
@@ -509,7 +600,7 @@ export default function NewBookPage() {
                   className={cn(
                     "flex flex-col items-center justify-center rounded-lg border-2 border-dashed p-12 transition-colors",
                     isDragOver
-                      ? "border-primary bg-primary/5"
+                      ? "border-[#D8B27A] bg-[#D8B27A]/5"
                       : "border-muted-foreground/25",
                     errors.cover && "border-destructive"
                   )}
@@ -758,7 +849,7 @@ export default function NewBookPage() {
                         Manuscript
                       </p>
                       <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-primary" />
+                        <FileText className="h-4 w-4 text-[#D8B27A]" />
                         <p>{formData.manuscriptName || "Not uploaded"}</p>
                       </div>
                     </div>
@@ -812,8 +903,8 @@ export default function NewBookPage() {
                 <CardTitle>Submit for Review</CardTitle>
               </CardHeader>
               <CardContent className="flex flex-col items-center justify-center py-12 text-center">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
-                  <BookOpen className="h-10 w-10 text-primary" />
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-[#D8B27A]/10">
+                  <BookOpen className="h-10 w-10 text-[#D8B27A]" />
                 </div>
                 <h3 className="mt-6 text-xl font-semibold">
                   Ready to Submit?
@@ -828,9 +919,23 @@ export default function NewBookPage() {
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back to Edit
                   </Button>
-                  <Button size="lg">
-                    <Send className="mr-2 h-4 w-4" />
-                    Submit for Review
+                  <Button
+                    size="lg"
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                        Submitting...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="mr-2 h-4 w-4" />
+                        Submit for Review
+                      </>
+                    )}
                   </Button>
                 </div>
               </CardContent>
@@ -849,7 +954,10 @@ export default function NewBookPage() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Previous
           </Button>
-          <Button onClick={nextStep}>
+          <Button
+            onClick={nextStep}
+            className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]"
+          >
             {currentStep === steps.length - 1 ? "Review" : "Next"}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>

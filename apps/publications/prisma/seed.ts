@@ -98,7 +98,7 @@ async function main() {
   });
 
   const author3 = await prisma.user.create({
-    data: { email: "ama.okafor@statementpub.com", name: "Ama Okafor", password: authorPassword, role: "AUTHOR", isVerified: true, emailVerified: new Date() },
+    data: { email: "ame.okafor@statementpub.com", name: "Ame Okafor", password: authorPassword, role: "AUTHOR", isVerified: true, emailVerified: new Date() },
   });
 
   const reader = await prisma.user.create({

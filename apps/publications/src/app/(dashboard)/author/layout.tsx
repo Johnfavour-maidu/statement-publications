@@ -1,45 +1,44 @@
 "use client";
 
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
 import { DashboardLayout } from "@/components/layout/dashboard-layout";
-
-const mockUser = {
-  name: "Adaeze Nwosu",
-  email: "adaeze@statementpub.com",
-  image: null,
-  role: "AUTHOR" as const,
-};
-
-const mockNotifications = [
-  {
-    id: "1",
-    title: "Book Approved",
-    message: "Your book 'The Last Horizon' has been approved for publication.",
-    isRead: false,
-    createdAt: new Date(Date.now() - 3600000).toISOString(),
-  },
-  {
-    id: "2",
-    title: "New Sale",
-    message: "You earned $12.99 from a sale of 'Echoes of Tomorrow'.",
-    isRead: false,
-    createdAt: new Date(Date.now() - 7200000).toISOString(),
-  },
-  {
-    id: "3",
-    title: "Royalty Paid",
-    message: "Your monthly royalty of $342.50 has been processed.",
-    isRead: true,
-    createdAt: new Date(Date.now() - 86400000).toISOString(),
-  },
-];
 
 export default function AuthorDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [status, router]);
+
+  if (status === "loading") {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-[#8A6A4A]" />
+      </div>
+    );
+  }
+
+  if (!session) return null;
+
+  const user = {
+    name: session.user?.name,
+    email: session.user?.email,
+    image: session.user?.image,
+    role: (session.user as { role?: string })?.role as "AUTHOR" | "ADMIN" | "SUPER_ADMIN",
+  };
+
   return (
-    <DashboardLayout user={mockUser} notifications={mockNotifications}>
+    <DashboardLayout user={user}>
       {children}
     </DashboardLayout>
   );

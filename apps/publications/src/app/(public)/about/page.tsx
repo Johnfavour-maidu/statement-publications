@@ -28,30 +28,30 @@ function AnimatedSection({ children, className, delay = 0 }: { children: React.R
 }
 
 const coreValues = [
-  { icon: Sparkles, title: "Excellence", description: "We hold ourselves to the highest standards in every manuscript we publish, every service we provide, and every interaction we have with authors.", bg: "bg-amber-200/80", iconColor: "text-amber-800", iconBg: "bg-amber-300", gradientBorder: "from-amber-300 via-amber-400 to-amber-500" },
-  { icon: Lightbulb, title: "Innovation", description: "We continuously push the boundaries of publishing technology to give authors cutting-edge tools and global reach for their work.", bg: "bg-emerald-200/80", iconColor: "text-emerald-800", iconBg: "bg-emerald-300", gradientBorder: "from-emerald-300 via-emerald-400 to-emerald-500" },
-  { icon: Shield, title: "Integrity", description: "Transparency and honesty are at the core of everything we do — from royalty structures to author contracts and communication.", bg: "bg-blue-200/80", iconColor: "text-blue-800", iconBg: "bg-blue-300", gradientBorder: "from-blue-300 via-blue-400 to-blue-500" },
-  { icon: Users, title: "Community", description: "We believe in the power of connecting authors with readers, fostering a supportive network of storytellers and literary enthusiasts.", bg: "bg-rose-200/80", iconColor: "text-rose-800", iconBg: "bg-rose-300", gradientBorder: "from-rose-300 via-rose-400 to-rose-500" },
-  { icon: Palette, title: "Creativity", description: "We celebrate the creative spirit in every author and provide tools that let their unique voice shine through in every published work.", bg: "bg-violet-200/80", iconColor: "text-violet-800", iconBg: "bg-violet-300", gradientBorder: "from-violet-300 via-violet-400 to-violet-500" },
-  { icon: Globe, title: "Global Reach", description: "We empower authors to transcend borders, distributing their stories to readers across continents and cultures worldwide.", bg: "bg-teal-200/80", iconColor: "text-teal-800", iconBg: "bg-teal-300", gradientBorder: "from-teal-300 via-teal-400 to-teal-500" },
+  { icon: Sparkles, title: "Excellence", description: "We hold ourselves to the highest standards in every manuscript we publish, every service we provide, and every interaction we have with authors.", bg: "bg-[#F5EDE3]", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#E0CDB4]", gradientBorder: "from-[#E0CDB4] via-[#C4976F] to-[#B68C5A]" },
+  { icon: Lightbulb, title: "Innovation", description: "We continuously push the boundaries of publishing technology to give authors cutting-edge tools and global reach for their work.", bg: "bg-[#EDE0D0]", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#D4B896]", gradientBorder: "from-[#D4B896] via-[#C79A6B] to-[#A57D4A]" },
+  { icon: Shield, title: "Integrity", description: "Transparency and honesty are at the core of everything we do — from royalty structures to author contracts and communication.", bg: "bg-[#E5D5C1]", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#C79A6B]", gradientBorder: "from-[#C79A6B] via-[#B68C5A] to-[#9A7545]" },
+  { icon: Users, title: "Community", description: "We believe in the power of connecting authors with readers, fostering a supportive network of storytellers and literary enthusiasts.", bg: "bg-[#DED0BE]", iconColor: "text-[#6A4E37]", iconBg: "bg-[#C4976F]", gradientBorder: "from-[#C4976F] via-[#9A7545] to-[#8B5E34]" },
+  { icon: Palette, title: "Creativity", description: "We celebrate the creative spirit in every author and provide tools that let their unique voice shine through in every published work.", bg: "bg-[#D4C0AA]", iconColor: "text-[#6A4E37]", iconBg: "bg-[#B68C5A]", gradientBorder: "from-[#B68C5A] via-[#8B5E34] to-[#7A5230]" },
+  { icon: Globe, title: "Global Reach", description: "We empower authors to transcend borders, distributing their stories to readers across continents and cultures worldwide.", bg: "bg-[#C9B49A]", iconColor: "text-[#FFFFFF]", iconBg: "bg-[#8A6A4A]", gradientBorder: "from-[#8A6A4A] via-[#7A5230] to-[#6A3F26]" },
 ];
 
 const whyChooseUs = [
-  { icon: Globe, title: "Global Distribution", description: "Distribute your book to readers in 50+ countries through our worldwide network of retailers, libraries, and distributors.", bg: "bg-amber-200/80", iconColor: "text-amber-800", iconBg: "bg-amber-300", gradientBorder: "from-amber-300 via-amber-400 to-amber-500" },
-  { icon: TrendingUp, title: "Higher Royalty Earnings", description: "Earn up to 70% royalties on every sale — among the highest in the industry. Weekly payouts with full transparency.", bg: "bg-[#F2D8BE]/80", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#D8B27A]", gradientBorder: "from-[#D8B27A] via-[#C9A06A] to-[#EBC9A8]" },
-  { icon: Zap, title: "Easy Publishing Tools", description: "Upload, format, and publish your book in minutes with our intuitive platform. No technical skills required.", bg: "bg-blue-200/80", iconColor: "text-blue-800", iconBg: "bg-blue-300", gradientBorder: "from-blue-300 via-blue-400 to-blue-500" },
-  { icon: Award, title: "Professional Support", description: "Get expert guidance from our team of publishing professionals at every step of your publishing journey.", bg: "bg-violet-200/80", iconColor: "text-violet-800", iconBg: "bg-violet-300", gradientBorder: "from-violet-300 via-violet-400 to-violet-500" },
-  { icon: Rocket, title: "Marketing Opportunities", description: "Leverage our marketing tools, featured placements, and promotional campaigns to maximize your book's visibility.", bg: "bg-rose-200/80", iconColor: "text-rose-800", iconBg: "bg-rose-300", gradientBorder: "from-rose-300 via-rose-400 to-rose-500" },
-  { icon: Heart, title: "Author Community", description: "Join a vibrant community of fellow authors. Share experiences, collaborate, and grow together in your publishing journey.", bg: "bg-teal-200/80", iconColor: "text-teal-800", iconBg: "bg-teal-300", gradientBorder: "from-teal-300 via-teal-400 to-teal-500" },
+  { icon: Globe, title: "Global Distribution", description: "Distribute your book to readers in 50+ countries through our worldwide network of retailers, libraries, and distributors.", bg: "bg-[#F5EDE3]", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#E0CDB4]", gradientBorder: "from-[#E0CDB4] via-[#C4976F] to-[#B68C5A]" },
+  { icon: TrendingUp, title: "Higher Royalty Earnings", description: "Earn up to 70% royalties on every sale — among the highest in the industry. Weekly payouts with full transparency.", bg: "bg-[#EDE0D0]", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#D4B896]", gradientBorder: "from-[#D4B896] via-[#C79A6B] to-[#A57D4A]" },
+  { icon: Zap, title: "Easy Publishing Tools", description: "Upload, format, and publish your book in minutes with our intuitive platform. No technical skills required.", bg: "bg-[#E5D5C1]", iconColor: "text-[#8A6A4A]", iconBg: "bg-[#C79A6B]", gradientBorder: "from-[#C79A6B] via-[#B68C5A] to-[#9A7545]" },
+  { icon: Award, title: "Professional Support", description: "Get expert guidance from our team of publishing professionals at every step of your publishing journey.", bg: "bg-[#DED0BE]", iconColor: "text-[#6A4E37]", iconBg: "bg-[#C4976F]", gradientBorder: "from-[#C4976F] via-[#9A7545] to-[#8B5E34]" },
+  { icon: Rocket, title: "Marketing Opportunities", description: "Leverage our marketing tools, featured placements, and promotional campaigns to maximize your book's visibility.", bg: "bg-[#D4C0AA]", iconColor: "text-[#6A4E37]", iconBg: "bg-[#B68C5A]", gradientBorder: "from-[#B68C5A] via-[#8B5E34] to-[#7A5230]" },
+  { icon: Heart, title: "Author Community", description: "Join a vibrant community of fellow authors. Share experiences, collaborate, and grow together in your publishing journey.", bg: "bg-[#C9B49A]", iconColor: "text-[#FFFFFF]", iconBg: "bg-[#8A6A4A]", gradientBorder: "from-[#8A6A4A] via-[#7A5230] to-[#6A3F26]" },
 ];
 
 const testimonials = [
-  { name: "Kofi Asante", role: "Independent Author", quote: "Statement Publications gave me complete creative control over my work. The publishing process was straightforward, and I had my book live within a week. The royalty structure is the fairest I've seen.", rating: 5, color: "from-amber-500 to-orange-600", bg: "bg-amber-200/80", gradientBorder: "from-amber-300 via-amber-400 to-amber-500", separatorColor: "border-amber-400" },
-  { name: "Abena Osei", role: "Business Author", quote: "As a business consultant, I needed a professional platform to publish my leadership book. Statement delivered exceptional quality — from formatting to global distribution across 40+ countries.", rating: 5, color: "from-emerald-500 to-green-600", bg: "bg-emerald-200/80", gradientBorder: "from-emerald-300 via-emerald-400 to-emerald-500", separatorColor: "border-emerald-400" },
-  { name: "Dr. Emmanuel Mensah", role: "Academic Researcher", quote: "Publishing my research through Statement was seamless. The platform handled complex formatting with ease, and my academic work is now accessible to readers and institutions worldwide.", rating: 5, color: "from-blue-500 to-indigo-600", bg: "bg-blue-200/80", gradientBorder: "from-blue-300 via-blue-400 to-blue-500", separatorColor: "border-blue-400" },
-  { name: "Nana Ama Brown", role: "Children's Book Author", quote: "My children's picture book needed special attention to illustrations. Statement's tools made it easy to showcase vibrant artwork, and the response has been overwhelming.", rating: 5, color: "from-rose-500 to-pink-600", bg: "bg-rose-200/80", gradientBorder: "from-rose-300 via-rose-400 to-rose-500", separatorColor: "border-rose-400" },
-  { name: "Pastor Samuel Koomson", role: "Faith-Based Author", quote: "Statement Publications understood my vision for reaching a global faith community. My devotional book is now available in bookstores across three continents.", rating: 5, color: "from-violet-500 to-purple-600", bg: "bg-violet-200/80", gradientBorder: "from-violet-300 via-violet-400 to-violet-500", separatorColor: "border-violet-400" },
-  { name: "Esi Kyere", role: "Poet & Creative Writer", quote: "Poetry is often overlooked in publishing, but Statement treated my collection with the same care as any bestseller. The formatting preserved every line break, and sales have exceeded my expectations.", rating: 5, color: "from-teal-500 to-emerald-600", bg: "bg-teal-200/80", gradientBorder: "from-teal-300 via-teal-400 to-teal-500", separatorColor: "border-teal-400" },
+  { name: "Kofi Asante", role: "Independent Author", quote: "Statement Publications gave me complete creative control over my work. The publishing process was straightforward, and I had my book live within a week. The royalty structure is the fairest I've seen.", rating: 5, bg: "bg-[#F5EDE3]", gradientBorder: "from-[#E0CDB4] via-[#C4976F] to-[#B68C5A]", separatorColor: "border-[#C4976F]" },
+  { name: "Abena Osei", role: "Business Author", quote: "As a business consultant, I needed a professional platform to publish my leadership book. Statement delivered exceptional quality — from formatting to global distribution across 40+ countries.", rating: 5, bg: "bg-[#EDE0D0]", gradientBorder: "from-[#D4B896] via-[#C79A6B] to-[#A57D4A]", separatorColor: "border-[#C79A6B]" },
+  { name: "Dr. Emmanuel Mensah", role: "Academic Researcher", quote: "Publishing my research through Statement was seamless. The platform handled complex formatting with ease, and my academic work is now accessible to readers and institutions worldwide.", rating: 5, bg: "bg-[#E5D5C1]", gradientBorder: "from-[#C79A6B] via-[#B68C5A] to-[#9A7545]", separatorColor: "border-[#B68C5A]" },
+  { name: "Nana Ama Brown", role: "Children's Book Author", quote: "My children's picture book needed special attention to illustrations. Statement's tools made it easy to showcase vibrant artwork, and the response has been overwhelming.", rating: 5, bg: "bg-[#DED0BE]", gradientBorder: "from-[#C4976F] via-[#9A7545] to-[#8B5E34]", separatorColor: "border-[#9A7545]" },
+  { name: "Pastor Samuel Koomson", role: "Faith-Based Author", quote: "Statement Publications understood my vision for reaching a global faith community. My devotional book is now available in bookstores across three continents.", rating: 5, bg: "bg-[#D4C0AA]", gradientBorder: "from-[#B68C5A] via-[#8B5E34] to-[#7A5230]", separatorColor: "border-[#8B5E34]" },
+  { name: "Esi Kyere", role: "Poet & Creative Writer", quote: "Poetry is often overlooked in publishing, but Statement treated my collection with the same care as any bestseller. The formatting preserved every line break, and sales have exceeded my expectations.", rating: 5, bg: "bg-[#C9B49A]", gradientBorder: "from-[#8A6A4A] via-[#7A5230] to-[#6A3F26]", separatorColor: "border-[#7A5230]" },
 ];
 
 const leadership = [
@@ -139,23 +139,23 @@ export default function AboutPage() {
                           <div className="text-[11px] sm:text-xs text-dark-gray/70">Books Published</div>
                         </div>
                       </div>
-                      <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500">
-                        <div className="text-center p-4 rounded-[10px] bg-amber-50">
-                          <Users className="h-5 w-5 sm:h-6 sm:w-6 mx-auto mb-2 text-amber-700" />
+                      <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#D4B896] via-[#C79A6B] to-[#A57D4A]">
+                        <div className="text-center p-4 rounded-[10px] bg-[#EDE0D0]">
+                          <Users className="h-5 w-5 sm:h-6 sm:w-6 mx-auto mb-2 text-[#8A6A4A]" />
                           <div className="text-xl sm:text-2xl font-bold text-charcoal"><CountUp end={5000} suffix="+" /></div>
                           <div className="text-[11px] sm:text-xs text-dark-gray/70">Active Authors</div>
                         </div>
                       </div>
-                      <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-500">
-                        <div className="text-center p-4 rounded-[10px] bg-emerald-50">
-                          <Globe className="h-5 w-5 sm:h-6 sm:w-6 mx-auto mb-2 text-emerald-700" />
+                      <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#C79A6B] via-[#B68C5A] to-[#9A7545]">
+                        <div className="text-center p-4 rounded-[10px] bg-[#E5D5C1]">
+                          <Globe className="h-5 w-5 sm:h-6 sm:w-6 mx-auto mb-2 text-[#8A6A4A]" />
                           <div className="text-xl sm:text-2xl font-bold text-charcoal"><CountUp end={50} suffix="+" /></div>
                           <div className="text-[11px] sm:text-xs text-dark-gray/70">Countries</div>
                         </div>
                       </div>
-                      <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-blue-300 via-blue-400 to-blue-500">
-                        <div className="text-center p-4 rounded-[10px] bg-blue-50">
-                          <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 mx-auto mb-2 text-blue-700" />
+                      <div className="p-[2px] rounded-xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#B68C5A] via-[#8B5E34] to-[#7A5230]">
+                        <div className="text-center p-4 rounded-[10px] bg-[#DED0BE]">
+                          <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6 mx-auto mb-2 text-[#6A4E37]" />
                           <div className="text-xl sm:text-2xl font-bold text-charcoal">$1M+</div>
                           <div className="text-[11px] sm:text-xs text-dark-gray/70">Royalties Paid</div>
                         </div>
@@ -173,10 +173,10 @@ export default function AboutPage() {
         <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <AnimatedSection>
-              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-amber-300 via-amber-400 to-amber-500 h-full hover:shadow-xxl transition-all duration-300 hover:scale-[1.02]">
-                <div className="rounded-[14px] bg-gradient-to-br from-amber-50 to-amber-100/50 p-6 sm:p-8 h-full">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-300 flex items-center justify-center mb-5 shadow-sm">
-                    <Target className="h-6 w-6 text-amber-800" />
+              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#E0CDB4] via-[#C4976F] to-[#B68C5A] h-full hover:shadow-xxl transition-all duration-300 hover:scale-[1.02]">
+                <div className="rounded-[14px] bg-gradient-to-br from-[#F5EDE3] to-[#EDE0D0] p-6 sm:p-8 h-full">
+                  <div className="w-12 h-12 rounded-2xl bg-[#E0CDB4] flex items-center justify-center mb-5 shadow-sm">
+                    <Target className="h-6 w-6 text-[#8A6A4A]" />
                   </div>
                   <h3 className="text-xl font-bold text-charcoal mb-3">Our Mission</h3>
                   <p className="text-[15px] text-dark-gray/90 leading-relaxed">
@@ -186,10 +186,10 @@ export default function AboutPage() {
               </div>
             </AnimatedSection>
             <AnimatedSection delay={0.1}>
-              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-blue-400 via-indigo-400 to-blue-500 h-full hover:shadow-xxl transition-all duration-300 hover:scale-[1.02]">
-                <div className="rounded-[14px] bg-gradient-to-br from-blue-50 to-indigo-50 p-6 sm:p-8 h-full">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-200 flex items-center justify-center mb-5 shadow-sm">
-                    <Eye className="h-6 w-6 text-blue-800" />
+              <div className="p-[2px] rounded-2xl bg-[length:300%_300%] animate-gradient bg-gradient-to-r from-[#C79A6B] via-[#B68C5A] to-[#9A7545] h-full hover:shadow-xxl transition-all duration-300 hover:scale-[1.02]">
+                <div className="rounded-[14px] bg-gradient-to-br from-[#EDE0D0] to-[#E5D5C1] p-6 sm:p-8 h-full">
+                  <div className="w-12 h-12 rounded-2xl bg-[#D4B896] flex items-center justify-center mb-5 shadow-sm">
+                    <Eye className="h-6 w-6 text-[#8A6A4A]" />
                   </div>
                   <h3 className="text-xl font-bold text-charcoal mb-3">Our Vision</h3>
                   <p className="text-[15px] text-dark-gray/90 leading-relaxed">
@@ -277,7 +277,7 @@ export default function AboutPage() {
                       &ldquo;{t.quote}&rdquo;
                     </p>
                     <div className={`flex items-center gap-3 pt-3 border-t-2 ${t.separatorColor}`}>
-                      <div className={`h-10 w-10 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center text-[10px] font-bold text-white shadow-sm shrink-0`}>
+                      <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#8A6A4A] to-[#6A3F26] flex items-center justify-center text-[10px] font-bold text-white shadow-sm shrink-0">
                         {t.name.split(" ").map((n) => n[0]).join("")}
                       </div>
                       <div className="min-w-0">

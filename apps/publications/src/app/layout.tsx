@@ -3,8 +3,7 @@ import { Inter, Playfair_Display, Libre_Baskerville } from "next/font/google";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { AuthProvider } from "@/providers/auth-provider";
 import { QueryProvider } from "@/providers/query-provider";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { LayoutShell } from "@/components/layout/layout-shell";
 import "./globals.css";
 
 const inter = Inter({
@@ -47,9 +46,15 @@ export const metadata: Metadata = {
   authors: [{ name: "Statement Publications" }],
   creator: "Statement Publications",
   icons: {
-    icon: "/logo.png",
-    shortcut: "/logo.png",
-    apple: "/logo.png",
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
   openGraph: {
     type: "website",
@@ -95,11 +100,15 @@ export default function RootLayout({
     >
       <head>
         <link rel="manifest" href="/site.webmanifest" />
-        <link rel="icon" type="image/png" sizes="192x192" href="/logo.png" />
-        <link rel="apple-touch-icon" href="/logo.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png" />
         <meta name="theme-color" content="#EBC9A8" />
         <meta name="msapplication-TileColor" content="#EBC9A8" />
-        <meta name="msapplication-TileImage" content="/logo.png" />
+        <meta name="msapplication-TileImage" content="/android-chrome-192x192.png" />
         {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
           <>
             <script
@@ -143,9 +152,7 @@ export default function RootLayout({
         >
           <AuthProvider>
             <QueryProvider>
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
+              <LayoutShell>{children}</LayoutShell>
             </QueryProvider>
           </AuthProvider>
         </ThemeProvider>

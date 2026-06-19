@@ -8,7 +8,6 @@ import { ArrowRight, ChevronLeft, ChevronRight, BookOpen, ChevronDown } from "lu
 import BlogHero from "@/components/blog/blog-hero";
 import BlogCard from "@/components/blog/blog-card";
 import CategoryShowcase from "@/components/blog/category-showcase";
-import AuthorSpotlight from "@/components/blog/author-spotlight";
 import TrendingSidebar from "@/components/blog/trending-sidebar";
 import NewsletterBannerCompact from "@/components/blog/newsletter-banner-compact";
 import { blogPosts, categories, getEditorsPicks, getTrendingPosts } from "@/lib/blog-data";
@@ -197,7 +196,7 @@ export default function BlogPage() {
                 <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
                   <button
                     onClick={() => handleCategoryChange("all")}
-                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${activeCategory === "all" ? "bg-[#8A6A4A] text-white shadow-md shadow-[#8A6A4A]/20" : "bg-gray-100 text-dark-gray/60 hover:bg-gray-200 hover:text-dark-gray/80"}`}
+                    className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${activeCategory === "all" ? "bg-[#8A6A4A] text-white shadow-md shadow-[#8A6A4A]/20" : "bg-[#F2D8BE] text-[#6A4E37] hover:bg-[#EBC9A8] hover:text-[#5C4A3D]"}`}
                   >
                     All Articles
                   </button>
@@ -205,7 +204,7 @@ export default function BlogPage() {
                     <button
                       key={cat.slug}
                       onClick={() => handleCategoryChange(cat.slug)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${activeCategory === cat.slug ? "bg-[#8A6A4A] text-white shadow-md shadow-[#8A6A4A]/20" : "bg-gray-100 text-dark-gray/60 hover:bg-gray-200 hover:text-dark-gray/80"}`}
+                      className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${activeCategory === cat.slug ? "bg-[#8A6A4A] text-white shadow-md shadow-[#8A6A4A]/20" : "bg-[#F2D8BE] text-[#6A4E37] hover:bg-[#EBC9A8] hover:text-[#5C4A3D]"}`}
                     >
                       {cat.name}
                     </button>
@@ -357,21 +356,6 @@ export default function BlogPage() {
               </AnimatedSection>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Author Spotlight */}
-      <section className="py-18 bg-[#FDF6EE]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <AnimatedSection className="text-center mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-charcoal" style={{ fontFamily: "var(--font-libre)" }}>
-              Meet Our Authors
-            </h2>
-            <p className="mt-2 text-dark-gray/60">Expert voices in publishing and writing</p>
-          </AnimatedSection>
-          <AnimatedSection delay={0.1}>
-            <AuthorSpotlight />
-          </AnimatedSection>
         </div>
       </section>
     </div>
