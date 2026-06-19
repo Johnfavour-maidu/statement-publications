@@ -79,6 +79,7 @@ const SORT_OPTIONS = [
   { value: "newest", label: "Newest First" },
   { value: "oldest", label: "Oldest First" },
   { value: "most-viewed", label: "Most Viewed" },
+  { value: "video-first", label: "Video First" },
 ];
 
 const MONTHLY_GROWTH = [
@@ -370,6 +371,8 @@ export default function AdminTestimonialsPage() {
   const [scheduleStartDate, setScheduleStartDate] = useState("");
   const [scheduleEndDate, setScheduleEndDate] = useState("");
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [drawerScheduleStart, setDrawerScheduleStart] = useState("");
+  const [drawerScheduleEnd, setDrawerScheduleEnd] = useState("");
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -414,6 +417,7 @@ export default function AdminTestimonialsPage() {
     if (activeTab === "published") result = result.filter((t) => t.status === "published");
     else if (activeTab === "pending") result = result.filter((t) => t.status === "pending");
     else if (activeTab === "featured") result = result.filter((t) => t.featured);
+    else if (activeTab === "video") result = result.filter((t) => t.type === "video");
     if (search) {
       const q = search.toLowerCase();
       result = result.filter((t) => t.name.toLowerCase().includes(q) || t.company.toLowerCase().includes(q) || t.content.toLowerCase().includes(q));
@@ -426,6 +430,7 @@ export default function AdminTestimonialsPage() {
       case "newest": result.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime()); break;
       case "oldest": result.sort((a, b) => new Date(a.submittedAt).getTime() - new Date(b.submittedAt).getTime()); break;
       case "most-viewed": result.sort((a, b) => b.views - a.views); break;
+      case "video-first": result.sort((a, b) => (a.type === "video" ? -1 : 1) - (b.type === "video" ? -1 : 1)); break;
       default: break;
     }
     return result;
@@ -900,6 +905,7 @@ export default function AdminTestimonialsPage() {
             { value: "published", label: "Approved Testimonials", color: "bg-emerald-600 text-white border-emerald-600" },
             { value: "pending", label: "Pending Approval", color: "bg-orange-500 text-white border-orange-500" },
             { value: "featured", label: "Featured Testimonials", color: "bg-amber-500 text-white border-amber-500" },
+            { value: "video", label: "Video Testimonials", color: "bg-violet-600 text-white border-violet-600" },
           ].map((tab) => {
             const isActive = activeTab === tab.value;
             return (
@@ -995,7 +1001,7 @@ export default function AdminTestimonialsPage() {
                     <TableCell className="text-sm text-[#5C4A3D]">{new Date(t.submittedAt).toLocaleDateString()}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
-                        <button onClick={() => { setDrawerTestimonial(t); setDrawerOpen(true); }} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title="View"><Eye className="h-4 w-4" /></button>
+                        <button onClick={() => { setDrawerTestimonial(t); setDrawerScheduleStart(t.featuredStartDate ? t.featuredStartDate.split("T")[0] : ""); setDrawerScheduleEnd(t.featuredEndDate ? t.featuredEndDate.split("T")[0] : ""); setDrawerOpen(true); }} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title="View"><Eye className="h-4 w-4" /></button>
                         <button onClick={() => { setPreviewTestimonial(t); setPreviewModalOpen(true); }} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title="Preview on Website"><Globe className="h-4 w-4" /></button>
                         <button onClick={() => openEditModal(t)} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title="Edit"><Edit3 className="h-4 w-4" /></button>
                         <button onClick={() => openScheduleModal(t)} className="p-1.5 rounded-lg hover:bg-[#F5EDE3] text-[#5C4A3D] transition-colors" title={t.featured ? "Unfeature" : "Feature"}><Star className={`h-4 w-4 ${t.featured ? "fill-amber-500 text-amber-500" : ""}`} /></button>
@@ -1105,11 +1111,30 @@ export default function AdminTestimonialsPage() {
                     <div className="p-2 rounded-lg bg-[#F5EDE3]/50"><span className="text-[#5C4A3D]">Featured</span><p className="font-medium text-[#111111]">{drawerTestimonial.featured ? "Yes" : "No"}</p></div>
                     <div className="p-2 rounded-lg bg-[#F5EDE3]/50"><span className="text-[#5C4A3D]">Views</span><p className="font-medium text-[#111111]">{drawerTestimonial.views}</p></div>
                   </div>
-                  {drawerTestimonial.featured && drawerTestimonial.featuredStartDate && drawerTestimonial.featuredEndDate && (
-                    <div className="p-2 rounded-lg bg-amber-50 border border-amber-200">
-                      <div className="flex items-center gap-1.5 text-xs text-amber-700">
-                        <Calendar className="h-3.5 w-3.5" />
-                        <span>Featured: {new Date(drawerTestimonial.featuredStartDate).toLocaleDateString()} — {new Date(drawerTestimonial.featuredEndDate).toLocaleDateString()}</span>
+                  {drawerTestimonial.featured && (
+                    <div className="p-3 rounded-lg bg-amber-50 border border-amber-200 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5 text-xs text-amber-700">
+                          <Calendar className="h-3.5 w-3.5" />
+                          <span className="font-medium">Featured Schedule</span>
+                        </div>
+                        {drawerScheduleStart && drawerScheduleEnd && (
+                          <button onClick={() => {
+                            setTestimonials((prev) => prev.map((t) => t.id === drawerTestimonial.id ? { ...t, featuredStartDate: new Date(drawerScheduleStart).toISOString(), featuredEndDate: new Date(drawerScheduleEnd).toISOString(), updatedAt: new Date().toISOString() } : t));
+                            setDrawerTestimonial((prev) => prev ? { ...prev, featuredStartDate: new Date(drawerScheduleStart).toISOString(), featuredEndDate: new Date(drawerScheduleEnd).toISOString() } : prev);
+                            showToast("Schedule updated");
+                          }} className="text-[10px] font-medium text-amber-700 hover:text-amber-900 underline">Save</button>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <label className="text-[9px] text-amber-600 mb-0.5 block">Start Date</label>
+                          <input type="date" value={drawerScheduleStart} onChange={(e) => setDrawerScheduleStart(e.target.value)} className="w-full text-[11px] px-2 py-1 rounded border border-amber-300 bg-white text-[#111111] focus:outline-none focus:ring-1 focus:ring-amber-400" />
+                        </div>
+                        <div>
+                          <label className="text-[9px] text-amber-600 mb-0.5 block">End Date</label>
+                          <input type="date" value={drawerScheduleEnd} onChange={(e) => setDrawerScheduleEnd(e.target.value)} className="w-full text-[11px] px-2 py-1 rounded border border-amber-300 bg-white text-[#111111] focus:outline-none focus:ring-1 focus:ring-amber-400" />
+                        </div>
                       </div>
                     </div>
                   )}
