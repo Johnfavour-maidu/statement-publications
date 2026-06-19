@@ -9,6 +9,7 @@ import {
   Eye as EyeIcon, SlidersHorizontal, Quote, CheckCircle2,
   FileText, User, FileUp, Activity, Zap, Video, Shield,
   TrendingUp, Share2, MousePointerClick, Award,
+  Globe, ExternalLink, Send,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -53,6 +54,17 @@ interface TestimonialRecord {
   clicks: number;
   shares: number;
   featuredAppearances: number;
+  customerReputation: {
+    totalTestimonialsSubmitted: number;
+    averageRatingGiven: number;
+    servicesPurchased: number;
+    booksPublished: number;
+  };
+  engagementTimeline: Array<{
+    event: "submitted" | "approved" | "featured" | "edited" | "viewed" | "shared";
+    timestamp: string;
+  }>;
+  websiteUrl?: string;
 }
 
 const SORT_OPTIONS = [
@@ -194,6 +206,19 @@ function generateDemoTestimonials(): TestimonialRecord[] {
     const clicks = Math.floor(views * (0.1 + Math.random() * 0.3));
     const shares = Math.floor(clicks * (0.05 + Math.random() * 0.15));
     const featuredAppearances = i < 12 ? Math.floor(Math.random() * 10) + 3 : Math.floor(Math.random() * 3);
+    const totalTestimonialsSubmitted = Math.floor(Math.random() * 8) + 1;
+    const averageRatingGiven = Math.round((3.5 + Math.random() * 1.5) * 10) / 10;
+    const servicesPurchased = Math.floor(Math.random() * 6) + 1;
+    const websiteUrl = i < 20 ? "https://statementpublications.com" : undefined;
+    const timelineBase = date.getTime();
+    const engagementTimeline = [
+      { event: "submitted" as const, timestamp: new Date(timelineBase).toISOString() },
+      ...(status === "published" ? [{ event: "approved" as const, timestamp: new Date(timelineBase + 86400000 * Math.floor(Math.random() * 3) + 1).toISOString() }] : []),
+      ...(i < 12 ? [{ event: "featured" as const, timestamp: new Date(timelineBase + 86400000 * (Math.floor(Math.random() * 5) + 3)).toISOString() }] : []),
+      ...(Math.random() > 0.5 ? [{ event: "edited" as const, timestamp: new Date(timelineBase + 86400000 * (Math.floor(Math.random() * 4) + 2)).toISOString() }] : []),
+      ...(views > 200 ? [{ event: "viewed" as const, timestamp: new Date(timelineBase + 86400000 * (Math.floor(Math.random() * 3) + 1)).toISOString() }] : []),
+      ...(shares > 20 ? [{ event: "shared" as const, timestamp: new Date(timelineBase + 86400000 * (Math.floor(Math.random() * 4) + 2)).toISOString() }] : []),
+    ].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     testimonials.push({
       id: `test-${i + 1}`,
       name: names[i % names.length],
@@ -215,6 +240,9 @@ function generateDemoTestimonials(): TestimonialRecord[] {
       clicks,
       shares,
       featuredAppearances,
+      customerReputation: { totalTestimonialsSubmitted, averageRatingGiven, servicesPurchased, booksPublished: publishedBooks },
+      engagementTimeline,
+      websiteUrl,
     });
   }
   videoTestimonials.forEach((vt, i) => {
@@ -228,6 +256,14 @@ function generateDemoTestimonials(): TestimonialRecord[] {
     const views = Math.floor(Math.random() * 800) + 200;
     const clicks = Math.floor(views * (0.2 + Math.random() * 0.3));
     const shares = Math.floor(clicks * (0.1 + Math.random() * 0.2));
+    const vtTimelineBase = date.getTime();
+    const vtTimeline = [
+      { event: "submitted" as const, timestamp: new Date(vtTimelineBase).toISOString() },
+      { event: "approved" as const, timestamp: new Date(vtTimelineBase + 86400000 * 1).toISOString() },
+      { event: "featured" as const, timestamp: new Date(vtTimelineBase + 86400000 * 3).toISOString() },
+      ...(Math.random() > 0.4 ? [{ event: "viewed" as const, timestamp: new Date(vtTimelineBase + 86400000 * 2).toISOString() }] : []),
+      ...(Math.random() > 0.5 ? [{ event: "shared" as const, timestamp: new Date(vtTimelineBase + 86400000 * 4).toISOString() }] : []),
+    ].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
     testimonials.push({
       id: `test-vid-${i + 1}`,
       name: vt.name,
@@ -251,6 +287,14 @@ function generateDemoTestimonials(): TestimonialRecord[] {
       clicks,
       shares,
       featuredAppearances: Math.floor(Math.random() * 8) + 5,
+      customerReputation: {
+        totalTestimonialsSubmitted: Math.floor(Math.random() * 5) + 2,
+        averageRatingGiven: Math.round((4 + Math.random()) * 10) / 10,
+        servicesPurchased: Math.floor(Math.random() * 4) + 2,
+        booksPublished: publishedBooks,
+      },
+      engagementTimeline: vtTimeline,
+      websiteUrl: "https://statementpublications.com",
     });
   });
   return testimonials;
@@ -429,6 +473,11 @@ export default function AdminTestimonialsPage() {
       const newTestimonial: TestimonialRecord = {
         id: `test-${Date.now()}`, name: editForm.name, role: editForm.role, company: editForm.company, content: editForm.content, rating: editForm.rating, status: editForm.status, featured: false, views: 0, type: editForm.type, videoUrl: editForm.videoUrl || undefined, verifiedAuthor: editForm.verifiedAuthor, serviceCompleted: editForm.serviceCompleted, publishedBooks: editForm.publishedBooks, accountAgeDays: editForm.accountAgeDays, ratingConsistency: 0.85, clicks: 0, shares: 0, featuredAppearances: 0,
         submittedAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+        customerReputation: { totalTestimonialsSubmitted: 1, averageRatingGiven: editForm.rating, servicesPurchased: 1, booksPublished: editForm.publishedBooks },
+        engagementTimeline: [
+          { event: "submitted", timestamp: new Date().toISOString() },
+          ...(editForm.status === "published" ? [{ event: "approved" as const, timestamp: new Date().toISOString() }] : []),
+        ],
       };
       setTestimonials((prev) => [newTestimonial, ...prev]);
       addActivity("create", `Added testimonial from ${editForm.name}`);
@@ -1002,6 +1051,29 @@ export default function AdminTestimonialsPage() {
                     <div className="p-2 rounded-lg bg-[#F5EDE3]/50"><span className="text-[#5C4A3D]">Views</span><p className="font-medium text-[#111111]">{drawerTestimonial.views}</p></div>
                   </div>
 
+                  {/* Customer Reputation */}
+                  <div className="p-4 rounded-lg border border-[#E8DDD0] bg-[#F5EDE3]/20">
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-3 flex items-center gap-1.5"><User className="h-3.5 w-3.5" />Customer Reputation</h4>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="p-2.5 rounded-lg bg-white border border-[#E8DDD0] text-center">
+                        <p className="text-[10px] text-[#5C4A3D] mb-0.5">Testimonials Submitted</p>
+                        <p className="text-lg font-bold text-[#111111]">{drawerTestimonial.customerReputation.totalTestimonialsSubmitted}</p>
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-white border border-[#E8DDD0] text-center">
+                        <p className="text-[10px] text-[#5C4A3D] mb-0.5">Avg Rating Given</p>
+                        <p className="text-lg font-bold text-amber-500">{drawerTestimonial.customerReputation.averageRatingGiven}★</p>
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-white border border-[#E8DDD0] text-center">
+                        <p className="text-[10px] text-[#5C4A3D] mb-0.5">Services Purchased</p>
+                        <p className="text-lg font-bold text-[#111111]">{drawerTestimonial.customerReputation.servicesPurchased}</p>
+                      </div>
+                      <div className="p-2.5 rounded-lg bg-white border border-[#E8DDD0] text-center">
+                        <p className="text-[10px] text-[#5C4A3D] mb-0.5">Books Published</p>
+                        <p className="text-lg font-bold text-[#111111]">{drawerTestimonial.customerReputation.booksPublished}</p>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* Trust Score */}
                   <div className="p-4 rounded-lg border border-[#E8DDD0] bg-[#F5EDE3]/20">
                     <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-2 flex items-center gap-1.5"><Shield className="h-3.5 w-3.5" />Trust Score</h4>
@@ -1051,22 +1123,80 @@ export default function AdminTestimonialsPage() {
                     <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-2">Full Testimonial</h4>
                     <p className="text-sm text-[#111111] leading-relaxed italic">&ldquo;{drawerTestimonial.content}&rdquo;</p>
                   </div>
-                  <div className="p-4 rounded-lg border border-[#E8DDD0] bg-[#F5EDE3]/20">
-                    <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-3">Timeline</h4>
-                    <div className="space-y-3 relative pl-4">
-                      <div className="absolute left-0 top-1 bottom-1 w-px bg-[#E8DDD0]" />
-                      <div className="relative">
-                        <div className="absolute -left-4 top-0.5 w-2 h-2 rounded-full bg-[#8A6A4A]" />
-                        <p className="text-[10px] text-[#5C4A3D]">Created</p>
-                        <p className="text-[11px] font-medium text-[#111111]">{new Date(drawerTestimonial.submittedAt).toLocaleDateString()}</p>
-                      </div>
-                      <div className="relative">
-                        <div className="absolute -left-4 top-0.5 w-2 h-2 rounded-full bg-[#D8B27A]" />
-                        <p className="text-[10px] text-[#5C4A3D]">Updated</p>
-                        <p className="text-[11px] font-medium text-[#111111]">{new Date(drawerTestimonial.updatedAt).toLocaleDateString()}</p>
+
+                  {/* Website Preview */}
+                  {drawerTestimonial.websiteUrl && (
+                    <div className="p-4 rounded-lg border border-[#E8DDD0] bg-[#F5EDE3]/20">
+                      <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-3 flex items-center gap-1.5"><Globe className="h-3.5 w-3.5" />Website Preview</h4>
+                      <div className="rounded-lg overflow-hidden border border-[#E8DDD0] bg-white">
+                        <div className="flex items-center gap-2 px-3 py-2 bg-[#F5EDE3]/50 border-b border-[#E8DDD0]">
+                          <div className="flex gap-1">
+                            <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-amber-400" />
+                            <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+                          </div>
+                          <div className="flex-1 bg-white rounded px-2 py-0.5 text-[9px] text-[#5C4A3D] border border-[#E8DDD0] truncate">{drawerTestimonial.websiteUrl}</div>
+                          <ExternalLink className="h-3 w-3 text-[#5C4A3D]" />
+                        </div>
+                        <div className="relative h-40 bg-gradient-to-br from-[#F5EDE3] to-[#E8DDD0] flex flex-col items-center justify-center gap-2">
+                          <Globe className="h-10 w-10 text-[#8A6A4A]/30" />
+                          <p className="text-xs text-[#5C4A3D]/60 font-medium">statementpublications.com</p>
+                          <p className="text-[9px] text-[#5C4A3D]/40">Author Profile & Portfolio</p>
+                          <a href={drawerTestimonial.websiteUrl} target="_blank" rel="noopener noreferrer" className="mt-1 inline-flex items-center gap-1 px-3 py-1 bg-[#8A6A4A] text-white rounded text-[10px] font-medium hover:bg-[#6A4E37] transition-colors">
+                            <Send className="h-2.5 w-2.5" /> Visit Site
+                          </a>
+                        </div>
                       </div>
                     </div>
+                  )}
+
+                  {/* Engagement Timeline */}
+                  <div className="p-4 rounded-lg border border-[#E8DDD0] bg-[#F5EDE3]/20">
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-3 flex items-center gap-1.5"><Activity className="h-3.5 w-3.5" />Engagement Timeline</h4>
+                    <div className="space-y-3 relative pl-4">
+                      <div className="absolute left-0 top-1 bottom-1 w-px bg-[#E8DDD0]" />
+                      {drawerTestimonial.engagementTimeline.map((entry, idx) => {
+                        const eventConfig: Record<string, { icon: React.ReactNode; color: string; label: string }> = {
+                          submitted: { icon: <FileUp className="h-2.5 w-2.5" />, color: "bg-[#8A6A4A]", label: "Submitted" },
+                          approved: { icon: <CheckCircle2 className="h-2.5 w-2.5" />, color: "bg-emerald-500", label: "Approved" },
+                          featured: { icon: <Star className="h-2.5 w-2.5" />, color: "bg-amber-500", label: "Featured" },
+                          edited: { icon: <Edit3 className="h-2.5 w-2.5" />, color: "bg-blue-500", label: "Edited" },
+                          viewed: { icon: <Eye className="h-2.5 w-2.5" />, color: "bg-violet-500", label: "Viewed" },
+                          shared: { icon: <Share2 className="h-2.5 w-2.5" />, color: "bg-rose-500", label: "Shared" },
+                        };
+                        const config = eventConfig[entry.event] || eventConfig.submitted;
+                        const ts = new Date(entry.timestamp);
+                        const timeAgo = (() => {
+                          const diffMs = Date.now() - ts.getTime();
+                          const diffDays = Math.floor(diffMs / 86400000);
+                          if (diffDays === 0) return "Today";
+                          if (diffDays === 1) return "Yesterday";
+                          if (diffDays < 7) return `${diffDays}d ago`;
+                          if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
+                          return `${Math.floor(diffDays / 30)}mo ago`;
+                        })();
+                        return (
+                          <div key={idx} className="relative">
+                            <div className={`absolute -left-4 top-0.5 w-2 h-2 rounded-full ${config.color} flex items-center justify-center`}>
+                              <div className="absolute -left-0.5 -top-0.5 w-3 h-3 rounded-full bg-white/50" />
+                              <div className={`absolute -left-[1px] -top-[1px] w-2 h-2 rounded-full ${config.color}`} />
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-1.5">
+                                <span className={`inline-flex items-center justify-center h-4 w-4 rounded ${config.color}/10 ${config.color}`}>{config.icon}</span>
+                                <p className="text-[11px] font-medium text-[#111111]">{config.label}</p>
+                              </div>
+                              <div className="text-right">
+                                <p className="text-[10px] text-[#5C4A3D]">{timeAgo}</p>
+                                <p className="text-[8px] text-[#5C4A3D]/60">{ts.toLocaleDateString()} {ts.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
+
                   <div className="flex gap-2">
                     <Button onClick={() => { setDrawerOpen(false); openEditModal(drawerTestimonial); }} className="flex-1 bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]"><Edit3 className="h-4 w-4 mr-1" /> Edit</Button>
                     <Button onClick={() => toggleFeature(drawerTestimonial.id)} variant="outline" className="border-[#E8DDD0]"><Star className={`h-4 w-4 ${drawerTestimonial.featured ? "fill-amber-500 text-amber-500" : ""}`} /></Button>
