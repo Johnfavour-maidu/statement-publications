@@ -150,7 +150,7 @@ const dashboardNav: Record<string, NavSection[]> = {
       items: [
         { label: "Blog", href: "/admin/blog", icon: FileText },
         { label: "Testimonials", href: "/admin/testimonials", icon: Star },
-        { label: "Content CMS", href: "/admin/content", icon: Megaphone },
+        { label: "Content Management", href: "/admin/content", icon: Megaphone },
         { label: "Media Library", href: "/admin/media", icon: FolderOpen },
       ],
     },
