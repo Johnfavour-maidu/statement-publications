@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Plus, Trash2, Eye, RefreshCw, Star, BarChart3,
@@ -1155,36 +1155,23 @@ export default function AdminTestimonialsPage() {
                     <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-3 flex items-center gap-1.5"><Activity className="h-3.5 w-3.5" />Engagement Timeline</h4>
                     <div className="space-y-3 relative pl-4">
                       <div className="absolute left-0 top-1 bottom-1 w-px bg-[#E8DDD0]" />
-                      {drawerTestimonial.engagementTimeline.map((entry, idx) => {
-                        const eventConfig: Record<string, { icon: React.ReactNode; color: string; label: string }> = {
-                          submitted: { icon: <FileUp className="h-2.5 w-2.5" />, color: "bg-[#8A6A4A]", label: "Submitted" },
-                          approved: { icon: <CheckCircle2 className="h-2.5 w-2.5" />, color: "bg-emerald-500", label: "Approved" },
-                          featured: { icon: <Star className="h-2.5 w-2.5" />, color: "bg-amber-500", label: "Featured" },
-                          edited: { icon: <Edit3 className="h-2.5 w-2.5" />, color: "bg-blue-500", label: "Edited" },
-                          viewed: { icon: <Eye className="h-2.5 w-2.5" />, color: "bg-violet-500", label: "Viewed" },
-                          shared: { icon: <Share2 className="h-2.5 w-2.5" />, color: "bg-rose-500", label: "Shared" },
-                        };
-                        const config = eventConfig[entry.event] || eventConfig.submitted;
+                      {drawerTestimonial.engagementTimeline && drawerTestimonial.engagementTimeline.map((entry, idx) => {
+                        const evtLabel = entry.event.charAt(0).toUpperCase() + entry.event.slice(1);
                         const ts = new Date(entry.timestamp);
-                        const timeAgo = (() => {
-                          const diffMs = Date.now() - ts.getTime();
-                          const diffDays = Math.floor(diffMs / 86400000);
-                          if (diffDays === 0) return "Today";
-                          if (diffDays === 1) return "Yesterday";
-                          if (diffDays < 7) return `${diffDays}d ago`;
-                          if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
-                          return `${Math.floor(diffDays / 30)}mo ago`;
-                        })();
+                        const diffMs = Date.now() - ts.getTime();
+                        const diffDays = Math.floor(diffMs / 86400000);
+                        const timeAgo = diffDays === 0 ? "Today" : diffDays === 1 ? "Yesterday" : diffDays < 7 ? `${diffDays}d ago` : diffDays < 30 ? `${Math.floor(diffDays / 7)}w ago` : `${Math.floor(diffDays / 30)}mo ago`;
+                        const dotColor = entry.event === "submitted" ? "bg-[#8A6A4A]" : entry.event === "approved" ? "bg-emerald-500" : entry.event === "featured" ? "bg-amber-500" : entry.event === "edited" ? "bg-blue-500" : entry.event === "viewed" ? "bg-violet-500" : "bg-rose-500";
+                        const iconBg = entry.event === "submitted" ? "bg-[#8A6A4A]/10 text-[#8A6A4A]" : entry.event === "approved" ? "bg-emerald-500/10 text-emerald-500" : entry.event === "featured" ? "bg-amber-500/10 text-amber-500" : entry.event === "edited" ? "bg-blue-500/10 text-blue-500" : entry.event === "viewed" ? "bg-violet-500/10 text-violet-500" : "bg-rose-500/10 text-rose-500";
                         return (
                           <div key={idx} className="relative">
-                            <div className={`absolute -left-4 top-0.5 w-2 h-2 rounded-full ${config.color} flex items-center justify-center`}>
-                              <div className="absolute -left-0.5 -top-0.5 w-3 h-3 rounded-full bg-white/50" />
-                              <div className={`absolute -left-[1px] -top-[1px] w-2 h-2 rounded-full ${config.color}`} />
-                            </div>
+                            <div className={`absolute -left-4 top-0.5 w-2 h-2 rounded-full ${dotColor}`} />
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-1.5">
-                                <span className={`inline-flex items-center justify-center h-4 w-4 rounded ${config.color}/10 ${config.color}`}>{config.icon}</span>
-                                <p className="text-[11px] font-medium text-[#111111]">{config.label}</p>
+                                <span className={`inline-flex items-center justify-center h-4 w-4 rounded ${iconBg}`}>
+                                  {entry.event === "submitted" ? <FileUp className="h-2.5 w-2.5" /> : entry.event === "approved" ? <CheckCircle2 className="h-2.5 w-2.5" /> : entry.event === "featured" ? <Star className="h-2.5 w-2.5" /> : entry.event === "edited" ? <Edit3 className="h-2.5 w-2.5" /> : entry.event === "viewed" ? <Eye className="h-2.5 w-2.5" /> : <Share2 className="h-2.5 w-2.5" />}
+                                </span>
+                                <p className="text-[11px] font-medium text-[#111111]">{evtLabel}</p>
                               </div>
                               <div className="text-right">
                                 <p className="text-[10px] text-[#5C4A3D]">{timeAgo}</p>
