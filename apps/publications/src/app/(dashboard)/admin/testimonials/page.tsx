@@ -313,6 +313,7 @@ export default function AdminTestimonialsPage() {
   const tableScrollRef = useRef<SyncedTableScrollHandle>(null);
   const sortFilterRef = useRef<HTMLDivElement>(null);
   const quickActionsRef = useRef<HTMLDivElement>(null);
+  const calendarRef = useRef<HTMLDivElement>(null);
   const allTestimonials = useMemo(() => generateDemoTestimonials(), []);
   const [testimonials, setTestimonials] = useState<TestimonialRecord[]>(() => {
     if (typeof window !== "undefined") {
@@ -368,11 +369,13 @@ export default function AdminTestimonialsPage() {
   const [scheduleTestimonial, setScheduleTestimonial] = useState<TestimonialRecord | null>(null);
   const [scheduleStartDate, setScheduleStartDate] = useState("");
   const [scheduleEndDate, setScheduleEndDate] = useState("");
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (sortFilterRef.current && !sortFilterRef.current.contains(e.target as Node)) setSortFilterOpen(false);
       if (quickActionsRef.current && !quickActionsRef.current.contains(e.target as Node)) setQuickActionsOpen(false);
+      if (calendarRef.current && !calendarRef.current.contains(e.target as Node)) setCalendarOpen(false);
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -725,6 +728,29 @@ export default function AdminTestimonialsPage() {
                         </div>
                       </div>
                     </div>
+
+                    {/* Performance Overview */}
+                    <div className="rounded-lg border border-[#D8B27A]/15 p-4 bg-[#F2D8BE]/5">
+                      <h4 className="text-xs font-semibold uppercase tracking-wider text-[#8A6A4A] mb-3 flex items-center gap-1.5"><BarChart3 className="h-3.5 w-3.5" />Performance Overview</h4>
+                      <div className="space-y-3">
+                        <div>
+                          <div className="flex justify-between text-[11px] mb-1"><span className="text-[#5C4A3D]">Total Views</span><span className="font-bold text-[#111111]">{stats.totalViews.toLocaleString()}</span></div>
+                          <div className="h-2 bg-white rounded-full overflow-hidden border border-[#E8DDD0]"><div className="h-full bg-violet-500 rounded-full" style={{ width: `${Math.min((stats.totalViews / 25000) * 100, 100)}%` }} /></div>
+                        </div>
+                        <div>
+                          <div className="flex justify-between text-[11px] mb-1"><span className="text-[#5C4A3D]">Total Clicks</span><span className="font-bold text-[#111111]">{stats.totalClicks.toLocaleString()}</span></div>
+                          <div className="h-2 bg-white rounded-full overflow-hidden border border-[#E8DDD0]"><div className="h-full bg-blue-500 rounded-full" style={{ width: `${Math.min((stats.totalClicks / 10000) * 100, 100)}%` }} /></div>
+                        </div>
+                        <div>
+                          <div className="flex justify-between text-[11px] mb-1"><span className="text-[#5C4A3D]">Total Shares</span><span className="font-bold text-[#111111]">{stats.totalShares.toLocaleString()}</span></div>
+                          <div className="h-2 bg-white rounded-full overflow-hidden border border-[#E8DDD0]"><div className="h-full bg-emerald-500 rounded-full" style={{ width: `${Math.min((stats.totalShares / 3000) * 100, 100)}%` }} /></div>
+                        </div>
+                        <div>
+                          <div className="flex justify-between text-[11px] mb-1"><span className="text-[#5C4A3D]">Video Testimonials</span><span className="font-bold text-[#111111]">{stats.videoCount}</span></div>
+                          <div className="h-2 bg-white rounded-full overflow-hidden border border-[#E8DDD0]"><div className="h-full bg-rose-500 rounded-full" style={{ width: `${Math.min((stats.videoCount / 10) * 100, 100)}%` }} /></div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               )}
@@ -782,6 +808,71 @@ export default function AdminTestimonialsPage() {
                 <SelectItem value="all">All</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          {/* Calendar Schedule */}
+          <div className="relative" ref={calendarRef}>
+            <div className="refresh-btn-border rounded-lg p-[2px]">
+              <Button variant="outline" size="sm" onClick={() => setCalendarOpen(!calendarOpen)} className="h-9 px-3 border-0 bg-white text-sm font-medium text-[#8A6A4A] hover:bg-[#F2D8BE] gap-2">
+                <Calendar className="h-4 w-4" /><span className="hidden sm:inline">Schedule</span>
+              </Button>
+            </div>
+            <AnimatePresence>
+              {calendarOpen && (
+                <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} className="absolute top-full right-0 mt-1 w-[340px] bg-white rounded-xl shadow-xl border border-[#E8DDD0] z-50 overflow-hidden">
+                  <div className="p-3 border-b border-[#E8DDD0] bg-[#F5EDE3]/30 flex items-center justify-between">
+                    <h4 className="text-sm font-semibold text-[#1D1D1D] flex items-center gap-2"><Calendar className="h-4 w-4 text-[#8A6A4A]" />Featured Schedule</h4>
+                    <span className="text-[10px] text-[#5C4A3D] bg-white px-2 py-0.5 rounded-full border border-[#E8DDD0]">{testimonials.filter((t) => t.featured && t.featuredStartDate && t.featuredEndDate).length} active</span>
+                  </div>
+                  <div className="max-h-[350px] overflow-y-auto p-2 space-y-1">
+                    {testimonials.filter((t) => t.featured && t.featuredStartDate && t.featuredEndDate).length === 0 ? (
+                      <div className="py-8 text-center">
+                        <Calendar className="h-8 w-8 mx-auto text-[#D8B27A]/40 mb-2" />
+                        <p className="text-xs text-[#5C4A3D]">No featured testimonials with schedules</p>
+                      </div>
+                    ) : (
+                      testimonials.filter((t) => t.featured && t.featuredStartDate && t.featuredEndDate).map((t) => {
+                        const start = new Date(t.featuredStartDate!);
+                        const end = new Date(t.featuredEndDate!);
+                        const now = Date.now();
+                        const startMs = start.getTime();
+                        const endMs = end.getTime();
+                        const totalDuration = endMs - startMs;
+                        const elapsed = Math.max(0, now - startMs);
+                        const progress = Math.min(100, Math.round((elapsed / totalDuration) * 100));
+                        const daysLeft = Math.max(0, Math.ceil((endMs - now) / 86400000));
+                        const isActive = now >= startMs && now <= endMs;
+                        const isExpired = now > endMs;
+                        return (
+                          <div key={t.id} className={`p-2.5 rounded-lg border transition-colors ${isExpired ? "border-red-200 bg-red-50/50" : isActive ? "border-amber-200 bg-amber-50/50" : "border-[#E8DDD0] bg-[#F5EDE3]/20"}`}>
+                            <div className="flex items-center justify-between mb-1.5">
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <div className="h-5 w-5 rounded bg-[#8A6A4A]/10 flex items-center justify-center flex-shrink-0">
+                                  {t.type === "video" ? <Video className="h-2.5 w-2.5 text-[#8A6A4A]" /> : <Star className="h-2.5 w-2.5 text-[#8A6A4A]" />}
+                                </div>
+                                <p className="text-[11px] font-medium text-[#111111] truncate">{t.name}</p>
+                              </div>
+                              <Badge className={`text-[7px] h-3.5 px-1 flex-shrink-0 ${isExpired ? "bg-red-100 text-red-600 border border-red-200" : isActive ? "bg-amber-100 text-amber-600 border border-amber-200" : "bg-gray-100 text-gray-600 border border-gray-200"}`}>
+                                {isExpired ? "Expired" : isActive ? "Live" : "Scheduled"}
+                              </Badge>
+                            </div>
+                            <div className="flex items-center gap-2 text-[9px] text-[#5C4A3D] mb-1.5">
+                              <span>{start.toLocaleDateString()}</span>
+                              <span>-</span>
+                              <span>{end.toLocaleDateString()}</span>
+                              {!isExpired && <span className="ml-auto font-medium text-[#8A6A4A]">{daysLeft}d left</span>}
+                            </div>
+                            <div className="h-1 bg-white rounded-full overflow-hidden border border-[#E8DDD0]">
+                              <div className={`h-full rounded-full ${isExpired ? "bg-red-400" : isActive ? "bg-amber-500" : "bg-gray-300"}`} style={{ width: `${progress}%` }} />
+                            </div>
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
           {/* Quick Actions */}
