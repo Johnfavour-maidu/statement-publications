@@ -3,11 +3,12 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Plus, Trash2, Eye, RefreshCw, Upload, Download, FolderOpen, Image,
-  ChevronDown, ChevronUp, X, CheckCircle2, BarChart3, BarChart2, Zap,
+  ChevronDown, ChevronUp, ChevronRight, X, CheckCircle2, BarChart3, BarChart2, Zap,
   FileText, Calendar, Clock, ArrowUpDown, Grid, List, ExternalLink,
   Copy, Edit3, AlertTriangle, Info, Settings, Filter as FilterIcon,
   SlidersHorizontal, Layers, Tag, Star, TrendingUp, Users, Archive,
   MoreVertical, Check, Square, CheckSquare, XCircle, File, UploadCloud,
+  Undo2, Redo2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,7 +22,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatDate } from "@/lib/utils";
 
-type MediaCategory = "book-covers" | "author-photos" | "blog-images" | "marketing";
+type MediaCategory = "book-covers" | "author-photos" | "blog-images";
 type SortOption = "newest" | "oldest" | "largest" | "smallest" | "name-az" | "name-za";
 type FileType = "jpg" | "png" | "webp" | "svg" | "pdf";
 
@@ -55,9 +56,8 @@ const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
 const CATEGORIES: { key: MediaCategory | "all"; label: string; color: string; activeColor: string }[] = [
   { key: "all", label: "All Files", color: "text-gray-600", activeColor: "bg-gray-600" },
   { key: "book-covers", label: "Book Covers", color: "text-violet-600", activeColor: "bg-violet-600" },
-  { key: "author-photos", label: "Author Photos", color: "text-blue-600", activeColor: "bg-blue-600" },
   { key: "blog-images", label: "Blog Images", color: "text-emerald-600", activeColor: "bg-emerald-600" },
-  { key: "marketing", label: "Marketing", color: "text-amber-600", activeColor: "bg-amber-600" },
+  { key: "author-photos", label: "Author Photos", color: "text-blue-600", activeColor: "bg-blue-600" },
 ];
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
@@ -73,14 +73,12 @@ const CATEGORY_COLORS: Record<MediaCategory, string> = {
   "book-covers": "#8A6A4A",
   "author-photos": "#3B82F6",
   "blog-images": "#10B981",
-  "marketing": "#F59E0B",
 };
 
 const CATEGORY_BADGE_CLASSES: Record<MediaCategory, string> = {
   "book-covers": "bg-violet-100 text-violet-700 border-violet-200",
   "author-photos": "bg-blue-100 text-blue-700 border-blue-200",
   "blog-images": "bg-emerald-100 text-emerald-700 border-emerald-200",
-  "marketing": "bg-amber-100 text-amber-700 border-amber-200",
 };
 
 const daysAgo = (d: number) => new Date(Date.now() - d * 86400000).toISOString();
@@ -139,19 +137,6 @@ const mockMedia: MediaAsset[] = [
   { id: "m48", name: "Olivia Carter Portrait", fileName: "author-olivia-carter.jpg", category: "author-photos", fileType: "jpg", fileSize: "2.0 MB", fileSizeBytes: 2097152, dimensions: "800x800", uploadDate: daysAgo(38), uploadedBy: "James Cooper", downloads: 55, usedIn: ["Author Page: Olivia Carter"], thumbnailColor: "#D8B27A" },
   { id: "m49", name: "David Kim Portrait", fileName: "author-david-kim.webp", category: "author-photos", fileType: "webp", fileSize: "1.6 MB", fileSizeBytes: 1677721, dimensions: "800x800", uploadDate: daysAgo(44), uploadedBy: "Admin User", downloads: 37, usedIn: ["Author Page: David Kim", "Homepage: Featured Authors"], thumbnailColor: "#3B82F6" },
   { id: "m50", name: "Rachel Green Portrait", fileName: "author-rachel-green.png", category: "author-photos", fileType: "png", fileSize: "2.3 MB", fileSizeBytes: 2411724, dimensions: "800x800", uploadDate: daysAgo(50), uploadedBy: "Sarah Mitchell", downloads: 48, usedIn: ["Author Page: Rachel Green"], thumbnailColor: "#10B981" },
-
-  { id: "m51", name: "Holiday Sale Banner", fileName: "marketing-holiday-sale-banner.webp", category: "marketing", fileType: "webp", fileSize: "4.2 MB", fileSizeBytes: 4404018, dimensions: "1920x1080", uploadDate: daysAgo(1), uploadedBy: "Admin User", downloads: 189, usedIn: ["Homepage Banner", "Email Campaign: Holiday Sale"], thumbnailColor: "#EF4444" },
-  { id: "m52", name: "New Release Promo", fileName: "marketing-new-release-promo.jpg", category: "marketing", fileType: "jpg", fileSize: "3.5 MB", fileSizeBytes: 3670016, dimensions: "1200x628", uploadDate: daysAgo(3), uploadedBy: "Sarah Mitchell", downloads: 112, usedIn: ["Social Media", "Blog: New Releases"], thumbnailColor: "#8A6A4A" },
-  { id: "m53", name: "Author Spotlight Graphic", fileName: "marketing-author-spotlight.png", category: "marketing", fileType: "png", fileSize: "2.9 MB", fileSizeBytes: 3040870, dimensions: "1080x1080", uploadDate: daysAgo(6), uploadedBy: "Admin User", downloads: 76, usedIn: ["Social Media: Instagram", "Blog: Author Features"], thumbnailColor: "#D8B27A" },
-  { id: "m54", name: "Newsletter Header", fileName: "marketing-newsletter-header.webp", category: "marketing", fileType: "webp", fileSize: "1.8 MB", fileSizeBytes: 1887436, dimensions: "600x200", uploadDate: daysAgo(9), uploadedBy: "James Cooper", downloads: 145, usedIn: ["Email Newsletter", "Email: Weekly Digest"], thumbnailColor: "#3B82F6" },
-  { id: "m55", name: "Social Cover Photo", fileName: "marketing-social-cover.jpg", category: "marketing", fileType: "jpg", fileSize: "3.8 MB", fileSizeBytes: 3984588, dimensions: "1500x500", uploadDate: daysAgo(12), uploadedBy: "Admin User", downloads: 98, usedIn: ["Twitter Cover", "Facebook Cover"], thumbnailColor: "#10B981" },
-  { id: "m56", name: "Book Launch Event", fileName: "marketing-book-launch-event.png", category: "marketing", fileType: "png", fileSize: "5.1 MB", fileSizeBytes: 5347737, dimensions: "1920x1080", uploadDate: daysAgo(15), uploadedBy: "Sarah Mitchell", downloads: 134, usedIn: ["Homepage Event Section", "Blog: Launch Events"], thumbnailColor: "#F59E0B" },
-  { id: "m57", name: "Summer Reading Promo", fileName: "marketing-summer-reading.webp", category: "marketing", fileType: "webp", fileSize: "2.7 MB", fileSizeBytes: 2831155, dimensions: "1200x628", uploadDate: daysAgo(20), uploadedBy: "Admin User", downloads: 67, usedIn: ["Social Media", "Email: Summer Campaign"], thumbnailColor: "#D4A574" },
-  { id: "m58", name: "Podcast Cover Art", fileName: "marketing-podcast-cover.jpg", category: "marketing", fileType: "jpg", fileSize: "3.3 MB", fileSizeBytes: 3460300, dimensions: "3000x3000", uploadDate: daysAgo(25), uploadedBy: "James Cooper", downloads: 89, usedIn: ["Podcast Page", "Apple Podcasts"], thumbnailColor: "#5C4A3D" },
-  { id: "m59", name: "Email Header Graphic", fileName: "marketing-email-header.png", category: "marketing", fileType: "png", fileSize: "1.5 MB", fileSizeBytes: 1572864, dimensions: "600x150", uploadDate: daysAgo(30), uploadedBy: "Admin User", downloads: 167, usedIn: ["All Email Campaigns"], thumbnailColor: "#8A6A4A" },
-  { id: "m60", name: "Leaderboard Ad Banner", fileName: "marketing-ad-banner-leaderboard.webp", category: "marketing", fileType: "webp", fileSize: "0.9 MB", fileSizeBytes: 943718, dimensions: "728x90", uploadDate: daysAgo(35), uploadedBy: "Sarah Mitchell", downloads: 201, usedIn: ["Blog Sidebar", "Website Footer"], thumbnailColor: "#EF4444" },
-  { id: "m61", name: "Square Ad Banner", fileName: "marketing-ad-banner-square.jpg", category: "marketing", fileType: "jpg", fileSize: "1.1 MB", fileSizeBytes: 1153433, dimensions: "300x250", uploadDate: daysAgo(40), uploadedBy: "Admin User", downloads: 178, usedIn: ["Blog Posts", "Category Pages"], thumbnailColor: "#3B82F6" },
-  { id: "m62", name: "Promo Card Graphic", fileName: "marketing-promo-card.png", category: "marketing", fileType: "png", fileSize: "2.4 MB", fileSizeBytes: 2516582, dimensions: "1080x1080", uploadDate: daysAgo(45), uploadedBy: "James Cooper", downloads: 93, usedIn: ["Social Media: Instagram", "Social Media: Facebook"], thumbnailColor: "#10B981" },
 ];
 
 const mockActivity: MediaActivity[] = [
@@ -159,9 +144,9 @@ const mockActivity: MediaActivity[] = [
   { id: "a2", action: "rename", fileName: "author-profile.png", user: "Sarah Mitchell", timestamp: hoursAgo(2) },
   { id: "a3", action: "delete", fileName: "marketing-old-banner.webp", user: "Admin User", timestamp: daysAgo(1) },
   { id: "a4", action: "replace", fileName: "blog-cover-main.jpg", user: "James Cooper", timestamp: daysAgo(2) },
-  { id: "a5", action: "upload", fileName: "marketing-holiday-sale-banner.webp", user: "Admin User", timestamp: daysAgo(3) },
+  { id: "a5", action: "upload", fileName: "echoes-of-the-savanna.png", user: "Admin User", timestamp: daysAgo(5) },
   { id: "a6", action: "download", fileName: "author-chinua-adebayo.jpg", user: "Lisa Park", timestamp: daysAgo(4) },
-  { id: "a7", action: "upload", fileName: "echoes-of-the-savanna.png", user: "Admin User", timestamp: daysAgo(5) },
+  { id: "a7", action: "upload", fileName: "blog-marketing-strategy.webp", user: "Admin User", timestamp: daysAgo(5) },
   { id: "a8", action: "delete", fileName: "unused-graphic.png", user: "Admin User", timestamp: daysAgo(7) },
 ];
 
@@ -186,9 +171,15 @@ export default function MediaLibraryPage() {
   const [activityLog, setActivityLog] = useState<MediaActivity[]>(mockActivity);
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const quickActionsRef = useRef<HTMLDivElement>(null);
+  const sortFilterRef = useRef<HTMLDivElement>(null);
+  const [sortFilterOpen, setSortFilterOpen] = useState(false);
   const [pageSize, setPageSize] = useState(20);
   const [page, setPage] = useState(1);
   const [showAllActivity, setShowAllActivity] = useState(false);
+  const [undoStack, setUndoStack] = useState<{ action: string; data: MediaAsset[] }[]>([]);
+  const [redoStack, setRedoStack] = useState<{ action: string; data: MediaAsset[] }[]>([]);
+  const [undoConfirmOpen, setUndoConfirmOpen] = useState(false);
+  const [undoAction, setUndoAction] = useState<{ type: string; target?: MediaAsset } | null>(null);
 
   const showNotification = useCallback((type: "success" | "error", message: string) => {
     setNotification({ type, message });
@@ -205,6 +196,29 @@ export default function MediaLibraryPage() {
     };
     setActivityLog((prev) => [newActivity, ...prev].slice(0, 20));
   }, []);
+
+  const pushUndo = useCallback((action: string, previousState: MediaAsset[]) => {
+    setUndoStack((prev) => [...prev, { action, data: previousState }]);
+    setRedoStack([]);
+  }, []);
+
+  const handleUndo = useCallback(() => {
+    if (undoStack.length === 0) return;
+    const last = undoStack[undoStack.length - 1];
+    setRedoStack((prev) => [...prev, { action: last.action, data: allMedia }]);
+    setAllMedia(last.data);
+    setUndoStack((prev) => prev.slice(0, -1));
+    showNotification("success", `Undid: ${last.action}`);
+  }, [undoStack, allMedia, showNotification]);
+
+  const handleRedo = useCallback(() => {
+    if (redoStack.length === 0) return;
+    const last = redoStack[redoStack.length - 1];
+    setUndoStack((prev) => [...prev, { action: last.action, data: allMedia }]);
+    setAllMedia(last.data);
+    setRedoStack((prev) => prev.slice(0, -1));
+    showNotification("success", `Redid: ${last.action}`);
+  }, [redoStack, allMedia, showNotification]);
 
   const filteredMedia = useMemo(() => {
     let result = [...allMedia];
@@ -235,7 +249,6 @@ export default function MediaLibraryPage() {
       bookCovers: allMedia.filter((m) => m.category === "book-covers").length,
       blogImages: allMedia.filter((m) => m.category === "blog-images").length,
       authorPhotos: allMedia.filter((m) => m.category === "author-photos").length,
-      marketing: allMedia.filter((m) => m.category === "marketing").length,
     }),
     [allMedia]
   );
@@ -288,11 +301,12 @@ export default function MediaLibraryPage() {
   const handleBulkDelete = useCallback(() => {
     const count = selectedIds.size;
     const deletedNames = allMedia.filter((m) => selectedIds.has(m.id)).map((m) => m.fileName);
+    pushUndo(`Delete ${count} file(s)`, allMedia);
     setAllMedia((prev) => prev.filter((m) => !selectedIds.has(m.id)));
     deletedNames.forEach((name) => addActivity("delete", name));
     setSelectedIds(new Set());
     showNotification("success", `${count} file(s) deleted successfully`);
-  }, [selectedIds, allMedia, addActivity, showNotification]);
+  }, [selectedIds, allMedia, addActivity, showNotification, pushUndo]);
 
   const handleBulkMoveCategory = useCallback(() => {
     const count = selectedIds.size;
@@ -314,6 +328,7 @@ export default function MediaLibraryPage() {
 
   const handleConfirmDelete = useCallback(() => {
     if (!deleteTarget) return;
+    pushUndo(`Delete "${deleteTarget.name}"`, allMedia);
     setAllMedia((prev) => prev.filter((m) => m.id !== deleteTarget.id));
     addActivity("delete", deleteTarget.fileName);
     setDeleteDialogOpen(false);
@@ -323,7 +338,7 @@ export default function MediaLibraryPage() {
       setDrawerAsset(null);
     }
     showNotification("success", `"${deleteTarget.name}" deleted successfully`);
-  }, [deleteTarget, addActivity, drawerAsset, showNotification]);
+  }, [deleteTarget, addActivity, drawerAsset, showNotification, allMedia, pushUndo]);
 
   const handleCopyUrl = useCallback(
     (asset: MediaAsset) => {
@@ -352,6 +367,7 @@ export default function MediaLibraryPage() {
     (asset: MediaAsset) => {
       const newName = prompt("Enter new name:", asset.name);
       if (newName && newName.trim() !== asset.name) {
+        pushUndo(`Rename "${asset.name}"`, allMedia);
         setAllMedia((prev) =>
           prev.map((m) => (m.id === asset.id ? { ...m, name: newName.trim() } : m))
         );
@@ -362,15 +378,16 @@ export default function MediaLibraryPage() {
         }
       }
     },
-    [addActivity, showNotification, drawerAsset]
+    [addActivity, showNotification, drawerAsset, allMedia, pushUndo]
   );
 
   const handleReplace = useCallback(
     (asset: MediaAsset) => {
+      pushUndo(`Replace "${asset.name}"`, allMedia);
       addActivity("replace", asset.fileName);
       showNotification("success", `Replace dialog for "${asset.name}" would open`);
     },
-    [addActivity, showNotification]
+    [addActivity, showNotification, allMedia, pushUndo]
   );
 
   const handleExportReport = useCallback(() => {
@@ -414,6 +431,7 @@ export default function MediaLibraryPage() {
             usedIn: [],
             thumbnailColor: "#8A6A4A",
           };
+          pushUndo("Upload new file", allMedia);
           setAllMedia((prev) => [newAsset, ...prev]);
           addActivity("upload", newAsset.fileName);
           showNotification("success", "File uploaded successfully");
@@ -422,12 +440,15 @@ export default function MediaLibraryPage() {
         return prev + 8;
       });
     }, 150);
-  }, [filter, addActivity, showNotification]);
+  }, [filter, addActivity, showNotification, allMedia, pushUndo]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (quickActionsRef.current && !quickActionsRef.current.contains(e.target as Node)) {
         setQuickActionsOpen(false);
+      }
+      if (sortFilterRef.current && !sortFilterRef.current.contains(e.target as Node)) {
+        setSortFilterOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -446,10 +467,26 @@ export default function MediaLibraryPage() {
     return () => document.removeEventListener("keydown", handleEscape);
   }, []);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "z" && !e.shiftKey) {
+        e.preventDefault();
+        handleUndo();
+      }
+      if ((e.ctrlKey || e.metaKey) && (e.key === "y" || (e.key === "z" && e.shiftKey))) {
+        e.preventDefault();
+        handleRedo();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleUndo, handleRedo]);
+
   const summaryCards = [
-    { key: "total", label: "TOTAL FILES", value: stats.total, icon: Image, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", filterVal: "all" as const },
-    { key: "book-covers", label: "BOOK COVERS", value: stats.bookCovers, icon: FolderOpen, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", filterVal: "book-covers" as const },
-    { key: "blog-images", label: "BLOG IMAGES", value: stats.blogImages, icon: Image, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", filterVal: "blog-images" as const },
+    { key: "total", label: "TOTAL FILES", value: stats.total, icon: Image, color: "text-blue-500", bg: "bg-blue-50", filterVal: "all" as const },
+    { key: "book-covers", label: "BOOK COVERS", value: stats.bookCovers, icon: FolderOpen, color: "text-purple-500", bg: "bg-purple-50", filterVal: "book-covers" as const },
+    { key: "blog-images", label: "BLOG IMAGES", value: stats.blogImages, icon: Image, color: "text-emerald-500", bg: "bg-emerald-50", filterVal: "blog-images" as const },
+    { key: "author-photos", label: "AUTHOR PHOTOS", value: stats.authorPhotos, icon: Users, color: "text-orange-500", bg: "bg-orange-50", filterVal: "author-photos" as const },
   ];
 
   const formatTimestamp = (ts: string) => {
@@ -533,6 +570,12 @@ export default function MediaLibraryPage() {
             <Upload className="h-4 w-4 mr-1" />
             Upload Files
           </Button>
+          <Button variant="outline" size="sm" onClick={handleUndo} disabled={undoStack.length === 0} className="border-[#D8B27A]/30 text-[#5C4A3D] hover:bg-[#F2D8BE]/20 disabled:opacity-30">
+            <Undo2 className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleRedo} disabled={redoStack.length === 0} className="border-[#D8B27A]/30 text-[#5C4A3D] hover:bg-[#F2D8BE]/20 disabled:opacity-30">
+            <Redo2 className="h-4 w-4" />
+          </Button>
           <div className="refresh-btn-border rounded-lg p-[2px] w-fit">
             <Button
               variant="outline"
@@ -550,7 +593,7 @@ export default function MediaLibraryPage() {
       </motion.div>
 
       {/* SECTION 2: SUMMARY CARDS */}
-      <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {summaryCards.map((card) => {
           const Icon = card.icon;
           const isActive = activeSummaryCard === card.key || (filter === card.filterVal && activeSummaryCard === null);
@@ -694,7 +737,6 @@ export default function MediaLibraryPage() {
                         { label: "Book Covers", count: stats.bookCovers, color: "bg-violet-500" },
                         { label: "Blog Images", count: stats.blogImages, color: "bg-emerald-500" },
                         { label: "Author Photos", count: stats.authorPhotos, color: "bg-blue-500" },
-                        { label: "Marketing", count: stats.marketing, color: "bg-amber-500" },
                       ].map((cat) => (
                         <div key={cat.label}>
                           <div className="flex items-center justify-between mb-1">
@@ -744,7 +786,7 @@ export default function MediaLibraryPage() {
       <motion.div variants={item} className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-[#E8DDD0] -mx-6 px-6 py-4 -mt-2 space-y-3 shadow-sm">
         {/* First row: Search, Sort, View toggle, Page counter, Quick Actions */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <div className="relative flex-1 max-w-md">
+          <div className="relative flex-1 max-w-md search-bar-border">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
             <Input
               placeholder="Search media files..."
@@ -762,19 +804,29 @@ export default function MediaLibraryPage() {
             )}
           </div>
           <div className="flex items-center gap-2">
-            <div className="relative">
-              <select
-                value={sortOption}
-                onChange={(e) => setSortOption(e.target.value as SortOption)}
-                className="appearance-none bg-white border border-[#E8DDD0] rounded-lg px-4 py-2 pr-10 text-sm text-[#1D1D1D] focus:outline-none focus:border-[#8A6A4A] focus:ring-1 focus:ring-[#8A6A4A]/20"
-              >
-                {SORT_OPTIONS.map((opt) => (
-                  <option key={opt.value} value={opt.value}>
-                    {opt.label}
-                  </option>
-                ))}
-              </select>
-              <ArrowUpDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5C4A3D] pointer-events-none" />
+            <div className="relative" ref={sortFilterRef}>
+              <div className="refresh-btn-border rounded-lg p-[2px]">
+                <Button variant="outline" size="sm" onClick={() => setSortFilterOpen(!sortFilterOpen)} className={`h-9 px-3 border-0 bg-white text-sm font-medium gap-2 ${sortOption !== "newest" ? "text-[#D8B27A]" : "text-[#8A6A4A] hover:bg-[#F2D8BE]"}`}>
+                  <SlidersHorizontal className="h-4 w-4" /><span className="hidden sm:inline">Sort & Filter</span><ChevronRight className={`h-3.5 w-3.5 transition-transform ${sortFilterOpen ? "rotate-90" : ""}`} />
+                </Button>
+              </div>
+              <AnimatePresence>
+                {sortFilterOpen && (
+                  <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} className="absolute top-full left-0 mt-1 w-[260px] bg-white rounded-xl shadow-xl border border-[#E8DDD0] z-50 overflow-hidden">
+                    <div className="p-3 border-b border-[#E8DDD0] bg-[#F5EDE3]/30 flex items-center justify-between">
+                      <h4 className="text-sm font-semibold text-[#1D1D1D] flex items-center gap-2"><SlidersHorizontal className="h-4 w-4 text-[#8A6A4A]" />Sort By</h4>
+                      {sortOption !== "newest" && <Button variant="ghost" size="sm" className="h-6 px-2 text-xs text-rose-600 hover:bg-rose-50" onClick={() => setSortOption("newest")}><X className="h-3 w-3 mr-1" />Clear</Button>}
+                    </div>
+                    <div className="max-h-[300px] overflow-y-auto p-2">
+                      {SORT_OPTIONS.map((opt) => (
+                        <button key={opt.value} onClick={() => { setSortOption(opt.value); setSortFilterOpen(false); }} className={`w-full text-left px-3 py-1.5 rounded-md text-sm transition-colors ${sortOption === opt.value ? "bg-[#D8B27A]/20 text-[#111111] font-medium" : "text-[#5C4A3D] hover:bg-[#F5EDE3]"}`}>
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
             <div className="flex items-center border border-[#E8DDD0] rounded-lg overflow-hidden">
               <button
@@ -998,6 +1050,59 @@ export default function MediaLibraryPage() {
         )}
       </motion.div>
 
+      {/* Bottom Page Counter */}
+      {filteredMedia.length > 0 && (
+        <div className="flex items-center justify-between pt-4 border-t border-[#E8DDD0]">
+          <p className="text-sm text-[#5C4A3D]">
+            Showing {((page - 1) * (pageSize >= 999 ? filteredMedia.length : pageSize)) + 1}–{Math.min(page * (pageSize >= 999 ? filteredMedia.length : pageSize), filteredMedia.length)} of {filteredMedia.length} files
+          </p>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground whitespace-nowrap">Show</span>
+              <Select value={pageSize >= 999 ? "all" : String(pageSize)} onValueChange={(v) => { setPageSize(v === "all" ? 999 : parseInt(v)); setPage(1); }}>
+                <SelectTrigger className="w-[70px] h-9 border-[#8A6A4A]/20"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                  <SelectItem value="100">100</SelectItem>
+                  <SelectItem value="all">All</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quick Actions inline */}
+      {filteredMedia.length > 0 && (
+        <div className="flex items-center justify-end">
+          <div className="relative" ref={quickActionsRef}>
+            <div className="refresh-btn-border rounded-lg p-[2px]">
+              <Button variant="outline" size="sm" onClick={() => setQuickActionsOpen(!quickActionsOpen)} className="h-9 px-3 border-0 bg-white text-sm font-medium text-[#8A6A4A] hover:bg-[#F2D8BE] gap-2">
+                <Zap className="h-4 w-4" /><span className="hidden sm:inline">Quick Actions</span><ChevronRight className={`h-3.5 w-3.5 transition-transform ${quickActionsOpen ? "rotate-90" : ""}`} />
+              </Button>
+            </div>
+            {quickActionsOpen && (
+              <div className="absolute top-full right-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-[#E8DDD0] z-50 p-2">
+                {[
+                  { label: "Upload Files", icon: Upload, action: () => setUploadDialogOpen(true) },
+                  { label: "Upload Book Cover", icon: FolderOpen, action: () => { setFilter("book-covers"); setUploadDialogOpen(true); } },
+                  { label: "Upload Author Photo", icon: Users, action: () => { setFilter("author-photos"); setUploadDialogOpen(true); } },
+                  { label: "Upload Blog Image", icon: FileText, action: () => { setFilter("blog-images"); setUploadDialogOpen(true); } },
+                  { label: "Export Media Report", icon: Download, action: handleExportReport },
+                ].map((action, i) => (
+                  <button key={i} onClick={() => { action.action(); setQuickActionsOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#1D1D1D] hover:bg-[#F2D8BE]/20 transition-colors text-left">
+                    <action.icon className="h-4 w-4 text-[#8A6A4A]" />
+                    {action.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* SECTION 8: MEDIA PREVIEW DRAWER */}
       <AnimatePresence>
         {drawerOpen && drawerAsset && (
@@ -1163,51 +1268,6 @@ export default function MediaLibraryPage() {
           </CardContent>
         </Card>
       </motion.div>
-
-      {/* SECTION 10: QUICK ACTIONS FAB */}
-      <div ref={quickActionsRef} className="fixed bottom-6 right-6 z-50">
-        <AnimatePresence>
-          {quickActionsOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: 10, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="absolute bottom-16 right-0 w-56 bg-white rounded-xl shadow-xl border border-[#E8DDD0] overflow-hidden mb-2"
-            >
-              {[
-                { label: "Upload Files", icon: Upload, action: () => setUploadDialogOpen(true) },
-                { label: "Upload Book Cover", icon: FolderOpen, action: () => { setFilter("book-covers"); setUploadDialogOpen(true); } },
-                { label: "Upload Author Photo", icon: Users, action: () => { setFilter("author-photos"); setUploadDialogOpen(true); } },
-                { label: "Upload Blog Image", icon: FileText, action: () => { setFilter("blog-images"); setUploadDialogOpen(true); } },
-                { label: "Create Folder", icon: FolderOpen, action: () => showNotification("success", "Folder creation dialog would open") },
-                { label: "Export Media Report", icon: Download, action: handleExportReport },
-              ].map((action, i) => (
-                <button
-                  key={i}
-                  onClick={() => {
-                    action.action();
-                    setQuickActionsOpen(false);
-                  }}
-                  className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#1D1D1D] hover:bg-[#F2D8BE]/20 transition-colors text-left"
-                >
-                  <action.icon className="h-4 w-4 text-[#8A6A4A]" />
-                  {action.label}
-                </button>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-        <div className="refresh-btn-border rounded-lg p-[2px] w-fit">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setQuickActionsOpen(!quickActionsOpen)}
-            className="w-14 h-14 rounded-full bg-[#8A6A4A] text-white shadow-lg hover:bg-[#6A4E37] transition-colors flex items-center justify-center"
-          >
-            {quickActionsOpen ? <X className="h-6 w-6" /> : <Zap className="h-6 w-6" />}
-          </motion.button>
-        </div>
-      </div>
 
       {/* SECTION 11: UPLOAD DIALOG */}
       <Dialog open={uploadDialogOpen} onOpenChange={setUploadDialogOpen}>
