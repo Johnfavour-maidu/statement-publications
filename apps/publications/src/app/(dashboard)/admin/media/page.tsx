@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Plus, Trash2, Eye, RefreshCw, Upload, Download, FolderOpen, Image,
-  ChevronDown, ChevronUp, ChevronRight, X, CheckCircle2, BarChart3, BarChart2, Zap,
+  ChevronDown, ChevronUp, ChevronLeft, ChevronRight, X, CheckCircle2, BarChart3, BarChart2, Zap,
   FileText, Calendar, Clock, ArrowUpDown, Grid, List, ExternalLink,
   Copy, Edit3, AlertTriangle, Info, Settings, Filter as FilterIcon,
   SlidersHorizontal, Layers, Tag, Star, TrendingUp, Users, Archive,
@@ -241,6 +241,17 @@ export default function MediaLibraryPage() {
     }
     return result;
   }, [allMedia, filter, search, sortOption]);
+
+  const totalPages = useMemo(() => {
+    if (pageSize >= 999) return 1;
+    return Math.max(1, Math.ceil(filteredMedia.length / pageSize));
+  }, [filteredMedia.length, pageSize]);
+
+  const displayedMedia = useMemo(() => {
+    const effectiveSize = pageSize >= 999 ? filteredMedia.length : pageSize;
+    const start = (page - 1) * effectiveSize;
+    return filteredMedia.slice(start, start + effectiveSize);
+  }, [filteredMedia, page, pageSize]);
 
   const stats = useMemo(
     () => ({
@@ -797,11 +808,6 @@ export default function MediaLibraryPage() {
             )}
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            {filteredMedia.length > 0 && (
-              <span className="text-xs text-[#5C4A3D] whitespace-nowrap hidden sm:inline">
-                Showing {((page - 1) * (pageSize >= 999 ? filteredMedia.length : pageSize)) + 1}–{Math.min(page * (pageSize >= 999 ? filteredMedia.length : pageSize), filteredMedia.length)} of {filteredMedia.length}
-              </span>
-            )}
             <div className="relative" ref={sortFilterRef}>
               <div className="refresh-btn-border rounded-lg p-[2px]">
                 <Button variant="outline" size="sm" onClick={() => setSortFilterOpen(!sortFilterOpen)} className={`h-9 px-3 border-0 bg-white text-sm font-medium gap-2 ${sortOption !== "newest" ? "text-[#D8B27A]" : "text-[#8A6A4A] hover:bg-[#F2D8BE]"}`}>
@@ -941,7 +947,16 @@ export default function MediaLibraryPage() {
         )}
       </AnimatePresence>
 
-      {/* SECTION 7: MEDIA GRID / LIST */}
+      {/* SECTION 7: SUMMARY STRIP */}
+      <motion.div variants={item} className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground bg-[#F2D8BE]/15 rounded-lg px-4 py-2 border border-[#D8B27A]/10">
+        <span>Showing <span className="font-semibold text-[#1D1D1D]">{filteredMedia.length}</span> of <span className="font-semibold text-[#1D1D1D]">{allMedia.length}</span> files</span>
+        <span className="hidden sm:inline text-[#E8DDD0]">|</span>
+        <span><span className="text-violet-600 font-medium">{stats.bookCovers}</span> Book Covers</span>
+        <span><span className="text-emerald-600 font-medium">{stats.blogImages}</span> Blog Images</span>
+        <span><span className="text-blue-600 font-medium">{stats.authorPhotos}</span> Author Photos</span>
+      </motion.div>
+
+      {/* SECTION 8: MEDIA GRID / LIST */}
       <motion.div variants={item}>
         {filteredMedia.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-[#E8DDD0]">
@@ -954,7 +969,7 @@ export default function MediaLibraryPage() {
           </div>
         ) : viewMode === "grid" ? (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {filteredMedia.map((asset) => (
+            {displayedMedia.map((asset) => (
               <motion.div
                 key={asset.id}
                 whileHover={{ scale: 1.02 }}
@@ -1008,7 +1023,7 @@ export default function MediaLibraryPage() {
                 <TableRow className="bg-gray-50 hover:bg-gray-50">
                   <TableHead className="w-10">
                     <button onClick={handleSelectAll} className="flex items-center justify-center">
-                      {selectedIds.size === filteredMedia.length && filteredMedia.length > 0 ? (
+                      {selectedIds.size === displayedMedia.length && displayedMedia.length > 0 ? (
                         <CheckSquare className="h-4 w-4 text-[#8A6A4A]" />
                       ) : (
                         <Square className="h-4 w-4" />
@@ -1023,7 +1038,7 @@ export default function MediaLibraryPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredMedia.map((asset) => (
+                {displayedMedia.map((asset) => (
                   <TableRow key={asset.id} className={`cursor-pointer ${selectedIds.has(asset.id) ? "bg-[#F2D8BE]/10" : ""}`} onClick={() => { setDrawerAsset(asset); setDrawerOpen(true); }}>
                     <TableCell onClick={(e) => e.stopPropagation()}>
                       <button onClick={() => handleSelect(asset.id)}>
@@ -1071,7 +1086,21 @@ export default function MediaLibraryPage() {
         )}
       </motion.div>
 
-      {/* SECTION 8: MEDIA PREVIEW DRAWER */}
+      {/* SECTION 8: PAGINATION */}
+      {filteredMedia.length > 0 && (
+        <motion.div variants={item} className="flex items-center justify-between">
+          <p className="text-sm text-[#5C4A3D]">
+            Showing <span className="font-medium text-[#111111]">{filteredMedia.length === 0 ? 0 : (page - 1) * (pageSize >= 999 ? filteredMedia.length : pageSize) + 1}</span> &ndash; <span className="font-medium text-[#111111]">{Math.min(page * (pageSize >= 999 ? filteredMedia.length : pageSize), filteredMedia.length)}</span> of <span className="font-medium text-[#111111]">{filteredMedia.length}</span> files
+          </p>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => p - 1)} className="border-[#E8DDD0] text-[#5C4A3D] hover:bg-[#F5EDE3]"><ChevronLeft className="h-4 w-4 mr-1" />Previous</Button>
+            <span className="text-sm font-medium text-[#111111] px-2">{page} / {totalPages}</span>
+            <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)} className="border-[#E8DDD0] text-[#5C4A3D] hover:bg-[#F5EDE3]">Next<ChevronRight className="h-4 w-4 ml-1" /></Button>
+          </div>
+        </motion.div>
+      )}
+
+      {/* SECTION 9: MEDIA PREVIEW DRAWER */}
       <AnimatePresence>
         {drawerOpen && drawerAsset && (
           <>
