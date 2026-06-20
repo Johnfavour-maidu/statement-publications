@@ -8,7 +8,6 @@ import {
   Copy, Edit3, AlertTriangle, Info, Settings, Filter as FilterIcon,
   SlidersHorizontal, Layers, Tag, Star, TrendingUp, Users, Archive,
   MoreVertical, Check, Square, CheckSquare, XCircle, File, UploadCloud,
-  Undo2, Redo2,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -570,12 +569,6 @@ export default function MediaLibraryPage() {
             <Upload className="h-4 w-4 mr-1" />
             Upload Files
           </Button>
-          <Button variant="outline" size="sm" onClick={handleUndo} disabled={undoStack.length === 0} className="border-[#D8B27A]/30 text-[#5C4A3D] hover:bg-[#F2D8BE]/20 disabled:opacity-30">
-            <Undo2 className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleRedo} disabled={redoStack.length === 0} className="border-[#D8B27A]/30 text-[#5C4A3D] hover:bg-[#F2D8BE]/20 disabled:opacity-30">
-            <Redo2 className="h-4 w-4" />
-          </Button>
           <div className="refresh-btn-border rounded-lg p-[2px] w-fit">
             <Button
               variant="outline"
@@ -784,7 +777,7 @@ export default function MediaLibraryPage() {
 
       {/* SECTIONS 4 & 5: SEARCH + FILTER CONTAINER */}
       <motion.div variants={item} className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-[#E8DDD0] -mx-6 px-6 py-4 -mt-2 space-y-3 shadow-sm">
-        {/* First row: Search, Sort, View toggle, Page counter, Quick Actions */}
+        {/* First row: Search, Page count, Sort, View toggle, Page size, Quick Actions */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <div className="relative flex-1 max-w-md search-bar-border">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
@@ -803,7 +796,12 @@ export default function MediaLibraryPage() {
               </button>
             )}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
+            {filteredMedia.length > 0 && (
+              <span className="text-xs text-[#5C4A3D] whitespace-nowrap hidden sm:inline">
+                Showing {((page - 1) * (pageSize >= 999 ? filteredMedia.length : pageSize)) + 1}–{Math.min(page * (pageSize >= 999 ? filteredMedia.length : pageSize), filteredMedia.length)} of {filteredMedia.length}
+              </span>
+            )}
             <div className="relative" ref={sortFilterRef}>
               <div className="refresh-btn-border rounded-lg p-[2px]">
                 <Button variant="outline" size="sm" onClick={() => setSortFilterOpen(!sortFilterOpen)} className={`h-9 px-3 border-0 bg-white text-sm font-medium gap-2 ${sortOption !== "newest" ? "text-[#D8B27A]" : "text-[#8A6A4A] hover:bg-[#F2D8BE]"}`}>
@@ -854,6 +852,29 @@ export default function MediaLibraryPage() {
                   <SelectItem value="all">All</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="relative" ref={quickActionsRef}>
+              <div className="refresh-btn-border rounded-lg p-[2px]">
+                <Button variant="outline" size="sm" onClick={() => setQuickActionsOpen(!quickActionsOpen)} className="h-9 px-3 border-0 bg-white text-sm font-medium text-[#8A6A4A] hover:bg-[#F2D8BE] gap-2">
+                  <Zap className="h-4 w-4" /><span className="hidden sm:inline">Quick Actions</span><ChevronRight className={`h-3.5 w-3.5 transition-transform ${quickActionsOpen ? "rotate-90" : ""}`} />
+                </Button>
+              </div>
+              {quickActionsOpen && (
+                <div className="absolute top-full right-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-[#E8DDD0] z-50 p-2">
+                  {[
+                    { label: "Upload Files", icon: Upload, action: () => setUploadDialogOpen(true) },
+                    { label: "Upload Book Cover", icon: FolderOpen, action: () => { setFilter("book-covers"); setUploadDialogOpen(true); } },
+                    { label: "Upload Author Photo", icon: Users, action: () => { setFilter("author-photos"); setUploadDialogOpen(true); } },
+                    { label: "Upload Blog Image", icon: FileText, action: () => { setFilter("blog-images"); setUploadDialogOpen(true); } },
+                    { label: "Export Media Report", icon: Download, action: handleExportReport },
+                  ].map((action, i) => (
+                    <button key={i} onClick={() => { action.action(); setQuickActionsOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#1D1D1D] hover:bg-[#F2D8BE]/20 transition-colors text-left">
+                      <action.icon className="h-4 w-4 text-[#8A6A4A]" />
+                      {action.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             {selectedIds.size > 0 && (
               <Badge className="bg-[#8A6A4A] text-white">{selectedIds.size} selected</Badge>
@@ -1049,59 +1070,6 @@ export default function MediaLibraryPage() {
           </div>
         )}
       </motion.div>
-
-      {/* Bottom Page Counter */}
-      {filteredMedia.length > 0 && (
-        <div className="flex items-center justify-between pt-4 border-t border-[#E8DDD0]">
-          <p className="text-sm text-[#5C4A3D]">
-            Showing {((page - 1) * (pageSize >= 999 ? filteredMedia.length : pageSize)) + 1}–{Math.min(page * (pageSize >= 999 ? filteredMedia.length : pageSize), filteredMedia.length)} of {filteredMedia.length} files
-          </p>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-muted-foreground whitespace-nowrap">Show</span>
-              <Select value={pageSize >= 999 ? "all" : String(pageSize)} onValueChange={(v) => { setPageSize(v === "all" ? 999 : parseInt(v)); setPage(1); }}>
-                <SelectTrigger className="w-[70px] h-9 border-[#8A6A4A]/20"><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="10">10</SelectItem>
-                  <SelectItem value="20">20</SelectItem>
-                  <SelectItem value="50">50</SelectItem>
-                  <SelectItem value="100">100</SelectItem>
-                  <SelectItem value="all">All</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Quick Actions inline */}
-      {filteredMedia.length > 0 && (
-        <div className="flex items-center justify-end">
-          <div className="relative" ref={quickActionsRef}>
-            <div className="refresh-btn-border rounded-lg p-[2px]">
-              <Button variant="outline" size="sm" onClick={() => setQuickActionsOpen(!quickActionsOpen)} className="h-9 px-3 border-0 bg-white text-sm font-medium text-[#8A6A4A] hover:bg-[#F2D8BE] gap-2">
-                <Zap className="h-4 w-4" /><span className="hidden sm:inline">Quick Actions</span><ChevronRight className={`h-3.5 w-3.5 transition-transform ${quickActionsOpen ? "rotate-90" : ""}`} />
-              </Button>
-            </div>
-            {quickActionsOpen && (
-              <div className="absolute top-full right-0 mt-1 w-56 bg-white rounded-xl shadow-xl border border-[#E8DDD0] z-50 p-2">
-                {[
-                  { label: "Upload Files", icon: Upload, action: () => setUploadDialogOpen(true) },
-                  { label: "Upload Book Cover", icon: FolderOpen, action: () => { setFilter("book-covers"); setUploadDialogOpen(true); } },
-                  { label: "Upload Author Photo", icon: Users, action: () => { setFilter("author-photos"); setUploadDialogOpen(true); } },
-                  { label: "Upload Blog Image", icon: FileText, action: () => { setFilter("blog-images"); setUploadDialogOpen(true); } },
-                  { label: "Export Media Report", icon: Download, action: handleExportReport },
-                ].map((action, i) => (
-                  <button key={i} onClick={() => { action.action(); setQuickActionsOpen(false); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-[#1D1D1D] hover:bg-[#F2D8BE]/20 transition-colors text-left">
-                    <action.icon className="h-4 w-4 text-[#8A6A4A]" />
-                    {action.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* SECTION 8: MEDIA PREVIEW DRAWER */}
       <AnimatePresence>
