@@ -16,6 +16,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatDate } from "@/lib/utils";
 
 type MediaCategory = "book-covers" | "author-photos" | "blog-images" | "marketing";
@@ -181,8 +184,11 @@ export default function MediaLibraryPage() {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [activityLog, setActivityLog] = useState<MediaActivity[]>(mockActivity);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const quickActionsRef = useRef<HTMLDivElement>(null);
+  const [pageSize, setPageSize] = useState(20);
+  const [page, setPage] = useState(1);
+  const [showAllActivity, setShowAllActivity] = useState(false);
 
   const showNotification = useCallback((type: "success" | "error", message: string) => {
     setNotification({ type, message });
@@ -441,9 +447,9 @@ export default function MediaLibraryPage() {
   }, []);
 
   const summaryCards = [
-    { key: "total", label: "Total Files", value: stats.total, icon: Image, textColor: "text-[#8A6A4A]", bgColor: "bg-[#F2D8BE]/40", filterVal: "all" as const },
-    { key: "book-covers", label: "Book Covers", value: stats.bookCovers, icon: FolderOpen, textColor: "text-violet-600", bgColor: "bg-violet-50", filterVal: "book-covers" as const },
-    { key: "blog-images", label: "Blog Images", value: stats.blogImages, icon: Image, textColor: "text-emerald-600", bgColor: "bg-emerald-50", filterVal: "blog-images" as const },
+    { key: "total", label: "TOTAL FILES", value: stats.total, icon: Image, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", filterVal: "all" as const },
+    { key: "book-covers", label: "BOOK COVERS", value: stats.bookCovers, icon: FolderOpen, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", filterVal: "book-covers" as const },
+    { key: "blog-images", label: "BLOG IMAGES", value: stats.blogImages, icon: Image, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]/40", filterVal: "blog-images" as const },
   ];
 
   const formatTimestamp = (ts: string) => {
@@ -519,27 +525,27 @@ export default function MediaLibraryPage() {
           <p className="text-[#5C4A3D] mt-1">Premium Digital Asset Management for Statement Publications</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="refresh-btn-border">
+          <Button
+            size="sm"
+            onClick={() => setUploadDialogOpen(true)}
+            className="bg-[#8A6A4A] hover:bg-[#6A4E37] text-white"
+          >
+            <Upload className="h-4 w-4 mr-1" />
+            Upload Files
+          </Button>
+          <div className="refresh-btn-border rounded-lg p-[2px] w-fit">
             <Button
               variant="outline"
               size="sm"
               onClick={() => {
                 showNotification("success", "Media library refreshed");
               }}
-              className="border-[#D8B27A]/30 hover:bg-[#F2D8BE]/20"
+              className="border-0 bg-white text-[#8A6A4A] hover:bg-[#F2D8BE] w-fit"
             >
-              <RefreshCw className="h-4 w-4 mr-2" />
+              <RefreshCw className="h-4 w-4 mr-1" />
               Refresh
             </Button>
           </div>
-          <Button
-            size="sm"
-            onClick={() => setUploadDialogOpen(true)}
-            className="bg-[#8A6A4A] hover:bg-[#7A5A3A] text-white"
-          >
-            <Upload className="h-4 w-4 mr-2" />
-            Upload Files
-          </Button>
         </div>
       </motion.div>
 
@@ -551,25 +557,31 @@ export default function MediaLibraryPage() {
           return (
             <motion.div
               key={card.key}
+              variants={item}
               whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => {
-                setFilter(card.filterVal);
-                setActiveSummaryCard(card.key);
-              }}
-              className={`cursor-pointer rounded-xl p-5 transition-all duration-200 ${card.bgColor} ${
-                isActive ? "ring-2 ring-[#D8B27A] shadow-md" : "shadow-sm hover:shadow-md"
-              }`}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-[#5C4A3D]">{card.label}</p>
-                  <p className={`text-3xl font-bold ${card.textColor} mt-1`}>{card.value}</p>
-                </div>
-                <div className={`p-3 rounded-lg ${card.bgColor}`}>
-                  <Icon className={`h-6 w-6 ${card.textColor}`} />
-                </div>
-              </div>
+              <Card
+                onClick={() => {
+                  setFilter(card.filterVal);
+                  setActiveSummaryCard(card.key);
+                }}
+                className={`shadow-sm transition-all duration-200 bg-white cursor-pointer hover:shadow-md hover:scale-[1.02] ${
+                  isActive ? "ring-2 ring-[#D8B27A] shadow-md" : ""
+                }`}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-[#111111] mb-1">{card.label}</p>
+                      <p className="text-2xl font-bold text-[#111111]">{card.value}</p>
+                    </div>
+                    <div className={`rounded-lg ${card.bg} p-2 ${card.color}`}>
+                      <Icon className="h-4 w-4" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
           );
         })}
@@ -577,24 +589,18 @@ export default function MediaLibraryPage() {
 
       {/* SECTION 3: MEDIA ANALYTICS CENTER */}
       <motion.div variants={item}>
-        <Card className="shadow-sm">
-          <button
-            onClick={() => setAnalyticsOpen(!analyticsOpen)}
-            className="w-full flex items-center justify-between p-5 hover:bg-gray-50/50 transition-colors"
-          >
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-[#F2D8BE]/40 rounded-lg">
-                <BarChart3 className="h-5 w-5 text-[#8A6A4A]" />
+        <div className="analytics-dropdown-border">
+          <Card className="shadow-sm bg-white">
+            <button
+              onClick={() => setAnalyticsOpen(!analyticsOpen)}
+              className="w-full flex items-center justify-between p-4 hover:bg-[#F2D8BE]/10 transition-colors rounded-lg"
+            >
+              <div className="flex items-center gap-2">
+                <BarChart3 className="h-4 w-4 text-[#8A6A4A]" />
+                <h3 className="text-sm font-semibold text-[#1D1D1D]">Media Analytics Center</h3>
               </div>
-              <div className="text-left">
-                <h3 className="font-semibold text-[#1D1D1D]">Media Analytics Center</h3>
-                <p className="text-sm text-[#5C4A3D]">Comprehensive media usage insights</p>
-              </div>
-            </div>
-            <motion.div animate={{ rotate: analyticsOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-              <ChevronDown className="h-5 w-5 text-[#5C4A3D]" />
-            </motion.div>
-          </button>
+              {analyticsOpen ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
+            </button>
           <AnimatePresence>
             {analyticsOpen && (
               <motion.div
@@ -731,82 +737,98 @@ export default function MediaLibraryPage() {
             )}
           </AnimatePresence>
         </Card>
-      </motion.div>
-
-      {/* SECTION 4: CATEGORY FILTER BAR */}
-      <motion.div variants={item} className="flex flex-wrap items-center gap-2">
-        {CATEGORIES.map((cat) => {
-          const isActive = filter === cat.key;
-          return (
-            <button
-              key={cat.key}
-              onClick={() => {
-                setFilter(cat.key);
-                setActiveSummaryCard(null);
-              }}
-              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                isActive
-                  ? `${cat.activeColor} text-white shadow-md`
-                  : "bg-white text-[#5C4A3D] hover:bg-gray-100 shadow-sm"
-              }`}
-            >
-              {cat.label}
-            </button>
-          );
-        })}
-      </motion.div>
-
-      {/* SECTION 5: SEARCH & SORT BAR */}
-      <motion.div variants={item} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5C4A3D]" />
-          <Input
-            placeholder="Search media files..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 border-[#D8B27A]/20 focus:border-[#8A6A4A] focus:ring-[#8A6A4A]/20"
-          />
-          {search && (
-            <button
-              onClick={() => setSearch("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5C4A3D] hover:text-[#1D1D1D]"
-            >
-              <X className="h-4 w-4" />
-            </button>
-          )}
         </div>
-        <div className="flex items-center gap-2">
-          <div className="relative">
-            <select
-              value={sortOption}
-              onChange={(e) => setSortOption(e.target.value as SortOption)}
-              className="appearance-none bg-white border border-[#D8B27A]/20 rounded-lg px-4 py-2 pr-10 text-sm text-[#1D1D1D] focus:outline-none focus:border-[#8A6A4A] focus:ring-1 focus:ring-[#8A6A4A]/20"
-            >
-              {SORT_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-            <ArrowUpDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5C4A3D] pointer-events-none" />
+      </motion.div>
+
+      {/* SECTIONS 4 & 5: SEARCH + FILTER CONTAINER */}
+      <motion.div variants={item} className="sticky top-0 z-20 bg-white/80 backdrop-blur-md border-b border-[#E8DDD0] -mx-6 px-6 py-4 -mt-2 space-y-3 shadow-sm">
+        {/* First row: Search, Sort, View toggle, Page counter, Quick Actions */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground z-10" />
+            <Input
+              placeholder="Search media files..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9 border-0 bg-white focus-visible:ring-0 focus-visible:ring-offset-0 h-9"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch("")}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5C4A3D] hover:text-[#1D1D1D]"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
           </div>
-          <div className="flex items-center border border-[#D8B27A]/20 rounded-lg overflow-hidden">
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`p-2 ${viewMode === "grid" ? "bg-[#8A6A4A] text-white" : "bg-white text-[#5C4A3D] hover:bg-gray-50"}`}
-            >
-              <Grid className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => setViewMode("list")}
-              className={`p-2 ${viewMode === "list" ? "bg-[#8A6A4A] text-white" : "bg-white text-[#5C4A3D] hover:bg-gray-50"}`}
-            >
-              <List className="h-4 w-4" />
-            </button>
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <select
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value as SortOption)}
+                className="appearance-none bg-white border border-[#E8DDD0] rounded-lg px-4 py-2 pr-10 text-sm text-[#1D1D1D] focus:outline-none focus:border-[#8A6A4A] focus:ring-1 focus:ring-[#8A6A4A]/20"
+              >
+                {SORT_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+              <ArrowUpDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5C4A3D] pointer-events-none" />
+            </div>
+            <div className="flex items-center border border-[#E8DDD0] rounded-lg overflow-hidden">
+              <button
+                onClick={() => setViewMode("list")}
+                className={`p-2 transition-colors ${viewMode === "list" ? "bg-[#8A6A4A] text-white" : "bg-white text-[#5C4A3D] hover:bg-[#F5EDE3]"}`}
+              >
+                <List className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => setViewMode("grid")}
+                className={`p-2 transition-colors ${viewMode === "grid" ? "bg-[#8A6A4A] text-white" : "bg-white text-[#5C4A3D] hover:bg-[#F5EDE3]"}`}
+              >
+                <Grid className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground whitespace-nowrap">Show</span>
+              <Select value={pageSize >= 999 ? "all" : String(pageSize)} onValueChange={(v) => { setPageSize(v === "all" ? 999 : parseInt(v)); setPage(1); }}>
+                <SelectTrigger className="w-[70px] h-9 border-[#8A6A4A]/20"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="10">10</SelectItem>
+                  <SelectItem value="20">20</SelectItem>
+                  <SelectItem value="50">50</SelectItem>
+                  <SelectItem value="100">100</SelectItem>
+                  <SelectItem value="all">All</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {selectedIds.size > 0 && (
+              <Badge className="bg-[#8A6A4A] text-white">{selectedIds.size} selected</Badge>
+            )}
           </div>
-          {selectedIds.size > 0 && (
-            <Badge className="bg-[#8A6A4A] text-white">{selectedIds.size} selected</Badge>
-          )}
+        </div>
+        {/* Second row: Category tabs */}
+        <div className="flex flex-wrap items-center gap-2">
+          {CATEGORIES.map((cat) => {
+            const isActive = filter === cat.key;
+            return (
+              <button
+                key={cat.key}
+                onClick={() => {
+                  setFilter(cat.key);
+                  setActiveSummaryCard(null);
+                }}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                  isActive
+                    ? `${cat.activeColor} text-white shadow-md`
+                    : "bg-white text-[#5C4A3D] hover:bg-gray-100 shadow-sm border border-[#E8DDD0]"
+                }`}
+              >
+                {cat.label}
+              </button>
+            );
+          })}
         </div>
       </motion.div>
 
@@ -846,10 +868,10 @@ export default function MediaLibraryPage() {
         )}
       </AnimatePresence>
 
-      {/* SECTION 7: MEDIA GRID */}
+      {/* SECTION 7: MEDIA GRID / LIST */}
       <motion.div variants={item}>
         {filteredMedia.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-[#D8B27A]/10">
+          <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-[#E8DDD0]">
             <FolderOpen className="h-16 w-16 text-[#D8B27A]/40 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-[#1D1D1D] mb-2">No Media Found</h3>
             <p className="text-[#5C4A3D] mb-4">Try adjusting your search or filter criteria</p>
@@ -907,93 +929,71 @@ export default function MediaLibraryPage() {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm border border-[#D8B27A]/10 overflow-hidden">
-            <div className="grid grid-cols-[auto_1fr_auto_auto_auto_auto] gap-4 items-center px-4 py-3 bg-gray-50 border-b border-[#D8B27A]/10 text-xs font-semibold text-[#5C4A3D] uppercase tracking-wider">
-              <div className="w-8">
-                <button onClick={handleSelectAll} className="hover:text-[#8A6A4A]">
-                  {selectedIds.size === filteredMedia.length && filteredMedia.length > 0 ? (
-                    <CheckSquare className="h-4 w-4 text-[#8A6A4A]" />
-                  ) : (
-                    <Square className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-              <span>File</span>
-              <span>Category</span>
-              <span>Size</span>
-              <span>Date</span>
-              <span>Actions</span>
-            </div>
-            {filteredMedia.map((asset) => (
-              <div
-                key={asset.id}
-                className={`grid grid-cols-[auto_1fr_auto_auto_auto_auto] gap-4 items-center px-4 py-3 border-b border-[#D8B27A]/5 hover:bg-[#F2D8BE]/5 transition-colors cursor-pointer ${
-                  selectedIds.has(asset.id) ? "bg-[#F2D8BE]/10" : ""
-                }`}
-                onClick={() => {
-                  setDrawerAsset(asset);
-                  setDrawerOpen(true);
-                }}
-              >
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleSelect(asset.id);
-                  }}
-                >
-                  {selectedIds.has(asset.id) ? (
-                    <CheckSquare className="h-4 w-4 text-[#8A6A4A]" />
-                  ) : (
-                    <Square className="h-4 w-4 text-gray-400 hover:text-[#8A6A4A]" />
-                  )}
-                </div>
-                <div className="flex items-center gap-3 min-w-0">
-                  <div
-                    className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: asset.thumbnailColor + "15" }}
-                  >
-                    <Image className="h-5 w-5" style={{ color: asset.thumbnailColor }} />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-[#1D1D1D] truncate">{asset.name}</p>
-                    <p className="text-xs text-[#5C4A3D] truncate">{asset.fileName}</p>
-                  </div>
-                </div>
-                <Badge variant="outline" className={`text-[10px] ${CATEGORY_BADGE_CLASSES[asset.category]}`}>
-                  {asset.category.replace("-", " ")}
-                </Badge>
-                <span className="text-sm text-[#5C4A3D]">{asset.fileSize}</span>
-                <span className="text-sm text-[#5C4A3D]">
-                  {new Date(asset.uploadDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
-                </span>
-                <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-7 w-7 p-0 hover:bg-[#F2D8BE]/30"
-                    onClick={() => handleDownloadAsset(asset)}
-                  >
-                    <Download className="h-3.5 w-3.5 text-[#5C4A3D]" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-7 w-7 p-0 hover:bg-[#F2D8BE]/30"
-                    onClick={() => handleCopyUrl(asset)}
-                  >
-                    <Copy className="h-3.5 w-3.5 text-[#5C4A3D]" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    className="h-7 w-7 p-0 hover:bg-red-50"
-                    onClick={() => handleDeleteAsset(asset)}
-                  >
-                    <Trash2 className="h-3.5 w-3.5 text-red-500" />
-                  </Button>
-                </div>
-              </div>
-            ))}
+          <div className="bg-white rounded-xl shadow-sm border border-[#E8DDD0] overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-gray-50 hover:bg-gray-50">
+                  <TableHead className="w-10">
+                    <button onClick={handleSelectAll} className="flex items-center justify-center">
+                      {selectedIds.size === filteredMedia.length && filteredMedia.length > 0 ? (
+                        <CheckSquare className="h-4 w-4 text-[#8A6A4A]" />
+                      ) : (
+                        <Square className="h-4 w-4" />
+                      )}
+                    </button>
+                  </TableHead>
+                  <TableHead>File</TableHead>
+                  <TableHead>Category</TableHead>
+                  <TableHead>Size</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {filteredMedia.map((asset) => (
+                  <TableRow key={asset.id} className={`cursor-pointer ${selectedIds.has(asset.id) ? "bg-[#F2D8BE]/10" : ""}`} onClick={() => { setDrawerAsset(asset); setDrawerOpen(true); }}>
+                    <TableCell onClick={(e) => e.stopPropagation()}>
+                      <button onClick={() => handleSelect(asset.id)}>
+                        {selectedIds.has(asset.id) ? <CheckSquare className="h-4 w-4 text-[#8A6A4A]" /> : <Square className="h-4 w-4 text-gray-400 hover:text-[#8A6A4A]" />}
+                      </button>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: asset.thumbnailColor + "15" }}>
+                          <Image className="h-5 w-5" style={{ color: asset.thumbnailColor }} />
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-[#111111] truncate">{asset.name}</p>
+                          <p className="text-xs text-[#5C4A3D] truncate">{asset.fileName}</p>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline" className={`text-[10px] ${CATEGORY_BADGE_CLASSES[asset.category]}`}>
+                        {asset.category.replace("-", " ")}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-sm text-[#5C4A3D]">{asset.fileSize}</TableCell>
+                    <TableCell className="text-sm text-[#5C4A3D]">
+                      {new Date(asset.uploadDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    </TableCell>
+                    <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                      <div className="flex items-center justify-end gap-1">
+                        <Button size="sm" variant="ghost" className="h-7 w-7 p-0 hover:bg-[#F2D8BE]/30" onClick={() => handleDownloadAsset(asset)}>
+                          <Download className="h-3.5 w-3.5 text-[#5C4A3D]" />
+                        </Button>
+                        <Button size="sm" variant="ghost" className="h-7 w-7 p-0 hover:bg-[#F2D8BE]/30" onClick={() => handleCopyUrl(asset)}>
+                          <Copy className="h-3.5 w-3.5 text-[#5C4A3D]" />
+                        </Button>
+                        <Button size="sm" variant="ghost" className="h-7 w-7 p-0 hover:bg-red-50" onClick={() => handleDeleteAsset(asset)}>
+                          <Trash2 className="h-3.5 w-3.5 text-red-500" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
           </div>
         )}
       </motion.div>
@@ -1016,7 +1016,7 @@ export default function MediaLibraryPage() {
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
               className="fixed inset-y-0 right-0 w-full sm:w-[420px] bg-white shadow-2xl z-[70] overflow-y-auto"
             >
-              <div className="sticky top-0 bg-white z-10 border-b border-[#D8B27A]/10 px-6 py-4 flex items-center justify-between">
+              <div className="sticky top-0 bg-white z-10 border-b border-[#E8DDD0] px-6 py-4 flex items-center justify-between">
                 <h3 className="font-semibold text-[#1D1D1D]">Asset Details</h3>
                 <button
                   onClick={() => { setDrawerOpen(false); setDrawerAsset(null); }}
@@ -1051,7 +1051,7 @@ export default function MediaLibraryPage() {
                     { label: "Category", value: drawerAsset.category.replace("-", " ").replace(/\b\w/g, (c) => c.toUpperCase()) },
                     { label: "Downloads", value: String(drawerAsset.downloads) },
                   ].map((detail) => (
-                    <div key={detail.label} className="flex items-center justify-between py-2 border-b border-[#D8B27A]/10 last:border-0">
+                    <div key={detail.label} className="flex items-center justify-between py-2 border-b border-[#E8DDD0] last:border-0">
                       <span className="text-sm text-[#5C4A3D]">{detail.label}</span>
                       <span className="text-sm font-medium text-[#1D1D1D]">{detail.value}</span>
                     </div>
@@ -1079,7 +1079,7 @@ export default function MediaLibraryPage() {
                 {/* Actions */}
                 <div className="space-y-2">
                   <Button
-                    className="w-full bg-[#8A6A4A] hover:bg-[#7A5A3A] text-white"
+                    className="w-full bg-[#8A6A4A] hover:bg-[#6A4E37] text-white"
                     onClick={() => handleDownloadAsset(drawerAsset)}
                   >
                     <Download className="h-4 w-4 mr-2" />
@@ -1132,31 +1132,30 @@ export default function MediaLibraryPage() {
 
       {/* SECTION 9: MEDIA ACTIVITY FEED */}
       <motion.div variants={item}>
-        <Card className="shadow-sm">
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Clock className="h-5 w-5 text-[#8A6A4A]" />
+        <Card className="shadow-sm bg-white">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Clock className="h-4 w-4 text-[#8A6A4A]" />
               Recent Media Activity
             </CardTitle>
+            <Button variant="ghost" size="sm" className="text-xs text-[#8A6A4A] hover:bg-[#F2D8BE]/20" onClick={() => setShowAllActivity(!showAllActivity)}>
+              {showAllActivity ? "Show Less" : "View All"}
+            </Button>
           </CardHeader>
           <CardContent>
             <div className="space-y-0">
-              {activityLog.map((activity, i) => (
-                <div key={activity.id} className="flex items-start gap-4 relative pb-4 last:pb-0">
-                  {i < activityLog.length - 1 && (
-                    <div className="absolute left-[11px] top-6 bottom-0 w-px bg-[#D8B27A]/20" />
-                  )}
-                  <div className={`relative z-10 mt-1 w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${activityDot(activity.action)}/10`}>
-                    <div className={`w-2.5 h-2.5 rounded-full ${activityDot(activity.action)}`} />
+              {(showAllActivity ? activityLog : activityLog.slice(0, 3)).map((activity, i, arr) => (
+                <div key={activity.id} className="flex items-start gap-4 py-3" style={{ borderBottom: i < arr.length - 1 ? "1px solid #E8DDD0" : "none" }}>
+                  <div className="flex flex-col items-center">
+                    <div className={`w-3 h-3 rounded-full mt-1 ${activityDot(activity.action)}`} />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       {activityIcon(activity.action)}
-                      <span className="text-sm font-medium text-[#1D1D1D]">{activity.user}</span>
-                      <span className="text-sm text-[#5C4A3D]">{activityVerb(activity.action)}</span>
+                      <span className="text-sm font-medium text-[#111111]">{activityVerb(activity.action)}</span>
                       <span className="text-sm font-medium text-[#8A6A4A] truncate">{activity.fileName}</span>
                     </div>
-                    <p className="text-xs text-[#5C4A3D] mt-0.5">{formatTimestamp(activity.timestamp)}</p>
+                    <p className="text-xs text-[#5C4A3D] mt-0.5">{activity.user} &middot; {formatTimestamp(activity.timestamp)}</p>
                   </div>
                 </div>
               ))}
@@ -1173,7 +1172,7 @@ export default function MediaLibraryPage() {
               initial={{ opacity: 0, y: 10, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              className="absolute bottom-16 right-0 w-56 bg-white rounded-xl shadow-xl border border-[#D8B27A]/15 overflow-hidden mb-2"
+              className="absolute bottom-16 right-0 w-56 bg-white rounded-xl shadow-xl border border-[#E8DDD0] overflow-hidden mb-2"
             >
               {[
                 { label: "Upload Files", icon: Upload, action: () => setUploadDialogOpen(true) },
@@ -1198,12 +1197,12 @@ export default function MediaLibraryPage() {
             </motion.div>
           )}
         </AnimatePresence>
-        <div className="refresh-btn-border">
+        <div className="refresh-btn-border rounded-lg p-[2px] w-fit">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setQuickActionsOpen(!quickActionsOpen)}
-            className="w-14 h-14 rounded-full bg-[#8A6A4A] text-white shadow-lg hover:bg-[#7A5A3A] transition-colors flex items-center justify-center"
+            className="w-14 h-14 rounded-full bg-[#8A6A4A] text-white shadow-lg hover:bg-[#6A4E37] transition-colors flex items-center justify-center"
           >
             {quickActionsOpen ? <X className="h-6 w-6" /> : <Zap className="h-6 w-6" />}
           </motion.button>
@@ -1256,7 +1255,7 @@ export default function MediaLibraryPage() {
             <Button
               onClick={handleUploadSimulate}
               disabled={uploading}
-              className="bg-[#8A6A4A] hover:bg-[#7A5A3A] text-white"
+              className="bg-[#8A6A4A] hover:bg-[#6A4E37] text-white"
             >
               {uploading ? "Uploading..." : "Upload"}
             </Button>
