@@ -92,7 +92,7 @@ const priorityConfig: Record<string, { label: string; color: string; bg: string 
   high: { label: "High", color: "text-red-700", bg: "bg-red-100" },
 };
 
-export default function AuthorCommunityPage() {
+export default function AuthorSupportCenterPage() {
   const [activeTab, setActiveTab] = useState<"support" | "faqs" | "announcements" | "resources">("support");
   const [ticketDialogOpen, setTicketDialogOpen] = useState(false);
   const [ticketForm, setTicketForm] = useState({ subject: "", category: "", description: "" });
@@ -109,7 +109,7 @@ export default function AuthorCommunityPage() {
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
       <motion.div variants={item} className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#1D1D1D]">Community</h1>
+          <h1 className="text-2xl font-bold tracking-tight text-[#1D1D1D]">Support Centre</h1>
           <p className="text-[#6A4E37]">Get support, find answers, and access publishing resources.</p>
         </div>
         <Button onClick={() => setTicketDialogOpen(true)} className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]">

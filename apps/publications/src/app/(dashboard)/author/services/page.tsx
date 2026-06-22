@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import {
@@ -12,37 +12,36 @@ import {
   CalendarDays,
   ExternalLink,
   Search,
-  Filter,
   ChevronDown,
+  ChevronUp,
+  ChevronLeft,
   ChevronRight,
   MoreHorizontal,
   Eye,
   Edit,
-  Download,
-  FileText,
-  Upload,
   Send,
-  AlertCircle,
   Star,
   TrendingUp,
-  ArrowUpRight,
   ArrowRight,
   X,
-  Archive,
   Trash2,
   RefreshCw,
-  Headphones,
   Users,
   BarChart3,
-  PieChart as PieChartIcon,
   FolderOpen,
-  Bell,
+  ArrowUpDown,
+  Check,
+  Upload,
+  Download,
+  FileText,
+  AlertTriangle,
+  ArrowUp,
+  TrendingDown,
+  ShoppingCart,
 } from "lucide-react";
 import {
   AreaChart,
   Area,
-  BarChart,
-  Bar,
   PieChart,
   Pie,
   Cell,
@@ -53,17 +52,8 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -302,36 +292,19 @@ const statusConfig: Record<ProjectStatus, { label: string; color: string; bg: st
   cancelled: { label: "Cancelled", color: "text-red-700", bg: "bg-red-100" },
 };
 
-const categories = [
-  { label: "All Projects", value: "all", count: allProjects.length },
-  { label: "Pending", value: "pending", count: allProjects.filter((p) => p.status === "pending").length },
-  { label: "In Progress", value: "in_progress", count: allProjects.filter((p) => p.status === "in_progress").length },
-  { label: "Review", value: "review", count: allProjects.filter((p) => p.status === "review").length },
-  { label: "Completed", value: "completed", count: allProjects.filter((p) => p.status === "completed").length },
-  { label: "Cancelled", value: "cancelled", count: allProjects.filter((p) => p.status === "cancelled").length },
-];
-
-const summaryCards = [
-  { label: "Active Projects", value: "5", icon: Package, color: "bg-blue-100 text-blue-600", href: "#projects" },
-  { label: "Pending Projects", value: "2", icon: Clock, color: "bg-amber-100 text-amber-600", href: "#projects" },
-  { label: "Completed Projects", value: "18", icon: CheckCircle2, color: "bg-emerald-100 text-emerald-600", href: "#projects" },
-  { label: "Total Spent", value: "$4,860", icon: DollarSign, color: "bg-violet-100 text-violet-600", href: "#spending" },
-  { label: "Messages", value: "7", icon: MessageSquare, color: "bg-pink-100 text-pink-600", href: "#messages" },
-  { label: "Due This Week", value: "3", icon: CalendarDays, color: "bg-orange-100 text-orange-600", href: "#deliveries" },
+const categoryTabs = [
+  { key: "all", label: "All Projects", icon: Package, count: allProjects.length },
+  { key: "pending", label: "Pending", icon: Clock, count: allProjects.filter((p) => p.status === "pending").length },
+  { key: "in_progress", label: "In Progress", icon: BarChart3, count: allProjects.filter((p) => p.status === "in_progress").length },
+  { key: "review", label: "Review", icon: Eye, count: allProjects.filter((p) => p.status === "review").length },
+  { key: "completed", label: "Completed", icon: CheckCircle2, count: allProjects.filter((p) => p.status === "completed").length },
+  { key: "cancelled", label: "Cancelled", icon: AlertTriangle, count: allProjects.filter((p) => p.status === "cancelled").length },
 ];
 
 const recentActivity = [
-  { title: "Editing Project Updated", desc: "Line editing phase started for Financial Freedom", time: "2 hours ago", icon: Edit, color: "text-blue-600 bg-blue-100" },
-  { title: "Designer Uploaded Files", desc: "Cover mockup v2 uploaded for Money Mindset", time: "5 hours ago", icon: Upload, color: "text-violet-600 bg-violet-100" },
-  { title: "Revision Requested", desc: "Cover design revision for Money Mindset", time: "1 day ago", icon: RefreshCw, color: "text-amber-600 bg-amber-100" },
-  { title: "Project Completed", desc: "Publishing package for Digital Nomad Guide finished", time: "2 weeks ago", icon: CheckCircle2, color: "text-emerald-600 bg-emerald-100" },
-  { title: "Invoice Generated", desc: "Invoice #INV-2025-006 for Marketing Campaign", time: "3 days ago", icon: FileText, color: "text-[#8A6A4A] bg-[#F2D8BE]" },
-];
-
-const upcomingDeliveries = [
-  { project: "Cover Design – Money Mindset", due: "Jul 15, 2025", daysLeft: 2, status: "review" as const },
-  { project: "Editing – Financial Freedom", due: "Jul 18, 2025", daysLeft: 5, status: "in_progress" as const },
-  { project: "Marketing Campaign – Wealth Series", due: "Jul 22, 2025", daysLeft: 9, status: "in_progress" as const },
+  { id: 1, icon: Edit, bg: "bg-blue-100", color: "text-blue-600", text: "Line editing phase started for Financial Freedom", time: "2 hours ago" },
+  { id: 2, icon: Upload, bg: "bg-violet-100", color: "text-violet-600", text: "Cover mockup v2 uploaded for Money Mindset", time: "5 hours ago" },
+  { id: 3, icon: RefreshCw, bg: "bg-amber-100", color: "text-amber-600", text: "Cover design revision requested for Money Mindset", time: "1 day ago" },
 ];
 
 const spendingInsights = {
@@ -344,9 +317,11 @@ const spendingInsights = {
 export default function AuthorServicesPage() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [search, setSearch] = useState("");
-  const [analyticsOpen, setAnalyticsOpen] = useState(true);
+  const [analyticsOpen, setAnalyticsOpen] = useState(false);
   const [drawerProject, setDrawerProject] = useState<Project | null>(null);
-  const [quickActionsOpen, setQuickActionsOpen] = useState(false);
+  const [sortBy, setSortBy] = useState("lastUpdate");
+  const [pageCounter, setPageCounter] = useState(20);
+  const [showPageCounter, setShowPageCounter] = useState(false);
 
   const filteredProjects = useMemo(() => {
     let result = [...allProjects];
@@ -362,166 +337,91 @@ export default function AuthorServicesPage() {
           p.assignedTeam.toLowerCase().includes(q)
       );
     }
+    switch (sortBy) {
+      case "title": result.sort((a, b) => a.title.localeCompare(b.title)); break;
+      case "amount": result.sort((a, b) => b.amount - a.amount); break;
+      case "dueDate": result.sort((a, b) => a.dueDate.localeCompare(b.dueDate)); break;
+      case "lastUpdate": default: break;
+    }
     return result;
-  }, [activeCategory, search]);
+  }, [activeCategory, search, sortBy]);
 
-  const totalMessages = allProjects.reduce((sum, p) => sum + p.messages.filter((m) => m.unread).length, 0);
+  const displayedProjects = useMemo(() => {
+    if (pageCounter === 999) return filteredProjects;
+    return filteredProjects.slice(0, pageCounter);
+  }, [filteredProjects, pageCounter]);
+
+  const activeCount = allProjects.filter((p) => p.status === "in_progress").length;
+  const pendingCount = allProjects.filter((p) => p.status === "pending").length;
+  const completedCount = allProjects.filter((p) => p.status === "completed").length;
+  const totalSpent = allProjects.reduce((sum, p) => sum + p.amount, 0);
+  const avgValue = Math.round(totalSpent / allProjects.length);
 
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
-      {/* 1. Marketplace Access CTA */}
-      <motion.div variants={item}>
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#8A6A4A] via-[#D8B27A] to-[#8A6A4A] p-[1px]">
-          <div className="rounded-2xl bg-white p-6 sm:p-8">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <h2 className="text-xl font-bold text-[#1D1D1D]">Browse Publishing Services</h2>
-                <p className="mt-1 text-sm text-[#6A4E37]">
-                  Explore editing, publishing, formatting, cover design, marketing, and author support services.
-                </p>
-              </div>
-              <div className="flex gap-3">
-                <Button asChild className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]">
-                  <Link href="/services">
-                    Browse Service Marketplace
-                    <ExternalLink className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button variant="outline" asChild className="border-[#E8DDD0]">
-                  <Link href="/services">View Featured Services</Link>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* 2. Summary Cards */}
-      <motion.div variants={item} className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
-        {summaryCards.map((card) => (
-          <a key={card.label} href={card.href}>
-            <Card className="cursor-pointer transition-all duration-300 hover:-translate-y-1 hover:shadow-lg border border-[#E8DDD0]">
-              <CardContent className="p-4">
-                <div className="flex items-center gap-3">
-                  <div className={`rounded-xl p-2.5 ${card.color}`}>
-                    <card.icon className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <p className="text-2xl font-bold text-[#1D1D1D]">{card.value}</p>
-                    <p className="text-xs text-[#6A4E37]">{card.label}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </a>
-        ))}
-      </motion.div>
-
-      {/* 3. Filter Bar */}
-      <motion.div variants={item} className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#8A6A4A]" />
-          <Input
-            placeholder="Search projects, categories, teams..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 border-[#E8DDD0] focus:border-[#D8B27A] focus:ring-[#D8B27A]/20"
-          />
+      {/* 1. Header */}
+      <motion.div variants={item} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-[#1D1D1D]">Services</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Manage your publishing projects and track progress</p>
         </div>
         <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm" className="border-[#E8DDD0]">
-                <Filter className="mr-2 h-4 w-4" />
-                Quick Actions
-                <ChevronDown className="ml-2 h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuItem asChild>
-                <Link href="/services">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Browse Marketplace
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Upload className="mr-2 h-4 w-4" />
-                Upload Requirements
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Headphones className="mr-2 h-4 w-4" />
-                Contact Support
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Request Revision
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Download className="mr-2 h-4 w-4" />
-                Download Invoice
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <BarChart3 className="mr-2 h-4 w-4" />
-                View Service History
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button variant="outline" size="sm" className="border-[#E8DDD0]">
-            <Download className="mr-2 h-4 w-4" />
-            Export
+          <Button variant="outline" className="refresh-btn-border rounded-lg border-[#E8DDD0]" onClick={() => {}}>
+            <RefreshCw className="h-4 w-4 mr-2" /> Refresh
+          </Button>
+          <Button className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a] rounded-lg" asChild>
+            <Link href="/services">
+              Browse Service Marketplace
+              <ExternalLink className="h-4 w-4 ml-2" />
+            </Link>
           </Button>
         </div>
       </motion.div>
 
-      {/* 4. Category Tabs */}
-      <motion.div variants={item} className="flex flex-wrap gap-2">
-        {categories.map((cat) => (
-          <button
-            key={cat.value}
-            onClick={() => setActiveCategory(cat.value)}
-            className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all duration-200 ${
-              activeCategory === cat.value
-                ? "bg-[#D8B27A] text-[#1D1D1D] shadow-sm"
-                : "bg-white text-[#6A4E37] border border-[#E8DDD0] hover:bg-[#F5EDE3]"
-            }`}
-          >
-            {cat.label}
-            <span className={`rounded-full px-1.5 py-0.5 text-xs ${
-              activeCategory === cat.value ? "bg-[#1D1D1D] text-white" : "bg-[#E8DDD0] text-[#6A4E37]"
-            }`}>
-              {cat.count}
-            </span>
-          </button>
+      {/* 2. Summary Cards */}
+      <motion.div variants={item} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+        {[
+          { label: "ACTIVE PROJECTS", value: activeCount, icon: Package, bg: "bg-blue-100", color: "text-blue-600" },
+          { label: "PENDING PROJECTS", value: pendingCount, icon: Clock, bg: "bg-amber-100", color: "text-amber-600" },
+          { label: "COMPLETED PROJECTS", value: completedCount, icon: CheckCircle2, bg: "bg-emerald-100", color: "text-emerald-600" },
+          { label: "TOTAL SPENT", value: `$${totalSpent.toLocaleString()}`, icon: DollarSign, bg: "bg-violet-100", color: "text-violet-600" },
+          { label: "AVG PROJECT VALUE", value: `$${avgValue}`, icon: TrendingUp, bg: "bg-[#F2D8BE]", color: "text-[#8A6A4A]" },
+        ].map((s) => (
+          <motion.div key={s.label} whileHover={{ y: -2 }} className="bg-white rounded-xl border border-[#E8DDD0] p-4 flex items-center justify-between">
+            <div>
+              <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">{s.label}</p>
+              <p className="text-xl font-bold text-[#1D1D1D] mt-1">{s.value}</p>
+            </div>
+            <div className={`p-2.5 rounded-lg ${s.bg}`}>
+              <s.icon className={`h-5 w-5 ${s.color}`} />
+            </div>
+          </motion.div>
         ))}
       </motion.div>
 
-      {/* 5. Analytics Center (collapsible) */}
-      <motion.div variants={item}>
-        <Card className="border border-[#E8DDD0]">
-          <button
-            onClick={() => setAnalyticsOpen(!analyticsOpen)}
-            className="flex w-full items-center justify-between p-4"
-          >
-            <div className="flex items-center gap-3">
-              <BarChart3 className="h-5 w-5 text-[#8A6A4A]" />
-              <h3 className="font-semibold text-[#1D1D1D]">Service Analytics Center</h3>
-            </div>
-            <ChevronDown className={`h-5 w-5 text-[#6A4E37] transition-transform duration-200 ${analyticsOpen ? "rotate-180" : ""}`} />
-          </button>
-          <AnimatePresence>
-            {analyticsOpen && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
-              >
-                <div className="grid gap-4 p-4 pt-0 sm:grid-cols-2 lg:grid-cols-3">
-                  {/* Monthly Spending Chart */}
-                  <div className="bg-white rounded-xl border border-[#E8DDD0] p-4">
-                    <h4 className="font-medium text-[#1D1D1D] mb-3 text-sm">Monthly Service Spending</h4>
-                    <ResponsiveContainer width="100%" height={200}>
+      {/* 3. Service Analytics Center (collapsed by default) */}
+      <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] shadow-sm">
+        <div className="flex items-center justify-between p-4 border-b border-[#E8DDD0]">
+          <h3 className="font-semibold text-[#1D1D1D]">Service Analytics Center</h3>
+          <Button variant="ghost" size="sm" onClick={() => setAnalyticsOpen(!analyticsOpen)} className="text-muted-foreground hover:text-[#1D1D1D]">
+            {analyticsOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </Button>
+        </div>
+        <AnimatePresence>
+          {analyticsOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="overflow-hidden"
+            >
+              <div className="p-4 space-y-4">
+                {/* Monthly Spending Chart + Category Breakdown */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
+                    <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Monthly Service Spending</h4>
+                    <ResponsiveContainer width="100%" height={180}>
                       <AreaChart data={monthlySpending}>
                         <defs>
                           <linearGradient id="spendGrad" x1="0" y1="0" x2="0" y2="1">
@@ -532,392 +432,308 @@ export default function AuthorServicesPage() {
                         <CartesianGrid strokeDasharray="3 3" stroke="#E8DDD0" />
                         <XAxis dataKey="month" tick={{ fontSize: 12 }} />
                         <YAxis tick={{ fontSize: 12 }} />
-                        <Tooltip
-                          contentStyle={{ borderRadius: "12px", border: "1px solid #E8DDD0" }}
-                          formatter={(value) => [`$${value}`, "Spent"]}
-                        />
+                        <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid #E8DDD0", background: "white" }} formatter={(value) => [`$${value}`, "Spent"]} />
                         <Area type="monotone" dataKey="amount" stroke="#D8B27A" fill="url(#spendGrad)" strokeWidth={2} />
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
-
-                  {/* Category Breakdown */}
-                  <div className="bg-white rounded-xl border border-[#E8DDD0] p-4">
-                    <h4 className="font-medium text-[#1D1D1D] mb-3 text-sm">Category Breakdown</h4>
-                    <ResponsiveContainer width="100%" height={200}>
-                      <PieChart>
-                        <Pie
-                          data={categoryBreakdown}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={50}
-                          outerRadius={80}
-                          paddingAngle={3}
-                          dataKey="value"
-                        >
-                          {categoryBreakdown.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip
-                          contentStyle={{ borderRadius: "12px", border: "1px solid #E8DDD0" }}
-                          formatter={(value) => [`${value}%`, "Share"]}
-                        />
-                        <Legend iconType="circle" wrapperStyle={{ fontSize: "11px" }} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-
-                  {/* Key Metrics */}
-                  <div className="bg-white rounded-xl border border-[#E8DDD0] p-4 space-y-4">
-                    <h4 className="font-medium text-[#1D1D1D] text-sm">Key Metrics</h4>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-[#6A4E37]">Average Delivery</span>
-                        <span className="font-semibold text-[#1D1D1D]">8 Days</span>
-                      </div>
-                      <div className="w-full bg-[#F5EDE3] rounded-full h-2">
-                        <div className="bg-[#D8B27A] h-2 rounded-full" style={{ width: "72%" }} />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-[#6A4E37]">Satisfaction Rate</span>
-                        <span className="font-semibold text-[#1D1D1D]">94%</span>
-                      </div>
-                      <div className="w-full bg-[#F5EDE3] rounded-full h-2">
-                        <div className="bg-emerald-500 h-2 rounded-full" style={{ width: "94%" }} />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-[#6A4E37]">On-Time Delivery</span>
-                        <span className="font-semibold text-[#1D1D1D]">89%</span>
-                      </div>
-                      <div className="w-full bg-[#F5EDE3] rounded-full h-2">
-                        <div className="bg-blue-500 h-2 rounded-full" style={{ width: "89%" }} />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </Card>
-      </motion.div>
-
-      {/* 6. Spending Insights + Upcoming Deliveries */}
-      <motion.div variants={item} className="grid gap-6 lg:grid-cols-2">
-        {/* Spending Insights */}
-        <Card className="border border-[#E8DDD0]">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <DollarSign className="h-5 w-5 text-[#8A6A4A]" />
-              Spending Insights
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-xl bg-[#F5EDE3]/50 p-3">
-                <p className="text-xs text-[#6A4E37]">This Month</p>
-                <p className="text-xl font-bold text-[#1D1D1D]">${spendingInsights.thisMonth}</p>
-                <p className="text-xs text-emerald-600">+37% from last month</p>
-              </div>
-              <div className="rounded-xl bg-[#F5EDE3]/50 p-3">
-                <p className="text-xs text-[#6A4E37]">Last Month</p>
-                <p className="text-xl font-bold text-[#1D1D1D]">${spendingInsights.lastMonth}</p>
-              </div>
-              <div className="rounded-xl bg-[#F5EDE3]/50 p-3">
-                <p className="text-xs text-[#6A4E37]">Most Ordered</p>
-                <p className="text-lg font-bold text-[#1D1D1D]">{spendingInsights.mostOrdered}</p>
-              </div>
-              <div className="rounded-xl bg-[#F5EDE3]/50 p-3">
-                <p className="text-xs text-[#6A4E37]">Highest Cost</p>
-                <p className="text-lg font-bold text-[#1D1D1D]">{spendingInsights.highestCost}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Upcoming Deliveries */}
-        <Card className="border border-[#E8DDD0]">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <CalendarDays className="h-5 w-5 text-[#8A6A4A]" />
-              Upcoming Deliveries
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {upcomingDeliveries.map((delivery, i) => (
-              <div key={i} className="flex items-center justify-between rounded-xl border border-[#E8DDD0] p-3 hover:bg-[#F5EDE3]/30 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className={`rounded-lg p-2 ${
-                    delivery.daysLeft <= 3 ? "bg-red-100" : "bg-amber-100"
-                  }`}>
-                    <CalendarDays className={`h-4 w-4 ${
-                      delivery.daysLeft <= 3 ? "text-red-600" : "text-amber-600"
-                    }`} />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-[#1D1D1D]">{delivery.project}</p>
-                    <p className="text-xs text-[#6A4E37]">Due {delivery.due}</p>
-                  </div>
-                </div>
-                <Badge className={delivery.daysLeft <= 3 ? "bg-red-100 text-red-700" : "bg-amber-100 text-amber-700"}>
-                  {delivery.daysLeft} days left
-                </Badge>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* 7. Project Table */}
-      <motion.div variants={item} id="projects">
-        <Card className="border border-[#E8DDD0]">
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-[#E8DDD0] bg-[#F5EDE3]/30">
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#6A4E37]">Project</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#6A4E37]">Category</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#6A4E37]">Team</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#6A4E37]">Status</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#6A4E37]">Progress</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#6A4E37]">Amount</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#6A4E37]">Due Date</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-[#6A4E37]">Last Update</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold text-[#6A4E37]">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredProjects.map((project) => {
-                    const status = statusConfig[project.status];
-                    return (
-                      <tr
-                        key={project.id}
-                        className="border-b border-[#E8DDD0]/50 transition-colors hover:bg-[#F5EDE3]/30 cursor-pointer"
-                        onClick={() => setDrawerProject(project)}
-                      >
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#F2D8BE]/50">
-                              <FileText className="h-5 w-5 text-[#8A6A4A]" />
-                            </div>
-                            <div>
-                              <p className="font-medium text-sm text-[#1D1D1D]">{project.title}</p>
-                              <p className="text-xs text-[#6A4E37]">Started {project.started}</p>
-                            </div>
+                  <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
+                    <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Category Breakdown</h4>
+                    <div className="flex items-center gap-6">
+                      <ResponsiveContainer width={140} height={140}>
+                        <PieChart>
+                          <Pie data={categoryBreakdown} cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={3} dataKey="value">
+                            {categoryBreakdown.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                          </Pie>
+                        </PieChart>
+                      </ResponsiveContainer>
+                      <div className="space-y-2 flex-1">
+                        {categoryBreakdown.map((c) => (
+                          <div key={c.name} className="flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full" style={{ background: c.color }} />
+                            <span className="text-xs text-muted-foreground flex-1">{c.name}</span>
+                            <span className="text-xs font-medium text-[#1D1D1D]">{c.value}%</span>
                           </div>
-                        </td>
-                        <td className="px-4 py-3 text-sm text-[#6A4E37]">{project.category}</td>
-                        <td className="px-4 py-3 text-sm text-[#6A4E37]">{project.assignedTeam}</td>
-                        <td className="px-4 py-3">
-                          <Badge className={`${status.bg} ${status.color} border-0`}>{status.label}</Badge>
-                        </td>
-                        <td className="px-4 py-3">
-                          <div className="w-24">
-                            <div className="flex items-center justify-between text-xs mb-1">
-                              <span className="text-[#6A4E37]">{project.progress}%</span>
-                            </div>
-                            <div className="w-full bg-[#F5EDE3] rounded-full h-1.5">
-                              <div
-                                className={`h-1.5 rounded-full transition-all duration-500 ${
-                                  project.progress === 100 ? "bg-emerald-500" : project.progress >= 60 ? "bg-[#D8B27A]" : "bg-blue-500"
-                                }`}
-                                style={{ width: `${project.progress}%` }}
-                              />
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 text-sm font-medium text-[#1D1D1D]">${project.amount}</td>
-                        <td className="px-4 py-3 text-sm text-[#6A4E37]">{project.dueDate}</td>
-                        <td className="px-4 py-3 text-sm text-[#6A4E37]">{project.lastUpdate}</td>
-                        <td className="px-4 py-3 text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => setDrawerProject(project)}>
-                                <Eye className="mr-2 h-4 w-4" />
-                                View Details
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <Edit className="mr-2 h-4 w-4" />
-                                Edit
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <Send className="mr-2 h-4 w-4" />
-                                Message Team
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <Download className="mr-2 h-4 w-4" />
-                                Download Files
-                              </DropdownMenuItem>
-                              <DropdownMenuItem className="text-red-600">
-                                <Trash2 className="mr-2 h-4 w-4" />
-                                Cancel Project
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-            {filteredProjects.length === 0 && (
-              <div className="flex flex-col items-center justify-center py-16">
-                <FolderOpen className="h-12 w-12 text-[#E8DDD0] mb-4" />
-                <p className="text-lg font-medium text-[#1D1D1D]">No Projects Found</p>
-                <p className="text-sm text-[#6A4E37] mt-1">Try adjusting your search or filters.</p>
-                <Button asChild className="mt-4 bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]">
-                  <Link href="/services">Browse Marketplace</Link>
-                </Button>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* 8. Recent Activity + Messages Center */}
-      <motion.div variants={item} className="grid gap-6 lg:grid-cols-2">
-        {/* Recent Activity */}
-        <Card className="border border-[#E8DDD0]">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <Clock className="h-5 w-5 text-[#8A6A4A]" />
-              Recent Activity
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {recentActivity.map((activity, i) => (
-              <div key={i} className="flex items-start gap-3 rounded-xl border border-[#E8DDD0]/50 p-3 hover:bg-[#F5EDE3]/30 transition-colors">
-                <div className={`rounded-lg p-2 ${activity.color}`}>
-                  <activity.icon className="h-4 w-4" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-[#1D1D1D]">{activity.title}</p>
-                  <p className="text-xs text-[#6A4E37] truncate">{activity.desc}</p>
-                  <p className="text-xs text-[#8A6A4A] mt-1">{activity.time}</p>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-
-        {/* Messages Center */}
-        <Card className="border border-[#E8DDD0]">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <MessageSquare className="h-5 w-5 text-[#8A6A4A]" />
-              Messages
-              {totalMessages > 0 && (
-                <Badge className="bg-red-500 text-white text-xs ml-1">{totalMessages}</Badge>
-              )}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {allProjects
-              .filter((p) => p.messages.length > 0)
-              .slice(0, 5)
-              .map((project) =>
-                project.messages.slice(0, 1).map((msg, i) => (
-                  <div
-                    key={`${project.id}-${i}`}
-                    className={`flex items-start gap-3 rounded-xl p-3 transition-colors ${
-                      msg.unread ? "bg-[#F2D8BE]/20 border border-[#D8B27A]/30" : "border border-[#E8DDD0]/50 hover:bg-[#F5EDE3]/30"
-                    }`}
-                  >
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F2D8BE]">
-                      <Users className="h-4 w-4 text-[#8A6A4A]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium text-[#1D1D1D]">{msg.from}</p>
-                        {msg.unread && <div className="h-2 w-2 rounded-full bg-[#D8B27A]" />}
+                        ))}
                       </div>
-                      <p className="text-xs text-[#6A4E37] truncate">{msg.text}</p>
-                      <p className="text-xs text-[#8A6A4A] mt-1">{msg.time}</p>
                     </div>
                   </div>
-                ))
-              )}
-          </CardContent>
-        </Card>
+                </div>
+                {/* Spending Insights */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">THIS MONTH</p>
+                    <p className="text-xl font-bold text-[#1D1D1D] mt-1">${spendingInsights.thisMonth}</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <ArrowUp className="h-3 w-3 text-emerald-500" />
+                      <span className="text-xs text-emerald-600 font-medium">+37%</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">LAST MONTH</p>
+                    <p className="text-xl font-bold text-[#1D1D1D] mt-1">${spendingInsights.lastMonth}</p>
+                  </div>
+                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">MOST ORDERED</p>
+                    <p className="text-sm font-bold text-[#1D1D1D] mt-1">{spendingInsights.mostOrdered}</p>
+                  </div>
+                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">HIGHEST COST</p>
+                    <p className="text-sm font-bold text-[#1D1D1D] mt-1">{spendingInsights.highestCost}</p>
+                  </div>
+                </div>
+                {/* Key Metrics */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {[
+                    { label: "Average Delivery", value: "8 Days", progress: 72, color: "bg-[#D8B27A]" },
+                    { label: "Satisfaction Rate", value: "94%", progress: 94, color: "bg-emerald-500" },
+                    { label: "On-Time Delivery", value: "89%", progress: 89, color: "bg-blue-500" },
+                  ].map((m) => (
+                    <div key={m.label} className="p-3 border border-[#E8DDD0] rounded-xl">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs text-muted-foreground">{m.label}</span>
+                        <span className="text-sm font-bold text-[#1D1D1D]">{m.value}</span>
+                      </div>
+                      <div className="w-full bg-[#F5EDE3] rounded-full h-1.5">
+                        <div className={`h-1.5 rounded-full ${m.color}`} style={{ width: `${m.progress}%` }} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
 
-      {/* 9. Project Files */}
-      <motion.div variants={item}>
-        <Card className="border border-[#E8DDD0]">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <FolderOpen className="h-5 w-5 text-[#8A6A4A]" />
-              Project Files
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-[#E8DDD0]">
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-[#6A4E37]">File Name</th>
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-[#6A4E37]">Project</th>
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-[#6A4E37]">Type</th>
-                    <th className="px-4 py-2 text-left text-xs font-semibold text-[#6A4E37]">Date</th>
-                    <th className="px-4 py-2 text-right text-xs font-semibold text-[#6A4E37]">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {allProjects
-                    .flatMap((p) =>
-                      p.files.map((f) => ({ ...f, project: p.title }))
-                    )
-                    .slice(0, 8)
-                    .map((file, i) => (
-                      <tr key={i} className="border-b border-[#E8DDD0]/50 hover:bg-[#F5EDE3]/30 transition-colors">
-                        <td className="px-4 py-2.5 text-sm font-medium text-[#1D1D1D]">{file.name}</td>
-                        <td className="px-4 py-2.5 text-sm text-[#6A4E37]">{file.project}</td>
-                        <td className="px-4 py-2.5">
-                          <Badge className={`text-xs ${
-                            file.type === "delivery" ? "bg-emerald-100 text-emerald-700" : "bg-blue-100 text-blue-700"
-                          }`}>
-                            {file.type}
-                          </Badge>
-                        </td>
-                        <td className="px-4 py-2.5 text-sm text-[#6A4E37]">{file.date}</td>
-                        <td className="px-4 py-2.5 text-right">
-                          <Button variant="ghost" size="icon" className="h-7 w-7">
-                            <Download className="h-3.5 w-3.5" />
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </CardContent>
-        </Card>
-      </motion.div>
-
-      {/* 10. Pagination Summary */}
-      <motion.div variants={item}>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between rounded-xl bg-[#F5EDE3]/30 border border-[#E8DDD0] px-4 py-3">
-          <p className="text-sm text-[#6A4E37]">
-            Showing <span className="font-medium text-[#1D1D1D]">{filteredProjects.length}</span> of{" "}
-            <span className="font-medium text-[#1D1D1D]">{allProjects.length}</span> projects
-          </p>
-          <div className="flex items-center gap-3 text-sm">
-            <span className="text-[#6A4E37]">Active: <span className="font-medium text-[#1D1D1D]">{allProjects.filter((p) => p.status === "in_progress").length}</span></span>
-            <span className="text-[#6A4E37]">Pending: <span className="font-medium text-[#1D1D1D]">{allProjects.filter((p) => p.status === "pending").length}</span></span>
-            <span className="text-[#6A4E37]">Review: <span className="font-medium text-[#1D1D1D]">{allProjects.filter((p) => p.status === "review").length}</span></span>
-            <span className="text-[#6A4E37]">Completed: <span className="font-medium text-[#1D1D1D]">{allProjects.filter((p) => p.status === "completed").length}</span></span>
+      {/* 4. Search & Filter Module */}
+      <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] p-4 space-y-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search projects, categories, teams..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pl-9 search-bar-border rounded-lg border-[#E8DDD0] text-sm"
+            />
           </div>
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="refresh-btn-border rounded-lg border-[#E8DDD0]">
+                  <ArrowUpDown className="h-4 w-4 mr-1.5" /> Sort
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-white rounded-xl border border-[#E8DDD0] shadow-lg">
+                <DropdownMenuItem onClick={() => setSortBy("lastUpdate")} className="text-sm">{sortBy === "lastUpdate" && <Check className="h-4 w-4 mr-2" />} Last Update</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy("title")} className="text-sm">{sortBy === "title" && <Check className="h-4 w-4 mr-2" />} Title A-Z</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy("amount")} className="text-sm">{sortBy === "amount" && <Check className="h-4 w-4 mr-2" />} Amount</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy("dueDate")} className="text-sm">{sortBy === "dueDate" && <Check className="h-4 w-4 mr-2" />} Due Date</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <div className="relative">
+              <Button variant="outline" size="sm" className="refresh-btn-border rounded-lg border-[#E8DDD0]" onClick={() => setShowPageCounter(!showPageCounter)}>
+                Show: {pageCounter === 999 ? "All" : pageCounter}
+                <ChevronDown className="h-4 w-4 ml-1" />
+              </Button>
+              <AnimatePresence>
+                {showPageCounter && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    className="absolute right-0 top-full mt-1 bg-white border border-[#E8DDD0] rounded-xl shadow-lg z-30 py-1 min-w-[100px]"
+                  >
+                    {[10, 20, 50, 100, 999].map((n) => (
+                      <button
+                        key={n}
+                        onClick={() => { setPageCounter(n); setShowPageCounter(false); }}
+                        className={`w-full text-left px-4 py-2 text-sm hover:bg-[#F5EDE3] transition-colors ${pageCounter === n ? "font-medium text-[#8A6A4A] bg-[#F5EDE3]/50" : "text-[#1D1D1D]"}`}
+                      >
+                        {n === 999 ? "All" : n}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {categoryTabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveCategory(tab.key)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                activeCategory === tab.key
+                  ? "bg-[#D8B27A] text-[#1D1D1D]"
+                  : "bg-[#F5EDE3] text-muted-foreground hover:bg-[#E8DDD0]"
+              }`}
+            >
+              <tab.icon className="h-3.5 w-3.5" />
+              {tab.label}
+              <span className="ml-0.5 opacity-70">({tab.count})</span>
+            </button>
+          ))}
         </div>
       </motion.div>
 
-      {/* 11. Project Details Drawer */}
+      {/* 5. Projects Table */}
+      <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] shadow-sm overflow-hidden">
+        {displayedProjects.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16 px-4">
+            <div className="p-4 bg-[#F5EDE3] rounded-full mb-4">
+              <FolderOpen className="h-10 w-10 text-[#8A6A4A]" />
+            </div>
+            <p className="text-lg font-semibold text-[#1D1D1D]">No Projects Found</p>
+            <p className="text-sm text-muted-foreground mt-1 mb-4">Try adjusting your search or filters.</p>
+            <Button className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a] rounded-lg" asChild>
+              <Link href="/services">Browse Marketplace</Link>
+            </Button>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-[#E8DDD0] bg-[#F5EDE3]/30">
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">PROJECT</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">CATEGORY</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">TEAM</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">STATUS</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">PROGRESS</th>
+                  <th className="px-4 py-3 text-right text-[10px] font-semibold text-muted-foreground tracking-wider">AMOUNT</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">DUE DATE</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">LAST UPDATE</th>
+                  <th className="px-4 py-3 text-right text-[10px] font-semibold text-muted-foreground tracking-wider">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {displayedProjects.map((project) => {
+                  const status = statusConfig[project.status];
+                  return (
+                    <tr
+                      key={project.id}
+                      className="border-b border-[#E8DDD0]/50 hover:bg-[#F5EDE3]/50 transition-colors cursor-pointer"
+                      onClick={() => setDrawerProject(project)}
+                    >
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#F2D8BE]/50">
+                            <FileText className="h-5 w-5 text-[#8A6A4A]" />
+                          </div>
+                          <div>
+                            <p className="font-medium text-sm text-[#1D1D1D]">{project.title}</p>
+                            <p className="text-xs text-muted-foreground">Started {project.started}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-muted-foreground">{project.category}</td>
+                      <td className="px-4 py-3 text-sm text-muted-foreground">{project.assignedTeam}</td>
+                      <td className="px-4 py-3">
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.color}`}>
+                          {status.label}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="w-24">
+                          <div className="flex items-center justify-between text-xs mb-1">
+                            <span className="text-muted-foreground">{project.progress}%</span>
+                          </div>
+                          <div className="w-full bg-[#F5EDE3] rounded-full h-1.5">
+                            <div
+                              className={`h-1.5 rounded-full transition-all duration-500 ${
+                                project.progress === 100 ? "bg-emerald-500" : project.progress >= 60 ? "bg-[#D8B27A]" : "bg-blue-500"
+                              }`}
+                              style={{ width: `${project.progress}%` }}
+                            />
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-right font-medium text-[#1D1D1D]">${project.amount}</td>
+                      <td className="px-4 py-3 text-sm text-muted-foreground">{project.dueDate}</td>
+                      <td className="px-4 py-3 text-sm text-muted-foreground">{project.lastUpdate}</td>
+                      <td className="px-4 py-3 text-right">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="12" cy="19" r="1.5" /></svg>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end" className="bg-white rounded-xl border border-[#E8DDD0] shadow-lg">
+                            <DropdownMenuItem onClick={() => setDrawerProject(project)}>
+                              <Eye className="h-4 w-4 mr-2" /> View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Edit className="h-4 w-4 mr-2" /> Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Send className="h-4 w-4 mr-2" /> Message Team
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Download className="h-4 w-4 mr-2" /> Download Files
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-600">
+                              <Trash2 className="h-4 w-4 mr-2" /> Cancel Project
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </motion.div>
+
+      {/* 6. Pagination Summary */}
+      <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+          <span>Showing {displayedProjects.length} of {filteredProjects.length} projects</span>
+          <span className="hidden sm:inline">|</span>
+          <span>Active: {activeCount}</span>
+          <span>|</span>
+          <span>Pending: {pendingCount}</span>
+          <span>|</span>
+          <span>Completed: {completedCount}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="icon" className="rounded-lg border-[#E8DDD0]" disabled>
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium text-[#8A6A4A] bg-[#F5EDE3] px-3 py-1 rounded-lg">1</span>
+          <Button variant="outline" size="icon" className="rounded-lg border-[#E8DDD0]" disabled>
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      </motion.div>
+
+      {/* 7. Recent Activity (Compact) */}
+      <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] shadow-sm">
+        <div className="flex items-center justify-between p-4 border-b border-[#E8DDD0]">
+          <h3 className="font-semibold text-[#1D1D1D]">Recent Activity</h3>
+          <Button variant="ghost" size="sm" className="text-[#8A6A4A] hover:text-[#6B5538] text-xs">
+            View All <ArrowRight className="h-3.5 w-3.5 ml-1" />
+          </Button>
+        </div>
+        <div className="divide-y divide-[#E8DDD0]/50">
+          {recentActivity.map((a) => (
+            <div key={a.id} className="flex items-center gap-3 p-4 hover:bg-[#F5EDE3]/30 transition-colors">
+              <div className={`p-2 rounded-lg ${a.bg} shrink-0`}>
+                <a.icon className={`h-4 w-4 ${a.color}`} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-[#1D1D1D] truncate">{a.text}</p>
+                <p className="text-xs text-muted-foreground">{a.time}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Project Details Drawer */}
       <AnimatePresence>
         {drawerProject && (
           <>
@@ -925,7 +741,7 @@ export default function AuthorServicesPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50"
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
               onClick={() => setDrawerProject(null)}
             />
             <motion.div
@@ -933,46 +749,47 @@ export default function AuthorServicesPage() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed right-0 top-0 h-full w-full max-w-lg bg-white shadow-2xl z-50 overflow-y-auto"
+              className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl rounded-l-2xl z-50 overflow-y-auto"
             >
-              <div className="sticky top-0 bg-white border-b border-[#E8DDD0] p-4 flex items-center justify-between z-10">
-                <h3 className="font-semibold text-[#1D1D1D]">Project Details</h3>
-                <Button variant="ghost" size="icon" onClick={() => setDrawerProject(null)}>
-                  <X className="h-5 w-5" />
-                </Button>
-              </div>
-              <div className="p-6 space-y-6">
-                {/* Project Info */}
-                <div>
-                  <h4 className="font-semibold text-[#1D1D1D] mb-2">{drawerProject.title}</h4>
-                  <p className="text-sm text-[#6A4E37]">{drawerProject.description}</p>
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-bold text-[#1D1D1D]">Project Details</h2>
+                  <button onClick={() => setDrawerProject(null)} className="p-2 hover:bg-[#F5EDE3] rounded-lg transition-colors">
+                    <X className="h-5 w-5" />
+                  </button>
                 </div>
-
-                {/* Status & Progress */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-xl bg-[#F5EDE3]/50 p-3">
-                    <p className="text-xs text-[#6A4E37]">Status</p>
-                    <Badge className={`${statusConfig[drawerProject.status].bg} ${statusConfig[drawerProject.status].color} mt-1`}>
-                      {statusConfig[drawerProject.status].label}
-                    </Badge>
+                <div className="mb-6">
+                  <h3 className="text-lg font-bold text-[#1D1D1D] mb-1">{drawerProject.title}</h3>
+                  <p className="text-sm text-muted-foreground">{drawerProject.description}</p>
+                </div>
+                <div className="space-y-3 mb-6">
+                  <div className="flex justify-between py-2 border-b border-[#E8DDD0]">
+                    <span className="text-sm text-muted-foreground">Status</span>
+                    <span className={`text-sm font-medium ${statusConfig[drawerProject.status as keyof typeof statusConfig].color}`}>{statusConfig[drawerProject.status as keyof typeof statusConfig].label}</span>
                   </div>
-                  <div className="rounded-xl bg-[#F5EDE3]/50 p-3">
-                    <p className="text-xs text-[#6A4E37]">Progress</p>
-                    <p className="text-xl font-bold text-[#1D1D1D]">{drawerProject.progress}%</p>
+                  <div className="flex justify-between py-2 border-b border-[#E8DDD0]">
+                    <span className="text-sm text-muted-foreground">Progress</span>
+                    <span className="text-sm font-bold text-[#1D1D1D]">{drawerProject.progress}%</span>
                   </div>
-                  <div className="rounded-xl bg-[#F5EDE3]/50 p-3">
-                    <p className="text-xs text-[#6A4E37]">Amount</p>
-                    <p className="text-xl font-bold text-[#1D1D1D]">${drawerProject.amount}</p>
+                  <div className="flex justify-between py-2 border-b border-[#E8DDD0]">
+                    <span className="text-sm text-muted-foreground">Amount</span>
+                    <span className="text-sm font-bold text-[#1D1D1D]">${drawerProject.amount}</span>
                   </div>
-                  <div className="rounded-xl bg-[#F5EDE3]/50 p-3">
-                    <p className="text-xs text-[#6A4E37]">Due Date</p>
-                    <p className="text-sm font-medium text-[#1D1D1D]">{drawerProject.dueDate}</p>
+                  <div className="flex justify-between py-2 border-b border-[#E8DDD0]">
+                    <span className="text-sm text-muted-foreground">Due Date</span>
+                    <span className="text-sm font-medium text-[#1D1D1D]">{drawerProject.dueDate}</span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-[#E8DDD0]">
+                    <span className="text-sm text-muted-foreground">Team</span>
+                    <span className="text-sm font-medium text-[#1D1D1D]">{drawerProject.assignedTeam}</span>
+                  </div>
+                  <div className="flex justify-between py-2">
+                    <span className="text-sm text-muted-foreground">Category</span>
+                    <span className="text-sm font-medium text-[#1D1D1D]">{drawerProject.category}</span>
                   </div>
                 </div>
-
                 {/* Progress Bar */}
-                <div>
-                  <p className="text-sm font-medium text-[#1D1D1D] mb-2">Progress</p>
+                <div className="mb-6">
                   <div className="w-full bg-[#F5EDE3] rounded-full h-2.5">
                     <div
                       className={`h-2.5 rounded-full transition-all duration-500 ${
@@ -982,43 +799,50 @@ export default function AuthorServicesPage() {
                     />
                   </div>
                 </div>
-
                 {/* Timeline */}
-                <div>
-                  <p className="text-sm font-medium text-[#1D1D1D] mb-3">Project Timeline</p>
-                  <div className="space-y-0">
-                    {drawerProject.milestones.map((milestone, i) => (
-                      <div key={i} className="flex items-start gap-3 pb-4 relative">
-                        {i < drawerProject.milestones.length - 1 && (
-                          <div className="absolute left-[11px] top-6 bottom-0 w-px bg-[#E8DDD0]" />
-                        )}
-                        <div className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full ${
-                          milestone.completed ? "bg-emerald-100" : "bg-[#F5EDE3]"
-                        }`}>
-                          {milestone.completed ? (
-                            <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                          ) : (
-                            <div className="h-2.5 w-2.5 rounded-full bg-[#E8DDD0]" />
-                          )}
-                        </div>
-                        <div>
-                          <p className={`text-sm ${milestone.completed ? "text-[#6A4E37] line-through" : "text-[#1D1D1D] font-medium"}`}>
-                            {milestone.title}
-                          </p>
-                          {milestone.date && (
-                            <p className="text-xs text-[#8A6A4A]">{milestone.date}</p>
-                          )}
-                        </div>
+                <h4 className="font-semibold text-[#1D1D1D] mb-3">Project Timeline</h4>
+                <div className="space-y-0 mb-6">
+                  {drawerProject.milestones.map((milestone, i) => (
+                    <div key={i} className="flex gap-3 relative">
+                      <div className="flex flex-col items-center">
+                        <div className={`w-3 h-3 rounded-full ${milestone.completed ? "bg-[#8A6A4A]" : "bg-[#E8DDD0]"} z-10 mt-1`} />
+                        {i < drawerProject.milestones.length - 1 && <div className="w-px flex-1 bg-[#E8DDD0]" />}
                       </div>
-                    ))}
-                  </div>
+                      <div className="pb-4">
+                        <p className={`text-sm ${milestone.completed ? "text-muted-foreground line-through" : "text-[#1D1D1D] font-medium"}`}>
+                          {milestone.title}
+                        </p>
+                        {milestone.date && (
+                          <p className="text-xs text-muted-foreground mt-0.5">{milestone.date}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-
+                {/* Messages */}
+                {drawerProject.messages.length > 0 && (
+                  <>
+                    <h4 className="font-semibold text-[#1D1D1D] mb-3">Messages</h4>
+                    <div className="space-y-2 mb-6">
+                      {drawerProject.messages.map((msg, i) => (
+                        <div key={i} className={`rounded-lg border p-3 ${
+                          msg.unread ? "border-[#D8B27A]/50 bg-[#F2D8BE]/10" : "border-[#E8DDD0]"
+                        }`}>
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-sm font-medium text-[#1D1D1D]">{msg.from}</span>
+                            <span className="text-xs text-muted-foreground">{msg.time}</span>
+                          </div>
+                          <p className="text-sm text-muted-foreground">{msg.text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
                 {/* Files */}
                 {drawerProject.files.length > 0 && (
-                  <div>
-                    <p className="text-sm font-medium text-[#1D1D1D] mb-3">Files</p>
-                    <div className="space-y-2">
+                  <>
+                    <h4 className="font-semibold text-[#1D1D1D] mb-3">Files</h4>
+                    <div className="space-y-2 mb-6">
                       {drawerProject.files.map((file, i) => (
                         <div key={i} className="flex items-center justify-between rounded-lg border border-[#E8DDD0] p-2.5">
                           <div className="flex items-center gap-2">
@@ -1031,36 +855,15 @@ export default function AuthorServicesPage() {
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </>
                 )}
-
-                {/* Messages */}
-                {drawerProject.messages.length > 0 && (
-                  <div>
-                    <p className="text-sm font-medium text-[#1D1D1D] mb-3">Messages</p>
-                    <div className="space-y-2">
-                      {drawerProject.messages.map((msg, i) => (
-                        <div key={i} className={`rounded-lg border p-3 ${
-                          msg.unread ? "border-[#D8B27A]/50 bg-[#F2D8BE]/10" : "border-[#E8DDD0]"
-                        }`}>
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-sm font-medium text-[#1D1D1D]">{msg.from}</span>
-                            <span className="text-xs text-[#8A6A4A]">{msg.time}</span>
-                          </div>
-                          <p className="text-sm text-[#6A4E37]">{msg.text}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
                 {/* Actions */}
                 <div className="flex gap-3">
-                  <Button className="flex-1 bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]">
+                  <Button className="flex-1 bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a] rounded-lg">
                     <Send className="mr-2 h-4 w-4" />
                     Message Team
                   </Button>
-                  <Button variant="outline" className="border-[#E8DDD0]">
+                  <Button variant="outline" className="rounded-lg border-[#E8DDD0]">
                     <Download className="mr-2 h-4 w-4" />
                     Download
                   </Button>

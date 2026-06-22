@@ -3,270 +3,336 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import {
-  DollarSign,
+  BarChart3,
   TrendingUp,
-  Clock,
+  DollarSign,
+  Eye,
+  ShoppingCart,
+  Star,
+  Users,
   Download,
-  Wallet,
-  ArrowUpRight,
-  CheckCircle2,
   Calendar,
+  BookOpen,
+  ArrowUpRight,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import {
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
   LineChart,
   Line,
+  PieChart,
+  Pie,
+  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Legend,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-const monthlyEarnings = [
-  { month: "Jan", earnings: 820 },
-  { month: "Feb", earnings: 932 },
-  { month: "Mar", earnings: 1101 },
-  { month: "Apr", earnings: 1034 },
-  { month: "May", earnings: 1290 },
-  { month: "Jun", earnings: 1438 },
-  { month: "Jul", earnings: 1200 },
-  { month: "Aug", earnings: 1380 },
-  { month: "Sep", earnings: 1540 },
-  { month: "Oct", earnings: 1620 },
-  { month: "Nov", earnings: 1480 },
-  { month: "Dec", earnings: 1658 },
-];
-
-const royaltyPayments = [
-  { month: "May 2026", amount: 420, status: "paid", date: "Jun 1, 2026" },
-  { month: "April 2026", amount: 385, status: "paid", date: "May 1, 2026" },
-  { month: "March 2026", amount: 512, status: "paid", date: "Apr 1, 2026" },
-  { month: "February 2026", amount: 301, status: "paid", date: "Mar 1, 2026" },
-  { month: "January 2026", amount: 278, status: "paid", date: "Feb 1, 2026" },
-  { month: "December 2025", amount: 342, status: "paid", date: "Jan 1, 2026" },
-  { month: "June 2026", amount: 480, status: "processing", date: "Processing" },
-  { month: "July 2026", amount: 0, status: "scheduled", date: "Scheduled" },
-];
-
-const transactions = [
-  { id: "TXN-001", book: "Financial Freedom", type: "Sale", amount: 12.99, date: "2 hours ago", status: "completed" },
-  { id: "TXN-002", book: "Income Is A Skill", type: "Sale", amount: 15.99, date: "5 hours ago", status: "completed" },
-  { id: "TXN-003", book: "Financial Freedom", type: "Royalty", amount: 342.50, date: "1 day ago", status: "completed" },
-  { id: "TXN-004", book: "Money Mindset", type: "Sale", amount: 9.99, date: "2 days ago", status: "completed" },
-  { id: "TXN-005", book: "Income Is A Skill", type: "Royalty", amount: 189.75, date: "3 days ago", status: "completed" },
-  { id: "TXN-006", book: "The Wealth Blueprint", type: "Sale", amount: 18.99, date: "4 days ago", status: "pending" },
-  { id: "TXN-007", book: "Financial Freedom", type: "Sale", amount: 12.99, date: "5 days ago", status: "completed" },
-  { id: "TXN-008", book: "Money Mindset", type: "Royalty", amount: 256.30, date: "1 week ago", status: "completed" },
-];
-
 const container = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.05 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.04 } },
 };
 
 const item = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
 };
 
-const statusConfig: Record<string, { label: string; color: string; bg: string }> = {
-  paid: { label: "Paid", color: "text-emerald-700", bg: "bg-emerald-100" },
-  processing: { label: "Processing", color: "text-amber-700", bg: "bg-amber-100" },
-  scheduled: { label: "Scheduled", color: "text-blue-700", bg: "bg-blue-100" },
-};
+const monthlyRevenue = [
+  { month: "Jan", revenue: 420, sales: 28 },
+  { month: "Feb", revenue: 560, sales: 35 },
+  { month: "Mar", revenue: 780, sales: 48 },
+  { month: "Apr", revenue: 940, sales: 56 },
+  { month: "May", revenue: 1200, sales: 72 },
+  { month: "Jun", revenue: 1560, sales: 89 },
+];
+
+const readerGrowth = [
+  { month: "Jan", readers: 1200 },
+  { month: "Feb", readers: 1450 },
+  { month: "Mar", readers: 1780 },
+  { month: "Apr", readers: 2100 },
+  { month: "May", readers: 2580 },
+  { month: "Jun", readers: 3120 },
+];
+
+const viewsData = [
+  { month: "Jan", views: 4200 },
+  { month: "Feb", views: 5100 },
+  { month: "Mar", views: 6800 },
+  { month: "Apr", views: 8200 },
+  { month: "May", views: 10400 },
+  { month: "Jun", views: 12800 },
+];
+
+const categoryPerformance = [
+  { name: "Personal Finance", value: 42, color: "#8A6A4A" },
+  { name: "Self-Help", value: 28, color: "#D8B27A" },
+  { name: "Business", value: 18, color: "#F2D8BE" },
+  { name: "Writing", value: 12, color: "#E8DDD0" },
+];
+
+const topBooks = [
+  { title: "Financial Freedom", sales: 342, revenue: 2640, rating: 4.8, views: 12450 },
+  { title: "Income Is A Skill", sales: 268, revenue: 2180, rating: 4.7, views: 9820 },
+  { title: "Money Mindset", sales: 195, revenue: 1420, rating: 4.6, views: 8340 },
+  { title: "The Wealth Blueprint", sales: 148, revenue: 980, rating: 4.5, views: 6890 },
+  { title: "Master Your Spending", sales: 112, revenue: 640, rating: 4.4, views: 5420 },
+];
+
+const royaltyPayments = [
+  { month: "Jun 2026", amount: 480, status: "processing" },
+  { month: "May 2026", amount: 420, status: "paid" },
+  { month: "Apr 2026", amount: 385, status: "paid" },
+  { month: "Mar 2026", amount: 512, status: "paid" },
+  { month: "Feb 2026", amount: 301, status: "paid" },
+  { month: "Jan 2026", amount: 278, status: "paid" },
+];
+
+const summaryCards = [
+  { label: "Total Revenue", value: "$5,460", change: "+30% vs last quarter", icon: DollarSign, color: "text-emerald-600", bg: "bg-emerald-50" },
+  { label: "Total Sales", value: "328", change: "+42 this month", icon: ShoppingCart, color: "text-blue-600", bg: "bg-blue-50" },
+  { label: "Total Views", value: "47,520", change: "+24% growth", icon: Eye, color: "text-violet-600", bg: "bg-violet-50" },
+  { label: "Avg Rating", value: "4.7", change: "Across 12 books", icon: Star, color: "text-amber-600", bg: "bg-amber-50" },
+  { label: "Readers", value: "3,120", change: "+540 this month", icon: Users, color: "text-pink-600", bg: "bg-pink-50" },
+  { label: "Royalties", value: "$2,376", change: "6 months total", icon: TrendingUp, color: "text-[#8A6A4A]", bg: "bg-[#F2D8BE]" },
+];
 
 export default function AuthorEarningsPage() {
-  const [page, setPage] = useState(1);
-  const ITEMS_PER_PAGE = 8;
-
-  const totalPages = Math.ceil(transactions.length / ITEMS_PER_PAGE);
-  const paginatedTransactions = transactions.slice(
-    (page - 1) * ITEMS_PER_PAGE,
-    page * ITEMS_PER_PAGE
-  );
-
-  const totalEarned = 12459.82;
-  const availableBalance = 3241.50;
-  const pending = 1234.00;
-  const thisMonthRoyalty = 420;
-
-  const stats = [
-    { label: "Total Earned", value: `$${totalEarned.toLocaleString()}`, change: "+18.2% this month", trend: "up" as const, icon: DollarSign, color: "text-emerald-600", bg: "bg-emerald-50" },
-    { label: "Available Balance", value: `$${availableBalance.toLocaleString()}`, change: "Royalties paid monthly", trend: "neutral" as const, icon: Wallet, color: "text-blue-600", bg: "bg-blue-50" },
-    { label: "Pending", value: `$${pending.toLocaleString()}`, change: "Processing 3 sales", trend: "neutral" as const, icon: Clock, color: "text-amber-600", bg: "bg-amber-50" },
-    { label: "This Month Royalty", value: `$${thisMonthRoyalty}`, change: "Paid on Jun 1", trend: "up" as const, icon: TrendingUp, color: "text-violet-600", bg: "bg-violet-50" },
-  ];
+  const [revenueOpen, setRevenueOpen] = useState(true);
+  const [booksOpen, setBooksOpen] = useState(true);
 
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
       <motion.div variants={item} className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-[#1D1D1D]">Earnings</h1>
-          <p className="text-[#6A4E37]">
-            Track your revenue, royalties, and financial performance.
-          </p>
+          <p className="text-[#6A4E37]">Track your book performance, revenue, and reader engagement.</p>
         </div>
         <Button variant="outline" className="border-[#E8DDD0]">
           <Download className="mr-2 h-4 w-4" />
-          Export CSV
+          Export Report
         </Button>
       </motion.div>
 
       {/* Summary Cards */}
-      <motion.div variants={item} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => (
-          <Card key={stat.label} className="border border-[#E8DDD0]">
-            <CardContent className="p-5">
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-[#6A4E37]">{stat.label}</p>
-                  <p className="text-2xl font-bold text-[#1D1D1D]">{stat.value}</p>
+      <motion.div variants={item} className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+        {summaryCards.map((card) => (
+          <Card key={card.label} className="border border-[#E8DDD0]">
+            <CardContent className="p-4">
+              <div className="flex items-center gap-3">
+                <div className={`rounded-xl p-2.5 ${card.bg}`}>
+                  <card.icon className={`h-5 w-5 ${card.color}`} />
                 </div>
-                <div className={`rounded-lg p-3 ${stat.bg}`}>
-                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
+                <div>
+                  <p className="text-xl font-bold text-[#1D1D1D]">{card.value}</p>
+                  <p className="text-xs text-[#6A4E37]">{card.label}</p>
                 </div>
-              </div>
-              <div className="mt-3 flex items-center gap-1 text-xs">
-                {stat.trend === "up" && <ArrowUpRight className="h-3 w-3 text-emerald-500" />}
-                <span className={stat.trend === "up" ? "text-emerald-500" : "text-[#6A4E37]"}>{stat.change}</span>
               </div>
             </CardContent>
           </Card>
         ))}
       </motion.div>
 
-      {/* Monthly Earnings Chart */}
+      {/* Revenue Analytics */}
       <motion.div variants={item}>
         <Card className="border border-[#E8DDD0]">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-base">Monthly Earnings</CardTitle>
-            <Badge variant="secondary" className="text-xs">Last 12 months</Badge>
+          <button onClick={() => setRevenueOpen(!revenueOpen)} className="flex w-full items-center justify-between p-4">
+            <div className="flex items-center gap-3">
+              <DollarSign className="h-5 w-5 text-[#8A6A4A]" />
+              <h3 className="font-semibold text-[#1D1D1D]">Revenue Analytics</h3>
+            </div>
+            {revenueOpen ? <ChevronUp className="h-5 w-5 text-[#6A4E37]" /> : <ChevronDown className="h-5 w-5 text-[#6A4E37]" />}
+          </button>
+          {revenueOpen && (
+            <div className="grid gap-4 p-4 pt-0 sm:grid-cols-2">
+              <div className="bg-white rounded-xl border border-[#E8DDD0] p-4">
+                <h4 className="font-medium text-[#1D1D1D] mb-3 text-sm">Monthly Revenue</h4>
+                <ResponsiveContainer width="100%" height={250}>
+                  <AreaChart data={monthlyRevenue}>
+                    <defs>
+                      <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#D8B27A" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#D8B27A" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E8DDD0" />
+                    <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid #E8DDD0" }} formatter={(value) => [`$${value}`, "Revenue"]} />
+                    <Area type="monotone" dataKey="revenue" stroke="#8A6A4A" fill="url(#revGrad)" strokeWidth={2} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="bg-white rounded-xl border border-[#E8DDD0] p-4">
+                <h4 className="font-medium text-[#1D1D1D] mb-3 text-sm">Sales Trend</h4>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={monthlyRevenue}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#E8DDD0" />
+                    <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                    <YAxis tick={{ fontSize: 12 }} />
+                    <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid #E8DDD0" }} />
+                    <Bar dataKey="sales" fill="#D8B27A" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          )}
+        </Card>
+      </motion.div>
+
+      {/* Views & Reader Growth */}
+      <motion.div variants={item} className="grid gap-6 lg:grid-cols-2">
+        <Card className="border border-[#E8DDD0]">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Eye className="h-5 w-5 text-[#8A6A4A]" />
+              Views Analytics
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={monthlyEarnings}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#E8DDD0" />
-                  <XAxis dataKey="month" tick={{ fontSize: 12, fill: "#888" }} />
-                  <YAxis tick={{ fontSize: 12, fill: "#888" }} tickFormatter={(v) => `$${v}`} />
-                  <Tooltip
-                    contentStyle={{ backgroundColor: "#fff", border: "1px solid #E8DDD0", borderRadius: "8px" }}
-                    formatter={(value) => [`$${value}`, "Earnings"]}
-                  />
-                  <Line type="monotone" dataKey="earnings" stroke="#D8B27A" strokeWidth={2} dot={{ fill: "#D8B27A", r: 4 }} activeDot={{ r: 6, fill: "#D8B27A" }} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height={220}>
+              <LineChart data={viewsData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E8DDD0" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid #E8DDD0" }} />
+                <Line type="monotone" dataKey="views" stroke="#8A6A4A" strokeWidth={2} dot={{ fill: "#D8B27A", r: 4 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card className="border border-[#E8DDD0]">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Users className="h-5 w-5 text-[#8A6A4A]" />
+              Reader Growth
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={220}>
+              <AreaChart data={readerGrowth}>
+                <defs>
+                  <linearGradient id="readerGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#8A6A4A" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#8A6A4A" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E8DDD0" />
+                <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
+                <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid #E8DDD0" }} />
+                <Area type="monotone" dataKey="readers" stroke="#8A6A4A" fill="url(#readerGrad)" strokeWidth={2} />
+              </AreaChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
       </motion.div>
 
-      {/* Royalty Payment History */}
-      <motion.div variants={item}>
+      {/* Category Performance + Royalty Payments */}
+      <motion.div variants={item} className="grid gap-6 lg:grid-cols-2">
+        <Card className="border border-[#E8DDD0]">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-base flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-[#8A6A4A]" />
+              Category Performance
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={220}>
+              <PieChart>
+                <Pie data={categoryPerformance} cx="50%" cy="50%" innerRadius={55} outerRadius={85} paddingAngle={3} dataKey="value">
+                  {categoryPerformance.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip contentStyle={{ borderRadius: "12px", border: "1px solid #E8DDD0" }} formatter={(value) => [`${value}%`, "Share"]} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: "11px" }} />
+              </PieChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
         <Card className="border border-[#E8DDD0]">
           <CardHeader className="pb-2">
             <CardTitle className="text-base flex items-center gap-2">
               <Calendar className="h-5 w-5 text-[#8A6A4A]" />
               Royalty Payments
             </CardTitle>
-            <p className="text-sm text-[#6A4E37]">Statement Publications pays royalties monthly on the 1st.</p>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {royaltyPayments.map((payment, i) => {
-                const status = statusConfig[payment.status];
-                return (
-                  <div key={i} className="flex items-center justify-between rounded-xl border border-[#E8DDD0]/50 p-4 hover:bg-[#F5EDE3]/30 transition-colors">
-                    <div className="flex items-center gap-4">
-                      <div className={`rounded-lg p-2.5 ${status.bg}`}>
-                        {payment.status === "paid" ? (
-                          <CheckCircle2 className={`h-5 w-5 ${status.color}`} />
-                        ) : payment.status === "processing" ? (
-                          <Clock className={`h-5 w-5 ${status.color}`} />
-                        ) : (
-                          <Calendar className={`h-5 w-5 ${status.color}`} />
-                        )}
-                      </div>
-                      <div>
-                        <p className="font-medium text-[#1D1D1D]">{payment.month}</p>
-                        <p className="text-xs text-[#6A4E37]">{payment.date}</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg font-bold text-[#1D1D1D]">
-                        {payment.amount > 0 ? `$${payment.amount}` : "—"}
-                      </span>
-                      <Badge className={`${status.bg} ${status.color} border-0`}>{status.label}</Badge>
-                    </div>
+          <CardContent className="space-y-3">
+            {royaltyPayments.map((payment, i) => (
+              <div key={i} className="flex items-center justify-between rounded-xl border border-[#E8DDD0]/50 p-3 hover:bg-[#F5EDE3]/30 transition-colors">
+                <div className="flex items-center gap-3">
+                  <div className={`rounded-lg p-2 ${payment.status === "paid" ? "bg-emerald-100" : "bg-amber-100"}`}>
+                    <DollarSign className={`h-4 w-4 ${payment.status === "paid" ? "text-emerald-600" : "text-amber-600"}`} />
                   </div>
-                );
-              })}
-            </div>
+                  <div>
+                    <p className="text-sm font-medium text-[#1D1D1D]">{payment.month}</p>
+                    <p className="text-xs text-[#6A4E37]">{payment.status === "paid" ? "Paid" : "Processing"}</p>
+                  </div>
+                </div>
+                <span className="text-lg font-bold text-[#1D1D1D]">${payment.amount}</span>
+              </div>
+            ))}
           </CardContent>
         </Card>
       </motion.div>
 
-      {/* Transaction History */}
+      {/* Top Performing Books */}
       <motion.div variants={item}>
         <Card className="border border-[#E8DDD0]">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-base">Transaction History</CardTitle>
-            <Button variant="ghost" size="sm" className="text-xs">
-              <Download className="mr-2 h-3.5 w-3.5" />
-              Export
-            </Button>
-          </CardHeader>
-          <CardContent className="p-0">
+          <button onClick={() => setBooksOpen(!booksOpen)} className="flex w-full items-center justify-between p-4">
+            <div className="flex items-center gap-3">
+              <BookOpen className="h-5 w-5 text-[#8A6A4A]" />
+              <h3 className="font-semibold text-[#1D1D1D]">Top Performing Books</h3>
+            </div>
+            {booksOpen ? <ChevronUp className="h-5 w-5 text-[#6A4E37]" /> : <ChevronDown className="h-5 w-5 text-[#6A4E37]" />}
+          </button>
+          {booksOpen && (
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-t border-[#E8DDD0] bg-[#F5EDE3]/30">
+                    <th className="text-left text-xs font-semibold text-[#6A4E37] px-4 py-3">#</th>
                     <th className="text-left text-xs font-semibold text-[#6A4E37] px-4 py-3">Book</th>
-                    <th className="text-left text-xs font-semibold text-[#6A4E37] px-4 py-3">Type</th>
-                    <th className="text-left text-xs font-semibold text-[#6A4E37] px-4 py-3">Date</th>
-                    <th className="text-left text-xs font-semibold text-[#6A4E37] px-4 py-3">Status</th>
-                    <th className="text-right text-xs font-semibold text-[#6A4E37] px-4 py-3">Amount</th>
+                    <th className="text-left text-xs font-semibold text-[#6A4E37] px-4 py-3">Sales</th>
+                    <th className="text-left text-xs font-semibold text-[#6A4E37] px-4 py-3">Revenue</th>
+                    <th className="text-left text-xs font-semibold text-[#6A4E37] px-4 py-3">Views</th>
+                    <th className="text-left text-xs font-semibold text-[#6A4E37] px-4 py-3">Rating</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {paginatedTransactions.map((txn) => (
-                    <tr key={txn.id} className="border-t border-[#E8DDD0]/50 hover:bg-[#F5EDE3]/30 transition-colors">
+                  {topBooks.map((book, i) => (
+                    <tr key={book.title} className="border-t border-[#E8DDD0]/50 hover:bg-[#F5EDE3]/30 transition-colors">
+                      <td className="px-4 py-3 text-sm font-medium text-[#8A6A4A]">{i + 1}</td>
+                      <td className="px-4 py-3 text-sm font-medium text-[#1D1D1D]">{book.title}</td>
+                      <td className="px-4 py-3 text-sm text-[#6A4E37]">{book.sales.toLocaleString()}</td>
+                      <td className="px-4 py-3 text-sm font-medium text-[#1D1D1D]">${book.revenue.toLocaleString()}</td>
+                      <td className="px-4 py-3 text-sm text-[#6A4E37]">{book.views.toLocaleString()}</td>
                       <td className="px-4 py-3">
-                        <p className="font-medium text-sm text-[#1D1D1D]">{txn.book}</p>
-                        <p className="text-xs text-[#6A4E37]">{txn.id}</p>
-                      </td>
-                      <td className="px-4 py-3">
-                        <Badge variant={txn.type === "Royalty" ? "secondary" : "outline"} className="text-xs">{txn.type}</Badge>
-                      </td>
-                      <td className="px-4 py-3 text-sm text-[#6A4E37]">{txn.date}</td>
-                      <td className="px-4 py-3">
-                        <Badge className={txn.status === "completed" ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}>
-                          {txn.status}
-                        </Badge>
-                      </td>
-                      <td className="px-4 py-3 text-right">
-                        <span className="text-sm font-semibold text-emerald-600">+${txn.amount.toFixed(2)}</span>
+                        <div className="flex items-center gap-1">
+                          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                          <span className="text-sm text-[#1D1D1D]">{book.rating}</span>
+                        </div>
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            {totalPages > 1 && (
-              <div className="flex items-center justify-between border-t border-[#E8DDD0] px-4 py-3">
-                <p className="text-sm text-[#6A4E37]">
-                  Showing {(page - 1) * ITEMS_PER_PAGE + 1} to {Math.min(page * ITEMS_PER_PAGE, transactions.length)} of {transactions.length}
-                </p>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm" disabled={page === 1} onClick={() => setPage((p) => p - 1)} className="border-[#E8DDD0]">Previous</Button>
-                  <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)} className="border-[#E8DDD0]">Next</Button>
-                </div>
-              </div>
-            )}
-          </CardContent>
+          )}
         </Card>
       </motion.div>
     </motion.div>

@@ -60,8 +60,8 @@ const dashboardNav: Record<string, NavSection[]> = {
       items: [
         { label: "All Books", href: "/author/books", icon: BookOpen },
         { label: "Services", href: "/author/services", icon: Package },
-        { label: "Reports", href: "/author/reports", icon: BarChart3 },
-        { label: "Community", href: "/author/community", icon: Users },
+        { label: "Earnings", href: "/author/earnings", icon: BarChart3 },
+        { label: "Support Centre", href: "/author/support-center", icon: Users },
         { label: "Profile", href: "/author/profile", icon: Settings },
       ],
     },
