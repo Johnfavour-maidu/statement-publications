@@ -240,11 +240,11 @@ export default function NewBookPage() {
                   key={step.id}
                   onClick={() => { if (step.id <= currentStep || status === "complete") setCurrentStep(step.id); }}
                   className={cn(
-                    "flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 shrink-0",
-                    status === "complete" && "bg-emerald-50 text-emerald-700 hover:bg-emerald-100 cursor-pointer",
-                    status === "current" && "bg-[#D8B27A]/10 text-[#8A6A4A] border border-[#D8B27A]/30",
-                    status === "warning" && "bg-amber-50 text-amber-600 hover:bg-amber-100 cursor-pointer",
-                    status === "upcoming" && "text-muted-foreground hover:bg-[#F5EDE3]",
+                    "flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all duration-200 shrink-0 text-[#1D1D1D]",
+                    status === "complete" && "bg-emerald-50 hover:bg-emerald-100 cursor-pointer",
+                    status === "current" && "bg-[#D8B27A]/10 border border-[#D8B27A]/30",
+                    status === "warning" && "hover:bg-[#F5EDE3] cursor-pointer",
+                    status === "upcoming" && "hover:bg-[#F5EDE3]",
                   )}
                 >
                   {status === "complete" ? (
@@ -253,12 +253,11 @@ export default function NewBookPage() {
                     <div className={cn(
                       "h-5 w-5 rounded-full flex items-center justify-center text-[10px] font-bold border",
                       status === "current" && "border-[#D8B27A] bg-[#D8B27A] text-white",
-                      status === "warning" && "border-amber-400 bg-amber-400 text-white",
-                      status === "upcoming" && "border-[#E8DDD0] text-muted-foreground",
+                      status === "warning" && "border-[#1D1D1D] text-[#1D1D1D]",
+                      status === "upcoming" && "border-[#E8DDD0] text-[#1D1D1D]",
                     )}>{step.id}</div>
                   )}
                   <span className="hidden sm:inline">{step.label}</span>
-                  {status === "warning" && <AlertTriangle className="h-3 w-3 text-amber-500" />}
                 </button>
               );
             })}
