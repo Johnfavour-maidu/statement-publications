@@ -71,8 +71,7 @@ const dashboardNav: Record<string, NavSection[]> = {
     {
       title: "Publishing Services",
       items: [
-        { label: "Order Service", href: "/author/services", icon: ShoppingCart },
-        { label: "Active Projects", href: "/author/projects", icon: Package },
+        { label: "Services", href: "/author/services", icon: Package },
       ],
     },
     {
