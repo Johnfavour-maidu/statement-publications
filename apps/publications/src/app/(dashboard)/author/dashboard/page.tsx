@@ -33,6 +33,7 @@ import {
   Palette,
   File,
   Send,
+  Headphones,
 } from "lucide-react";
 import {
   AreaChart,
@@ -52,6 +53,24 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const container = {
   hidden: { opacity: 0 },
@@ -147,12 +166,11 @@ const earningsData = [
 ];
 
 const quickActions = [
-  { label: "Create New Book", href: "/author/books/new", icon: BookOpen, color: "bg-[#D8B27A]" },
-  { label: "Continue Draft", href: "/author/books?status=draft", icon: FileText, color: "bg-blue-600" },
-  { label: "Upload Manuscript", href: "/author/books/new", icon: Upload, color: "bg-emerald-600" },
-  { label: "Order Service", href: "/services", icon: ShoppingCart, color: "bg-violet-600" },
-  { label: "Request Withdrawal", href: "/author/earnings", icon: DollarSign, color: "bg-amber-600" },
-  { label: "View Analytics", href: "/author/analytics", icon: BarChart3, color: "bg-pink-600" },
+  { label: "Upload New Book", action: "upload", icon: Upload, color: "bg-[#D8B27A]" },
+  { label: "Browse Services", href: "/author/services", icon: ShoppingCart, color: "bg-blue-600" },
+  { label: "Contact Support", href: "/author/support", icon: Headphones, color: "bg-emerald-600" },
+  { label: "View Earnings", href: "/author/earnings", icon: DollarSign, color: "bg-violet-600" },
+  { label: "Edit Profile", href: "/author/profile", icon: User, color: "bg-amber-600" },
 ];
 
 const analyticsPanels = [
@@ -238,6 +256,8 @@ export default function AuthorDashboardPage() {
   const [analyticsOpen, setAnalyticsOpen] = useState(true);
   const [notificationsOpen, setNotificationsOpen] = useState(true);
   const [completedTasks, setCompletedTasks] = useState<Record<number, boolean>>({ 1: true });
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [uploadForm, setUploadForm] = useState({ title: "", category: "", description: "", file: "" });
 
   const toggleTask = (index: number) => {
     setCompletedTasks((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -346,10 +366,25 @@ export default function AuthorDashboardPage() {
           <h3 className="font-semibold text-[#1D1D1D] mb-4">Quick Actions</h3>
           <div className="grid grid-cols-2 gap-3">
             {quickActions.map((action) => (
-              <Link key={action.label} href={action.href}>
+              action.href ? (
+                <Link key={action.label} href={action.href}>
+                  <motion.div
+                    whileHover={{ y: -2, boxShadow: "0 8px 24px rgba(0,0,0,0.06)" }}
+                    className="bg-white rounded-xl border border-[#E8DDD0] p-4 cursor-pointer transition-all duration-300 hover:shadow-md"
+                  >
+                    <div className={`h-10 w-10 rounded-lg ${action.color} flex items-center justify-center mb-3`}>
+                      <action.icon className="h-5 w-5 text-white" />
+                    </div>
+                    <p className="text-sm font-medium text-[#1D1D1D]">{action.label}</p>
+                    <ArrowUpRight className="h-3 w-3 text-muted-foreground mt-1" />
+                  </motion.div>
+                </Link>
+              ) : (
                 <motion.div
+                  key={action.label}
                   whileHover={{ y: -2, boxShadow: "0 8px 24px rgba(0,0,0,0.06)" }}
                   className="bg-white rounded-xl border border-[#E8DDD0] p-4 cursor-pointer transition-all duration-300 hover:shadow-md"
+                  onClick={() => setUploadModalOpen(true)}
                 >
                   <div className={`h-10 w-10 rounded-lg ${action.color} flex items-center justify-center mb-3`}>
                     <action.icon className="h-5 w-5 text-white" />
@@ -357,7 +392,7 @@ export default function AuthorDashboardPage() {
                   <p className="text-sm font-medium text-[#1D1D1D]">{action.label}</p>
                   <ArrowUpRight className="h-3 w-3 text-muted-foreground mt-1" />
                 </motion.div>
-              </Link>
+              )
             ))}
           </div>
         </div>
@@ -679,6 +714,74 @@ export default function AuthorDashboardPage() {
           </div>
         </div>
       </motion.div>
+
+      {/* Upload New Book Modal */}
+      <Dialog open={uploadModalOpen} onOpenChange={setUploadModalOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Upload New Book</DialogTitle>
+            <DialogDescription>
+              Start your publishing journey by adding a new book.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label htmlFor="book-title">Book Title</Label>
+              <Input
+                id="book-title"
+                placeholder="Enter your book title"
+                value={uploadForm.title}
+                onChange={(e) => setUploadForm({ ...uploadForm, title: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="book-category">Category</Label>
+              <Select value={uploadForm.category} onValueChange={(v) => setUploadForm({ ...uploadForm, category: v })}>
+                <SelectTrigger id="book-category">
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="fiction">Fiction</SelectItem>
+                  <SelectItem value="non-fiction">Non-Fiction</SelectItem>
+                  <SelectItem value="self-help">Self-Help</SelectItem>
+                  <SelectItem value="business">Business</SelectItem>
+                  <SelectItem value="poetry">Poetry</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="book-desc">Description</Label>
+              <Textarea
+                id="book-desc"
+                placeholder="Brief description of your book..."
+                rows={3}
+                value={uploadForm.description}
+                onChange={(e) => setUploadForm({ ...uploadForm, description: e.target.value })}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Manuscript File</Label>
+              <div className="rounded-lg border-2 border-dashed border-[#E8DDD0] p-6 text-center hover:border-[#D8B27A] transition-colors cursor-pointer">
+                <Upload className="h-8 w-8 text-[#8A6A4A] mx-auto mb-2" />
+                <p className="text-sm text-[#6A4E37]">Drop your manuscript here or click to browse</p>
+                <p className="text-xs text-[#8A6A4A] mt-1">PDF, DOCX, or EPUB up to 50MB</p>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setUploadModalOpen(false)}>Cancel</Button>
+            <Button
+              onClick={() => setUploadModalOpen(false)}
+              className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]"
+              disabled={!uploadForm.title}
+            >
+              <Upload className="mr-2 h-4 w-4" />
+              Upload Book
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 }

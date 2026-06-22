@@ -65,7 +65,6 @@ const dashboardNav: Record<string, NavSection[]> = {
       title: "My Books",
       items: [
         { label: "All Books", href: "/author/books", icon: BookOpen },
-        { label: "Create New Book", href: "/author/books/new", icon: PenTool },
       ],
     },
     {
@@ -78,28 +77,18 @@ const dashboardNav: Record<string, NavSection[]> = {
       title: "Royalties",
       items: [
         { label: "Earnings", href: "/author/earnings", icon: Wallet },
-        { label: "Withdrawals", href: "/author/withdrawals", icon: CreditCard },
-      ],
-    },
-    {
-      title: "Insights",
-      items: [
-        { label: "Book Analytics", href: "/author/analytics", icon: BarChart3 },
       ],
     },
     {
       title: "Communication",
       items: [
-        { label: "Messages", href: "/author/messages", icon: MessageSquare },
         { label: "Support Center", href: "/author/support", icon: Headphones },
-        { label: "Notifications", href: "/author/notifications", icon: Bell },
       ],
     },
     {
       title: "Account",
       items: [
-        { label: "My Profile", href: "/author/profile", icon: Users },
-        { label: "Settings", href: "/author/settings", icon: Settings },
+        { label: "Profile", href: "/author/profile", icon: Users },
       ],
     },
   ],
