@@ -1,513 +1,265 @@
 "use client";
 
-import { useState, useMemo, useCallback, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useMemo, useCallback } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import {
-  BookOpen,
-  CheckCircle2,
-  FileText,
-  Eye,
-  BarChart3,
-  DollarSign,
-  Search,
-  Plus,
-  Upload,
-  ShoppingCart,
-  Hash,
-  Download,
-  Edit,
-  Trash2,
-  Archive,
-  Copy,
-  ChevronDown,
-  ChevronUp,
-  ChevronLeft,
-  ChevronRight,
-  Star,
-  Clock,
-  Users,
-  MessageSquare,
-  Bookmark,
-  RefreshCw,
-  XCircle,
-  AlertTriangle,
-  ArrowUp,
-  X,
-  TrendingUp,
-  TrendingDown,
-  Activity,
-  Zap,
-  Layers,
-  Target,
-  Award,
-  Calendar,
+  BookOpen, Plus, Search, Filter, MoreVertical, Eye, Edit, Copy, Archive, Trash2,
+  ArrowUp, TrendingUp, Users, Clock, MessageSquare, Download, Bookmark, Star,
+  ChevronDown, ChevronUp, ChevronLeft, ChevronRight, CheckCircle2, AlertTriangle,
+  FileText, X, Grid3X3, List, BarChart3, PieChart as PieIcon, SlidersHorizontal,
+  Check, RefreshCw, Settings, TrendingDown, DollarSign, ShoppingCart, BookMarked,
+  Loader2, ArrowRight, ArrowUpDown, SortAsc, SortDesc, LayoutGrid, Table, Calendar, Tag,
+  Folder, Award, Zap, Activity, Eye as EyeIcon
 } from "lucide-react";
-import {
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+const statusConfig = {
+  published: { label: "Published", bg: "bg-emerald-100", color: "text-emerald-700" },
+  draft: { label: "Draft", bg: "bg-amber-100", color: "text-amber-700" },
+  pending: { label: "Pending", bg: "bg-blue-100", color: "text-blue-700" },
+  rejected: { label: "Rejected", bg: "bg-red-100", color: "text-red-700" },
+} as const;
 
-type BookStatus = "PUBLISHED" | "DRAFT" | "PENDING_REVIEW" | "REJECTED";
-
-interface Book {
-  id: string;
-  title: string;
-  isbn: string;
-  category: string;
-  status: BookStatus;
-  views: number;
-  sales: number;
-  revenue: number;
-  rating: number;
-  createdDate: string;
-  updatedDate: string;
-  performance: string;
-  description: string;
-}
-
-const demoBooks: Book[] = [
-  { id: "1", title: "Wealth Is A Decision", isbn: "978-1-234567-01-1", category: "Personal Finance", status: "PUBLISHED", views: 12450, sales: 342, revenue: 2640, rating: 4.8, createdDate: "Jan 15", updatedDate: "Jun 18", performance: "Excellent", description: "A comprehensive guide to making smart financial decisions that build lasting wealth." },
-  { id: "2", title: "Income Is A Skill", isbn: "978-1-234567-02-8", category: "Personal Finance", status: "PUBLISHED", views: 9820, sales: 268, revenue: 2180, rating: 4.7, createdDate: "Feb 3", updatedDate: "Jun 15", performance: "Excellent", description: "Learn the essential skills to increase your income and achieve financial freedom." },
-  { id: "3", title: "Money Is A Behaviour", isbn: "978-1-234567-03-5", category: "Personal Finance", status: "PUBLISHED", views: 8340, sales: 195, revenue: 1420, rating: 4.6, createdDate: "Feb 20", updatedDate: "Jun 12", performance: "Excellent", description: "Understanding the psychology behind money habits and how to change them." },
-  { id: "4", title: "Master Your Spending", isbn: "978-1-234567-04-2", category: "Budgeting", status: "PUBLISHED", views: 6890, sales: 148, revenue: 980, rating: 4.5, createdDate: "Mar 8", updatedDate: "Jun 10", performance: "Excellent", description: "Practical strategies to take control of your spending and save more money." },
-  { id: "5", title: "Build Strong Savings", isbn: "978-1-234567-05-9", category: "Savings", status: "PUBLISHED", views: 5420, sales: 112, revenue: 640, rating: 4.4, createdDate: "Mar 22", updatedDate: "Jun 8", performance: "Good", description: "A step-by-step approach to building a robust savings plan for any income level." },
-  { id: "6", title: "Beginner Investing Made Simple", isbn: "978-1-234567-06-6", category: "Investing", status: "PUBLISHED", views: 4870, sales: 96, revenue: 480, rating: 4.3, createdDate: "Apr 5", updatedDate: "Jun 5", performance: "Good", description: "Breaking down complex investment concepts into simple, actionable steps for beginners." },
-  { id: "7", title: "Financial Clarity Blueprint", isbn: "978-1-234567-07-3", category: "Finance", status: "PUBLISHED", views: 4210, sales: 78, revenue: 320, rating: 4.2, createdDate: "Apr 18", updatedDate: "Jun 2", performance: "Good", description: "Your complete blueprint for achieving financial clarity and long-term stability." },
-  { id: "8", title: "The Entrepreneur Mindset", isbn: "978-1-234567-08-0", category: "Business", status: "PUBLISHED", views: 3680, sales: 64, revenue: 240, rating: 4.1, createdDate: "May 2", updatedDate: "May 28", performance: "Good", description: "Cultivating the mindset needed to succeed as an entrepreneur in today's market." },
-  { id: "9", title: "Digital Nomad Guide", isbn: "978-1-234567-09-7", category: "Travel", status: "PUBLISHED", views: 3240, sales: 52, revenue: 180, rating: 4.0, createdDate: "May 15", updatedDate: "May 25", performance: "Good", description: "Everything you need to know about living and working as a digital nomad." },
-  { id: "10", title: "Self-Publishing Mastery", isbn: "978-1-234567-10-3", category: "Publishing", status: "PUBLISHED", views: 2890, sales: 45, revenue: 120, rating: 3.9, createdDate: "Jun 1", updatedDate: "Jun 18", performance: "Average", description: "Master the art of self-publishing and bring your book to market successfully." },
-  { id: "11", title: "Creative Writing 101", isbn: "978-1-234567-11-0", category: "Writing", status: "PUBLISHED", views: 2540, sales: 38, revenue: 80, rating: 3.8, createdDate: "Jun 10", updatedDate: "Jun 18", performance: "Average", description: "A foundational guide to creative writing for aspiring authors." },
-  { id: "12", title: "The Writer's Journey", isbn: "978-1-234567-12-7", category: "Writing", status: "PUBLISHED", views: 2100, sales: 28, revenue: 60, rating: 3.7, createdDate: "Jun 18", updatedDate: "Jun 18", performance: "Average", description: "Follow the transformative journey of becoming a published writer." },
-  { id: "13", title: "Future Trends 2025", isbn: "978-1-234567-13-4", category: "Business", status: "DRAFT", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Jun 1", updatedDate: "Jun 16", performance: "Needs Attention", description: "An exploration of emerging business and technology trends for 2025." },
-  { id: "14", title: "Health & Wellness Guide", isbn: "978-1-234567-14-1", category: "Health", status: "DRAFT", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Jun 5", updatedDate: "Jun 14", performance: "Needs Attention", description: "A comprehensive guide to holistic health and wellness practices." },
-  { id: "15", title: "Travel Memoirs", isbn: "978-1-234567-15-8", category: "Travel", status: "DRAFT", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Jun 10", updatedDate: "Jun 17", performance: "Needs Attention", description: "Personal travel stories and insights from journeys around the world." },
-  { id: "16", title: "Poetry Collection", isbn: "978-1-234567-16-5", category: "Poetry", status: "PENDING_REVIEW", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Jun 12", updatedDate: "Jun 18", performance: "Needs Attention", description: "A curated collection of contemporary poetry exploring love, nature, and life." },
-  { id: "17", title: "The Art of Public Speaking", isbn: "978-1-234567-17-2", category: "Self-Help", status: "PENDING_REVIEW", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Jun 15", updatedDate: "Jun 18", performance: "Needs Attention", description: "Develop confidence and master the skills of effective public speaking." },
-  { id: "18", title: "Rejected Manuscript", isbn: "978-1-234567-18-9", category: "Fiction", status: "REJECTED", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Jun 8", updatedDate: "Jun 17", performance: "Needs Attention", description: "A fictional manuscript that did not meet publishing guidelines." },
-];
-
-const statusConfig: Record<BookStatus, { label: string; color: string; bg: string }> = {
-  PUBLISHED: { label: "Published", color: "text-emerald-700", bg: "bg-emerald-100" },
-  DRAFT: { label: "Draft", color: "text-gray-700", bg: "bg-gray-100" },
-  PENDING_REVIEW: { label: "Pending Review", color: "text-amber-700", bg: "bg-amber-100" },
-  REJECTED: { label: "Rejected", color: "text-red-700", bg: "bg-red-100" },
-};
-
-const performanceConfig: Record<string, { color: string; bg: string; label: string }> = {
-  Excellent: { color: "text-emerald-700", bg: "bg-emerald-100", label: "Excellent" },
-  Good: { color: "text-blue-700", bg: "bg-blue-100", label: "Good" },
-  Average: { color: "text-amber-700", bg: "bg-amber-100", label: "Average" },
-  "Needs Attention": { color: "text-red-700", bg: "bg-red-100", label: "Needs Attention" },
-};
+const performanceConfig = {
+  excellent: { label: "Excellent", bg: "bg-emerald-100", color: "text-emerald-700" },
+  good: { label: "Good", bg: "bg-blue-100", color: "text-blue-700" },
+  average: { label: "Average", bg: "bg-amber-100", color: "text-amber-700" },
+  new: { label: "New", bg: "bg-purple-100", color: "text-purple-700" },
+} as const;
 
 const coverColors = [
-  "bg-[#8A6A4A]",
-  "bg-[#D8B27A]",
-  "bg-[#F2D8BE]",
-  "bg-emerald-200",
-  "bg-blue-200",
-  "bg-violet-200",
-  "bg-amber-200",
-  "bg-pink-200",
-  "bg-cyan-200",
+  "bg-gradient-to-br from-[#8A6A4A] to-[#6B5538]",
+  "bg-gradient-to-br from-[#D8B27A] to-[#b8966a]",
+  "bg-gradient-to-br from-[#1D1D1D] to-[#3a3a3a]",
+  "bg-gradient-to-br from-[#5C4033] to-[#4a3228]",
+  "bg-gradient-to-br from-[#8B7355] to-[#6d5a43]",
+  "bg-gradient-to-br from-[#2C5F2D] to-[#234b24]",
 ];
 
-const monthlyEarnings = [
-  { month: "Jan", amount: 420 },
-  { month: "Feb", amount: 560 },
-  { month: "Mar", amount: 780 },
-  { month: "Apr", amount: 940 },
-  { month: "May", amount: 1200 },
-  { month: "Jun", amount: 1560 },
+const emptyStateConfig: Record<string, { icon: any; title: string; desc: string }> = {
+  published: { icon: CheckCircle2, title: "No Published Books", desc: "Publish your first book to start earning." },
+  draft: { icon: FileText, title: "No Drafts", desc: "All caught up! No drafts in progress." },
+  pending: { icon: Clock, title: "No Pending Books", desc: "No books awaiting approval." },
+  rejected: { icon: AlertTriangle, title: "No Rejected Books", desc: "No books have been rejected." },
+};
+
+const categoryTabs = [
+  { key: "all", label: "All Books", icon: BookOpen, count: 18 },
+  { key: "published", label: "Published", icon: CheckCircle2, count: 12 },
+  { key: "draft", label: "Drafts", icon: FileText, count: 3 },
+  { key: "pending", label: "Pending", icon: Clock, count: 2 },
+  { key: "rejected", label: "Rejected", icon: AlertTriangle, count: 1 },
 ];
 
-const bookViewsTrend = [
-  { month: "Jan", views: 8200 },
-  { month: "Feb", views: 9400 },
-  { month: "Mar", views: 12100 },
-  { month: "Apr", views: 14800 },
-  { month: "May", views: 18200 },
-  { month: "Jun", views: 21500 },
+const monthLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+const monthlyPerformance = [
+  { month: "Jan", revenue: 580, sales: 95, views: 2400 },
+  { month: "Feb", revenue: 720, sales: 112, views: 2800 },
+  { month: "Mar", revenue: 890, sales: 134, views: 3200 },
+  { month: "Apr", revenue: 1050, sales: 156, views: 3600 },
+  { month: "May", revenue: 1280, sales: 178, views: 4100 },
+  { month: "Jun", revenue: 1560, sales: 204, views: 4800 },
 ];
 
-const topPerformingBooks = [
-  { title: "Wealth Is A Decision", sales: 342, max: 400 },
-  { title: "Income Is A Skill", sales: 268, max: 400 },
-  { title: "Money Is A Behaviour", sales: 195, max: 400 },
-  { title: "Master Your Spending", sales: 148, max: 400 },
-  { title: "Build Strong Savings", sales: 112, max: 400 },
+const categoryPieData = [
+  { name: "Personal Finance", value: 45, color: "#8A6A4A" },
+  { name: "Business", value: 25, color: "#D8B27A" },
+  { name: "Self Help", value: 18, color: "#1D1D1D" },
+  { name: "Technology", value: 12, color: "#5C4033" },
 ];
 
-const revenueBreakdown = [
-  { name: "Personal Finance", value: 6240 },
-  { name: "Budgeting", value: 980 },
-  { name: "Savings", value: 640 },
-  { name: "Investing", value: 480 },
-  { name: "Finance", value: 320 },
-  { name: "Other", value: 900 },
+const readerEngagementData = [
+  { month: "Jan", engagement: 320 },
+  { month: "Feb", engagement: 380 },
+  { month: "Mar", engagement: 450 },
+  { month: "Apr", engagement: 520 },
+  { month: "May", engagement: 610 },
+  { month: "Jun", engagement: 720 },
 ];
 
-const recentActivity = [
-  { id: "1", text: "\"Wealth Is A Decision\" approved and published", time: "2 hours ago", icon: CheckCircle2, color: "text-emerald-500", bg: "bg-emerald-100" },
-  { id: "2", text: "\"Future Trends 2025\" draft updated", time: "5 hours ago", icon: Edit, color: "text-blue-500", bg: "bg-blue-100" },
-  { id: "3", text: "New 5-star review on \"Income Is A Skill\"", time: "1 day ago", icon: Star, color: "text-amber-500", bg: "bg-amber-100" },
-  { id: "4", text: "\"Money Is A Behaviour\" published", time: "2 days ago", icon: BookOpen, color: "text-green-500", bg: "bg-green-100" },
-  { id: "5", text: "Metadata updated for \"Master Your Spending\"", time: "3 days ago", icon: RefreshCw, color: "text-gray-500", bg: "bg-gray-100" },
+const topBooksTableData = [
+  { title: "Wealth Is A Decision", views: 1840, revenue: 2640, conversion: 8.2 },
+  { title: "The Art of Negotiation", views: 1520, revenue: 1980, conversion: 7.8 },
+  { title: "Building Your Empire", views: 1280, revenue: 1640, conversion: 7.5 },
+  { title: "Money Mindset Mastery", views: 980, revenue: 1120, conversion: 7.1 },
+  { title: "Financial Freedom Blueprint", views: 840, revenue: 920, conversion: 6.8 },
 ];
 
 const publishHistory = [
-  { step: "Created", date: "Jan 15, 2025", done: true },
-  { step: "Submitted for Review", date: "Feb 1, 2025", done: true },
-  { step: "Approved", date: "Feb 10, 2025", done: true },
+  { step: "Draft Created", date: "Jan 15, 2025", done: true },
+  { step: "First Review", date: "Jan 22, 2025", done: true },
+  { step: "Edits Complete", date: "Feb 3, 2025", done: true },
+  { step: "Final Review", date: "Feb 10, 2025", done: true },
   { step: "Published", date: "Feb 15, 2025", done: true },
-  { step: "Updated", date: "Jun 18, 2025", done: true },
 ];
 
-const container = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.05 } },
-} as const;
+const initialBooks = [
+  { id: "1", title: "Wealth Is A Decision", isbn: "978-1-234567-00-1", category: "Personal Finance", status: "published" as const, views: 1840, sales: 220, revenue: 2640, rating: 4.8, createdDate: "Jan 15, 2025", updatedDate: "Jun 10, 2026", description: "A comprehensive guide to making smart financial decisions.", performance: "excellent" as const },
+  { id: "2", title: "The Art of Negotiation", isbn: "978-1-234567-00-2", category: "Business", status: "published" as const, views: 1520, sales: 180, revenue: 1980, rating: 4.6, createdDate: "Feb 8, 2025", updatedDate: "Jun 5, 2026", description: "Master the art of negotiation in business and life.", performance: "excellent" as const },
+  { id: "3", title: "Building Your Empire", isbn: "978-1-234567-00-3", category: "Business", status: "published" as const, views: 1280, sales: 150, revenue: 1640, rating: 4.5, createdDate: "Mar 1, 2025", updatedDate: "May 28, 2026", description: "Build a lasting business empire from the ground up.", performance: "excellent" as const },
+  { id: "4", title: "Money Mindset Mastery", isbn: "978-1-234567-00-4", category: "Self Help", status: "published" as const, views: 980, sales: 120, revenue: 1120, rating: 4.4, createdDate: "Mar 20, 2025", updatedDate: "May 22, 2026", description: "Transform your relationship with money.", performance: "good" as const },
+  { id: "5", title: "Financial Freedom Blueprint", isbn: "978-1-234567-00-5", category: "Personal Finance", status: "published" as const, views: 840, sales: 95, revenue: 920, rating: 4.3, createdDate: "Apr 5, 2025", updatedDate: "May 18, 2026", description: "Your step-by-step guide to financial independence.", performance: "good" as const },
+  { id: "6", title: "Leadership in the Digital Age", isbn: "978-1-234567-00-6", category: "Business", status: "published" as const, views: 720, sales: 82, revenue: 780, rating: 4.2, createdDate: "Apr 18, 2025", updatedDate: "May 12, 2026", description: "Leading teams and organizations in a digital world.", performance: "good" as const },
+  { id: "7", title: "The Entrepreneur's Playbook", isbn: "978-1-234567-00-7", category: "Business", status: "published" as const, views: 680, sales: 76, revenue: 680, rating: 4.1, createdDate: "May 2, 2025", updatedDate: "May 8, 2026", description: "Essential strategies for startup founders.", performance: "good" as const },
+  { id: "8", title: "Investing for Beginners", isbn: "978-1-234567-00-8", category: "Personal Finance", status: "published" as const, views: 620, sales: 68, revenue: 580, rating: 4.0, createdDate: "May 15, 2025", updatedDate: "May 5, 2026", description: "Start your investing journey with confidence.", performance: "good" as const },
+  { id: "9", title: "The Productivity System", isbn: "978-1-234567-00-9", category: "Self Help", status: "published" as const, views: 540, sales: 58, revenue: 480, rating: 3.9, createdDate: "Jun 1, 2025", updatedDate: "May 1, 2026", description: "A proven system for 10x your productivity.", performance: "average" as const },
+  { id: "10", title: "Digital Marketing Mastery", isbn: "978-1-234567-01-0", category: "Technology", status: "published" as const, views: 480, sales: 52, revenue: 420, rating: 3.8, createdDate: "Jun 15, 2025", updatedDate: "Apr 28, 2026", description: "Master digital marketing channels and strategies.", performance: "average" as const },
+  { id: "11", title: "Real Estate Investing 101", isbn: "978-1-234567-01-1", category: "Personal Finance", status: "published" as const, views: 420, sales: 45, revenue: 360, rating: 3.7, createdDate: "Jul 1, 2025", updatedDate: "Apr 22, 2026", description: "Get started in real estate investing.", performance: "average" as const },
+  { id: "12", title: "The Side Hustle Bible", isbn: "978-1-234567-01-2", category: "Business", status: "published" as const, views: 380, sales: 40, revenue: 300, rating: 3.6, createdDate: "Jul 15, 2025", updatedDate: "Apr 18, 2026", description: "50+ side hustle ideas to boost your income.", performance: "average" as const },
+  { id: "13", title: "Tax Strategies for Authors", isbn: "978-1-234567-01-3", category: "Personal Finance", status: "draft" as const, views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Aug 1, 2025", updatedDate: "Apr 15, 2026", description: "Minimize your tax burden as a published author.", performance: "new" as const },
+  { id: "14", title: "The Writing Habit", isbn: "978-1-234567-01-4", category: "Self Help", status: "draft" as const, views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Aug 15, 2025", updatedDate: "Apr 10, 2026", description: "Build a consistent writing habit that sticks.", performance: "new" as const },
+  { id: "15", title: "Passive Income Streams", isbn: "978-1-234567-01-5", category: "Personal Finance", status: "draft" as const, views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Sep 1, 2025", updatedDate: "Apr 5, 2026", description: "Create multiple streams of passive income.", performance: "new" as const },
+  { id: "16", title: "AI for Entrepreneurs", isbn: "978-1-234567-01-6", category: "Technology", status: "pending" as const, views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Sep 15, 2025", updatedDate: "Mar 28, 2026", description: "Leverage AI to grow your business.", performance: "new" as const },
+  { id: "17", title: "The Remote Work Revolution", isbn: "978-1-234567-01-7", category: "Business", status: "pending" as const, views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Oct 1, 2025", updatedDate: "Mar 22, 2026", description: "Thriving in the new world of remote work.", performance: "new" as const },
+  { id: "18", title: "Crypto & Blockchain Explained", isbn: "978-1-234567-01-8", category: "Technology", status: "rejected" as const, views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Oct 15, 2025", updatedDate: "Mar 15, 2026", description: "A beginner's guide to cryptocurrency.", performance: "new" as const },
+];
 
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { ease: [0.25, 0.46, 0.45, 0.94] as const } },
-} as const;
+const recentActivity = [
+  { id: 1, icon: Eye, bg: "bg-blue-100", color: "text-blue-600", text: "\"Wealth Is A Decision\" reached 1,840 views", time: "2 hours ago" },
+  { id: 2, icon: ShoppingCart, bg: "bg-emerald-100", color: "text-emerald-600", text: "12 new sales on \"The Art of Negotiation\"", time: "5 hours ago" },
+  { id: 3, icon: Star, bg: "bg-amber-100", color: "text-amber-600", text: "New 5-star review on \"Building Your Empire\"", time: "1 day ago" },
+];
 
-export default function AuthorBooksPage() {
-  const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState("newest");
-  const [statusFilter, setStatusFilter] = useState("all");
+export default function AuthorAllBooksPage() {
+  const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
+  const [sortBy, setSortBy] = useState("updated");
+  const [showAnalytics, setShowAnalytics] = useState(true);
   const [selectedBooks, setSelectedBooks] = useState<Set<string>>(new Set());
-  const [drawerBook, setDrawerBook] = useState<Book | null>(null);
-  const [deleteBook, setDeleteBook] = useState<Book | null>(null);
-  const [analyticsOpen, setAnalyticsOpen] = useState(false);
-  const [undoStack, setUndoStack] = useState<Array<{ action: string; book: Book }>>([]);
+  const [drawerBook, setDrawerBook] = useState<any>(null);
+  const [deleteBook, setDeleteBook] = useState<any>(null);
+  const [undoStack, setUndoStack] = useState<any[]>([]);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [books, setBooks] = useState(initialBooks);
+  const [showFilters, setShowFilters] = useState(true);
+  const [pageCounter, setPageCounter] = useState(20);
+  const [showPageCounter, setShowPageCounter] = useState(false);
 
-  const totalBooks = demoBooks.length;
-  const publishedCount = demoBooks.filter((b) => b.status === "PUBLISHED").length;
-  const draftsCount = demoBooks.filter((b) => b.status === "DRAFT").length;
-  const pendingCount = demoBooks.filter((b) => b.status === "PENDING_REVIEW").length;
-  const rejectedCount = demoBooks.filter((b) => b.status === "REJECTED").length;
-  const totalViews = demoBooks.reduce((s, b) => s + b.views, 0);
-  const totalRevenue = demoBooks.reduce((s, b) => s + b.revenue, 0);
-  const bestSellersCount = demoBooks.filter((b) => b.sales >= 100).length;
+  const publishedCount = useMemo(() => books.filter(b => b.status === "published").length, [books]);
+  const draftsCount = useMemo(() => books.filter(b => b.status === "draft").length, [books]);
+  const pendingCount = useMemo(() => books.filter(b => b.status === "pending").length, [books]);
+  const rejectedCount = useMemo(() => books.filter(b => b.status === "rejected").length, [books]);
+  const totalViews = useMemo(() => books.reduce((s, b) => s + b.views, 0), [books]);
+  const totalRevenue = useMemo(() => books.reduce((s, b) => s + b.revenue, 0), [books]);
+  const totalSales = useMemo(() => books.reduce((s, b) => s + b.sales, 0), [books]);
 
   const filteredBooks = useMemo(() => {
-    let books = [...demoBooks];
-
-    if (statusFilter !== "all") {
-      const statusMap: Record<string, BookStatus> = {
-        published: "PUBLISHED",
-        drafts: "DRAFT",
-        pending: "PENDING_REVIEW",
-        rejected: "REJECTED",
-      };
-      if (statusMap[statusFilter]) {
-        books = books.filter((b) => b.status === statusMap[statusFilter]);
-      }
+    let result = [...books];
+    if (activeCategory !== "all") result = result.filter(b => b.status === activeCategory);
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(b => b.title.toLowerCase().includes(q) || b.isbn.toLowerCase().includes(q) || b.category.toLowerCase().includes(q));
     }
-
-    if (activeCategory !== "all") {
-      const catMap: Record<string, (b: Book) => boolean> = {
-        published: (b) => b.status === "PUBLISHED",
-        drafts: (b) => b.status === "DRAFT",
-        pending: (b) => b.status === "PENDING_REVIEW",
-        rejected: (b) => b.status === "REJECTED",
-        bestsellers: (b) => b.sales >= 100,
-      };
-      const filter = catMap[activeCategory];
-      if (filter) books = books.filter(filter);
+    switch (sortBy) {
+      case "title": result.sort((a, b) => a.title.localeCompare(b.title)); break;
+      case "revenue": result.sort((a, b) => b.revenue - a.revenue); break;
+      case "views": result.sort((a, b) => b.views - a.views); break;
+      case "created": result.sort((a, b) => b.createdDate.localeCompare(a.createdDate)); break;
+      case "updated": default: result.sort((a, b) => b.updatedDate.localeCompare(a.updatedDate)); break;
     }
+    return result;
+  }, [books, activeCategory, searchQuery, sortBy]);
 
-    if (search) {
-      const q = search.toLowerCase();
-      books = books.filter(
-        (b) =>
-          b.title.toLowerCase().includes(q) ||
-          b.isbn.toLowerCase().includes(q) ||
-          b.category.toLowerCase().includes(q)
-      );
-    }
+  const displayedBooks = useMemo(() => {
+    if (pageCounter === 999) return filteredBooks;
+    return filteredBooks.slice(0, pageCounter);
+  }, [filteredBooks, pageCounter]);
 
-    const sortFns: Record<string, (a: Book, b: Book) => number> = {
-      newest: (a, b) => b.id.localeCompare(a.id),
-      oldest: (a, b) => a.id.localeCompare(b.id),
-      revenue: (a, b) => b.revenue - a.revenue,
-      views: (a, b) => b.views - a.views,
-      rating: (a, b) => b.rating - a.rating,
-      title: (a, b) => a.title.localeCompare(b.title),
-    };
-    books.sort(sortFns[sortBy] || sortFns.newest);
-    return books;
-  }, [search, sortBy, activeCategory, statusFilter]);
+  const toggleSelectAll = useCallback(() => {
+    if (selectedBooks.size === displayedBooks.length) setSelectedBooks(new Set());
+    else setSelectedBooks(new Set(displayedBooks.map(b => b.id)));
+  }, [selectedBooks, displayedBooks]);
 
   const toggleSelect = useCallback((id: string) => {
-    setSelectedBooks((prev) => {
+    setSelectedBooks(prev => {
       const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
+      if (next.has(id)) next.delete(id); else next.add(id);
       return next;
     });
   }, []);
 
-  const toggleSelectAll = useCallback(() => {
-    if (selectedBooks.size === filteredBooks.length) {
-      setSelectedBooks(new Set());
-    } else {
-      setSelectedBooks(new Set(filteredBooks.map((b) => b.id)));
-    }
-  }, [selectedBooks, filteredBooks]);
-
-  const handleDelete = useCallback((book: Book) => {
-    setUndoStack((prev) => [...prev, { action: "delete", book }]);
-    setDeleteBook(null);
-    setToastMessage(`"${book.title}" deleted. Undo?`);
-    setTimeout(() => setToastMessage(null), 5000);
+  const handleArchive = useCallback((book: any) => {
+    setBooks(prev => prev.filter(b => b.id !== book.id));
+    setUndoStack(prev => [...prev, { type: "archive", book }]);
+    setToastMessage(`"${book.title}" archived`);
+    setTimeout(() => setToastMessage(null), 4000);
   }, []);
 
-  const handleArchive = useCallback((book: Book) => {
-    setUndoStack((prev) => [...prev, { action: "archive", book }]);
-    setToastMessage(`"${book.title}" archived. Undo?`);
-    setTimeout(() => setToastMessage(null), 5000);
+  const handleDelete = useCallback((book: any) => {
+    setBooks(prev => prev.filter(b => b.id !== book.id));
+    setDeleteBook(null);
+    setUndoStack(prev => [...prev, { type: "delete", book }]);
+    setToastMessage(`"${book.title}" deleted`);
+    setTimeout(() => setToastMessage(null), 4000);
   }, []);
 
   const handleUndo = useCallback(() => {
     if (undoStack.length === 0) return;
     const last = undoStack[undoStack.length - 1];
-    setUndoStack((prev) => prev.slice(0, -1));
-    setToastMessage(`Undone: ${last.action} of "${last.book.title}"`);
+    setBooks(prev => [...prev, last.book]);
+    setUndoStack(prev => prev.slice(0, -1));
+    setToastMessage("Action undone");
     setTimeout(() => setToastMessage(null), 3000);
   }, [undoStack]);
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "z") {
-        e.preventDefault();
-        handleUndo();
-      }
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [handleUndo]);
-
-  const summaryCards = [
-    { key: "total", label: "Total Books", value: totalBooks.toString(), icon: BookOpen, iconBg: "bg-blue-100", iconColor: "text-blue-600", change: "+3 this month", positive: true, href: "/author/books" },
-    { key: "published", label: "Published", value: publishedCount.toString(), icon: CheckCircle2, iconBg: "bg-emerald-100", iconColor: "text-emerald-600", change: "+2 this month", positive: true, href: "/author/books?status=published" },
-    { key: "drafts", label: "Drafts", value: draftsCount.toString(), icon: FileText, iconBg: "bg-gray-100", iconColor: "text-gray-600", change: "1 new", positive: true, href: "/author/books?status=drafts" },
-    { key: "pending", label: "Pending Review", value: pendingCount.toString(), icon: Eye, iconBg: "bg-amber-100", iconColor: "text-amber-600", change: "Awaiting review", positive: false, href: "/author/books?status=pending" },
-    { key: "views", label: "Total Views", value: totalViews.toLocaleString(), icon: BarChart3, iconBg: "bg-violet-100", iconColor: "text-violet-600", change: "+12% from last month", positive: true, href: "/author/analytics" },
-    { key: "revenue", label: "Total Revenue", value: `$${totalRevenue.toLocaleString()}`, icon: DollarSign, iconBg: "bg-green-100", iconColor: "text-green-600", change: "+30% from last month", positive: true, href: "/author/analytics" },
-  ];
-
-  const categoryTabs = [
-    { key: "all", label: "All Books", count: totalBooks },
-    { key: "published", label: "Published", count: publishedCount },
-    { key: "drafts", label: "Drafts", count: draftsCount },
-    { key: "pending", label: "Pending Review", count: pendingCount },
-    { key: "rejected", label: "Rejected", count: rejectedCount },
-    { key: "bestsellers", label: "Best Sellers", count: bestSellersCount },
-  ];
-
-  const emptyStateConfig: Record<string, { icon: any; title: string; desc: string }> = {
-    published: { icon: CheckCircle2, title: "No Published Books", desc: "Publish your first book to see it here." },
-    drafts: { icon: FileText, title: "No Draft Books", desc: "Create your first draft to get started." },
-    pending: { icon: Clock, title: "No Pending Reviews", desc: "All your books have been reviewed." },
-    rejected: { icon: XCircle, title: "No Rejected Books", desc: "All submissions are looking great!" },
-    bestsellers: { icon: Award, title: "No Best Sellers Yet", desc: "Keep publishing to hit the best seller mark." },
-  };
-
   return (
-    <motion.div variants={container} initial="hidden" animate="show" className="space-y-6 pb-24">
-      {/* Header */}
-      <motion.div variants={item} className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="space-y-6"
+    >
+      {/* 1. Header with Action Buttons */}
+      <motion.div variants={item} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-[#1D1D1D]">My Books</h1>
-          <p className="text-sm text-muted-foreground">Manage and track all your published books</p>
+          <h1 className="text-2xl font-bold text-[#1D1D1D]">All Books</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Manage your complete book collection</p>
         </div>
         <div className="flex items-center gap-2">
-          {/* Export Button */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="rounded-lg border-[#E8DDD0] hover:shadow-md transition-all">
-                <Download className="h-4 w-4 mr-2" />
-                Export
-                <ChevronDown className="h-4 w-4 ml-1" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-white rounded-xl border border-[#E8DDD0] shadow-lg">
-              <DropdownMenuItem onClick={() => alert("Exporting PDF...")}>
-                <FileText className="h-4 w-4 mr-2" /> Export as PDF
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => alert("Exporting Excel...")}>
-                <BarChart3 className="h-4 w-4 mr-2" /> Export as Excel
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => alert("Exporting CSV...")}>
-                <Download className="h-4 w-4 mr-2" /> Export as CSV
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          {/* Quick Actions Button */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a] rounded-lg hover:shadow-md transition-all">
-                <Plus className="h-4 w-4 mr-2" />
-                Quick Actions
-                <ChevronDown className="h-4 w-4 ml-1" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-white rounded-xl border border-[#E8DDD0] shadow-lg w-56">
-              <DropdownMenuItem asChild>
-                <Link href="/author/books/new"><Plus className="h-4 w-4 mr-2" /> Create New Book</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem><Upload className="h-4 w-4 mr-2" /> Upload Manuscript</DropdownMenuItem>
-              <DropdownMenuItem><FileText className="h-4 w-4 mr-2" /> Create Draft</DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/services"><ShoppingCart className="h-4 w-4 mr-2" /> Order Publishing Service</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem><Hash className="h-4 w-4 mr-2" /> Request ISBN</DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/author/analytics"><BarChart3 className="h-4 w-4 mr-2" /> View Analytics</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem><Download className="h-4 w-4 mr-2" /> Export Book List</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button variant="outline" className="refresh-btn-border rounded-lg border-[#E8DDD0]" onClick={() => {}}>
+            <RefreshCw className="h-4 w-4 mr-2" /> Refresh
+          </Button>
+          <Button className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a] rounded-lg" asChild>
+            <Link href="/author/books/new"><Plus className="h-4 w-4 mr-2" /> Create New Book</Link>
+          </Button>
         </div>
       </motion.div>
 
-      {/* 1. Summary Cards */}
-      <motion.div variants={item} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        {summaryCards.map((card) => (
-          <Link key={card.key} href={card.href}>
-            <motion.div
-              whileHover={{ y: -4, boxShadow: "0 8px 25px rgba(0,0,0,0.1)" }}
-              transition={{ duration: 0.2 }}
-              className="bg-white rounded-xl border border-[#E8DDD0] p-4 cursor-pointer transition-all duration-300 hover:border-[#D8B27A]"
-            >
-              <div className="flex items-center gap-3 mb-3">
-                <div className={`p-2 rounded-lg ${card.iconBg}`}>
-                  <card.icon className={`h-5 w-5 ${card.iconColor}`} />
-                </div>
-              </div>
-              <p className="text-2xl font-bold text-[#1D1D1D]">{card.value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{card.label}</p>
-              <p className={`text-xs mt-2 font-medium ${card.positive ? "text-emerald-600" : "text-amber-600"}`}>{card.change}</p>
-            </motion.div>
-          </Link>
-        ))}
-      </motion.div>
-
-      {/* 2. Advanced Filter Bar */}
-      <motion.div variants={item} className="flex flex-col gap-4 sm:flex-row sm:items-center">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Search by title, ISBN, or category..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 rounded-lg border-[#E8DDD0] focus:border-[#D8B27A] focus:ring-[#D8B27A]/30"
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-[160px] rounded-lg border-[#E8DDD0]">
-              <SelectValue placeholder="Status" />
-            </SelectTrigger>
-            <SelectContent className="bg-white rounded-xl border border-[#E8DDD0] shadow-lg">
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="published">Published</SelectItem>
-              <SelectItem value="drafts">Drafts</SelectItem>
-              <SelectItem value="pending">Pending Review</SelectItem>
-              <SelectItem value="rejected">Rejected</SelectItem>
-            </SelectContent>
-          </Select>
-          <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-[180px] rounded-lg border-[#E8DDD0]">
-              <SelectValue placeholder="Sort by" />
-            </SelectTrigger>
-            <SelectContent className="bg-white rounded-xl border border-[#E8DDD0] shadow-lg">
-              <SelectItem value="newest">Newest First</SelectItem>
-              <SelectItem value="oldest">Oldest First</SelectItem>
-              <SelectItem value="revenue">Highest Revenue</SelectItem>
-              <SelectItem value="views">Most Viewed</SelectItem>
-              <SelectItem value="rating">Best Rated</SelectItem>
-              <SelectItem value="title">Title A-Z</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <p className="text-sm text-muted-foreground ml-auto">
-          Showing {filteredBooks.length} of {totalBooks} books
-        </p>
-      </motion.div>
-
-      {/* 5. Book Status Categories */}
-      <motion.div variants={item} className="flex flex-wrap gap-2">
-        {categoryTabs.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => setActiveCategory(tab.key)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
-              activeCategory === tab.key
-                ? "bg-[#8A6A4A] text-white shadow-md"
-                : "bg-white border border-[#E8DDD0] text-[#1D1D1D] hover:bg-[#F5EDE3]"
-            }`}
-          >
-            {tab.label}
-            <span className={`text-xs px-1.5 py-0.5 rounded-full ${
-              activeCategory === tab.key ? "bg-white/20" : "bg-[#F5EDE3]"
-            }`}>
-              {tab.count}
-            </span>
-          </button>
-        ))}
-      </motion.div>
-
-      {/* 4. Analytics Center (Collapsible) */}
-      <motion.div variants={item}>
-        <button
-          onClick={() => setAnalyticsOpen(!analyticsOpen)}
-          className="w-full flex items-center justify-between p-4 bg-white rounded-xl border border-[#E8DDD0] hover:shadow-md transition-all"
-        >
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-[#F2D8BE] rounded-lg">
-              <BarChart3 className="h-5 w-5 text-[#8A6A4A]" />
+      {/* 2. Summary Cards */}
+      <motion.div variants={item} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        {[
+          { label: "TOTAL BOOKS", value: books.length, icon: BookOpen, bg: "bg-[#F5EDE3]", color: "text-[#8A6A4A]" },
+          { label: "PUBLISHED", value: publishedCount, icon: CheckCircle2, bg: "bg-emerald-100", color: "text-emerald-600" },
+          { label: "DRAFTS", value: draftsCount, icon: FileText, bg: "bg-amber-100", color: "text-amber-600" },
+          { label: "TOTAL VIEWS", value: totalViews.toLocaleString(), icon: Eye, bg: "bg-blue-100", color: "text-blue-600" },
+          { label: "TOTAL SALES", value: totalSales.toLocaleString(), icon: ShoppingCart, bg: "bg-violet-100", color: "text-violet-600" },
+          { label: "TOTAL REVENUE", value: `$${totalRevenue.toLocaleString()}`, icon: DollarSign, bg: "bg-emerald-100", color: "text-emerald-600" },
+        ].map((s) => (
+          <motion.div key={s.label} whileHover={{ y: -2 }} className="bg-white rounded-xl border border-[#E8DDD0] p-4 flex items-center justify-between">
+            <div>
+              <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">{s.label}</p>
+              <p className="text-xl font-bold text-[#1D1D1D] mt-1">{s.value}</p>
             </div>
-            <span className="font-semibold text-[#1D1D1D]">Author Book Analytics Center</span>
-          </div>
-          {analyticsOpen ? <ChevronUp className="h-5 w-5 text-muted-foreground" /> : <ChevronDown className="h-5 w-5 text-muted-foreground" />}
-        </button>
+            <div className={`p-2.5 rounded-lg ${s.bg}`}>
+              <s.icon className={`h-5 w-5 ${s.color}`} />
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+
+      {/* 3. Analytics Center */}
+      <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] shadow-sm">
+        <div className="flex items-center justify-between p-4 border-b border-[#E8DDD0]">
+          <h3 className="font-semibold text-[#1D1D1D]">Analytics Center</h3>
+          <Button variant="ghost" size="sm" onClick={() => setShowAnalytics(!showAnalytics)} className="text-muted-foreground hover:text-[#1D1D1D]">
+            {showAnalytics ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </Button>
+        </div>
         <AnimatePresence>
-          {analyticsOpen && (
+          {showAnalytics && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
@@ -515,90 +267,123 @@ export default function AuthorBooksPage() {
               transition={{ duration: 0.3 }}
               className="overflow-hidden"
             >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mt-4">
-                {/* Monthly Earnings AreaChart */}
-                <div className="bg-white rounded-xl border border-[#E8DDD0] p-4">
-                  <h3 className="font-semibold text-[#1D1D1D] mb-4">Monthly Earnings</h3>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <AreaChart data={monthlyEarnings}>
-                      <defs>
-                        <linearGradient id="earningsGrad" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#D8B27A" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="#D8B27A" stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E8DDD0" />
-                      <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-                      <YAxis tick={{ fontSize: 12 }} />
-                      <Tooltip
-                        contentStyle={{ borderRadius: "12px", border: "1px solid #E8DDD0", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
-                        formatter={(value) => [`$${value}`, "Revenue"]}
-                      />
-                      <Area type="monotone" dataKey="amount" stroke="#D8B27A" fill="url(#earningsGrad)" strokeWidth={2} />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-                {/* Book Views Trend BarChart */}
-                <div className="bg-white rounded-xl border border-[#E8DDD0] p-4">
-                  <h3 className="font-semibold text-[#1D1D1D] mb-4">Book Views Trend</h3>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <BarChart data={bookViewsTrend}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#E8DDD0" />
-                      <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-                      <YAxis tick={{ fontSize: 12 }} />
-                      <Tooltip
-                        contentStyle={{ borderRadius: "12px", border: "1px solid #E8DDD0", boxShadow: "0 4px 12px rgba(0,0,0,0.1)" }}
-                        formatter={(value) => [Number(value).toLocaleString(), "Views"]}
-                      />
-                      <Bar dataKey="views" fill="#8A6A4A" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-                {/* Top Performing Books */}
-                <div className="bg-white rounded-xl border border-[#E8DDD0] p-4">
-                  <h3 className="font-semibold text-[#1D1D1D] mb-4">Top Performing Books</h3>
-                  <div className="space-y-4">
-                    {topPerformingBooks.map((book, i) => (
-                      <div key={i}>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="font-medium text-[#1D1D1D]">{book.title}</span>
-                          <span className="text-muted-foreground">{book.sales} sales</span>
+              <div className="p-4 space-y-4">
+                {/* Monthly Performance Chart */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
+                    <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Monthly Performance</h4>
+                    <ResponsiveContainer width="100%" height={180}>
+                      <AreaChart data={monthlyPerformance}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#E8DDD0" />
+                        <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                        <YAxis tick={{ fontSize: 12 }} />
+                        <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid #E8DDD0", background: "white" }} />
+                        <Area type="monotone" dataKey="revenue" stroke="#8A6A4A" fill="#D8B27A" fillOpacity={0.3} />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+                  <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
+                    <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Revenue Trend</h4>
+                    <div className="space-y-2">
+                      {monthlyPerformance.map((m) => (
+                        <div key={m.month} className="flex items-center gap-3">
+                          <span className="text-xs font-medium text-muted-foreground w-8">{m.month}</span>
+                          <div className="flex-1 h-2 bg-[#E8DDD0] rounded-full overflow-hidden">
+                            <div className="h-full bg-[#8A6A4A] rounded-full" style={{ width: `${(m.revenue / 1600) * 100}%` }} />
+                          </div>
+                          <span className="text-xs font-medium text-[#1D1D1D] w-16 text-right">${m.revenue.toLocaleString()}</span>
                         </div>
-                        <div className="h-2 bg-[#F5EDE3] rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-gradient-to-r from-[#D8B27A] to-[#8A6A4A] rounded-full transition-all duration-500"
-                            style={{ width: `${(book.sales / book.max) * 100}%` }}
-                          />
-                        </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
-                {/* Revenue Breakdown PieChart */}
-                <div className="bg-white rounded-xl border border-[#E8DDD0] p-4">
-                  <h3 className="font-semibold text-[#1D1D1D] mb-4">Revenue by Category</h3>
-                  <ResponsiveContainer width="100%" height={250}>
-                    <PieChart>
-                      <Pie
-                        data={revenueBreakdown}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={90}
-                        paddingAngle={3}
-                        dataKey="value"
-                      >
-                        {revenueBreakdown.map((_, i) => (
-                          <Cell key={i} fill={["#8A6A4A", "#D8B27A", "#F2D8BE", "#6B9E76", "#7B8EC2", "#C49A6C"][i]} />
+                {/* Revenue Insights */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">THIS MONTH</p>
+                    <p className="text-xl font-bold text-[#1D1D1D] mt-1">$1,560</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <ArrowUp className="h-3 w-3 text-emerald-500" />
+                      <span className="text-xs text-emerald-600 font-medium">+30%</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">LAST MONTH</p>
+                    <p className="text-xl font-bold text-[#1D1D1D] mt-1">$1,200</p>
+                    <div className="flex items-center gap-1 mt-1">
+                      <TrendingUp className="h-3 w-3 text-emerald-500" />
+                      <span className="text-xs text-emerald-600 font-medium">+18%</span>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">BEST SELLER</p>
+                    <p className="text-sm font-bold text-[#1D1D1D] mt-1">Wealth Is A Decision</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">$2,640 total</p>
+                  </div>
+                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">TOP CATEGORY</p>
+                    <p className="text-sm font-bold text-[#1D1D1D] mt-1">Personal Finance</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">71% of revenue</p>
+                  </div>
+                </div>
+                {/* Reader Engagement */}
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                  {[
+                    { label: "Total Readers", value: "4,820", icon: Users, bg: "bg-blue-100", color: "text-blue-600" },
+                    { label: "Avg Reading Time", value: "12.4 min", icon: Clock, bg: "bg-emerald-100", color: "text-emerald-600" },
+                    { label: "Comments", value: "486", icon: MessageSquare, bg: "bg-amber-100", color: "text-amber-600" },
+                    { label: "Downloads", value: "2,340", icon: Download, bg: "bg-violet-100", color: "text-violet-600" },
+                    { label: "Bookmarks", value: "1,890", icon: Bookmark, bg: "bg-pink-100", color: "text-pink-600" },
+                  ].map((m) => (
+                    <div key={m.label} className="p-3 border border-[#E8DDD0] rounded-xl flex items-center gap-3">
+                      <div className={`p-2 rounded-lg ${m.bg}`}>
+                        <m.icon className={`h-4 w-4 ${m.color}`} />
+                      </div>
+                      <div>
+                        <p className="text-lg font-bold text-[#1D1D1D]">{m.value}</p>
+                        <p className="text-[10px] text-muted-foreground">{m.label}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {/* Category Performance & Top Books */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
+                    <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Category Performance</h4>
+                    <div className="flex items-center gap-6">
+                      <ResponsiveContainer width={140} height={140}>
+                        <PieChart>
+                          <Pie data={categoryPieData} cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={3} dataKey="value">
+                            {categoryPieData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                          </Pie>
+                        </PieChart>
+                      </ResponsiveContainer>
+                      <div className="space-y-2 flex-1">
+                        {categoryPieData.map((c) => (
+                          <div key={c.name} className="flex items-center gap-2">
+                            <div className="w-2.5 h-2.5 rounded-full" style={{ background: c.color }} />
+                            <span className="text-xs text-muted-foreground flex-1">{c.name}</span>
+                            <span className="text-xs font-medium text-[#1D1D1D]">{c.value}%</span>
+                          </div>
                         ))}
-                      </Pie>
-                      <Tooltip
-                        contentStyle={{ borderRadius: "12px", border: "1px solid #E8DDD0" }}
-                        formatter={(value) => [`$${value}`, "Revenue"]}
-                      />
-                      <Legend iconType="circle" wrapperStyle={{ fontSize: "12px" }} />
-                    </PieChart>
-                  </ResponsiveContainer>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
+                    <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Top Books by Revenue</h4>
+                    <div className="space-y-2">
+                      {topBooksTableData.map((b, i) => (
+                        <div key={b.title} className="flex items-center gap-3 p-2 bg-white rounded-lg border border-[#E8DDD0]/50">
+                          <span className="text-xs font-bold text-[#8A6A4A] w-5">{i + 1}</span>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-medium text-[#1D1D1D] truncate">{b.title}</p>
+                            <p className="text-[10px] text-muted-foreground">{b.views.toLocaleString()} views</p>
+                          </div>
+                          <span className="text-xs font-bold text-[#1D1D1D]">${b.revenue.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -606,90 +391,109 @@ export default function AuthorBooksPage() {
         </AnimatePresence>
       </motion.div>
 
-      {/* 9 & 11. Revenue Insights + Reader Engagement */}
-      <motion.div variants={item} className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* 9. Revenue Insights Panel */}
-        <div className="bg-white rounded-xl border border-[#E8DDD0] p-5">
-          <h3 className="font-semibold text-[#1D1D1D] mb-4">Revenue Insights</h3>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
-              <p className="text-xs text-muted-foreground">This Month</p>
-              <p className="text-2xl font-bold text-[#1D1D1D]">$1,560</p>
-              <div className="flex items-center gap-1 mt-1">
-                <ArrowUp className="h-3 w-3 text-emerald-500" />
-                <span className="text-xs text-emerald-600 font-medium">+30%</span>
-              </div>
-            </div>
-            <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
-              <p className="text-xs text-muted-foreground">Last Month</p>
-              <p className="text-2xl font-bold text-[#1D1D1D]">$1,200</p>
-              <div className="flex items-center gap-1 mt-1">
-                <TrendingUp className="h-3 w-3 text-emerald-500" />
-                <span className="text-xs text-emerald-600 font-medium">+18%</span>
-              </div>
-            </div>
-            <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
-              <p className="text-xs text-muted-foreground">Best Seller</p>
-              <p className="text-sm font-semibold text-[#1D1D1D]">Wealth Is A Decision</p>
-              <p className="text-xs text-muted-foreground mt-0.5">$2,640 total</p>
-            </div>
-            <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
-              <p className="text-xs text-muted-foreground">Top Category</p>
-              <p className="text-sm font-semibold text-[#1D1D1D]">Personal Finance</p>
-              <p className="text-xs text-muted-foreground mt-0.5">71% of revenue</p>
+      {/* 4. Search & Filter Module */}
+      <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] p-4 space-y-3">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search by title, ISBN, or category..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-9 search-bar-border rounded-lg border-[#E8DDD0] text-sm"
+            />
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="refresh-btn-border rounded-lg border-[#E8DDD0]" onClick={() => setShowFilters(!showFilters)}>
+              <SlidersHorizontal className="h-4 w-4 mr-1.5" /> Filters
+            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="refresh-btn-border rounded-lg border-[#E8DDD0]">
+                  <ArrowUpDown className="h-4 w-4 mr-1.5" /> Sort
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-white rounded-xl border border-[#E8DDD0] shadow-lg">
+                <DropdownMenuItem onClick={() => setSortBy("updated")} className="text-sm">{sortBy === "updated" && <Check className="h-4 w-4 mr-2" />} Last Updated</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy("created")} className="text-sm">{sortBy === "created" && <Check className="h-4 w-4 mr-2" />} Date Created</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy("title")} className="text-sm">{sortBy === "title" && <Check className="h-4 w-4 mr-2" />} Title A-Z</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy("revenue")} className="text-sm">{sortBy === "revenue" && <Check className="h-4 w-4 mr-2" />} Revenue</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setSortBy("views")} className="text-sm">{sortBy === "views" && <Check className="h-4 w-4 mr-2" />} Views</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <div className="relative">
+              <Button variant="outline" size="sm" className="refresh-btn-border rounded-lg border-[#E8DDD0]" onClick={() => setShowPageCounter(!showPageCounter)}>
+                Show: {pageCounter === 999 ? "All" : pageCounter}
+                <ChevronDown className="h-4 w-4 ml-1" />
+              </Button>
+              <AnimatePresence>
+                {showPageCounter && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    className="absolute right-0 top-full mt-1 bg-white border border-[#E8DDD0] rounded-xl shadow-lg z-30 py-1 min-w-[100px]"
+                  >
+                    {[10, 20, 50, 100, 999].map((n) => (
+                      <button
+                        key={n}
+                        onClick={() => { setPageCounter(n); setShowPageCounter(false); }}
+                        className={`w-full text-left px-4 py-2 text-sm hover:bg-[#F5EDE3] transition-colors ${pageCounter === n ? "font-medium text-[#8A6A4A] bg-[#F5EDE3]/50" : "text-[#1D1D1D]"}`}
+                      >
+                        {n === 999 ? "All" : n}
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </div>
-        {/* 11. Reader Engagement */}
-        <div className="bg-white rounded-xl border border-[#E8DDD0] p-5">
-          <h3 className="font-semibold text-[#1D1D1D] mb-4">Reader Engagement</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {[
-              { label: "Total Readers", value: "4,820", icon: Users, bg: "bg-blue-100", color: "text-blue-600" },
-              { label: "Avg Reading Time", value: "12.4 min", icon: Clock, bg: "bg-emerald-100", color: "text-emerald-600" },
-              { label: "Comments", value: "486", icon: MessageSquare, bg: "bg-amber-100", color: "text-amber-600" },
-              { label: "Downloads", value: "2,340", icon: Download, bg: "bg-violet-100", color: "text-violet-600" },
-              { label: "Bookmarks", value: "1,890", icon: Bookmark, bg: "bg-pink-100", color: "text-pink-600" },
-            ].map((m) => (
-              <div key={m.label} className="p-3 border border-[#E8DDD0] rounded-xl flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${m.bg}`}>
-                  <m.icon className={`h-4 w-4 ${m.color}`} />
-                </div>
-                <div>
-                  <p className="text-lg font-bold text-[#1D1D1D]">{m.value}</p>
-                  <p className="text-xs text-muted-foreground">{m.label}</p>
-                </div>
-              </div>
+        {showFilters && (
+          <div className="flex flex-wrap gap-2">
+            {categoryTabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveCategory(tab.key)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  activeCategory === tab.key
+                    ? "bg-[#D8B27A] text-[#1D1D1D]"
+                    : "bg-[#F5EDE3] text-muted-foreground hover:bg-[#E8DDD0]"
+                }`}
+              >
+                <tab.icon className="h-3.5 w-3.5" />
+                {tab.label}
+                <span className="ml-0.5 opacity-70">({tab.count})</span>
+              </button>
             ))}
           </div>
-        </div>
+        )}
       </motion.div>
 
-      {/* 10. Recent Book Activity */}
-      <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] p-5">
-        <h3 className="font-semibold text-[#1D1D1D] mb-4">Recent Book Activity</h3>
-        <div className="space-y-0">
-          {recentActivity.map((a, i) => (
-            <div key={a.id} className="flex gap-4 relative">
-              <div className="flex flex-col items-center">
-                <div className={`p-2 rounded-full ${a.bg} z-10`}>
-                  <a.icon className={`h-4 w-4 ${a.color}`} />
-                </div>
-                {i < recentActivity.length - 1 && <div className="w-px flex-1 bg-[#E8DDD0] my-1" />}
-              </div>
-              <div className="pb-6 pt-1">
-                <p className="text-sm font-medium text-[#1D1D1D]">{a.text}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">{a.time}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* 5. Book Status Categories (Compact Pills) */}
+      <motion.div variants={item} className="flex items-center gap-2 overflow-x-auto pb-1">
+        {categoryTabs.map((tab) => (
+          <button
+            key={tab.key}
+            onClick={() => setActiveCategory(tab.key)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all ${
+              activeCategory === tab.key
+                ? "bg-[#D8B27A] text-[#1D1D1D] shadow-sm"
+                : "bg-white border border-[#E8DDD0] text-muted-foreground hover:bg-[#F5EDE3]"
+            }`}
+          >
+            <tab.icon className="h-3.5 w-3.5" />
+            {tab.label}
+            <span className={`ml-0.5 px-1.5 py-0.5 rounded-full text-[10px] ${activeCategory === tab.key ? "bg-[#1D1D1D] text-white" : "bg-[#F5EDE3] text-muted-foreground"}`}>
+              {tab.count}
+            </span>
+          </button>
+        ))}
       </motion.div>
 
-      {/* 6. Premium Book Table */}
+      {/* 6. Book Table */}
       <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] shadow-sm overflow-hidden">
-        {filteredBooks.length === 0 ? (
-          /* 15. Empty States */
+        {displayedBooks.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
             {activeCategory !== "all" && emptyStateConfig[activeCategory] ? (
               (() => {
@@ -729,27 +533,27 @@ export default function AuthorBooksPage() {
                   <th className="px-4 py-3 text-left">
                     <input
                       type="checkbox"
-                      checked={selectedBooks.size === filteredBooks.length && filteredBooks.length > 0}
+                      checked={selectedBooks.size === displayedBooks.length && displayedBooks.length > 0}
                       onChange={toggleSelectAll}
                       className="rounded border-[#E8DDD0]"
                     />
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Cover</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Book Title</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">ISBN</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Category</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Status</th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground">Views</th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground">Sales</th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground">Revenue</th>
-                  <th className="px-4 py-3 text-center text-xs font-medium text-muted-foreground">Rating</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Created</th>
-                  <th className="px-4 py-3 text-left text-xs font-medium text-muted-foreground">Updated</th>
-                  <th className="px-4 py-3 text-right text-xs font-medium text-muted-foreground">Actions</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">COVER</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">TITLE</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">ISBN</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">CATEGORY</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">STATUS</th>
+                  <th className="px-4 py-3 text-right text-[10px] font-semibold text-muted-foreground tracking-wider">VIEWS</th>
+                  <th className="px-4 py-3 text-right text-[10px] font-semibold text-muted-foreground tracking-wider">SALES</th>
+                  <th className="px-4 py-3 text-right text-[10px] font-semibold text-muted-foreground tracking-wider">REVENUE</th>
+                  <th className="px-4 py-3 text-center text-[10px] font-semibold text-muted-foreground tracking-wider">RATING</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">CREATED</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">UPDATED</th>
+                  <th className="px-4 py-3 text-right text-[10px] font-semibold text-muted-foreground tracking-wider">ACTIONS</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredBooks.map((book, idx) => {
+                {displayedBooks.map((book, idx) => {
                   const status = statusConfig[book.status];
                   return (
                     <tr
@@ -829,10 +633,10 @@ export default function AuthorBooksPage() {
         )}
       </motion.div>
 
-      {/* 16. Pagination Summary */}
+      {/* 7. Pagination Summary */}
       <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-          <span>Showing 1–{filteredBooks.length} of {filteredBooks.length} books</span>
+          <span>Showing {displayedBooks.length} of {filteredBooks.length} books</span>
           <span className="hidden sm:inline">|</span>
           <span>Published: {publishedCount}</span>
           <span>|</span>
@@ -853,7 +657,30 @@ export default function AuthorBooksPage() {
         </div>
       </motion.div>
 
-      {/* 8. Book Details Drawer */}
+      {/* 8. Recent Activity (Compact) */}
+      <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] shadow-sm">
+        <div className="flex items-center justify-between p-4 border-b border-[#E8DDD0]">
+          <h3 className="font-semibold text-[#1D1D1D]">Recent Activity</h3>
+          <Button variant="ghost" size="sm" className="text-[#8A6A4A] hover:text-[#6B5538] text-xs">
+            View All <ArrowRight className="h-3.5 w-3.5 ml-1" />
+          </Button>
+        </div>
+        <div className="divide-y divide-[#E8DDD0]/50">
+          {recentActivity.map((a) => (
+            <div key={a.id} className="flex items-center gap-3 p-4 hover:bg-[#F5EDE3]/30 transition-colors">
+              <div className={`p-2 rounded-lg ${a.bg} shrink-0`}>
+                <a.icon className={`h-4 w-4 ${a.color}`} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-[#1D1D1D] truncate">{a.text}</p>
+                <p className="text-xs text-muted-foreground">{a.time}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* Book Details Drawer */}
       <AnimatePresence>
         {drawerBook && (
           <>
@@ -890,7 +717,7 @@ export default function AuthorBooksPage() {
                   </div>
                   <div className="flex justify-between py-2 border-b border-[#E8DDD0]">
                     <span className="text-sm text-muted-foreground">Status</span>
-                    <span className={`text-sm font-medium ${statusConfig[drawerBook.status].color}`}>{statusConfig[drawerBook.status].label}</span>
+                    <span className={`text-sm font-medium ${statusConfig[drawerBook.status as keyof typeof statusConfig].color}`}>{statusConfig[drawerBook.status as keyof typeof statusConfig].label}</span>
                   </div>
                   <div className="flex justify-between py-2 border-b border-[#E8DDD0]">
                     <span className="text-sm text-muted-foreground">Category</span>
@@ -918,12 +745,11 @@ export default function AuthorBooksPage() {
                   </div>
                   <div className="flex justify-between py-2">
                     <span className="text-sm text-muted-foreground">Performance</span>
-                    <span className={`text-sm font-medium px-2 py-0.5 rounded-full ${performanceConfig[drawerBook.performance]?.bg} ${performanceConfig[drawerBook.performance]?.color}`}>
-                      {performanceConfig[drawerBook.performance]?.label}
+                    <span className={`text-sm font-medium px-2 py-0.5 rounded-full ${performanceConfig[drawerBook.performance as keyof typeof performanceConfig]?.bg} ${performanceConfig[drawerBook.performance as keyof typeof performanceConfig]?.color}`}>
+                      {performanceConfig[drawerBook.performance as keyof typeof performanceConfig]?.label}
                     </span>
                   </div>
                 </div>
-                {/* Publishing History Timeline */}
                 <h4 className="font-semibold text-[#1D1D1D] mb-3">Publishing History</h4>
                 <div className="space-y-0">
                   {publishHistory.map((step, i) => (
@@ -984,7 +810,7 @@ export default function AuthorBooksPage() {
         )}
       </AnimatePresence>
 
-      {/* 13. Bulk Action Bar */}
+      {/* Bulk Action Bar */}
       <AnimatePresence>
         {selectedBooks.size > 0 && (
           <motion.div
@@ -1007,9 +833,6 @@ export default function AuthorBooksPage() {
                 <Button size="sm" className="rounded-lg bg-gray-500 text-white hover:bg-gray-600">
                   <Archive className="h-4 w-4 mr-1" /> Archive
                 </Button>
-                <Button size="sm" className="rounded-lg bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]">
-                  <Download className="h-4 w-4 mr-1" /> Export
-                </Button>
                 <Button size="sm" className="rounded-lg bg-red-500 text-white hover:bg-red-600">
                   <Trash2 className="h-4 w-4 mr-1" /> Delete
                 </Button>
@@ -1019,7 +842,7 @@ export default function AuthorBooksPage() {
         )}
       </AnimatePresence>
 
-      {/* 17. Undo Toast */}
+      {/* Undo Toast */}
       <AnimatePresence>
         {toastMessage && (
           <motion.div
@@ -1040,3 +863,5 @@ export default function AuthorBooksPage() {
     </motion.div>
   );
 }
+
+const item = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
