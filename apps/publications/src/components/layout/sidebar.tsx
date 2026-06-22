@@ -56,39 +56,13 @@ interface NavSection {
 const dashboardNav: Record<string, NavSection[]> = {
   AUTHOR: [
     {
-      title: "Overview",
-      items: [
-        { label: "Dashboard", href: "/author/dashboard", icon: LayoutDashboard },
-      ],
-    },
-    {
-      title: "My Books",
+      title: "",
       items: [
         { label: "All Books", href: "/author/books", icon: BookOpen },
-      ],
-    },
-    {
-      title: "Publishing Services",
-      items: [
         { label: "Services", href: "/author/services", icon: Package },
-      ],
-    },
-    {
-      title: "Royalties",
-      items: [
-        { label: "Earnings", href: "/author/earnings", icon: Wallet },
-      ],
-    },
-    {
-      title: "Communication",
-      items: [
-        { label: "Support Center", href: "/author/support", icon: Headphones },
-      ],
-    },
-    {
-      title: "Account",
-      items: [
-        { label: "Profile", href: "/author/profile", icon: Users },
+        { label: "Reports", href: "/author/reports", icon: BarChart3 },
+        { label: "Community", href: "/author/community", icon: Users },
+        { label: "Profile", href: "/author/profile", icon: Settings },
       ],
     },
   ],
@@ -262,8 +236,8 @@ export function Sidebar({ user, collapsed = false, onToggle }: SidebarProps) {
       <ScrollArea className="flex-1 py-3">
         <nav className="space-y-1 px-2">
           {sections.map((section) => (
-            <div key={section.title}>
-              {!collapsed && (
+            <div key={section.title || "flat"}>
+              {!collapsed && section.title && (
                 <button
                   onClick={() => toggleSection(section.title)}
                   className="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-black hover:text-black/80 transition-colors"
@@ -278,7 +252,7 @@ export function Sidebar({ user, collapsed = false, onToggle }: SidebarProps) {
                 </button>
               )}
               <AnimatePresence initial={false}>
-                {(collapsed || openSections[section.title]) && (
+                {(collapsed || !section.title || openSections[section.title]) && (
                   <motion.div
                     initial={collapsed ? false : { height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
