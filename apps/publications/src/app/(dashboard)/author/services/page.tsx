@@ -8,25 +8,18 @@ import {
   Clock,
   CheckCircle2,
   DollarSign,
-  MessageSquare,
-  CalendarDays,
   ExternalLink,
   Search,
   ChevronDown,
   ChevronUp,
   ChevronLeft,
   ChevronRight,
-  MoreHorizontal,
   Eye,
   Edit,
   Send,
-  Star,
-  TrendingUp,
-  ArrowRight,
   X,
   Trash2,
   RefreshCw,
-  Users,
   BarChart3,
   FolderOpen,
   ArrowUpDown,
@@ -35,9 +28,6 @@ import {
   Download,
   FileText,
   AlertTriangle,
-  ArrowUp,
-  TrendingDown,
-  ShoppingCart,
 } from "lucide-react";
 import {
   AreaChart,
@@ -50,7 +40,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
 } from "recharts";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -293,12 +282,12 @@ const statusConfig: Record<ProjectStatus, { label: string; color: string; bg: st
 };
 
 const categoryTabs = [
-  { key: "all", label: "All Projects", icon: Package, count: allProjects.length },
-  { key: "pending", label: "Pending", icon: Clock, count: allProjects.filter((p) => p.status === "pending").length },
-  { key: "in_progress", label: "In Progress", icon: BarChart3, count: allProjects.filter((p) => p.status === "in_progress").length },
-  { key: "review", label: "Review", icon: Eye, count: allProjects.filter((p) => p.status === "review").length },
-  { key: "completed", label: "Completed", icon: CheckCircle2, count: allProjects.filter((p) => p.status === "completed").length },
-  { key: "cancelled", label: "Cancelled", icon: AlertTriangle, count: allProjects.filter((p) => p.status === "cancelled").length },
+  { key: "all", label: "All Services", icon: Package },
+  { key: "pending", label: "Pending", icon: Clock },
+  { key: "in_progress", label: "In Progress", icon: BarChart3 },
+  { key: "review", label: "Review", icon: Eye },
+  { key: "completed", label: "Completed", icon: CheckCircle2 },
+  { key: "cancelled", label: "Cancelled", icon: AlertTriangle },
 ];
 
 const recentActivity = [
@@ -306,13 +295,6 @@ const recentActivity = [
   { id: 2, icon: Upload, bg: "bg-violet-100", color: "text-violet-600", text: "Cover mockup v2 uploaded for Money Mindset", time: "5 hours ago" },
   { id: 3, icon: RefreshCw, bg: "bg-amber-100", color: "text-amber-600", text: "Cover design revision requested for Money Mindset", time: "1 day ago" },
 ];
-
-const spendingInsights = {
-  thisMonth: 850,
-  lastMonth: 620,
-  mostOrdered: "Editing",
-  highestCost: "Marketing Campaign",
-};
 
 export default function AuthorServicesPage() {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -355,7 +337,16 @@ export default function AuthorServicesPage() {
   const pendingCount = allProjects.filter((p) => p.status === "pending").length;
   const completedCount = allProjects.filter((p) => p.status === "completed").length;
   const totalSpent = allProjects.reduce((sum, p) => sum + p.amount, 0);
-  const avgValue = Math.round(totalSpent / allProjects.length);
+
+  const handleCardClick = useCallback((key: string) => {
+    setActiveCategory(prev => prev === key ? "all" : key);
+  }, []);
+
+  const handleViewAll = useCallback(() => {
+    setActiveCategory("all");
+    setSearch("");
+    setSortBy("lastUpdate");
+  }, []);
 
   return (
     <motion.div variants={container} initial="hidden" animate="show" className="space-y-6">
@@ -366,9 +357,11 @@ export default function AuthorServicesPage() {
           <p className="text-sm text-muted-foreground mt-0.5">Manage your publishing projects and track progress</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="refresh-btn-border rounded-lg border-[#E8DDD0]" onClick={() => {}}>
-            <RefreshCw className="h-4 w-4 mr-2" /> Refresh
-          </Button>
+          <div className="refresh-btn-border rounded-lg p-[2px]">
+            <Button variant="outline" size="icon" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0" onClick={() => {}}>
+              <RefreshCw className="h-4 w-4 text-[#8A6A4A]" />
+            </Button>
+          </div>
           <Button className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a] rounded-lg" asChild>
             <Link href="/services">
               Browse Service Marketplace
@@ -378,16 +371,26 @@ export default function AuthorServicesPage() {
         </div>
       </motion.div>
 
-      {/* 2. Summary Cards */}
-      <motion.div variants={item} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      {/* 2. Summary Cards (Clickable) */}
+      <motion.div variants={item} className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {[
-          { label: "ACTIVE PROJECTS", value: activeCount, icon: Package, bg: "bg-blue-100", color: "text-blue-600" },
-          { label: "PENDING PROJECTS", value: pendingCount, icon: Clock, bg: "bg-amber-100", color: "text-amber-600" },
-          { label: "COMPLETED PROJECTS", value: completedCount, icon: CheckCircle2, bg: "bg-emerald-100", color: "text-emerald-600" },
-          { label: "TOTAL SPENT", value: `$${totalSpent.toLocaleString()}`, icon: DollarSign, bg: "bg-violet-100", color: "text-violet-600" },
-          { label: "AVG PROJECT VALUE", value: `$${avgValue}`, icon: TrendingUp, bg: "bg-[#F2D8BE]", color: "text-[#8A6A4A]" },
+          { key: "all", label: "TOTAL SERVICES", value: allProjects.length, icon: Package, bg: "bg-[#F5EDE3]", color: "text-[#8A6A4A]" },
+          { key: "pending", label: "PENDING SERVICES", value: pendingCount, icon: Clock, bg: "bg-amber-100", color: "text-amber-600" },
+          { key: "completed", label: "COMPLETED SERVICES", value: completedCount, icon: CheckCircle2, bg: "bg-emerald-100", color: "text-emerald-600" },
+          { key: "spent", label: "TOTAL SPENT", value: `$${totalSpent.toLocaleString()}`, icon: DollarSign, bg: "bg-violet-100", color: "text-violet-600" },
         ].map((s) => (
-          <motion.div key={s.label} whileHover={{ y: -2 }} className="bg-white rounded-xl border border-[#E8DDD0] p-4 flex items-center justify-between">
+          <motion.div
+            key={s.key}
+            whileHover={{ y: -2 }}
+            onClick={() => s.key !== "spent" && handleCardClick(s.key)}
+            className={`bg-white rounded-xl p-4 flex items-center justify-between transition-all ${
+              s.key === "spent"
+                ? "border border-[#E8DDD0] cursor-default"
+                : activeCategory === s.key
+                  ? "ring-2 ring-[#8A6A4A] ring-offset-2 shadow-md cursor-pointer"
+                  : "border border-[#E8DDD0] hover:shadow-md cursor-pointer"
+            }`}
+          >
             <div>
               <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">{s.label}</p>
               <p className="text-xl font-bold text-[#1D1D1D] mt-1">{s.value}</p>
@@ -417,7 +420,6 @@ export default function AuthorServicesPage() {
               className="overflow-hidden"
             >
               <div className="p-4 space-y-4">
-                {/* Monthly Spending Chart + Category Breakdown */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                   <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
                     <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Monthly Service Spending</h4>
@@ -459,44 +461,16 @@ export default function AuthorServicesPage() {
                     </div>
                   </div>
                 </div>
-                {/* Spending Insights */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
-                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">THIS MONTH</p>
-                    <p className="text-xl font-bold text-[#1D1D1D] mt-1">${spendingInsights.thisMonth}</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <ArrowUp className="h-3 w-3 text-emerald-500" />
-                      <span className="text-xs text-emerald-600 font-medium">+37%</span>
-                    </div>
-                  </div>
-                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
-                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">LAST MONTH</p>
-                    <p className="text-xl font-bold text-[#1D1D1D] mt-1">${spendingInsights.lastMonth}</p>
-                  </div>
-                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
-                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">MOST ORDERED</p>
-                    <p className="text-sm font-bold text-[#1D1D1D] mt-1">{spendingInsights.mostOrdered}</p>
-                  </div>
-                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
-                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">HIGHEST COST</p>
-                    <p className="text-sm font-bold text-[#1D1D1D] mt-1">{spendingInsights.highestCost}</p>
-                  </div>
-                </div>
-                {/* Key Metrics */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {[
-                    { label: "Average Delivery", value: "8 Days", progress: 72, color: "bg-[#D8B27A]" },
-                    { label: "Satisfaction Rate", value: "94%", progress: 94, color: "bg-emerald-500" },
-                    { label: "On-Time Delivery", value: "89%", progress: 89, color: "bg-blue-500" },
+                    { label: "THIS MONTH", value: "$850" },
+                    { label: "LAST MONTH", value: "$620" },
+                    { label: "AVG PROJECT", value: `$${Math.round(totalSpent / allProjects.length)}` },
+                    { label: "ON-TIME RATE", value: "89%" },
                   ].map((m) => (
-                    <div key={m.label} className="p-3 border border-[#E8DDD0] rounded-xl">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs text-muted-foreground">{m.label}</span>
-                        <span className="text-sm font-bold text-[#1D1D1D]">{m.value}</span>
-                      </div>
-                      <div className="w-full bg-[#F5EDE3] rounded-full h-1.5">
-                        <div className={`h-1.5 rounded-full ${m.color}`} style={{ width: `${m.progress}%` }} />
-                      </div>
+                    <div key={m.label} className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                      <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">{m.label}</p>
+                      <p className="text-xl font-bold text-[#1D1D1D] mt-1">{m.value}</p>
                     </div>
                   ))}
                 </div>
@@ -509,55 +483,66 @@ export default function AuthorServicesPage() {
       {/* 4. Search & Filter Module */}
       <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] p-4 space-y-3">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search projects, categories, teams..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 search-bar-border rounded-lg border-[#E8DDD0] text-sm"
-            />
+          <div className="search-bar-border relative flex-1 max-w-md">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground z-10" />
+              <Input
+                placeholder="Search services..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-9 rounded-[calc(0.5rem-2px)] border-0 bg-white text-sm"
+              />
+            </div>
           </div>
           <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" className="refresh-btn-border rounded-lg border-[#E8DDD0]">
-                  <ArrowUpDown className="h-4 w-4 mr-1.5" /> Sort
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-white rounded-xl border border-[#E8DDD0] shadow-lg">
-                <DropdownMenuItem onClick={() => setSortBy("lastUpdate")} className="text-sm">{sortBy === "lastUpdate" && <Check className="h-4 w-4 mr-2" />} Last Update</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy("title")} className="text-sm">{sortBy === "title" && <Check className="h-4 w-4 mr-2" />} Title A-Z</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy("amount")} className="text-sm">{sortBy === "amount" && <Check className="h-4 w-4 mr-2" />} Amount</DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setSortBy("dueDate")} className="text-sm">{sortBy === "dueDate" && <Check className="h-4 w-4 mr-2" />} Due Date</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <div className="relative">
-              <Button variant="outline" size="sm" className="refresh-btn-border rounded-lg border-[#E8DDD0]" onClick={() => setShowPageCounter(!showPageCounter)}>
-                Show: {pageCounter === 999 ? "All" : pageCounter}
-                <ChevronDown className="h-4 w-4 ml-1" />
-              </Button>
-              <AnimatePresence>
-                {showPageCounter && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
-                    className="absolute right-0 top-full mt-1 bg-white border border-[#E8DDD0] rounded-xl shadow-lg z-30 py-1 min-w-[100px]"
-                  >
-                    {[10, 20, 50, 100, 999].map((n) => (
-                      <button
-                        key={n}
-                        onClick={() => { setPageCounter(n); setShowPageCounter(false); }}
-                        className={`w-full text-left px-4 py-2 text-sm hover:bg-[#F5EDE3] transition-colors ${pageCounter === n ? "font-medium text-[#8A6A4A] bg-[#F5EDE3]/50" : "text-[#1D1D1D]"}`}
-                      >
-                        {n === 999 ? "All" : n}
-                      </button>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
+            <div className="refresh-btn-border rounded-lg p-[2px]">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0 text-sm">
+                    <ArrowUpDown className="h-4 w-4 mr-1.5" /> Sort
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="bg-white rounded-xl border border-[#E8DDD0] shadow-lg">
+                  <DropdownMenuItem onClick={() => setSortBy("lastUpdate")} className="text-sm">{sortBy === "lastUpdate" && <Check className="h-4 w-4 mr-2" />} Last Update</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setSortBy("title")} className="text-sm">{sortBy === "title" && <Check className="h-4 w-4 mr-2" />} Title A-Z</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setSortBy("amount")} className="text-sm">{sortBy === "amount" && <Check className="h-4 w-4 mr-2" />} Amount</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setSortBy("dueDate")} className="text-sm">{sortBy === "dueDate" && <Check className="h-4 w-4 mr-2" />} Due Date</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
+            <div className="refresh-btn-border rounded-lg p-[2px]">
+              <div className="relative">
+                <Button variant="outline" size="sm" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0 text-sm" onClick={() => setShowPageCounter(!showPageCounter)}>
+                  Show: {pageCounter === 999 ? "All" : pageCounter}
+                  <ChevronDown className="h-4 w-4 ml-1" />
+                </Button>
+                <AnimatePresence>
+                  {showPageCounter && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      className="absolute right-0 top-full mt-1 bg-white border border-[#E8DDD0] rounded-xl shadow-lg z-30 py-1 min-w-[100px]"
+                    >
+                      {[10, 20, 50, 100, 999].map((n) => (
+                        <button
+                          key={n}
+                          onClick={() => { setPageCounter(n); setShowPageCounter(false); }}
+                          className={`w-full text-left px-4 py-2 text-sm hover:bg-[#F5EDE3] transition-colors ${pageCounter === n ? "font-medium text-[#8A6A4A] bg-[#F5EDE3]/50" : "text-[#1D1D1D]"}`}
+                        >
+                          {n === 999 ? "All" : n}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+            {activeCategory !== "all" && (
+              <Button variant="ghost" size="sm" className="text-[#8A6A4A] hover:text-[#6B5538] text-xs" onClick={handleViewAll}>
+                View All
+              </Button>
+            )}
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -573,20 +558,19 @@ export default function AuthorServicesPage() {
             >
               <tab.icon className="h-3.5 w-3.5" />
               {tab.label}
-              <span className="ml-0.5 opacity-70">({tab.count})</span>
             </button>
           ))}
         </div>
       </motion.div>
 
-      {/* 5. Projects Table */}
+      {/* 5. Services Table */}
       <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] shadow-sm overflow-hidden">
         {displayedProjects.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 px-4">
             <div className="p-4 bg-[#F5EDE3] rounded-full mb-4">
               <FolderOpen className="h-10 w-10 text-[#8A6A4A]" />
             </div>
-            <p className="text-lg font-semibold text-[#1D1D1D]">No Projects Found</p>
+            <p className="text-lg font-semibold text-[#1D1D1D]">No Services Found</p>
             <p className="text-sm text-muted-foreground mt-1 mb-4">Try adjusting your search or filters.</p>
             <Button className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a] rounded-lg" asChild>
               <Link href="/services">Browse Marketplace</Link>
@@ -597,14 +581,13 @@ export default function AuthorServicesPage() {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-[#E8DDD0] bg-[#F5EDE3]/30">
-                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">PROJECT</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">SERVICE</th>
                   <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">CATEGORY</th>
                   <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">TEAM</th>
                   <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">STATUS</th>
                   <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">PROGRESS</th>
                   <th className="px-4 py-3 text-right text-[10px] font-semibold text-muted-foreground tracking-wider">AMOUNT</th>
                   <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">DUE DATE</th>
-                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">LAST UPDATE</th>
                   <th className="px-4 py-3 text-right text-[10px] font-semibold text-muted-foreground tracking-wider">ACTIONS</th>
                 </tr>
               </thead>
@@ -652,7 +635,6 @@ export default function AuthorServicesPage() {
                       </td>
                       <td className="px-4 py-3 text-sm text-right font-medium text-[#1D1D1D]">${project.amount}</td>
                       <td className="px-4 py-3 text-sm text-muted-foreground">{project.dueDate}</td>
-                      <td className="px-4 py-3 text-sm text-muted-foreground">{project.lastUpdate}</td>
                       <td className="px-4 py-3 text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
@@ -688,16 +670,10 @@ export default function AuthorServicesPage() {
         )}
       </motion.div>
 
-      {/* 6. Pagination Summary */}
+      {/* 6. Page Count / Pagination (Clean) */}
       <motion.div variants={item} className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-          <span>Showing {displayedProjects.length} of {filteredProjects.length} projects</span>
-          <span className="hidden sm:inline">|</span>
-          <span>Active: {activeCount}</span>
-          <span>|</span>
-          <span>Pending: {pendingCount}</span>
-          <span>|</span>
-          <span>Completed: {completedCount}</span>
+        <div className="text-sm text-muted-foreground">
+          <span>Showing {displayedProjects.length} of {filteredProjects.length} services</span>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon" className="rounded-lg border-[#E8DDD0]" disabled>
@@ -714,9 +690,6 @@ export default function AuthorServicesPage() {
       <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] shadow-sm">
         <div className="flex items-center justify-between p-4 border-b border-[#E8DDD0]">
           <h3 className="font-semibold text-[#1D1D1D]">Recent Activity</h3>
-          <Button variant="ghost" size="sm" className="text-[#8A6A4A] hover:text-[#6B5538] text-xs">
-            View All <ArrowRight className="h-3.5 w-3.5 ml-1" />
-          </Button>
         </div>
         <div className="divide-y divide-[#E8DDD0]/50">
           {recentActivity.map((a) => (
@@ -788,7 +761,6 @@ export default function AuthorServicesPage() {
                     <span className="text-sm font-medium text-[#1D1D1D]">{drawerProject.category}</span>
                   </div>
                 </div>
-                {/* Progress Bar */}
                 <div className="mb-6">
                   <div className="w-full bg-[#F5EDE3] rounded-full h-2.5">
                     <div
@@ -799,7 +771,6 @@ export default function AuthorServicesPage() {
                     />
                   </div>
                 </div>
-                {/* Timeline */}
                 <h4 className="font-semibold text-[#1D1D1D] mb-3">Project Timeline</h4>
                 <div className="space-y-0 mb-6">
                   {drawerProject.milestones.map((milestone, i) => (
@@ -819,7 +790,6 @@ export default function AuthorServicesPage() {
                     </div>
                   ))}
                 </div>
-                {/* Messages */}
                 {drawerProject.messages.length > 0 && (
                   <>
                     <h4 className="font-semibold text-[#1D1D1D] mb-3">Messages</h4>
@@ -838,7 +808,6 @@ export default function AuthorServicesPage() {
                     </div>
                   </>
                 )}
-                {/* Files */}
                 {drawerProject.files.length > 0 && (
                   <>
                     <h4 className="font-semibold text-[#1D1D1D] mb-3">Files</h4>
@@ -857,7 +826,6 @@ export default function AuthorServicesPage() {
                     </div>
                   </>
                 )}
-                {/* Actions */}
                 <div className="flex gap-3">
                   <Button className="flex-1 bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a] rounded-lg">
                     <Send className="mr-2 h-4 w-4" />
