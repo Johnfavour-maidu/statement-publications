@@ -2,13 +2,12 @@
 
 import { useState, useMemo, useCallback } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  BookOpen, Plus, Search, Eye, Edit, Archive, Trash2,
+  BookOpen, Plus, Search, Eye, Pencil, Archive, Trash2,
   ChevronDown, ChevronUp, ChevronLeft, ChevronRight, CheckCircle2, AlertTriangle,
-  FileText, X, SlidersHorizontal, Check, RefreshCw, DollarSign, ShoppingCart,
-  ArrowUpDown, Clock, Users,
+  FileText, X, SlidersHorizontal, Check, RefreshCw,
+  ArrowUpDown, Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -71,7 +70,6 @@ const initialBooks = [
 ];
 
 export default function AuthorAllBooksPage() {
-  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [sortBy, setSortBy] = useState("updated");
@@ -164,8 +162,8 @@ export default function AuthorAllBooksPage() {
   }, []);
 
   const handleEdit = useCallback((book: any) => {
-    router.push(`/author/books/${book.id}/edit`);
-  }, [router]);
+    setDrawerBook(book);
+  }, []);
 
   return (
     <motion.div
@@ -182,8 +180,8 @@ export default function AuthorAllBooksPage() {
         </div>
         <div className="flex items-center gap-2">
           <div className="refresh-btn-border rounded-lg p-[2px]">
-            <Button variant="outline" size="icon" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0" onClick={() => {}}>
-              <RefreshCw className="h-4 w-4 text-[#8A6A4A]" />
+            <Button variant="outline" size="sm" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0 text-[#8A6A4A]" onClick={() => {}}>
+              <RefreshCw className="h-4 w-4 mr-1.5" />Refresh
             </Button>
           </div>
           <Button className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a] rounded-lg" asChild>
@@ -450,7 +448,7 @@ export default function AuthorAllBooksPage() {
                               <Eye className="h-4 w-4 mr-2" /> View Details
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleEdit(book)}>
-                              <Edit className="h-4 w-4 mr-2" /> Edit
+                              <Pencil className="h-4 w-4 mr-2" /> Edit
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleArchive(book)}>
                               <Archive className="h-4 w-4 mr-2" /> Archive
@@ -531,10 +529,7 @@ export default function AuthorAllBooksPage() {
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <Button className="flex-1 bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a] rounded-lg" onClick={() => { setDrawerBook(null); handleEdit(drawerBook); }}>
-                    <Edit className="h-4 w-4 mr-2" /> Edit Book
-                  </Button>
-                  <Button variant="outline" className="rounded-lg border-[#E8DDD0]" onClick={() => setDrawerBook(null)}>
+                  <Button className="flex-1 bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a] rounded-lg" onClick={() => setDrawerBook(null)}>
                     Close
                   </Button>
                 </div>
