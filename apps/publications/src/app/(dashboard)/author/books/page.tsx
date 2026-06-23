@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   BookOpen, Plus, Search, Eye, Pencil, Archive, Trash2,
   ChevronDown, ChevronUp, ChevronLeft, ChevronRight, CheckCircle2, AlertTriangle,
-  FileText, X, SlidersHorizontal, Check, RefreshCw,
+  FileText, X, SlidersHorizontal, Check, RefreshCw, BarChart3,
   ArrowUpDown, Clock, Users, MessageSquare, Download, Bookmark, Star,
   TrendingUp, ArrowUp, DollarSign,
 } from "lucide-react";
@@ -221,10 +221,6 @@ export default function AuthorAllBooksPage() {
     setCurrentPage(1);
   }, []);
 
-  const handleEdit = useCallback((book: any) => {
-    setDrawerBook(book);
-  }, []);
-
   const handlePageChange = useCallback((page: number) => {
     setCurrentPage(page);
     setSelectedBooks(new Set());
@@ -245,7 +241,12 @@ export default function AuthorAllBooksPage() {
         </div>
         <div className="flex items-center gap-2">
           <div className="refresh-btn-border rounded-lg p-[2px]">
-            <Button variant="outline" size="sm" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0 text-[#8A6A4A]" onClick={() => {}}>
+            <Button variant="outline" size="sm" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0 text-[#8A6A4A]" onClick={() => setShowAnalytics(!showAnalytics)}>
+              <BarChart3 className="h-4 w-4 mr-1.5" />{showAnalytics ? "Hide Analytics" : "View Analytics"}
+            </Button>
+          </div>
+          <div className="refresh-btn-border rounded-lg p-[2px]">
+            <Button variant="outline" size="sm" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0 text-[#8A6A4A]" onClick={() => { setActiveCategory("all"); setSearchQuery(""); setSortBy("updated"); setCurrentPage(1); setPageCounter(10); }}>
               <RefreshCw className="h-4 w-4 mr-1.5" />Refresh
             </Button>
           </div>
@@ -286,144 +287,137 @@ export default function AuthorAllBooksPage() {
         ))}
       </motion.div>
 
-      {/* 3. Books Analytics Center (collapsed by default) */}
-      <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] shadow-sm">
-        <div className="flex items-center justify-between p-4 border-b border-[#E8DDD0]">
-          <h3 className="font-semibold text-[#1D1D1D]">Books Analytics Center</h3>
-          <Button variant="ghost" size="sm" onClick={() => setShowAnalytics(!showAnalytics)} className="text-muted-foreground hover:text-[#1D1D1D]">
-            {showAnalytics ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-          </Button>
-        </div>
-        <AnimatePresence>
-          {showAnalytics && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="overflow-hidden"
-            >
-              <div className="p-4 space-y-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
-                    <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Monthly Performance</h4>
-                    <ResponsiveContainer width="100%" height={180}>
-                      <AreaChart data={monthlyPerformance}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#E8DDD0" />
-                        <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-                        <YAxis tick={{ fontSize: 12 }} />
-                        <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid #E8DDD0", background: "white" }} />
-                        <Area type="monotone" dataKey="revenue" stroke="#8A6A4A" fill="#D8B27A" fillOpacity={0.3} />
-                      </AreaChart>
-                    </ResponsiveContainer>
-                  </div>
-                  <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
-                    <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Revenue Trend</h4>
-                    <div className="space-y-2">
-                      {monthlyPerformance.map((m) => (
-                        <div key={m.month} className="flex items-center gap-3">
-                          <span className="text-xs font-medium text-muted-foreground w-8">{m.month}</span>
-                          <div className="flex-1 h-2 bg-[#E8DDD0] rounded-full overflow-hidden">
-                            <div className="h-full bg-[#8A6A4A] rounded-full" style={{ width: `${(m.revenue / 1600) * 100}%` }} />
-                          </div>
-                          <span className="text-xs font-medium text-[#1D1D1D] w-16 text-right">${m.revenue.toLocaleString()}</span>
+      {/* 2b. Analytics (toggled by View Analytics button) */}
+      <AnimatePresence>
+        {showAnalytics && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="overflow-hidden"
+          >
+            <div className="bg-white rounded-xl border border-[#E8DDD0] shadow-sm p-4 space-y-4">
+              <h3 className="font-semibold text-[#1D1D1D]">Books Analytics Center</h3>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
+                  <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Monthly Performance</h4>
+                  <ResponsiveContainer width="100%" height={180}>
+                    <AreaChart data={monthlyPerformance}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#E8DDD0" />
+                      <XAxis dataKey="month" tick={{ fontSize: 12 }} />
+                      <YAxis tick={{ fontSize: 12 }} />
+                      <Tooltip contentStyle={{ borderRadius: 12, border: "1px solid #E8DDD0", background: "white" }} />
+                      <Area type="monotone" dataKey="revenue" stroke="#8A6A4A" fill="#D8B27A" fillOpacity={0.3} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
+                  <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Revenue Trend</h4>
+                  <div className="space-y-2">
+                    {monthlyPerformance.map((m) => (
+                      <div key={m.month} className="flex items-center gap-3">
+                        <span className="text-xs font-medium text-muted-foreground w-8">{m.month}</span>
+                        <div className="flex-1 h-2 bg-[#E8DDD0] rounded-full overflow-hidden">
+                          <div className="h-full bg-[#8A6A4A] rounded-full" style={{ width: `${(m.revenue / 1600) * 100}%` }} />
                         </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
-                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">THIS MONTH</p>
-                    <p className="text-xl font-bold text-[#1D1D1D] mt-1">$1,560</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <ArrowUp className="h-3 w-3 text-emerald-500" />
-                      <span className="text-xs text-emerald-600 font-medium">+30%</span>
-                    </div>
-                  </div>
-                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
-                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">LAST MONTH</p>
-                    <p className="text-xl font-bold text-[#1D1D1D] mt-1">$1,200</p>
-                    <div className="flex items-center gap-1 mt-1">
-                      <TrendingUp className="h-3 w-3 text-emerald-500" />
-                      <span className="text-xs text-emerald-600 font-medium">+18%</span>
-                    </div>
-                  </div>
-                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
-                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">BEST SELLER</p>
-                    <p className="text-sm font-bold text-[#1D1D1D] mt-1">Wealth Is A Decision</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">$2,640 total</p>
-                  </div>
-                  <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
-                    <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">TOP CATEGORY</p>
-                    <p className="text-sm font-bold text-[#1D1D1D] mt-1">Personal Finance</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">71% of revenue</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-                  {[
-                    { label: "Total Readers", value: "4,820", icon: Users, bg: "bg-blue-100", color: "text-blue-600" },
-                    { label: "Avg Reading Time", value: "12.4 min", icon: Clock, bg: "bg-emerald-100", color: "text-emerald-600" },
-                    { label: "Comments", value: "486", icon: MessageSquare, bg: "bg-amber-100", color: "text-amber-600" },
-                    { label: "Downloads", value: "2,340", icon: Download, bg: "bg-violet-100", color: "text-violet-600" },
-                    { label: "Bookmarks", value: "1,890", icon: Bookmark, bg: "bg-pink-100", color: "text-pink-600" },
-                  ].map((m) => (
-                    <div key={m.label} className="p-3 border border-[#E8DDD0] rounded-xl flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${m.bg}`}>
-                        <m.icon className={`h-4 w-4 ${m.color}`} />
+                        <span className="text-xs font-medium text-[#1D1D1D] w-16 text-right">${m.revenue.toLocaleString()}</span>
                       </div>
-                      <div>
-                        <p className="text-lg font-bold text-[#1D1D1D]">{m.value}</p>
-                        <p className="text-[10px] text-muted-foreground">{m.label}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
-                    <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Category Performance</h4>
-                    <div className="flex items-center gap-6">
-                      <ResponsiveContainer width={140} height={140}>
-                        <PieChart>
-                          <Pie data={categoryPieData} cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={3} dataKey="value">
-                            {categoryPieData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
-                          </Pie>
-                        </PieChart>
-                      </ResponsiveContainer>
-                      <div className="space-y-2 flex-1">
-                        {categoryPieData.map((c) => (
-                          <div key={c.name} className="flex items-center gap-2">
-                            <div className="w-2.5 h-2.5 rounded-full" style={{ background: c.color }} />
-                            <span className="text-xs text-muted-foreground flex-1">{c.name}</span>
-                            <span className="text-xs font-medium text-[#1D1D1D]">{c.value}%</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
-                    <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Top Books by Revenue</h4>
-                    <div className="space-y-2">
-                      {topBooksTableData.map((b, i) => (
-                        <div key={b.title} className="flex items-center gap-3 p-2 bg-white rounded-lg border border-[#E8DDD0]/50">
-                          <span className="text-xs font-bold text-[#8A6A4A] w-5">{i + 1}</span>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-xs font-medium text-[#1D1D1D] truncate">{b.title}</p>
-                            <p className="text-[10px] text-muted-foreground">{b.views.toLocaleString()} views</p>
-                          </div>
-                          <span className="text-xs font-bold text-[#1D1D1D]">${b.revenue.toLocaleString()}</span>
-                        </div>
-                      ))}
-                    </div>
+                    ))}
                   </div>
                 </div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </motion.div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                  <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">THIS MONTH</p>
+                  <p className="text-xl font-bold text-[#1D1D1D] mt-1">$1,560</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <ArrowUp className="h-3 w-3 text-emerald-500" />
+                    <span className="text-xs text-emerald-600 font-medium">+30%</span>
+                  </div>
+                </div>
+                <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                  <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">LAST MONTH</p>
+                  <p className="text-xl font-bold text-[#1D1D1D] mt-1">$1,200</p>
+                  <div className="flex items-center gap-1 mt-1">
+                    <TrendingUp className="h-3 w-3 text-emerald-500" />
+                    <span className="text-xs text-emerald-600 font-medium">+18%</span>
+                  </div>
+                </div>
+                <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                  <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">BEST SELLER</p>
+                  <p className="text-sm font-bold text-[#1D1D1D] mt-1">Wealth Is A Decision</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">$2,640 total</p>
+                </div>
+                <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
+                  <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">TOP CATEGORY</p>
+                  <p className="text-sm font-bold text-[#1D1D1D] mt-1">Personal Finance</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">71% of revenue</p>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+                {[
+                  { label: "Total Readers", value: "4,820", icon: Users, bg: "bg-blue-100", color: "text-blue-600" },
+                  { label: "Avg Reading Time", value: "12.4 min", icon: Clock, bg: "bg-emerald-100", color: "text-emerald-600" },
+                  { label: "Comments", value: "486", icon: MessageSquare, bg: "bg-amber-100", color: "text-amber-600" },
+                  { label: "Downloads", value: "2,340", icon: Download, bg: "bg-violet-100", color: "text-violet-600" },
+                  { label: "Bookmarks", value: "1,890", icon: Bookmark, bg: "bg-pink-100", color: "text-pink-600" },
+                ].map((m) => (
+                  <div key={m.label} className="p-3 border border-[#E8DDD0] rounded-xl flex items-center gap-3">
+                    <div className={`p-2 rounded-lg ${m.bg}`}>
+                      <m.icon className={`h-4 w-4 ${m.color}`} />
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold text-[#1D1D1D]">{m.value}</p>
+                      <p className="text-[10px] text-muted-foreground">{m.label}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
+                  <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Category Performance</h4>
+                  <div className="flex items-center gap-6">
+                    <ResponsiveContainer width={140} height={140}>
+                      <PieChart>
+                        <Pie data={categoryPieData} cx="50%" cy="50%" innerRadius={35} outerRadius={60} paddingAngle={3} dataKey="value">
+                          {categoryPieData.map((entry, i) => <Cell key={i} fill={entry.color} />)}
+                        </Pie>
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="space-y-2 flex-1">
+                      {categoryPieData.map((c) => (
+                        <div key={c.name} className="flex items-center gap-2">
+                          <div className="w-2.5 h-2.5 rounded-full" style={{ background: c.color }} />
+                          <span className="text-xs text-muted-foreground flex-1">{c.name}</span>
+                          <span className="text-xs font-medium text-[#1D1D1D]">{c.value}%</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
+                  <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Top Books by Revenue</h4>
+                  <div className="space-y-2">
+                    {topBooksTableData.map((b, i) => (
+                      <div key={b.title} className="flex items-center gap-3 p-2 bg-white rounded-lg border border-[#E8DDD0]/50">
+                        <span className="text-xs font-bold text-[#8A6A4A] w-5">{i + 1}</span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-medium text-[#1D1D1D] truncate">{b.title}</p>
+                          <p className="text-[10px] text-muted-foreground">{b.views.toLocaleString()} views</p>
+                        </div>
+                        <span className="text-xs font-bold text-[#1D1D1D]">${b.revenue.toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* 4. Search & Filter Module */}
+      {/* 3. Search & Filter Module */}
       <motion.div variants={item} className="bg-white rounded-xl border border-[#E8DDD0] p-4">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <div className="search-bar-border relative flex-1 max-w-md">
@@ -438,28 +432,6 @@ export default function AuthorAllBooksPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="refresh-btn-border rounded-lg p-[2px]">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0 text-sm">
-                    <SlidersHorizontal className="h-4 w-4 mr-1.5" /> Filters
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="bg-white rounded-xl border border-[#E8DDD0] shadow-lg min-w-[180px]">
-                  {categoryTabs.map((tab) => (
-                    <DropdownMenuItem
-                      key={tab.key}
-                      onClick={() => { setActiveCategory(tab.key); setCurrentPage(1); }}
-                      className="text-sm"
-                    >
-                      {activeCategory === tab.key && <Check className="h-4 w-4 mr-2" />}
-                      <tab.icon className="h-4 w-4 mr-2" />
-                      {tab.label}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
             <div className="refresh-btn-border rounded-lg p-[2px]">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -506,6 +478,22 @@ export default function AuthorAllBooksPage() {
               </div>
             </div>
           </div>
+        </div>
+        <div className="flex flex-wrap gap-2 mt-3 pt-3 border-t border-[#E8DDD0]">
+          {categoryTabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => { setActiveCategory(tab.key); setCurrentPage(1); }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                activeCategory === tab.key
+                  ? "bg-[#8A6A4A] text-white"
+                  : "bg-[#F5EDE3] text-[#1D1D1D] hover:bg-[#E8DDD0]"
+              }`}
+            >
+              <tab.icon className="h-3 w-3" />
+              {tab.label}
+            </button>
+          ))}
         </div>
       </motion.div>
 
@@ -605,9 +593,6 @@ export default function AuthorAllBooksPage() {
                           <DropdownMenuContent align="end" className="bg-white rounded-xl border border-[#E8DDD0] shadow-lg">
                             <DropdownMenuItem onClick={() => setDrawerBook(book)}>
                               <Eye className="h-4 w-4 mr-2" /> View Details
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleEdit(book)}>
-                              <Pencil className="h-4 w-4 mr-2" /> Edit
                             </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => handleArchive(book)}>
                               <Archive className="h-4 w-4 mr-2" /> Archive
