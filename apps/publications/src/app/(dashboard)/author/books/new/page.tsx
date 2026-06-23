@@ -212,8 +212,25 @@ export default function NewBookPage() {
         }),
       });
       const data = await response.json();
-      if (data.success) router.push("/author/books");
-      else alert(data.error || "Failed to create book");
+      if (data.success) {
+        const newBook = {
+          id: `submitted-${Date.now()}`,
+          title: formData.title,
+          subtitle: formData.subtitle,
+          isbn: formData.isbn || `978-0-000000-${Math.floor(Math.random() * 99).toString().padStart(2, "0")}-${Math.floor(Math.random() * 9)}`,
+          category: formData.category || "Uncategorized",
+          status: "pending" as const,
+          formats: ["eBook"] as string[],
+          views: 0, sales: 0, revenue: 0, rating: 0,
+          createdDate: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+          description: formData.description,
+          performance: "new" as const,
+        };
+        const existing = JSON.parse(localStorage.getItem("authorCreatedBooks") || "[]");
+        existing.push(newBook);
+        localStorage.setItem("authorCreatedBooks", JSON.stringify(existing));
+        router.push("/author/books");
+      } else alert(data.error || "Failed to create book");
     } catch (error) {
       console.error("Submit failed:", error);
       alert("Failed to create book. Please try again.");
@@ -768,7 +785,26 @@ export default function NewBookPage() {
             <ArrowLeft className="mr-2 h-4 w-4" /> Previous
           </Button>
           <div className="flex items-center gap-3">
-            <Button variant="outline" className="rounded-xl border-[#E8DDD0] hover:bg-[#F5EDE3] px-5 text-[#8A6A4A]" onClick={() => { setSaveStatus("saving"); localStorage.setItem("newBookDraft", JSON.stringify({ ...formData, manuscriptFile: undefined, coverFile: undefined, coverPreview: undefined })); setTimeout(() => { setSaveStatus("saved"); setLastSaved(new Date()); }, 800); }}>
+            <Button variant="outline" className="rounded-xl border-[#E8DDD0] hover:bg-[#F5EDE3] px-5 text-[#8A6A4A]" onClick={() => {
+              setSaveStatus("saving");
+              const newBook = {
+                id: `draft-${Date.now()}`,
+                title: formData.title || "Untitled Draft",
+                subtitle: formData.subtitle,
+                isbn: formData.isbn || `978-0-000000-${Math.floor(Math.random() * 99).toString().padStart(2, "0")}-${Math.floor(Math.random() * 9)}`,
+                category: formData.category || "Uncategorized",
+                status: "draft" as const,
+                formats: [] as string[],
+                views: 0, sales: 0, revenue: 0, rating: 0,
+                createdDate: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+                description: formData.description || "",
+                performance: "new" as const,
+              };
+              const existing = JSON.parse(localStorage.getItem("authorCreatedBooks") || "[]");
+              existing.push(newBook);
+              localStorage.setItem("authorCreatedBooks", JSON.stringify(existing));
+              setTimeout(() => { setSaveStatus("saved"); setLastSaved(new Date()); }, 800);
+            }}>
               <Save className="mr-2 h-4 w-4" /> Save Draft
             </Button>
             {currentStep < 6 ? (

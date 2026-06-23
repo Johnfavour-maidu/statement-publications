@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -140,6 +140,19 @@ export default function AuthorAllBooksPage() {
   const [pageCounter, setPageCounter] = useState(10);
   const [showPageCounter, setShowPageCounter] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("authorCreatedBooks") || "[]");
+      if (saved.length > 0) {
+        setBooks((prev) => {
+          const existingIds = new Set(prev.map((b) => b.id));
+          const newBooks = saved.filter((b: Book) => !existingIds.has(b.id));
+          return [...prev, ...newBooks];
+        });
+      }
+    } catch {}
+  }, []);
 
   const publishedCount = useMemo(() => books.filter(b => b.status === "published").length, [books]);
   const draftsCount = useMemo(() => books.filter(b => b.status === "draft").length, [books]);
