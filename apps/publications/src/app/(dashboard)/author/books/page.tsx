@@ -62,6 +62,7 @@ interface Book {
   isbn: string;
   category: string;
   status: "published" | "draft" | "pending" | "rejected" | "archived";
+  formats: string[];
   views: number;
   sales: number;
   revenue: number;
@@ -104,25 +105,25 @@ const publishHistory = [
 ];
 
 const initialBooks: Book[] = [
-  { id: "1", title: "Wealth Is A Decision", isbn: "978-1-234567-00-1", category: "Personal Finance", status: "published", views: 1840, sales: 220, revenue: 2640, rating: 4.8, createdDate: "Jan 15, 2025", description: "A comprehensive guide to making smart financial decisions.", performance: "excellent" },
-  { id: "2", title: "The Art of Negotiation", isbn: "978-1-234567-00-2", category: "Business", status: "published", views: 1520, sales: 180, revenue: 1980, rating: 4.6, createdDate: "Feb 8, 2025", description: "Master the art of negotiation in business and life.", performance: "excellent" },
-  { id: "3", title: "Building Your Empire", isbn: "978-1-234567-00-3", category: "Business", status: "published", views: 1280, sales: 150, revenue: 1640, rating: 4.5, createdDate: "Mar 1, 2025", description: "Build a lasting business empire from the ground up.", performance: "excellent" },
-  { id: "4", title: "Money Mindset Mastery", isbn: "978-1-234567-00-4", category: "Self Help", status: "published", views: 980, sales: 120, revenue: 1120, rating: 4.4, createdDate: "Mar 20, 2025", description: "Transform your relationship with money.", performance: "good" },
-  { id: "5", title: "Financial Freedom Blueprint", isbn: "978-1-234567-00-5", category: "Personal Finance", status: "published", views: 840, sales: 95, revenue: 920, rating: 4.3, createdDate: "Apr 5, 2025", description: "Your step-by-step guide to financial independence.", performance: "good" },
-  { id: "6", title: "Leadership in the Digital Age", isbn: "978-1-234567-00-6", category: "Business", status: "published", views: 720, sales: 82, revenue: 780, rating: 4.2, createdDate: "Apr 18, 2025", description: "Leading teams and organizations in a digital world.", performance: "good" },
-  { id: "7", title: "The Entrepreneur's Playbook", isbn: "978-1-234567-00-7", category: "Business", status: "published", views: 680, sales: 76, revenue: 680, rating: 4.1, createdDate: "May 2, 2025", description: "Essential strategies for startup founders.", performance: "good" },
-  { id: "8", title: "Investing for Beginners", isbn: "978-1-234567-00-8", category: "Personal Finance", status: "published", views: 620, sales: 68, revenue: 580, rating: 4.0, createdDate: "May 15, 2025", description: "Start your investing journey with confidence.", performance: "good" },
-  { id: "9", title: "The Productivity System", isbn: "978-1-234567-00-9", category: "Self Help", status: "published", views: 540, sales: 58, revenue: 480, rating: 3.9, createdDate: "Jun 1, 2025", description: "A proven system for 10x your productivity.", performance: "average" },
-  { id: "10", title: "Digital Marketing Mastery", isbn: "978-1-234567-01-0", category: "Technology", status: "published", views: 480, sales: 52, revenue: 420, rating: 3.8, createdDate: "Jun 15, 2025", description: "Master digital marketing channels and strategies.", performance: "average" },
-  { id: "11", title: "Real Estate Investing 101", isbn: "978-1-234567-01-1", category: "Personal Finance", status: "published", views: 420, sales: 45, revenue: 360, rating: 3.7, createdDate: "Jul 1, 2025", description: "Get started in real estate investing.", performance: "average" },
-  { id: "12", title: "The Side Hustle Bible", isbn: "978-1-234567-01-2", category: "Business", status: "published", views: 380, sales: 40, revenue: 300, rating: 3.6, createdDate: "Jul 15, 2025", description: "50+ side hustle ideas to boost your income.", performance: "average" },
-  { id: "13", title: "Tax Strategies for Authors", isbn: "978-1-234567-01-3", category: "Personal Finance", status: "draft", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Aug 1, 2025", description: "Minimize your tax burden as a published author.", performance: "new" },
-  { id: "14", title: "The Writing Habit", isbn: "978-1-234567-01-4", category: "Self Help", status: "draft", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Aug 15, 2025", description: "Build a consistent writing habit that sticks.", performance: "new" },
-  { id: "15", title: "Passive Income Streams", isbn: "978-1-234567-01-5", category: "Personal Finance", status: "draft", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Sep 1, 2025", description: "Create multiple streams of passive income.", performance: "new" },
-  { id: "16", title: "AI for Entrepreneurs", isbn: "978-1-234567-01-6", category: "Technology", status: "pending", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Sep 15, 2025", description: "Leverage AI to grow your business.", performance: "new" },
-  { id: "17", title: "The Remote Work Revolution", isbn: "978-1-234567-01-7", category: "Business", status: "pending", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Oct 1, 2025", description: "Thriving in the new world of remote work.", performance: "new" },
-  { id: "18", title: "Crypto & Blockchain Explained", isbn: "978-1-234567-01-8", category: "Technology", status: "rejected", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Oct 15, 2025", description: "A beginner's guide to cryptocurrency.", performance: "new" },
-  { id: "19", title: "Legacy Building 101", isbn: "978-1-234567-01-9", category: "Personal Finance", status: "archived", views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Nov 1, 2024", description: "Build generational wealth.", performance: "new" },
+  { id: "1", title: "Wealth Is A Decision", isbn: "978-1-234567-00-1", category: "Personal Finance", status: "published", formats: ["eBook", "Paperback", "Hardcover", "Audiobook"], views: 1840, sales: 220, revenue: 2640, rating: 4.8, createdDate: "Jan 15, 2025", description: "A comprehensive guide to making smart financial decisions.", performance: "excellent" },
+  { id: "2", title: "The Art of Negotiation", isbn: "978-1-234567-00-2", category: "Business", status: "published", formats: ["eBook", "Paperback", "Audiobook"], views: 1520, sales: 180, revenue: 1980, rating: 4.6, createdDate: "Feb 8, 2025", description: "Master the art of negotiation in business and life.", performance: "excellent" },
+  { id: "3", title: "Building Your Empire", isbn: "978-1-234567-00-3", category: "Business", status: "published", formats: ["eBook", "Paperback"], views: 1280, sales: 150, revenue: 1640, rating: 4.5, createdDate: "Mar 1, 2025", description: "Build a lasting business empire from the ground up.", performance: "excellent" },
+  { id: "4", title: "Money Mindset Mastery", isbn: "978-1-234567-00-4", category: "Self Help", status: "published", formats: ["eBook", "Paperback", "Hardcover"], views: 980, sales: 120, revenue: 1120, rating: 4.4, createdDate: "Mar 20, 2025", description: "Transform your relationship with money.", performance: "good" },
+  { id: "5", title: "Financial Freedom Blueprint", isbn: "978-1-234567-00-5", category: "Personal Finance", status: "published", formats: ["eBook", "Paperback", "Audiobook"], views: 840, sales: 95, revenue: 920, rating: 4.3, createdDate: "Apr 5, 2025", description: "Your step-by-step guide to financial independence.", performance: "good" },
+  { id: "6", title: "Leadership in the Digital Age", isbn: "978-1-234567-00-6", category: "Business", status: "published", formats: ["eBook", "Paperback"], views: 720, sales: 82, revenue: 780, rating: 4.2, createdDate: "Apr 18, 2025", description: "Leading teams and organizations in a digital world.", performance: "good" },
+  { id: "7", title: "The Entrepreneur's Playbook", isbn: "978-1-234567-00-7", category: "Business", status: "published", formats: ["eBook", "Paperback", "Hardcover"], views: 680, sales: 76, revenue: 680, rating: 4.1, createdDate: "May 2, 2025", description: "Essential strategies for startup founders.", performance: "good" },
+  { id: "8", title: "Investing for Beginners", isbn: "978-1-234567-00-8", category: "Personal Finance", status: "published", formats: ["eBook", "Paperback"], views: 620, sales: 68, revenue: 580, rating: 4.0, createdDate: "May 15, 2025", description: "Start your investing journey with confidence.", performance: "good" },
+  { id: "9", title: "The Productivity System", isbn: "978-1-234567-00-9", category: "Self Help", status: "published", formats: ["eBook", "Audiobook"], views: 540, sales: 58, revenue: 480, rating: 3.9, createdDate: "Jun 1, 2025", description: "A proven system for 10x your productivity.", performance: "average" },
+  { id: "10", title: "Digital Marketing Mastery", isbn: "978-1-234567-01-0", category: "Technology", status: "published", formats: ["eBook", "Paperback"], views: 480, sales: 52, revenue: 420, rating: 3.8, createdDate: "Jun 15, 2025", description: "Master digital marketing channels and strategies.", performance: "average" },
+  { id: "11", title: "Real Estate Investing 101", isbn: "978-1-234567-01-1", category: "Personal Finance", status: "published", formats: ["eBook"], views: 420, sales: 45, revenue: 360, rating: 3.7, createdDate: "Jul 1, 2025", description: "Get started in real estate investing.", performance: "average" },
+  { id: "12", title: "The Side Hustle Bible", isbn: "978-1-234567-01-2", category: "Business", status: "published", formats: ["eBook", "Paperback", "Audiobook"], views: 380, sales: 40, revenue: 300, rating: 3.6, createdDate: "Jul 15, 2025", description: "50+ side hustle ideas to boost your income.", performance: "average" },
+  { id: "13", title: "Tax Strategies for Authors", isbn: "978-1-234567-01-3", category: "Personal Finance", status: "draft", formats: [], views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Aug 1, 2025", description: "Minimize your tax burden as a published author.", performance: "new" },
+  { id: "14", title: "The Writing Habit", isbn: "978-1-234567-01-4", category: "Self Help", status: "draft", formats: [], views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Aug 15, 2025", description: "Build a consistent writing habit that sticks.", performance: "new" },
+  { id: "15", title: "Passive Income Streams", isbn: "978-1-234567-01-5", category: "Personal Finance", status: "draft", formats: [], views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Sep 1, 2025", description: "Create multiple streams of passive income.", performance: "new" },
+  { id: "16", title: "AI for Entrepreneurs", isbn: "978-1-234567-01-6", category: "Technology", status: "pending", formats: [], views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Sep 15, 2025", description: "Leverage AI to grow your business.", performance: "new" },
+  { id: "17", title: "The Remote Work Revolution", isbn: "978-1-234567-01-7", category: "Business", status: "pending", formats: [], views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Oct 1, 2025", description: "Thriving in the new world of remote work.", performance: "new" },
+  { id: "18", title: "Crypto & Blockchain Explained", isbn: "978-1-234567-01-8", category: "Technology", status: "rejected", formats: [], views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Oct 15, 2025", description: "A beginner's guide to cryptocurrency.", performance: "new" },
+  { id: "19", title: "Legacy Building 101", isbn: "978-1-234567-01-9", category: "Personal Finance", status: "archived", formats: [], views: 0, sales: 0, revenue: 0, rating: 0, createdDate: "Nov 1, 2024", description: "Build generational wealth.", performance: "new" },
 ];
 
 export default function AuthorAllBooksPage() {
@@ -547,6 +548,7 @@ export default function AuthorAllBooksPage() {
                   <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">COVER</th>
                   <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">TITLE</th>
                   <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">CATEGORY</th>
+                  <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">FORMATS</th>
                   <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">STATUS</th>
                   <th className="px-4 py-3 text-left text-[10px] font-semibold text-muted-foreground tracking-wider">PUBLISHED</th>
                   <th className="px-4 py-3 text-right text-[10px] font-semibold text-muted-foreground tracking-wider">ACTIONS</th>
@@ -577,6 +579,13 @@ export default function AuthorAllBooksPage() {
                         <p className="font-medium text-[#1D1D1D]">{book.title}</p>
                       </td>
                       <td className="px-4 py-3 text-sm text-muted-foreground">{book.category}</td>
+                      <td className="px-4 py-3">
+                        <div className="flex flex-wrap gap-1">
+                          {book.formats.length > 0 ? book.formats.map((f) => (
+                            <span key={f} className="inline-block px-1.5 py-0.5 rounded bg-[#F5EDE3] text-[10px] font-medium text-[#8A6A4A]">{f}</span>
+                          )) : <span className="text-xs text-muted-foreground">—</span>}
+                        </div>
+                      </td>
                       <td className="px-4 py-3">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${status.bg} ${status.color}`}>
                           {status.label}
@@ -698,6 +707,14 @@ export default function AuthorAllBooksPage() {
                   <div className="flex justify-between py-2 border-b border-[#E8DDD0]">
                     <span className="text-sm text-muted-foreground">Category</span>
                     <span className="text-sm font-medium text-[#1D1D1D]">{drawerBook.category}</span>
+                  </div>
+                  <div className="flex justify-between py-2 border-b border-[#E8DDD0]">
+                    <span className="text-sm text-muted-foreground">Formats</span>
+                    <div className="flex flex-wrap gap-1 justify-end">
+                      {drawerBook.formats?.length > 0 ? drawerBook.formats.map((f: string) => (
+                        <span key={f} className="inline-block px-2 py-0.5 rounded bg-[#F5EDE3] text-[10px] font-medium text-[#8A6A4A]">{f}</span>
+                      )) : <span className="text-sm text-muted-foreground">—</span>}
+                    </div>
                   </div>
                   <div className="flex justify-between py-2 border-b border-[#E8DDD0]">
                     <span className="text-sm text-muted-foreground">Revenue</span>

@@ -105,7 +105,6 @@ export default function NewBookPage() {
     if (step === 1) {
       if (!formData.title.trim()) newErrors.title = "Title is required";
       if (!formData.description.trim()) newErrors.description = "Description is required";
-      if (!formData.category) newErrors.category = "Category is required";
     }
     if (step === 2) { if (!formData.manuscriptFile) newErrors.manuscript = "Manuscript file is required"; }
     if (step === 3) { if (!formData.coverFile) newErrors.cover = "Cover image is required"; }
@@ -769,7 +768,7 @@ export default function NewBookPage() {
             <ArrowLeft className="mr-2 h-4 w-4" /> Previous
           </Button>
           <div className="flex items-center gap-3">
-            <Button variant="outline" className="rounded-xl border-[#E8DDD0] hover:bg-[#F5EDE3] px-5 text-[#8A6A4A]">
+            <Button variant="outline" className="rounded-xl border-[#E8DDD0] hover:bg-[#F5EDE3] px-5 text-[#8A6A4A]" onClick={() => { setSaveStatus("saving"); localStorage.setItem("newBookDraft", JSON.stringify({ ...formData, manuscriptFile: undefined, coverFile: undefined, coverPreview: undefined })); setTimeout(() => { setSaveStatus("saved"); setLastSaved(new Date()); }, 800); }}>
               <Save className="mr-2 h-4 w-4" /> Save Draft
             </Button>
             {currentStep < 6 ? (
