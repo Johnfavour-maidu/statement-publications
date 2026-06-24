@@ -3,7 +3,24 @@
 import { use, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Star, ShoppingCart, Heart, BookOpen, ChevronRight, Minus, Plus, Share2 } from "lucide-react";
+import {
+  Star,
+  ShoppingCart,
+  Heart,
+  BookOpen,
+  ChevronRight,
+  Minus,
+  Plus,
+  Headphones,
+  Download,
+  Eye,
+  Share2,
+  Clock,
+  Globe,
+  Hash,
+  Calendar,
+  Building2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { getBookBySlug, getBooksByCategory } from "@/lib/demo-data";
@@ -22,12 +39,31 @@ const ratingDistribution = [
 ];
 
 const sampleReviews = [
-  { name: "Adeola K.", rating: 5, date: "May 12, 2026", text: "Absolutely transformative. This book gave me a clear roadmap for my finances. I've already recommended it to three friends." },
-  { name: "Chidi O.", rating: 5, date: "April 28, 2026", text: "Practical, actionable, and well-written. The author really knows how to break down complex topics into simple steps." },
-  { name: "Fatima M.", rating: 4, date: "March 15, 2026", text: "Great content and easy to read. I would have liked a bit more depth on the investment chapter, but overall an excellent book." },
+  {
+    name: "Adeola K.",
+    rating: 5,
+    date: "May 12, 2026",
+    text: "Absolutely transformative. This book gave me a clear roadmap for my finances. I've already recommended it to three friends.",
+  },
+  {
+    name: "Chidi O.",
+    rating: 5,
+    date: "April 28, 2026",
+    text: "Practical, actionable, and well-written. The author really knows how to break down complex topics into simple steps.",
+  },
+  {
+    name: "Fatima M.",
+    rating: 4,
+    date: "March 15, 2026",
+    text: "Great content and easy to read. I would have liked a bit more depth on the investment chapter, but overall an excellent book.",
+  },
 ];
 
-export default function BookDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+export default function BookDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = use(params);
   const book = getBookBySlug(slug);
   const { addItem } = useCart();
@@ -39,8 +75,12 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20 text-center">
         <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-        <h1 className="text-2xl font-bold text-[#1D1D1D] mb-2">Book Not Found</h1>
-        <p className="text-gray-500 mb-6">The book you are looking for does not exist or has been removed.</p>
+        <h1 className="text-2xl font-bold text-[#1D1D1D] mb-2">
+          Book Not Found
+        </h1>
+        <p className="text-gray-500 mb-6">
+          The book you are looking for does not exist or has been removed.
+        </p>
         <Link href="/books">
           <Button className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a]">
             <BookOpen className="w-4 h-4 mr-2" /> Browse All Books
@@ -50,19 +90,21 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
     );
   }
 
-  const relatedBooks = getBooksByCategory(book.category.slug)
-    .filter((b) => b.id !== book.id)
+  const b = book;
+
+  const relatedBooks = getBooksByCategory(b.category.slug)
+    .filter((rel) => rel.id !== b.id)
     .slice(0, 4);
 
-  const discountedTotal = book.discountPrice
-    ? book.discountPrice * quantity
-    : book.price * quantity;
+  const discountedTotal = b.discountPrice
+    ? b.discountPrice * quantity
+    : b.price * quantity;
 
-  const savings = book.discountPrice ? (book.price - book.discountPrice) * quantity : 0;
+  const savings = b.discountPrice
+    ? (b.price - b.discountPrice) * quantity
+    : 0;
 
-  const inWishlist = isInWishlist(book.id);
-
-  const b = book;
+  const inWishlist = isInWishlist(b.id);
 
   function handleAddToCart() {
     for (let i = 0; i < quantity; i++) {
@@ -87,19 +129,46 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
     });
   }
 
+  const detailsItems = [
+    { icon: Hash, label: "ISBN", value: b.isbn },
+    { icon: BookOpen, label: "Pages", value: b.pageCount },
+    { icon: Globe, label: "Language", value: b.language },
+    { icon: Building2, label: "Publisher", value: b.publisher },
+    {
+      icon: Calendar,
+      label: "Publication Date",
+      value: new Date(b.publicationDate).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+    },
+    { icon: BookOpen, label: "Format", value: b.format },
+    { icon: BookOpen, label: "Category", value: b.category.name },
+  ];
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-sm text-gray-500 mb-6 flex-wrap">
-        <Link href="/" className="hover:text-[#D8B27A] transition-colors">Home</Link>
-        <ChevronRight className="w-3.5 h-3.5" />
-        <Link href="/books" className="hover:text-[#D8B27A] transition-colors">Books</Link>
-        <ChevronRight className="w-3.5 h-3.5" />
-        <Link href={`/books?category=${book.category.slug}`} className="hover:text-[#D8B27A] transition-colors">
-          {book.category.name}
+        <Link href="/" className="hover:text-[#D8B27A] transition-colors">
+          Home
         </Link>
         <ChevronRight className="w-3.5 h-3.5" />
-        <span className="text-[#1D1D1D] font-medium truncate max-w-[200px]">{book.title}</span>
+        <Link href="/books" className="hover:text-[#D8B27A] transition-colors">
+          Books
+        </Link>
+        <ChevronRight className="w-3.5 h-3.5" />
+        <Link
+          href={`/books?category=${b.category.slug}`}
+          className="hover:text-[#D8B27A] transition-colors"
+        >
+          {b.category.name}
+        </Link>
+        <ChevronRight className="w-3.5 h-3.5" />
+        <span className="text-[#1D1D1D] font-medium truncate max-w-[200px]">
+          {b.title}
+        </span>
       </nav>
 
       {/* Main Two-Column Layout */}
@@ -115,7 +184,11 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
               className="flex-shrink-0"
             >
               <div className="w-48 sm:w-56 aspect-[3/4] rounded-2xl overflow-hidden bg-gray-100 book-shadow">
-                <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
+                <img
+                  src={b.coverImage}
+                  alt={b.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
             </motion.div>
 
@@ -125,19 +198,38 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
               transition={{ duration: 0.4, delay: 0.1 }}
               className="flex-1 min-w-0"
             >
-              <Badge className="bg-[#F2D8BE] text-[#8A6A4A] border-0 mb-3">
-                {book.category.icon} {book.category.name}
-              </Badge>
+              <div className="flex flex-wrap items-center gap-2 mb-3">
+                <Badge className="bg-[#F2D8BE] text-[#8A6A4A] border-0">
+                  {b.category.icon} {b.category.name}
+                </Badge>
+                {b.isPreOrder && (
+                  <Badge className="bg-amber-100 text-amber-700 border-0">
+                    <Clock className="w-3 h-3 mr-1" />
+                    Expected Release:{" "}
+                    {new Date(b.publicationDate).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </Badge>
+                )}
+                {b.isAudiobook && (
+                  <Badge className="bg-purple-100 text-purple-700 border-0">
+                    <Headphones className="w-3 h-3 mr-1" />
+                    Also available as Audiobook
+                  </Badge>
+                )}
+              </div>
 
               <h1 className="text-2xl sm:text-3xl font-bold text-[#1D1D1D] mb-2 leading-tight">
-                {book.title}
+                {b.title}
               </h1>
 
               <Link
-                href={`/authors/${book.author.slug}`}
+                href={`/authors/${b.author.slug}`}
                 className="text-[#8A6A4A] hover:text-[#D8B27A] font-medium text-lg transition-colors"
               >
-                {book.author.penName}
+                {b.author.penName}
               </Link>
 
               {/* Rating */}
@@ -148,30 +240,38 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
                       key={i}
                       className={cn(
                         "h-4 w-4",
-                        i < Math.round(book.averageRating)
+                        i < Math.round(b.averageRating)
                           ? "fill-amber-400 text-amber-400"
                           : "fill-gray-200 text-gray-200"
                       )}
                     />
                   ))}
                 </div>
-                <span className="text-sm font-medium text-[#1D1D1D]">{book.averageRating}</span>
-                <span className="text-sm text-gray-400">({book.totalReviews.toLocaleString()} reviews)</span>
+                <span className="text-sm font-medium text-[#1D1D1D]">
+                  {b.averageRating}
+                </span>
+                <span className="text-sm text-gray-400">
+                  ({b.totalReviews.toLocaleString()} reviews)
+                </span>
               </div>
 
               <p className="text-sm text-gray-400 mt-1">
-                {book.totalSales.toLocaleString()} copies sold
+                {b.totalSales.toLocaleString()} copies sold
               </p>
 
               {/* Description */}
               <p className="text-gray-600 mt-4 leading-relaxed text-sm sm:text-base">
-                {book.description}
+                {b.description}
               </p>
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2 mt-4">
-                {book.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary" className="bg-gray-100 text-gray-600 text-xs border-0">
+                {b.tags.map((tag) => (
+                  <Badge
+                    key={tag}
+                    variant="secondary"
+                    className="bg-gray-100 text-gray-600 text-xs border-0"
+                  >
                     {tag}
                   </Badge>
                 ))}
@@ -193,7 +293,7 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
                       : "text-gray-500 hover:text-[#1D1D1D]"
                   )}
                 >
-                  {tab} {tab === "reviews" && `(${book.totalReviews})`}
+                  {tab} {tab === "reviews" && `(${b.totalReviews})`}
                 </button>
               ))}
             </div>
@@ -206,42 +306,48 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
                   animate={{ opacity: 1 }}
                   className="prose prose-sm max-w-none text-gray-600 leading-relaxed space-y-4"
                 >
-                  <p>{book.description}</p>
+                  <p>{b.description}</p>
                   <p>
-                    This book is a must-read for anyone looking to deepen their understanding of{" "}
-                    {book.tags[0] || "the subject"}. With practical insights and real-world examples,
-                    {book.author.penName} delivers a comprehensive guide that is both informative and
-                    engaging.
+                    This book is a must-read for anyone looking to deepen their
+                    understanding of {b.tags[0] || "the subject"}. With practical
+                    insights and real-world examples, {b.author.penName} delivers
+                    a comprehensive guide that is both informative and engaging.
                   </p>
                   <p>
-                    Whether you are a beginner or an experienced professional, this book offers valuable
-                    perspectives that will change the way you think about {book.tags[0] || "the topic"}.
-                    Each chapter builds on the previous one, creating a cohesive journey from foundational
-                    concepts to advanced strategies.
+                    Whether you are a beginner or an experienced professional,
+                    this book offers valuable perspectives that will change the
+                    way you think about {b.tags[0] || "the topic"}. Each chapter
+                    builds on the previous one, creating a cohesive journey from
+                    foundational concepts to advanced strategies.
                   </p>
                   <blockquote className="border-l-4 border-[#D8B27A] pl-4 italic text-gray-500">
-                    &ldquo;A brilliant work that combines deep knowledge with practical application.
-                    Highly recommended.&rdquo;
+                    &ldquo;A brilliant work that combines deep knowledge with
+                    practical application. Highly recommended.&rdquo;
                   </blockquote>
                 </motion.div>
               )}
 
               {/* Details Tab */}
               {activeTab === "details" && (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-3">
-                  {[
-                    { label: "Format", value: book.format },
-                    { label: "Pages", value: book.pageCount },
-                    { label: "Language", value: book.language },
-                    { label: "Publisher", value: book.publisher },
-                    { label: "Publication Date", value: new Date(book.publicationDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) },
-                    { label: "ISBN", value: book.isbn },
-                    { label: "Category", value: book.category.name },
-                    { label: "Author", value: book.author.name },
-                  ].map((item) => (
-                    <div key={item.label} className="flex justify-between py-2 border-b border-[#E8DDD0] last:border-0">
-                      <span className="text-sm text-gray-500">{item.label}</span>
-                      <span className="text-sm font-medium text-[#1D1D1D]">{item.value}</span>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                >
+                  {detailsItems.map((item) => (
+                    <div
+                      key={item.label}
+                      className="flex items-center gap-3 p-3 bg-[#F2D8BE]/10 rounded-xl border border-[#E8DDD0]"
+                    >
+                      <div className="w-9 h-9 rounded-lg bg-[#D8B27A]/10 flex items-center justify-center flex-shrink-0">
+                        <item.icon className="w-4 h-4 text-[#8A6A4A]" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-xs text-gray-400">{item.label}</p>
+                        <p className="text-sm font-medium text-[#1D1D1D] truncate">
+                          {item.value}
+                        </p>
+                      </div>
                     </div>
                   ))}
                 </motion.div>
@@ -253,36 +359,47 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
                   {/* Rating Distribution */}
                   <div className="flex flex-col sm:flex-row gap-6 mb-8">
                     <div className="text-center sm:text-left sm:pr-6 sm:border-r sm:border-[#E8DDD0]">
-                      <div className="text-5xl font-bold text-[#1D1D1D]">{book.averageRating}</div>
+                      <div className="text-5xl font-bold text-[#1D1D1D]">
+                        {b.averageRating}
+                      </div>
                       <div className="flex items-center justify-center sm:justify-start gap-0.5 mt-1">
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
                             className={cn(
                               "h-4 w-4",
-                              i < Math.round(book.averageRating)
+                              i < Math.round(b.averageRating)
                                 ? "fill-amber-400 text-amber-400"
                                 : "fill-gray-200 text-gray-200"
                             )}
                           />
                         ))}
                       </div>
-                      <p className="text-xs text-gray-400 mt-1">{book.totalReviews.toLocaleString()} reviews</p>
+                      <p className="text-xs text-gray-400 mt-1">
+                        {b.totalReviews.toLocaleString()} reviews
+                      </p>
                     </div>
 
                     <div className="flex-1 space-y-2">
                       {ratingDistribution.map((dist) => (
                         <div key={dist.stars} className="flex items-center gap-3">
-                          <span className="text-xs text-gray-500 w-8">{dist.stars} star</span>
+                          <span className="text-xs text-gray-500 w-8">
+                            {dist.stars} star
+                          </span>
                           <div className="flex-1 h-2.5 bg-gray-100 rounded-full overflow-hidden">
                             <motion.div
                               initial={{ width: 0 }}
                               animate={{ width: `${dist.percent}%` }}
-                              transition={{ duration: 0.8, delay: (5 - dist.stars) * 0.1 }}
+                              transition={{
+                                duration: 0.8,
+                                delay: (5 - dist.stars) * 0.1,
+                              }}
                               className="h-full bg-amber-400 rounded-full"
                             />
                           </div>
-                          <span className="text-xs text-gray-400 w-8 text-right">{dist.percent}%</span>
+                          <span className="text-xs text-gray-400 w-8 text-right">
+                            {dist.percent}%
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -291,15 +408,22 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
                   {/* Sample Reviews */}
                   <div className="space-y-4">
                     {sampleReviews.map((review, idx) => (
-                      <div key={idx} className="p-4 bg-[#F2D8BE]/10 rounded-xl border border-[#E8DDD0]">
+                      <div
+                        key={idx}
+                        className="p-4 bg-[#F2D8BE]/10 rounded-xl border border-[#E8DDD0]"
+                      >
                         <div className="flex items-center justify-between mb-2">
                           <div className="flex items-center gap-2">
                             <div className="w-8 h-8 rounded-full bg-[#D8B27A] flex items-center justify-center text-white text-xs font-bold">
                               {review.name[0]}
                             </div>
-                            <span className="text-sm font-medium text-[#1D1D1D]">{review.name}</span>
+                            <span className="text-sm font-medium text-[#1D1D1D]">
+                              {review.name}
+                            </span>
                           </div>
-                          <span className="text-xs text-gray-400">{review.date}</span>
+                          <span className="text-xs text-gray-400">
+                            {review.date}
+                          </span>
                         </div>
                         <div className="flex items-center gap-0.5 mb-2">
                           {[...Array(5)].map((_, i) => (
@@ -314,7 +438,9 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
                             />
                           ))}
                         </div>
-                        <p className="text-sm text-gray-600 leading-relaxed">{review.text}</p>
+                        <p className="text-sm text-gray-600 leading-relaxed">
+                          {review.text}
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -337,12 +463,12 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
               <div className="mb-5">
                 <div className="flex items-baseline gap-3">
                   <span className="text-3xl font-bold text-[#1D1D1D]">
-                    {formatCurrency(book.discountPrice || book.price)}
+                    {formatCurrency(b.discountPrice || b.price)}
                   </span>
-                  {book.discountPrice && (
+                  {b.discountPrice && (
                     <>
                       <span className="text-lg text-gray-400 line-through">
-                        {formatCurrency(book.price)}
+                        {formatCurrency(b.price)}
                       </span>
                       <Badge className="bg-[#D8B27A] text-white border-0 text-xs">
                         Save {formatCurrency(savings / quantity)}
@@ -350,16 +476,19 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
                     </>
                   )}
                 </div>
-                {book.discountPrice && (
+                {b.discountPrice && (
                   <p className="text-sm text-emerald-600 mt-1">
-                    You save {formatCurrency(savings)} on {quantity} {quantity === 1 ? "copy" : "copies"}
+                    You save {formatCurrency(savings)} on {quantity}{" "}
+                    {quantity === 1 ? "copy" : "copies"}
                   </p>
                 )}
               </div>
 
               {/* Quantity Selector */}
               <div className="mb-5">
-                <label className="text-sm font-medium text-[#1D1D1D] mb-2 block">Quantity</label>
+                <label className="text-sm font-medium text-[#1D1D1D] mb-2 block">
+                  Quantity
+                </label>
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
@@ -367,7 +496,9 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
                   >
                     <Minus className="w-4 h-4 text-gray-600" />
                   </button>
-                  <span className="w-12 text-center font-semibold text-[#1D1D1D]">{quantity}</span>
+                  <span className="w-12 text-center font-semibold text-[#1D1D1D]">
+                    {quantity}
+                  </span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
                     className="w-10 h-10 rounded-xl border border-[#E8DDD0] flex items-center justify-center hover:bg-gray-50 transition-colors"
@@ -383,37 +514,64 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
                   className="w-full bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#c9a46a] font-semibold py-6 text-base"
                   onClick={handleAddToCart}
                 >
-                  <ShoppingCart className="w-5 h-5 mr-2" />
-                  Add to Cart &mdash; {formatCurrency(discountedTotal)}
+                  Buy Now
                 </Button>
 
                 <Button
                   className="w-full bg-[#1D1D1D] text-white hover:bg-[#333] font-semibold py-6 text-base"
                   onClick={handleAddToCart}
                 >
-                  Buy Now
+                  <ShoppingCart className="w-5 h-5 mr-2" />
+                  Add to Cart &mdash; {formatCurrency(discountedTotal)}
                 </Button>
               </div>
 
-              <div className="flex gap-3 mb-5">
+              <div className="space-y-3 mb-5">
                 <Button
                   variant="outline"
                   className={cn(
-                    "flex-1 border-[#E8DDD0]",
+                    "w-full border-[#E8DDD0]",
                     inWishlist && "bg-red-50 border-red-200"
                   )}
                   onClick={handleWishlist}
                 >
-                  <Heart className={cn("w-4 h-4 mr-1.5", inWishlist && "fill-current text-red-500")} />
-                  {inWishlist ? "Wishlisted" : "Wishlist"}
+                  <Heart
+                    className={cn(
+                      "w-4 h-4 mr-1.5",
+                      inWishlist && "fill-current text-red-500"
+                    )}
+                  />
+                  {inWishlist ? "Wishlisted" : "Add to Wishlist"}
                 </Button>
 
                 <Button
                   variant="outline"
-                  className="flex-1 border-[#E8DDD0]"
+                  className="w-full border-[#E8DDD0]"
+                >
+                  <Eye className="w-4 h-4 mr-1.5" />
+                  Read Sample
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="w-full border-[#E8DDD0]"
+                >
+                  <Download className="w-4 h-4 mr-1.5" />
+                  Download Sample
+                </Button>
+
+                <Button
+                  variant="outline"
+                  className="w-full border-[#E8DDD0]"
                   onClick={() => {
-                    if (typeof navigator !== "undefined" && navigator.share) {
-                      navigator.share({ title: book.title, url: window.location.href });
+                    if (
+                      typeof navigator !== "undefined" &&
+                      navigator.share
+                    ) {
+                      navigator.share({
+                        title: b.title,
+                        url: window.location.href,
+                      });
                     }
                   }}
                 >
@@ -424,16 +582,20 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
 
               {/* Book Meta */}
               <div className="border-t border-[#E8DDD0] pt-4 space-y-2.5">
-                <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Book Details</h4>
+                <h4 className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                  Book Details
+                </h4>
                 {[
-                  { label: "Format", value: book.format },
-                  { label: "Pages", value: book.pageCount },
-                  { label: "Language", value: book.language },
-                  { label: "Publisher", value: book.publisher },
+                  { label: "Format", value: b.format },
+                  { label: "Pages", value: b.pageCount },
+                  { label: "Language", value: b.language },
+                  { label: "Publisher", value: b.publisher },
                 ].map((item) => (
                   <div key={item.label} className="flex justify-between">
                     <span className="text-sm text-gray-500">{item.label}</span>
-                    <span className="text-sm font-medium text-[#1D1D1D]">{item.value}</span>
+                    <span className="text-sm font-medium text-[#1D1D1D]">
+                      {item.value}
+                    </span>
                   </div>
                 ))}
               </div>
@@ -447,10 +609,10 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
         <div className="mt-12 sm:mt-16">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl sm:text-2xl font-bold text-[#1D1D1D]">
-              Related Books in {book.category.name}
+              Related Books in {b.category.name}
             </h2>
             <Link
-              href={`/books?category=${book.category.slug}`}
+              href={`/books?category=${b.category.slug}`}
               className="text-sm text-[#D8B27A] hover:underline font-medium"
             >
               View All
@@ -469,7 +631,13 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
                     />
                     {relBook.discountPrice && (
                       <Badge className="absolute top-2 left-2 bg-[#D8B27A] text-white border-0 text-[10px]">
-                        -{Math.round(((relBook.price - relBook.discountPrice) / relBook.price) * 100)}%
+                        -
+                        {Math.round(
+                          ((relBook.price - relBook.discountPrice) /
+                            relBook.price) *
+                            100
+                        )}
+                        %
                       </Badge>
                     )}
                   </div>
@@ -479,7 +647,9 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
                     {relBook.title}
                   </h3>
                 </Link>
-                <p className="text-xs text-gray-400 mt-0.5">{relBook.author.penName}</p>
+                <p className="text-xs text-gray-400 mt-0.5">
+                  {relBook.author.penName}
+                </p>
                 <div className="flex items-center gap-1 mt-1">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
@@ -494,12 +664,18 @@ export default function BookDetailPage({ params }: { params: Promise<{ slug: str
                       />
                     ))}
                   </div>
-                  <span className="text-[10px] text-gray-400">({relBook.totalReviews})</span>
+                  <span className="text-[10px] text-gray-400">
+                    ({relBook.totalReviews})
+                  </span>
                 </div>
                 <div className="flex items-baseline gap-2 mt-1">
-                  <span className="text-sm font-bold">{formatCurrency(relBook.discountPrice || relBook.price)}</span>
+                  <span className="text-sm font-bold">
+                    {formatCurrency(relBook.discountPrice || relBook.price)}
+                  </span>
                   {relBook.discountPrice && (
-                    <span className="text-xs text-gray-400 line-through">{formatCurrency(relBook.price)}</span>
+                    <span className="text-xs text-gray-400 line-through">
+                      {formatCurrency(relBook.price)}
+                    </span>
                   )}
                 </div>
               </motion.div>
