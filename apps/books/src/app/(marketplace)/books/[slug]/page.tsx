@@ -96,6 +96,10 @@ export default function BookDetailPage({
     .filter((rel) => rel.id !== b.id)
     .slice(0, 4);
 
+  const alsoBought = getBooksByCategory(b.category.slug)
+    .filter((rel) => rel.id !== b.id && !relatedBooks.some((r) => r.id === rel.id))
+    .slice(0, 4);
+
   const discountedTotal = b.discountPrice
     ? b.discountPrice * quantity
     : b.price * quantity;
@@ -678,6 +682,61 @@ export default function BookDetailPage({
                     </span>
                   )}
                 </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Customers Also Bought */}
+      {alsoBought.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-xl font-bold text-[#1D1D1D] mb-6">
+            Customers Also Bought
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {alsoBought.map((abBook) => (
+              <motion.div
+                key={abBook.id}
+                whileHover={{ y: -4 }}
+                className="group cursor-pointer"
+              >
+                <Link href={`/books/${abBook.slug}`}>
+                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden bg-gray-100 book-shadow mb-2.5">
+                    <img
+                      src={abBook.coverImage}
+                      alt={abBook.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    {abBook.discountPrice && (
+                      <Badge className="absolute top-2 left-2 bg-red-500 text-white border-0 text-[10px] px-1.5 py-0">
+                        Sale
+                      </Badge>
+                    )}
+                  </div>
+                  <h3 className="text-sm font-semibold line-clamp-1 group-hover:text-[#D8B27A] transition-colors">
+                    {abBook.title}
+                  </h3>
+                  <p className="text-xs text-gray-400 mt-0.5">
+                    {abBook.author.penName}
+                  </p>
+                  <div className="flex items-baseline gap-2 mt-1">
+                    {abBook.discountPrice ? (
+                      <>
+                        <span className="text-xs text-gray-400 line-through">
+                          {formatCurrency(abBook.price)}
+                        </span>
+                        <span className="text-sm font-bold text-[#1D1D1D]">
+                          {formatCurrency(abBook.discountPrice)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-sm font-bold text-[#1D1D1D]">
+                        {formatCurrency(abBook.price)}
+                      </span>
+                    )}
+                  </div>
+                </Link>
               </motion.div>
             ))}
           </div>
