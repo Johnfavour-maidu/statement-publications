@@ -236,7 +236,7 @@ const allProjects: Project[] = [
   },
   {
     id: "p10", title: "Website Design – Author Portfolio", category: "Marketing", assignedTeam: "Design Studio",
-    status: "cancelled", progress: 20, amount: 450, orderDate: "2025-04-10", dueDate: "2025-06-15", lastUpdate: "3 weeks ago",
+    status: "cancelled", progress: 0, amount: 450, orderDate: "2025-04-10", dueDate: "2025-06-15", lastUpdate: "3 weeks ago",
     description: "Custom author website with book listings, blog, and newsletter signup.",
     milestones: [
       { title: "Wireframes", completed: true, date: "Apr 15" },
@@ -311,7 +311,7 @@ const allProjects: Project[] = [
   },
   {
     id: "p15", title: "Ghostwriting – Startup Playbook", category: "Editing", assignedTeam: "Editorial Team Beta",
-    status: "cancelled", progress: 15, amount: 2400, orderDate: "2025-03-01", dueDate: "2025-07-30", lastUpdate: "1 month ago",
+    status: "cancelled", progress: 0, amount: 2400, orderDate: "2025-03-01", dueDate: "2025-07-30", lastUpdate: "1 month ago",
     description: "Ghostwriting 12-chapter business book from outline and interviews.",
     milestones: [
       { title: "Outline Approved", completed: true, date: "Mar 10" },
@@ -368,14 +368,16 @@ export default function AuthorServicesPage() {
   const [drawerProject, setDrawerProject] = useState<Project | null>(null);
   const [sortBy, setSortBy] = useState("lastUpdate");
   const [pageCounter, setPageCounter] = useState(20);
+  const [currentPage, setCurrentPage] = useState(1);
   const [showPageCounter, setShowPageCounter] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [cancelConfirm, setCancelConfirm] = useState<Project | null>(null);
+  const [projects, setProjects] = useState<Project[]>(allProjects);
   const [messageModal, setMessageModal] = useState<Project | null>(null);
   const [editModal, setEditModal] = useState<Project | null>(null);
 
   const filteredProjects = useMemo(() => {
-    let result = [...allProjects];
+    let result = [...projects];
     if (activeCategory !== "all") {
       result = result.filter((p) => p.status === activeCategory);
     }
@@ -401,17 +403,23 @@ export default function AuthorServicesPage() {
     return result;
   }, [activeCategory, search, sortBy]);
 
-  const displayedProjects = useMemo(() => {
-    if (pageCounter === 999) return filteredProjects;
-    return filteredProjects.slice(0, pageCounter);
+  const totalPages = useMemo(() => {
+    if (pageCounter === 999) return 1;
+    return Math.max(1, Math.ceil(filteredProjects.length / pageCounter));
   }, [filteredProjects, pageCounter]);
 
-  const pendingCount = allProjects.filter((p) => p.status === "pending").length;
-  const inProgressCount = allProjects.filter((p) => p.status === "in_progress").length;
-  const reviewCount = allProjects.filter((p) => p.status === "review").length;
-  const completedCount = allProjects.filter((p) => p.status === "completed").length;
-  const cancelledCount = allProjects.filter((p) => p.status === "cancelled").length;
-  const totalSpent = allProjects.reduce((sum, p) => sum + p.amount, 0);
+  const displayedProjects = useMemo(() => {
+    if (pageCounter === 999) return filteredProjects;
+    const start = (currentPage - 1) * pageCounter;
+    return filteredProjects.slice(start, start + pageCounter);
+  }, [filteredProjects, pageCounter, currentPage]);
+
+  const pendingCount = projects.filter((p) => p.status === "pending").length;
+  const inProgressCount = projects.filter((p) => p.status === "in_progress").length;
+  const reviewCount = projects.filter((p) => p.status === "review").length;
+  const completedCount = projects.filter((p) => p.status === "completed").length;
+  const cancelledCount = projects.filter((p) => p.status === "cancelled").length;
+  const totalSpent = projects.reduce((sum, p) => sum + p.amount, 0);
 
   const handleCardClick = useCallback((key: string) => {
     setActiveCategory(prev => prev === key ? "all" : key);
@@ -443,7 +451,7 @@ export default function AuthorServicesPage() {
             </Button>
           </div>
           <div className="refresh-btn-border rounded-lg p-[2px]">
-            <Button variant="outline" size="sm" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0 text-[#8A6A4A]" onClick={() => { setActiveCategory("all"); setSearch(""); setSortBy("lastUpdate"); setPageCounter(20); }}>
+            <Button variant="outline" size="sm" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0 text-[#8A6A4A]" onClick={() => { setActiveCategory("all"); setSearch(""); setSortBy("lastUpdate"); setPageCounter(20); setCurrentPage(1); setShowAnalytics(false); setShowPageCounter(false); }}>
               <RefreshCw className="h-4 w-4 mr-1.5" />Refresh
             </Button>
           </div>
@@ -459,7 +467,7 @@ export default function AuthorServicesPage() {
       {/* 2. Summary Cards (Clickable) */}
       <motion.div variants={item} className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {[
-          { key: "all", label: "ALL SERVICES", value: allProjects.length, icon: Package, bg: "bg-[#F5EDE3]", color: "text-[#8A6A4A]" },
+          { key: "all", label: "ALL SERVICES", value: projects.length, icon: Package, bg: "bg-[#F5EDE3]", color: "text-[#8A6A4A]" },
           { key: "pending", label: "PENDING", value: pendingCount, icon: Clock, bg: "bg-amber-100", color: "text-amber-600" },
           { key: "in_progress", label: "IN PROGRESS", value: inProgressCount, icon: BarChart3, bg: "bg-blue-100", color: "text-blue-600" },
           { key: "review", label: "REVIEW", value: reviewCount, icon: Eye, bg: "bg-violet-100", color: "text-violet-600" },
@@ -559,7 +567,7 @@ export default function AuthorServicesPage() {
                 </div>
                 <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
                   <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">AVG PROJECT</p>
-                  <p className="text-xl font-bold text-[#1D1D1D] mt-1">${Math.round(totalSpent / allProjects.length)}</p>
+                  <p className="text-xl font-bold text-[#1D1D1D] mt-1">${Math.round(totalSpent / projects.length)}</p>
                   <p className="text-xs text-muted-foreground mt-1">per service</p>
                 </div>
                 <div className="p-3 bg-[#F5EDE3]/50 rounded-lg">
@@ -603,7 +611,7 @@ export default function AuthorServicesPage() {
                 <div className="bg-[#F5EDE3]/30 rounded-xl p-4">
                   <h4 className="text-sm font-medium text-[#1D1D1D] mb-3">Top Services by Cost</h4>
                   <div className="space-y-2">
-                    {[...allProjects].sort((a, b) => b.amount - a.amount).slice(0, 5).map((p, i) => (
+                    {[...projects].sort((a, b) => b.amount - a.amount).slice(0, 5).map((p, i) => (
                       <div key={p.id} className="flex items-center gap-3 p-2 bg-white rounded-lg border border-[#E8DDD0]/50">
                         <span className="text-xs font-bold text-[#8A6A4A] w-5">{i + 1}</span>
                         <div className="flex-1 min-w-0">
@@ -672,7 +680,7 @@ export default function AuthorServicesPage() {
                       {[10, 20, 50, 100, 999].map((n) => (
                         <button
                           key={n}
-                          onClick={() => { setPageCounter(n); setShowPageCounter(false); }}
+                          onClick={() => { setPageCounter(n); setShowPageCounter(false); setCurrentPage(1); }}
                           className={`w-full text-left px-4 py-2 text-sm hover:bg-[#F5EDE3] transition-colors ${pageCounter === n ? "font-medium text-[#8A6A4A] bg-[#F5EDE3]/50" : "text-[#1D1D1D]"}`}
                         >
                           {n === 999 ? "All" : n}
@@ -802,9 +810,11 @@ export default function AuthorServicesPage() {
                             <DropdownMenuItem onClick={(e) => { e.stopPropagation(); showToast("Files download started"); }}>
                               <Download className="h-4 w-4 mr-2" /> Download Files
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-600" onClick={(e) => { e.stopPropagation(); setCancelConfirm(project); }}>
-                              <Trash2 className="h-4 w-4 mr-2" /> Cancel Project
-                            </DropdownMenuItem>
+                            {project.status === "pending" && (
+                              <DropdownMenuItem className="text-red-600" onClick={(e) => { e.stopPropagation(); setCancelConfirm(project); }}>
+                                <Trash2 className="h-4 w-4 mr-2" /> Cancel Project
+                              </DropdownMenuItem>
+                            )}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </td>
@@ -823,11 +833,23 @@ export default function AuthorServicesPage() {
           <span>Showing {displayedProjects.length} of {filteredProjects.length} services</span>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" className="rounded-lg border-[#E8DDD0]" disabled>
+          <Button variant="outline" size="icon" className="rounded-lg border-[#E8DDD0]" disabled={currentPage <= 1} onClick={() => setCurrentPage((p) => p - 1)}>
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <span className="text-sm font-medium text-[#8A6A4A] bg-[#F5EDE3] px-3 py-1 rounded-lg">1</span>
-          <Button variant="outline" size="icon" className="rounded-lg border-[#E8DDD0]" disabled>
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`text-sm font-medium px-3 py-1 rounded-lg transition-colors ${
+                currentPage === page
+                  ? "text-[#8A6A4A] bg-[#F5EDE3]"
+                  : "text-muted-foreground hover:bg-[#F5EDE3]/50"
+              }`}
+            >
+              {page}
+            </button>
+          ))}
+          <Button variant="outline" size="icon" className="rounded-lg border-[#E8DDD0]" disabled={currentPage >= totalPages} onClick={() => setCurrentPage((p) => p + 1)}>
             <ChevronRight className="h-4 w-4" />
           </Button>
         </div>
@@ -877,7 +899,11 @@ export default function AuthorServicesPage() {
                   <Button variant="outline" className="flex-1 rounded-lg border-[#E8DDD0]" onClick={() => setCancelConfirm(null)}>
                     Keep Project
                   </Button>
-                  <Button className="flex-1 rounded-lg bg-red-500 text-white hover:bg-red-600" onClick={() => { showToast(`"${cancelConfirm.title}" cancelled`); setCancelConfirm(null); }}>
+                  <Button className="flex-1 rounded-lg bg-red-500 text-white hover:bg-red-600" onClick={() => {
+                    setProjects((prev) => prev.map((p) => p.id === cancelConfirm.id ? { ...p, status: "cancelled" as const, progress: 0 } : p));
+                    showToast(`"${cancelConfirm.title}" cancelled`);
+                    setCancelConfirm(null);
+                  }}>
                     <Trash2 className="h-4 w-4 mr-2" /> Cancel Project
                   </Button>
                 </div>

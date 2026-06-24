@@ -260,7 +260,7 @@ export default function AuthorAllBooksPage() {
             </Button>
           </div>
           <div className="refresh-btn-border rounded-lg p-[2px]">
-            <Button variant="outline" size="sm" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0 text-[#8A6A4A]" onClick={() => { setActiveCategory("all"); setSearchQuery(""); setSortBy("updated"); setCurrentPage(1); setPageCounter(10); }}>
+            <Button variant="outline" size="sm" className="rounded-[calc(0.5rem-2px)] bg-white hover:bg-[#F5EDE3] border-0 text-[#8A6A4A]" onClick={() => { setActiveCategory("all"); setSearchQuery(""); setSortBy("updated"); setCurrentPage(1); setPageCounter(10); setShowAnalytics(false); setShowPageCounter(false); }}>
               <RefreshCw className="h-4 w-4 mr-1.5" />Refresh
             </Button>
           </div>
