@@ -163,7 +163,7 @@ export default function AuthorSupportCenterPage() {
       {activeTab === "support" && (
         <motion.div variants={item} className="space-y-6">
           {/* My Support Requests Table */}
-          <Card className="border border-[#E8DDD0] shadow-sm">
+          <Card className="border border-[#E8DDD0] shadow-sm bg-white">
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold text-[#1D1D1D]">My Support Requests</CardTitle>
             </CardHeader>
@@ -171,7 +171,7 @@ export default function AuthorSupportCenterPage() {
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-t border-[#E8DDD0] bg-[#F5EDE3]/30">
+                    <tr className="border-t border-[#E8DDD0] bg-[#F5EDE3]/20">
                       <th className="text-left text-xs font-semibold uppercase tracking-wider text-[#6A4E37] px-5 py-3">Reference</th>
                       <th className="text-left text-xs font-semibold uppercase tracking-wider text-[#6A4E37] px-5 py-3">Subject</th>
                       <th className="text-left text-xs font-semibold uppercase tracking-wider text-[#6A4E37] px-5 py-3">Status</th>
@@ -205,7 +205,7 @@ export default function AuthorSupportCenterPage() {
 
           {/* Quick Help + Support Hours */}
           <div className="grid gap-6 lg:grid-cols-2">
-            <Card className="border border-[#E8DDD0] shadow-sm">
+            <Card className="border border-[#E8DDD0] shadow-sm bg-white">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base font-semibold text-[#1D1D1D] flex items-center gap-2">
                   <MessageSquare className="h-5 w-5 text-[#8A6A4A]" />
@@ -246,7 +246,7 @@ export default function AuthorSupportCenterPage() {
               </CardContent>
             </Card>
 
-            <Card className="border border-[#E8DDD0] shadow-sm">
+            <Card className="border border-[#E8DDD0] shadow-sm bg-white">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base font-semibold text-[#1D1D1D]">Support Hours</CardTitle>
               </CardHeader>
@@ -285,7 +285,7 @@ export default function AuthorSupportCenterPage() {
             <Input placeholder="Search FAQs..." className="pl-9 rounded-[calc(0.5rem-2px)] border-0 bg-white" />
           </div>
           {faqs.map((faq, i) => (
-            <Card key={i} className="border border-[#E8DDD0] shadow-sm hover:shadow-md transition-shadow duration-200">
+            <Card key={i} className="border border-[#E8DDD0] shadow-sm bg-white hover:shadow-md transition-shadow duration-200">
               <button
                 onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
                 className="flex w-full items-center justify-between p-5 text-left"
@@ -313,7 +313,7 @@ export default function AuthorSupportCenterPage() {
       {activeTab === "announcements" && (
         <motion.div variants={item} className="space-y-4">
           {announcements.map((ann, i) => (
-            <Card key={i} className="border border-[#E8DDD0] shadow-sm hover:shadow-md transition-shadow duration-200">
+            <Card key={i} className="border border-[#E8DDD0] shadow-sm bg-white hover:shadow-md transition-shadow duration-200">
               <CardContent className="p-5">
                 <div className="flex items-start gap-4">
                   <div className={`rounded-lg p-2.5 flex-shrink-0 ${
@@ -349,7 +349,7 @@ export default function AuthorSupportCenterPage() {
         <motion.div variants={item}>
           <div className="grid gap-4 sm:grid-cols-2">
             {resources.map((resource, i) => (
-              <Card key={i} className="group border border-[#E8DDD0] shadow-sm hover:shadow-md hover:border-[#D8B27A]/40 transition-all duration-200 cursor-pointer">
+              <Card key={i} className="group border border-[#E8DDD0] shadow-sm bg-white hover:shadow-md hover:border-[#D8B27A]/40 transition-all duration-200 cursor-pointer">
                 <CardContent className="p-5">
                   <div className="flex items-start gap-4">
                     <div className={`rounded-xl p-3 transition-transform duration-200 group-hover:scale-105 ${resource.color}`}>
