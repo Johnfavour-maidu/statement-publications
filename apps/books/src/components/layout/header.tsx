@@ -700,6 +700,10 @@ export function Header() {
           <CountryDropdown />
           <div className="w-px h-3 bg-[#1D1D1D]/20" />
           <LanguageDropdown />
+          <div className="w-px h-3 bg-[#1D1D1D]/20" />
+          <Link href="/support" className="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
+            <span>Support</span>
+          </Link>
         </div>
       </div>
 
