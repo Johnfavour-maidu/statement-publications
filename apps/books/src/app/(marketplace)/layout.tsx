@@ -3,5 +3,5 @@ export default function MarketplaceLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <div className="pt-[116px]">{children}</div>;
+  return <div className="pt-[152px]">{children}</div>;
 }

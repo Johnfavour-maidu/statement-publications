@@ -426,7 +426,7 @@ function CategoryPills() {
 
 export default function HomePage() {
   return (
-    <div className="pt-[128px] lg:pt-[144px]">
+    <div className="pt-[152px]">
       {/* SECTION 1: Hero Slider */}
       <HeroSlider />
 
