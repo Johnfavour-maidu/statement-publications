@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -12,9 +12,6 @@ import {
   X,
   ChevronDown,
   Globe,
-  HelpCircle,
-  ExternalLink,
-  Pen,
   ArrowRight,
 } from "lucide-react";
 import { useCart } from "@/context/cart-context";
@@ -388,7 +385,7 @@ function MegaMenu({
   );
 }
 
-/* ─── Search Bar ───────────────────────────────────────── */
+/* ─── Search Bar (Centralized) ─────────────────────────── */
 
 function SearchBar({
   searchQuery,
@@ -418,7 +415,7 @@ function SearchBar({
   }, [setShowSuggestions]);
 
   return (
-    <div ref={searchRef} className="flex-1 max-w-xl relative hidden sm:block">
+    <div ref={searchRef} className="relative hidden sm:block" style={{ flex: "1 1 auto", maxWidth: "42%", margin: "0 auto" }}>
       <div className="relative">
         <input
           type="text"
@@ -426,10 +423,10 @@ function SearchBar({
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
           placeholder="Search books, authors or ISBN"
-          className="w-full pl-4 pr-10 py-2.5 text-sm bg-white border border-[#D8B27A]/20 rounded-xl focus:outline-none focus:border-[#D8B27A] focus:ring-2 focus:ring-[#D8B27A]/10 transition-all"
+          className="w-full pl-4 pr-12 py-2.5 text-sm bg-white border border-gray-200 rounded-full focus:outline-none focus:border-[#D8B27A] focus:ring-2 focus:ring-[#D8B27A]/15 transition-all duration-200 shadow-sm hover:shadow-md focus:shadow-md"
         />
         <button onClick={() => handleSearch()}
-          className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 hover:text-[#D8B27A] transition-colors">
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-full hover:bg-[#D8B27A]/10 text-gray-400 hover:text-[#D8B27A] transition-all duration-200">
           <Search className="w-4 h-4" />
         </button>
       </div>
@@ -437,7 +434,7 @@ function SearchBar({
       <AnimatePresence>
         {showSuggestions && suggestions.length > 0 && (
           <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}
-            className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-2xl overflow-hidden z-50">
+            className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-2xl overflow-hidden z-50">
             {suggestions.map((book) => (
               <Link key={book.id} href={`/books/${book.slug}`}
                 onClick={() => { setShowSuggestions(false); setSearchQuery(""); }}
@@ -472,7 +469,7 @@ function SearchBar({
 
 function CategoryNav({ openDropdown, setOpenDropdown }: { openDropdown: string | null; setOpenDropdown: (v: string | null) => void }) {
   return (
-    <div className="hidden lg:block bg-white/80 backdrop-blur-sm border-b border-[#D8B27A]/10">
+    <div className="hidden lg:block bg-white/80 backdrop-blur-sm border-b border-gray-100">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="flex items-center gap-1 h-11">
           {categoryNavItems.map((navItem) => (
@@ -616,17 +613,6 @@ function MobileDrawer({
                 className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[#1D1D1D] hover:bg-gray-50 transition-colors">
                 My Library
               </Link>
-
-              <hr className="my-3 border-gray-100" />
-
-              <Link href="https://statement-cyan.vercel.app" target="_blank" rel="noopener noreferrer" onClick={onClose}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[#1D1D1D] hover:bg-gray-50 transition-colors">
-                <Pen className="w-4 h-4" /> Publish With Us <ExternalLink className="w-3 h-3 text-gray-400 ml-auto" />
-              </Link>
-              <Link href="/support" onClick={onClose}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-[#1D1D1D] hover:bg-gray-50 transition-colors">
-                <HelpCircle className="w-4 h-4" /> Support
-              </Link>
             </div>
 
             <div className="px-5 py-4 border-t border-gray-100 space-y-2">
@@ -718,40 +704,30 @@ export function Header() {
         <div className="max-w-[1400px] mx-auto px-6 h-full flex items-center justify-end gap-5 text-xs font-medium text-[#1D1D1D]">
           <Link href="https://statement-cyan.vercel.app" target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
-            <Pen className="w-3.5 h-3.5" />
             <span>Publish With Us</span>
           </Link>
           <div className="w-px h-3 bg-[#1D1D1D]/20" />
           <CountryDropdown />
           <div className="w-px h-3 bg-[#1D1D1D]/20" />
           <LanguageDropdown />
-          <div className="w-px h-3 bg-[#1D1D1D]/20" />
-          <Link href="/support" className="flex items-center gap-1.5 hover:opacity-70 transition-opacity">
-            <HelpCircle className="w-3.5 h-3.5" />
-            <span>Support</span>
-          </Link>
         </div>
       </div>
 
-      {/* Layer 2: Main Header — Author Platform Style */}
+      {/* Layer 2: Main Header — Simplified Ecommerce Style */}
       <nav className={cn(
         "transition-all duration-300 border-b",
         scrolled
           ? "bg-[#FDF6EE]/95 backdrop-blur-md border-[#D8B27A]/10 shadow-sm"
           : "bg-[#FDF6EE]/95 backdrop-blur-md border-[#D8B27A]/10"
       )}>
-        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 flex items-center gap-4 lg:gap-6"
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 flex items-center"
           style={{ height: scrolled ? "60px" : "68px", transition: "height 0.3s" }}>
-          {/* Logo — Author Platform Style */}
-          <Link href="/" className="flex items-center shrink-0">
-            <img
-              src="/logo.png"
-              alt="Statement Publications"
-              className="h-8 lg:h-10 w-auto"
-            />
+          {/* Logo */}
+          <Link href="/" className="flex items-center shrink-0 mr-6">
+            <img src="/logo.png" alt="Statement Publications" className="h-8 lg:h-10 w-auto" />
           </Link>
 
-          {/* Search Bar */}
+          {/* Centralized Search Bar */}
           <SearchBar
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
@@ -761,32 +737,8 @@ export function Header() {
             handleSearch={handleSearch}
           />
 
-          {/* Navigation Items */}
-          <div className="hidden lg:flex items-center gap-1 flex-shrink-0">
-            <Link href="/"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-[#1D1D1D] hover:text-[#8A6A4A] hover:bg-[#D8B27A]/10 transition-colors">
-              Home
-            </Link>
-            <Link href="/about"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-[#1D1D1D] hover:text-[#8A6A4A] hover:bg-[#D8B27A]/10 transition-colors">
-              About
-            </Link>
-            <Link href="https://statement-cyan.vercel.app" target="_blank" rel="noopener noreferrer"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-[#1D1D1D] hover:text-[#8A6A4A] hover:bg-[#D8B27A]/10 transition-colors">
-              Services
-            </Link>
-            <Link href="/blog"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-[#1D1D1D] hover:text-[#8A6A4A] hover:bg-[#D8B27A]/10 transition-colors">
-              Blog
-            </Link>
-            <Link href="/support"
-              className="px-3 py-2 rounded-lg text-sm font-medium text-[#1D1D1D] hover:text-[#8A6A4A] hover:bg-[#D8B27A]/10 transition-colors">
-              Support
-            </Link>
-          </div>
-
-          {/* Actions */}
-          <div className="flex items-center gap-2 flex-shrink-0">
+          {/* Right Actions */}
+          <div className="flex items-center gap-1 flex-shrink-0 ml-auto">
             <Link href="/search" className="sm:hidden p-2.5 rounded-xl hover:bg-[#D8B27A]/10 transition-colors text-[#1D1D1D]">
               <Search className="w-5 h-5" />
             </Link>

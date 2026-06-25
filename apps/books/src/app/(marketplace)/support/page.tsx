@@ -151,7 +151,7 @@ export default function SupportPage() {
             "linear-gradient(135deg, #FDF6EE 0%, #ffffff 50%, #F5E6D3 100%)",
         }}
       >
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-16 lg:py-24 text-center">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 lg:py-16 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -166,10 +166,10 @@ export default function SupportPage() {
             >
               <Headphones className="w-8 h-8 text-white" />
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#1D1D1D] mb-4">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1D1D1D] mb-3">
               Support Centre
             </h1>
-            <p className="text-gray-500 text-lg max-w-2xl mx-auto mb-8">
+            <p className="text-gray-500 text-base max-w-2xl mx-auto mb-8">
               We&apos;re here to help you with purchases, reading, accounts, and
               publishing enquiries.
             </p>
@@ -207,7 +207,7 @@ export default function SupportPage() {
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:py-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10 lg:py-14">
         {/* Quick Help Cards */}
         <motion.section
           variants={container}
@@ -215,7 +215,7 @@ export default function SupportPage() {
           animate="show"
           className="mb-16"
         >
-          <h2 className="text-2xl font-bold text-[#1D1D1D] mb-6">
+          <h2 className="text-lg font-bold text-[#1D1D1D] mb-6">
             Quick Help
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -245,7 +245,7 @@ export default function SupportPage() {
           animate="show"
           className="mb-16"
         >
-          <h2 className="text-2xl font-bold text-[#1D1D1D] mb-6">
+          <h2 className="text-lg font-bold text-[#1D1D1D] mb-6">
             Support Categories
           </h2>
           <div className="flex flex-wrap gap-3">
@@ -291,7 +291,7 @@ export default function SupportPage() {
         {/* FAQ Section */}
         <section className="mb-16">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-[#1D1D1D]">
+            <h2 className="text-lg font-bold text-[#1D1D1D]">
               Frequently Asked Questions
             </h2>
             <span className="text-sm text-gray-400">
@@ -362,7 +362,7 @@ export default function SupportPage() {
 
         {/* Contact Section */}
         <section className="mb-16">
-          <h2 className="text-2xl font-bold text-[#1D1D1D] mb-6">
+          <h2 className="text-lg font-bold text-[#1D1D1D] mb-6">
             Contact Us
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -389,7 +389,7 @@ export default function SupportPage() {
         {/* Ticket Form */}
         <section>
           <div className="max-w-2xl">
-            <h2 className="text-2xl font-bold text-[#1D1D1D] mb-2">
+            <h2 className="text-lg font-bold text-[#1D1D1D] mb-2">
               Submit a Support Request
             </h2>
             <p className="text-gray-500 text-sm mb-6">
