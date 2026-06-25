@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { SubNav, FilterPanel, type FilterState } from "@/components/layout/sub-nav";
 
-export function MarketplaceSubNav() {
+export function MarketplaceSubNav({ onOpenCategories }: { onOpenCategories?: () => void }) {
   const [sortBy, setSortBy] = useState("newest");
   const [viewMode, setViewMode] = useState<"grid" | "list">(() => {
     if (typeof window !== "undefined") {
@@ -36,6 +36,7 @@ export function MarketplaceSubNav() {
         viewMode={viewMode}
         onViewChange={handleViewChange}
         onOpenFilters={() => setFilterOpen(true)}
+        onOpenCategories={onOpenCategories}
         activeFilterCount={activeFilterCount}
       />
       <FilterPanel

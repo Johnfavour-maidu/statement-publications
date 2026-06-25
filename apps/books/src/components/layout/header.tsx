@@ -16,9 +16,10 @@ import {
 } from "lucide-react";
 import { useCart } from "@/context/cart-context";
 import { useWishlist } from "@/context/wishlist-context";
-import { books, categories } from "@/lib/demo-data";
+import { books } from "@/lib/demo-data";
 import { cn } from "@/lib/utils";
 import type { DemoBook } from "@/lib/demo-data";
+import CategoryMegaSidebar from "./category-mega-sidebar";
 
 /* ─── Data ─────────────────────────────────────────────── */
 
@@ -148,9 +149,9 @@ const audiobooksMenuColumns = [
 ];
 
 const categoryNavItems = [
+  { label: "Categories", hasDropdown: true, key: "categories" },
   { label: "eBooks", hasDropdown: true, key: "ebooks" },
   { label: "Audiobooks", hasDropdown: true, key: "audiobooks" },
-  { label: "Categories", hasDropdown: true, key: "categories" },
   { label: "New Releases", href: "/books?sort=newest" },
   { label: "Best Sellers", href: "/books?filter=bestsellers" },
   { label: "Deals", href: "/deals" },
@@ -329,28 +330,9 @@ function MegaMenu({
   onClose,
 }: {
   columns: { title: string; items: { label: string; href: string; bold?: boolean }[] }[];
-  type: "ebooks" | "audiobooks" | "categories";
+  type: "ebooks" | "audiobooks";
   onClose: () => void;
 }) {
-  if (type === "categories") {
-    return (
-      <div className="py-6 px-8">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          {categories.map((cat) => (
-            <Link key={cat.slug} href={`/categories/${cat.slug}`} onClick={onClose}
-              className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors group">
-              <span className="text-2xl">{cat.icon}</span>
-              <div>
-                <p className="text-sm font-medium text-[#1D1D1D] group-hover:text-[#D8B27A] transition-colors">{cat.name}</p>
-                <p className="text-[11px] text-gray-400">{cat.bookCount} books</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="py-6 px-8">
       <div className="grid grid-cols-3 gap-8">
@@ -467,16 +449,26 @@ function SearchBar({
 
 /* ─── Category Nav ─────────────────────────────────────── */
 
-function CategoryNav({ openDropdown, setOpenDropdown }: { openDropdown: string | null; setOpenDropdown: (v: string | null) => void }) {
+function CategoryNav({ openDropdown, setOpenDropdown, onCategoriesClick }: { openDropdown: string | null; setOpenDropdown: (v: string | null) => void; onCategoriesClick: () => void }) {
   return (
     <div className="hidden lg:block bg-white/80 backdrop-blur-sm border-b border-gray-100">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="flex items-center gap-1 h-11">
           {categoryNavItems.map((navItem) => (
             <div key={navItem.key || navItem.label} className="relative"
-              onMouseEnter={() => navItem.hasDropdown && setOpenDropdown(navItem.key)}
-              onMouseLeave={() => navItem.hasDropdown && setOpenDropdown(null)}>
-              {navItem.hasDropdown ? (
+              onMouseEnter={() => navItem.hasDropdown && navItem.key !== "categories" && setOpenDropdown(navItem.key)}
+              onMouseLeave={() => navItem.hasDropdown && navItem.key !== "categories" && setOpenDropdown(null)}>
+              {navItem.hasDropdown && navItem.key === "categories" ? (
+                <button
+                  className={cn(
+                    "flex items-center gap-1 px-3 py-2 text-[13px] font-medium rounded-lg transition-colors",
+                    "text-[#8A6A4A] bg-[#D8B27A]/10"
+                  )}
+                  onClick={onCategoriesClick}
+                >
+                  {navItem.label}
+                </button>
+              ) : navItem.hasDropdown ? (
                 <button
                   className={cn(
                     "flex items-center gap-1 px-3 py-2 text-[13px] font-medium rounded-lg transition-colors",
@@ -503,7 +495,7 @@ function CategoryNav({ openDropdown, setOpenDropdown }: { openDropdown: string |
       </div>
 
       <AnimatePresence>
-        {openDropdown && (
+        {openDropdown && openDropdown !== "categories" && (
           <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
             className="bg-white border-t border-gray-50 shadow-lg"
@@ -515,9 +507,6 @@ function CategoryNav({ openDropdown, setOpenDropdown }: { openDropdown: string |
               )}
               {openDropdown === "audiobooks" && (
                 <MegaMenu columns={audiobooksMenuColumns} type="audiobooks" onClose={() => setOpenDropdown(null)} />
-              )}
-              {openDropdown === "categories" && (
-                <MegaMenu columns={[]} type="categories" onClose={() => setOpenDropdown(null)} />
               )}
             </div>
           </motion.div>
@@ -641,6 +630,7 @@ export function Header() {
   const [suggestions, setSuggestions] = useState<DemoBook[]>([]);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [categorySidebarOpen, setCategorySidebarOpen] = useState(false);
   const router = useRouter();
   const { totalItems: cartCount } = useCart();
   const { totalItems: wishlistCount } = useWishlist();
@@ -784,7 +774,10 @@ export function Header() {
       </nav>
 
       {/* Layer 3: Category Navigation */}
-      <CategoryNav openDropdown={openDropdown} setOpenDropdown={setOpenDropdown} />
+      <CategoryNav openDropdown={openDropdown} setOpenDropdown={setOpenDropdown} onCategoriesClick={() => setCategorySidebarOpen(true)} />
+
+      {/* Category Mega Sidebar */}
+      <CategoryMegaSidebar isOpen={categorySidebarOpen} onClose={() => setCategorySidebarOpen(false)} />
 
       {/* Mobile Drawer */}
       <MobileDrawer

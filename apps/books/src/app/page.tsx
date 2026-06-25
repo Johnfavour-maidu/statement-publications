@@ -259,7 +259,7 @@ function HeroSlider() {
             "linear-gradient(135deg, #FDF6EE 0%, #ffffff 40%, #F5E6D3 100%)",
         }}
       />
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-10 lg:py-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-6 lg:py-10">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div className="order-2 lg:order-1">
             <AnimatePresence mode="wait">
