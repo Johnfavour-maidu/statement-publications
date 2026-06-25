@@ -142,7 +142,7 @@ export default function SupportPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-[152px]">
       {/* Hero Section */}
       <section
         className="relative overflow-hidden"
