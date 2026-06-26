@@ -376,6 +376,7 @@ function SearchBar({
   setShowSuggestions,
   suggestions,
   handleSearch,
+  totalResults,
 }: {
   searchQuery: string;
   setSearchQuery: (v: string) => void;
@@ -383,6 +384,7 @@ function SearchBar({
   setShowSuggestions: (v: boolean) => void;
   suggestions: DemoBook[];
   handleSearch: (q?: string) => void;
+  totalResults: number;
 }) {
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -404,7 +406,7 @@ function SearchBar({
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") handleSearch(); }}
-          placeholder="Search books, authors or ISBN"
+          placeholder="Search books"
           className="w-full pl-4 pr-12 py-2.5 text-sm bg-white border border-gray-200 rounded-full focus:outline-none focus:border-[#D8B27A] focus:ring-2 focus:ring-[#D8B27A]/15 transition-all duration-200 shadow-sm hover:shadow-md focus:shadow-md"
         />
         <button onClick={() => handleSearch()}
@@ -414,32 +416,47 @@ function SearchBar({
       </div>
 
       <AnimatePresence>
-        {showSuggestions && suggestions.length > 0 && (
+        {showSuggestions && (
           <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}
-            className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-2xl overflow-hidden z-50">
-            {suggestions.map((book) => (
-              <Link key={book.id} href={`/books/${book.slug}`}
-                onClick={() => { setShowSuggestions(false); setSearchQuery(""); }}
-                className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors">
-                <div className="w-10 h-14 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                  <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-[#1D1D1D] line-clamp-1">{book.title}</p>
-                  <p className="text-xs text-gray-400">{book.author.penName}</p>
-                  <p className="text-[11px] text-gray-300">{book.category.name}</p>
-                </div>
-                <span className="text-sm font-bold text-[#1D1D1D] flex-shrink-0">
-                  ${(book.discountPrice || book.price).toFixed(2)}
-                </span>
-              </Link>
-            ))}
-            <Link href={`/search?q=${encodeURIComponent(searchQuery)}`}
-              onClick={() => { setShowSuggestions(false); setSearchQuery(""); }}
-              className="flex items-center justify-between px-4 py-3 text-sm font-medium text-[#D8B27A] hover:bg-gray-50 border-t border-gray-50">
-              View all results for &quot;{searchQuery}&quot;
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            transition={{ duration: 0.15 }}
+            className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-2xl overflow-hidden z-[60]">
+            {suggestions.length > 0 ? (
+              <>
+                {suggestions.map((book) => (
+                  <Link key={book.id} href={`/books/${book.slug}`}
+                    onClick={() => { setShowSuggestions(false); setSearchQuery(""); }}
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 transition-colors">
+                    <div className="w-10 h-14 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                      <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-[#1D1D1D] line-clamp-1">{book.title}</p>
+                      <p className="text-xs text-gray-400">{book.author.penName}</p>
+                    </div>
+                    <span className="text-sm font-bold text-[#1D1D1D] flex-shrink-0">
+                      ${(book.discountPrice || book.price).toFixed(2)}
+                    </span>
+                  </Link>
+                ))}
+                {totalResults > 8 && (
+                  <Link href={`/search?q=${encodeURIComponent(searchQuery)}`}
+                    onClick={() => { setShowSuggestions(false); setSearchQuery(""); }}
+                    className="flex items-center justify-between px-4 py-3 text-sm font-medium text-[#D8B27A] hover:bg-gray-50 border-t border-gray-50">
+                    View all matching books
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                )}
+              </>
+            ) : (
+              <div className="px-4 py-8 text-center">
+                <p className="text-sm text-gray-400 mb-3">No books found</p>
+                <Link href="/books"
+                  onClick={() => { setShowSuggestions(false); setSearchQuery(""); }}
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#1D1D1D] text-white text-sm font-medium hover:bg-[#333] transition-colors">
+                  Browse All Books
+                </Link>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -623,29 +640,35 @@ export function Header() {
   const [suggestions, setSuggestions] = useState<DemoBook[]>([]);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [totalResults, setTotalResults] = useState(0);
   const router = useRouter();
   const { totalItems: cartCount } = useCart();
   const { totalItems: wishlistCount } = useWishlist();
 
   useEffect(() => {
-    if (searchQuery.trim().length > 1) {
+    if (!searchQuery.trim()) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      setTotalResults(0);
+      return;
+    }
+
+    const timer = setTimeout(() => {
       const q = searchQuery.toLowerCase();
       const results = books
         .filter(
           (b) =>
             b.title.toLowerCase().includes(q) ||
-            b.author.penName.toLowerCase().includes(q) ||
-            b.author.name.toLowerCase().includes(q) ||
-            b.category.name.toLowerCase().includes(q) ||
-            b.isbn.includes(q)
-        )
-        .slice(0, 8);
-      setSuggestions(results);
-      setShowSuggestions(results.length > 0);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
+            b.isbn.includes(q) ||
+            b.description?.toLowerCase().includes(q) ||
+            b.tags?.some((t) => t.toLowerCase().includes(q))
+        );
+      setTotalResults(results.length);
+      setSuggestions(results.slice(0, 8));
+      setShowSuggestions(true);
+    }, 250);
+
+    return () => clearTimeout(timer);
   }, [searchQuery]);
 
   useEffect(() => {
@@ -721,6 +744,7 @@ export function Header() {
             setShowSuggestions={setShowSuggestions}
             suggestions={suggestions}
             handleSearch={handleSearch}
+            totalResults={totalResults}
           />
 
           {/* Right Actions */}
