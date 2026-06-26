@@ -36,9 +36,16 @@ export async function POST(request: Request) {
       where: { email: email.toLowerCase() },
     });
 
-    if (existingUser) {
+    if (existingUser && (existingUser.role === "AUTHOR" || existingUser.role === "ADMIN" || existingUser.role === "SUPER_ADMIN")) {
       return NextResponse.json(
         { message: "An account already exists with this email address" },
+        { status: 409 }
+      );
+    }
+
+    if (existingUser && existingUser.role === "READER") {
+      return NextResponse.json(
+        { message: "This email is associated with a Reader account. Please use the Statement Books platform to sign in." },
         { status: 409 }
       );
     }

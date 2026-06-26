@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password, role } = await req.json();
+    const { name, email, password } = await req.json();
 
     if (!name || !email || !password) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -15,21 +15,41 @@ export async function POST(req: Request) {
     }
 
     const existingUser = await prisma.user.findUnique({
-      where: { email },
+      where: { email: email.toLowerCase() },
     });
 
-    if (existingUser) {
+    if (existingUser && existingUser.role === "READER") {
       return NextResponse.json({ error: "An account with this email already exists" }, { status: 400 });
+    }
+
+    if (existingUser && (existingUser.role === "AUTHOR" || existingUser.role === "ADMIN" || existingUser.role === "SUPER_ADMIN")) {
+      return NextResponse.json({ error: "This email is associated with an author account. Please use the Author Platform to sign in." }, { status: 400 });
     }
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    if (existingUser) {
+      const user = await prisma.user.update({
+        where: { email: email.toLowerCase() },
+        data: {
+          name,
+          password: hashedPassword,
+          role: "READER",
+        },
+      });
+
+      return NextResponse.json({
+        success: true,
+        user: { id: user.id, name: user.name, email: user.email },
+      });
+    }
+
     const user = await prisma.user.create({
       data: {
         name,
-        email,
+        email: email.toLowerCase(),
         password: hashedPassword,
-        role: role || "READER",
+        role: "READER",
       },
     });
 

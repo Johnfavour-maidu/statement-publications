@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import Facebook from "next-auth/providers/facebook";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
@@ -24,12 +23,8 @@ export const {
   },
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-    }),
-    Facebook({
-      clientId: process.env.FACEBOOK_CLIENT_ID ?? "",
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET ?? "",
+      clientId: process.env.AUTHOR_GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.AUTHOR_GOOGLE_CLIENT_SECRET ?? "",
     }),
     Credentials({
       name: "credentials",
@@ -51,6 +46,10 @@ export const {
 
         if (!user || !user.password) {
           throw new Error("No account found with this email address");
+        }
+
+        if (user.role !== "AUTHOR" && user.role !== "ADMIN" && user.role !== "SUPER_ADMIN") {
+          throw new Error("This account is not an author account. Please use the Reader platform to sign in.");
         }
 
         if (!user.isActive) {
@@ -78,6 +77,33 @@ export const {
     }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email! },
+        });
+
+        if (existingUser) {
+          if (existingUser.role !== "AUTHOR" && existingUser.role !== "ADMIN" && existingUser.role !== "SUPER_ADMIN") {
+            return false;
+          }
+          return true;
+        }
+
+        await prisma.user.create({
+          data: {
+            email: user.email!,
+            name: user.name,
+            image: user.image,
+            role: "AUTHOR",
+            emailVerified: new Date(),
+            isVerified: true,
+          },
+        });
+        return true;
+      }
+      return true;
+    },
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;

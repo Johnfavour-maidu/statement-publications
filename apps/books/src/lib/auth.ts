@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
-import GitHub from "next-auth/providers/github";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
@@ -24,12 +23,8 @@ export const {
   },
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-    }),
-    GitHub({
-      clientId: process.env.GITHUB_CLIENT_ID ?? "",
-      clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
+      clientId: process.env.READER_GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.READER_GOOGLE_CLIENT_SECRET ?? "",
     }),
     Credentials({
       name: "credentials",
@@ -50,6 +45,10 @@ export const {
         });
 
         if (!user || !user.password) {
+          return null;
+        }
+
+        if (user.role !== "READER") {
           return null;
         }
 
@@ -74,6 +73,33 @@ export const {
     }),
   ],
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.provider === "google") {
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email! },
+        });
+
+        if (existingUser) {
+          if (existingUser.role !== "READER") {
+            return false;
+          }
+          return true;
+        }
+
+        await prisma.user.create({
+          data: {
+            email: user.email!,
+            name: user.name,
+            image: user.image,
+            role: "READER",
+            emailVerified: new Date(),
+            isVerified: true,
+          },
+        });
+        return true;
+      }
+      return true;
+    },
     async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
