@@ -520,7 +520,6 @@ export function SubNav({
   viewMode,
   onViewChange,
   onOpenFilters,
-  onOpenCategories,
   activeFilterCount = 0,
 }: {
   sortBy: string;
@@ -528,26 +527,14 @@ export function SubNav({
   viewMode: "grid" | "list";
   onViewChange: (v: "grid" | "list") => void;
   onOpenFilters: () => void;
-  onOpenCategories?: () => void;
   activeFilterCount?: number;
 }) {
   return (
     <div className="bg-white border-b border-gray-100">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-12">
-          {/* Left: Categories + Filters + Sort */}
+          {/* Left: Filters + Sort */}
           <div className="flex items-center gap-2">
-            {onOpenCategories && (
-              <Button
-                onClick={onOpenCategories}
-                variant="outline"
-                className="h-8 px-3 rounded-lg border-gray-200 text-[13px] font-medium text-[#1D1D1D] hover:border-[#D8B27A]/40 hover:bg-[#D8B27A]/5"
-              >
-                <LayoutGrid className="w-3.5 h-3.5 mr-1.5" />
-                Categories
-              </Button>
-            )}
-
             <Button
               onClick={onOpenFilters}
               variant="outline"
