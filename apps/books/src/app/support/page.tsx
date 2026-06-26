@@ -29,6 +29,10 @@ import {
   BookMarked,
   Settings,
   Zap,
+  ArrowRight,
+  Sparkles,
+  ExternalLink,
+  LifeBuoy,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -54,24 +58,24 @@ const item = {
 };
 
 const quickHelpCards = [
-  { title: "Buying eBooks", description: "Learn how to browse and purchase books", icon: ShoppingCart, color: "bg-[#F2D8BE] text-[#8A6A4A]" },
-  { title: "Downloading Books", description: "Access your purchased books offline", icon: Download, color: "bg-blue-50 text-blue-600" },
-  { title: "Reading on Devices", description: "Read on any device, anywhere", icon: Monitor, color: "bg-emerald-50 text-emerald-600" },
-  { title: "Payments & Refunds", description: "Payment methods and refund policy", icon: CreditCard, color: "bg-violet-50 text-violet-600" },
-  { title: "Account Issues", description: "Password reset and account management", icon: User, color: "bg-amber-50 text-amber-600" },
-  { title: "Wishlist & Library", description: "Organize your reading list", icon: Heart, color: "bg-rose-50 text-rose-600" },
-  { title: "Gift Cards", description: "Send books as gifts to friends", icon: Gift, color: "bg-cyan-50 text-cyan-600" },
-  { title: "Publishing With Statement", description: "Submit your manuscript for publishing", icon: Pen, color: "bg-[#F2D8BE] text-[#8A6A4A]" },
-  { title: "Contact Support", description: "Get in touch with our team", icon: Headphones, color: "bg-indigo-50 text-indigo-600" },
+  { title: "Buying eBooks", description: "Learn how to browse and purchase books", icon: ShoppingCart, color: "bg-[#F2D8BE] text-[#8A6A4A]", gradient: "from-[#F2D8BE] to-[#F5EDE3]" },
+  { title: "Downloading Books", description: "Access your purchased books offline", icon: Download, color: "bg-blue-50 text-blue-600", gradient: "from-blue-50 to-blue-100" },
+  { title: "Reading on Devices", description: "Read on any device, anywhere", icon: Monitor, color: "bg-emerald-50 text-emerald-600", gradient: "from-emerald-50 to-emerald-100" },
+  { title: "Payments & Refunds", description: "Payment methods and refund policy", icon: CreditCard, color: "bg-violet-50 text-violet-600", gradient: "from-violet-50 to-violet-100" },
+  { title: "Account Issues", description: "Password reset and account management", icon: User, color: "bg-amber-50 text-amber-600", gradient: "from-amber-50 to-amber-100" },
+  { title: "Wishlist & Library", description: "Organize your reading list", icon: Heart, color: "bg-rose-50 text-rose-600", gradient: "from-rose-50 to-rose-100" },
+  { title: "Gift Cards", description: "Send books as gifts to friends", icon: Gift, color: "bg-cyan-50 text-cyan-600", gradient: "from-cyan-50 to-cyan-100" },
+  { title: "Publishing With Statement", description: "Submit your manuscript for publishing", icon: Pen, color: "bg-[#F2D8BE] text-[#8A6A4A]", gradient: "from-[#F2D8BE] to-[#F5EDE3]" },
+  { title: "Contact Support", description: "Get in touch with our team", icon: Headphones, color: "bg-indigo-50 text-indigo-600", gradient: "from-indigo-50 to-indigo-100" },
 ];
 
 const supportCategories = [
-  { name: "Purchases", icon: ShoppingCart, count: 4 },
-  { name: "Accounts", icon: User, count: 3 },
-  { name: "Reading", icon: BookOpen, count: 3 },
-  { name: "Publishing", icon: Pen, count: 3 },
-  { name: "Payments", icon: CreditCard, count: 3 },
-  { name: "Technical Issues", icon: Settings, count: 4 },
+  { name: "Purchases", icon: ShoppingCart, count: 4, color: "bg-[#F2D8BE] text-[#8A6A4A]" },
+  { name: "Accounts", icon: User, count: 3, color: "bg-blue-50 text-blue-600" },
+  { name: "Reading", icon: BookOpen, count: 3, color: "bg-emerald-50 text-emerald-600" },
+  { name: "Publishing", icon: Pen, count: 3, color: "bg-violet-50 text-violet-600" },
+  { name: "Payments", icon: CreditCard, count: 3, color: "bg-amber-50 text-amber-600" },
+  { name: "Technical Issues", icon: Settings, count: 4, color: "bg-rose-50 text-rose-600" },
 ];
 
 const faqs = [
@@ -100,11 +104,19 @@ const faqs = [
 ];
 
 const contactMethods = [
-  { icon: Mail, label: "Email Support", value: "support@statement-publications.com", detail: "Response within 24 hours", color: "bg-[#F2D8BE] text-[#8A6A4A]" },
-  { icon: MessageSquare, label: "Live Chat", value: "Coming Soon", detail: "Instant support for urgent issues", color: "bg-blue-50 text-blue-600" },
-  { icon: Phone, label: "Phone Support", value: "+234 800 123 4567", detail: "Mon-Fri, 9AM-6PM WAT", color: "bg-emerald-50 text-emerald-600" },
-  { icon: Clock, label: "Support Hours", value: "Mon-Fri: 9AM-6PM WAT", detail: "Weekend: 10AM-4PM WAT", color: "bg-amber-50 text-amber-600" },
-  { icon: Zap, label: "Average Response", value: "Under 4 hours", detail: "For priority requests", color: "bg-violet-50 text-violet-600" },
+  { icon: Mail, label: "Email Support", value: "support@statement-publications.com", detail: "Response within 24 hours", color: "bg-[#F2D8BE] text-[#8A6A4A]", status: "Active", statusColor: "bg-emerald-500" },
+  { icon: MessageSquare, label: "Live Chat", value: "Coming Soon", detail: "Instant support for urgent issues", color: "bg-blue-50 text-blue-600", status: "Beta", statusColor: "bg-amber-500" },
+  { icon: Phone, label: "Phone Support", value: "+234 800 123 4567", detail: "Mon-Fri, 9AM-6PM WAT", color: "bg-emerald-50 text-emerald-600", status: "Active", statusColor: "bg-emerald-500" },
+  { icon: Clock, label: "Support Hours", value: "Mon-Fri: 9AM-6PM WAT", detail: "Weekend: 10AM-4PM WAT", color: "bg-amber-50 text-amber-600", status: "Open", statusColor: "bg-emerald-500" },
+  { icon: Zap, label: "Average Response", value: "Under 4 hours", detail: "For priority requests", color: "bg-violet-50 text-violet-600", status: "Fast", statusColor: "bg-emerald-500" },
+];
+
+const suggestionChips = [
+  "How to buy books",
+  "Download issues",
+  "Password reset",
+  "Refund policy",
+  "Publish with us",
 ];
 
 export default function SupportPage() {
@@ -177,20 +189,20 @@ export default function SupportPage() {
             {/* Search Bar */}
             <div className="max-w-xl mx-auto">
               <div
-                className="relative p-[2px] rounded-xl"
+                className="relative p-[2px] rounded-2xl"
                 style={{
                   background:
                     "linear-gradient(135deg, #EBC9A8 0%, #D8B27A 50%, #F2D8BE 100%)",
                 }}
               >
-                <div className="bg-white rounded-[10px] flex items-center">
+                <div className="bg-white rounded-[14px] flex items-center">
                   <Search className="w-5 h-5 text-gray-400 ml-4" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search for help..."
-                    className="flex-1 px-4 py-4 text-sm bg-transparent focus:outline-none rounded-[10px]"
+                    className="flex-1 px-4 py-4 text-sm bg-transparent focus:outline-none rounded-[14px]"
                   />
                   {searchQuery && (
                     <button
@@ -201,6 +213,18 @@ export default function SupportPage() {
                     </button>
                   )}
                 </div>
+              </div>
+              {/* Suggestion Chips */}
+              <div className="flex flex-wrap justify-center gap-2 mt-4">
+                {suggestionChips.map((chip) => (
+                  <button
+                    key={chip}
+                    onClick={() => setSearchQuery(chip)}
+                    className="px-3 py-1.5 rounded-full text-xs font-medium bg-white border border-gray-200 text-gray-600 hover:border-[#D8B27A] hover:text-[#8A6A4A] transition-all"
+                  >
+                    {chip}
+                  </button>
+                ))}
               </div>
             </div>
           </motion.div>
@@ -371,8 +395,14 @@ export default function SupportPage() {
                 key={method.label}
                 className="bg-white border border-gray-100 rounded-2xl p-5"
               >
-                <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center mb-3", method.color)}>
-                  <method.icon className="w-5 h-5" />
+                <div className="flex items-start justify-between mb-3">
+                  <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center", method.color)}>
+                    <method.icon className="w-5 h-5" />
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <div className={cn("w-2 h-2 rounded-full", method.statusColor)} />
+                    <span className="text-[10px] font-medium text-gray-500">{method.status}</span>
+                  </div>
                 </div>
                 <h3 className="font-semibold text-[#1D1D1D] text-sm">
                   {method.label}
@@ -505,7 +535,7 @@ export default function SupportPage() {
                   <label className="block text-sm font-medium text-[#1D1D1D] mb-1.5">
                     Attachment (optional)
                   </label>
-                  <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-[#D8B27A] transition-colors cursor-pointer">
+                  <div className="border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center hover:border-[#D8B27A] transition-colors cursor-pointer">
                     <Upload className="w-8 h-8 text-gray-300 mx-auto mb-2" />
                     <p className="text-sm text-gray-500">
                       Drag & drop files here or{" "}
