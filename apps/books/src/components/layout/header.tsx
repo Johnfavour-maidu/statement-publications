@@ -471,8 +471,8 @@ function CategoryNav({ openDropdown, setOpenDropdown }: { openDropdown: string |
         <div className="flex items-center gap-1 h-11">
           {categoryNavItems.map((navItem) => (
             <div key={navItem.key || navItem.label} className="relative"
-              onMouseEnter={() => navItem.hasDropdown && setOpenDropdown(navItem.key)}
-              onMouseLeave={() => navItem.hasDropdown && setOpenDropdown(null)}>
+              onMouseEnter={() => navItem.hasDropdown && navItem.key !== "categories" && setOpenDropdown(navItem.key)}
+              onMouseLeave={() => navItem.hasDropdown && navItem.key !== "categories" && setOpenDropdown(null)}>
               {navItem.hasDropdown ? (
                 <button
                   className={cn(
