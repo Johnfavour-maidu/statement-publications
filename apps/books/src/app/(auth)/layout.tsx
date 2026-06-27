@@ -1,63 +1,75 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useMemo } from "react";
 
-const bubbles = [
-  { size: 120, x: "10%", y: "20%", delay: 0, duration: 18 },
-  { size: 80, x: "80%", y: "15%", delay: 2, duration: 22 },
-  { size: 150, x: "70%", y: "70%", delay: 4, duration: 20 },
-  { size: 60, x: "20%", y: "80%", delay: 1, duration: 16 },
-  { size: 100, x: "50%", y: "10%", delay: 3, duration: 24 },
-  { size: 90, x: "85%", y: "50%", delay: 5, duration: 19 },
-  { size: 70, x: "15%", y: "55%", delay: 2.5, duration: 21 },
-  { size: 110, x: "60%", y: "85%", delay: 1.5, duration: 17 },
-];
+function seededRandom(seed: number) {
+  const x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+}
 
 export default function AuthLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const bubbles = useMemo(() => {
+    return Array.from({ length: 18 }, (_, i) => {
+      const isBurst = i % 2 === 0;
+      const size = 5 + seededRandom(i * 7 + 1) * 20;
+      const left = seededRandom(i * 13 + 3) * 100;
+      const delay = seededRandom(i * 17 + 5) * 8;
+      const duration = 3 + seededRandom(i * 23 + 7) * 4;
+      const opacity = 0.85 + seededRandom(i * 29 + 11) * 0.1;
+      const blur = size > 15 ? 3 : 1.5;
+      const colorIndex = i % 3;
+      const gradients = [
+        "from-[#D8B27A] to-[#EBC9A8]",
+        "from-[#EBC9A8] to-[#F2D8BE]",
+        "from-[#C9A06A] to-[#D8B27A]",
+      ];
+      return {
+        size,
+        left,
+        delay,
+        duration,
+        opacity,
+        blur,
+        gradient: gradients[colorIndex],
+        animation: isBurst ? "animate-bubble-float-burst" : "animate-bubble-float-top",
+        position: isBurst ? "bottom" : "top",
+      };
+    });
+  }, []);
+
   return (
-    <div className="min-h-screen relative overflow-hidden flex items-center justify-center px-4"
-      style={{ background: "linear-gradient(135deg, #FDF6EE 0%, #ffffff 40%, #F5E6D3 70%, #FDF6EE 100%)" }}>
+    <div
+      className="relative min-h-screen flex items-center justify-center px-4 py-12 overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(135deg, #F5E6D3 0%, #F2D8BE 40%, #EBC9A8 100%)",
+      }}
+    >
       {/* Animated Bubbles */}
-      {bubbles.map((bubble, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            width: bubble.size,
-            height: bubble.size,
-            left: bubble.x,
-            top: bubble.y,
-            background: `radial-gradient(circle, rgba(216, 178, 122, 0.08) 0%, rgba(216, 178, 122, 0.02) 70%, transparent 100%)`,
-            border: `1px solid rgba(216, 178, 122, 0.06)`,
-          }}
-          animate={{
-            y: [0, -30, 0, 20, 0],
-            x: [0, 15, -10, 5, 0],
-            scale: [1, 1.05, 0.95, 1.02, 1],
-          }}
-          transition={{
-            duration: bubble.duration,
-            delay: bubble.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-      ))}
-
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 pointer-events-none"
-        style={{
-          background: "radial-gradient(ellipse at 30% 20%, rgba(216, 178, 122, 0.06) 0%, transparent 50%), radial-gradient(ellipse at 70% 80%, rgba(235, 201, 168, 0.06) 0%, transparent 50%)",
-        }}
-      />
-
-      <div className="w-full max-w-md relative z-10">
-        {children}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {bubbles.map((bubble, i) => (
+          <div
+            key={i}
+            className={`absolute rounded-full bg-gradient-to-br ${bubble.gradient} ${bubble.animation}`}
+            style={{
+              width: bubble.size,
+              height: bubble.size,
+              left: `${bubble.left}%`,
+              [bubble.position]: -30,
+              opacity: bubble.opacity,
+              animationDelay: `${bubble.delay}s`,
+              animationDuration: `${bubble.duration}s`,
+              filter: `blur(${bubble.blur}px)`,
+            }}
+          />
+        ))}
       </div>
+
+      <div className="relative z-10 w-full max-w-md">{children}</div>
     </div>
   );
 }

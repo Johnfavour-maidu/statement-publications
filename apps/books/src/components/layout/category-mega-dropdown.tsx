@@ -91,7 +91,6 @@ export default function CategoryFlyout({
                       : "text-gray-700 hover:bg-gray-50"
                   )}
                 >
-                  <span className="text-base w-6 text-center flex-shrink-0">{cat.icon}</span>
                   <span className="text-[13px] font-medium leading-tight flex-1">
                     {cat.name}
                   </span>
@@ -124,7 +123,6 @@ export default function CategoryFlyout({
                   style={{ maxHeight: "70vh" }}>
                   <div className="p-6">
                     <div className="flex items-center gap-2 mb-5">
-                      <span className="text-xl">{hoveredCategory.icon}</span>
                       <h3 className="text-[16px] font-bold text-[#1D1D1D]">
                         {hoveredCategory.name}
                       </h3>
