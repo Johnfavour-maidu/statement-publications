@@ -19,7 +19,6 @@ import { useWishlist } from "@/context/wishlist-context";
 import { books } from "@/lib/demo-data";
 import { cn } from "@/lib/utils";
 import type { DemoBook } from "@/lib/demo-data";
-import CategoryMegaDropdown from "./category-mega-dropdown";
 
 /* ─── Data ─────────────────────────────────────────────── */
 
@@ -149,7 +148,7 @@ const audiobooksMenuColumns = [
 ];
 
 const categoryNavItems = [
-  { label: "Categories", hasDropdown: true, key: "categories" },
+  { label: "Categories", href: "/categories" },
   { label: "New Releases", href: "/books?sort=newest" },
   { label: "Best Sellers", href: "/books?filter=bestsellers" },
   { label: "Deals", href: "/deals" },
@@ -464,44 +463,19 @@ function SearchBar({
 
 /* ─── Category Nav ─────────────────────────────────────── */
 
-function CategoryNav({ openDropdown, setOpenDropdown }: { openDropdown: string | null; setOpenDropdown: (v: string | null) => void }) {
+function CategoryNav() {
   return (
     <div className="hidden lg:block bg-white/80 backdrop-blur-sm border-b border-gray-100 relative">
       <div className="max-w-[1400px] mx-auto px-6">
         <div className="flex items-center gap-1 h-11">
           {categoryNavItems.map((navItem) => (
-            <div key={navItem.key || navItem.label} className="relative"
-              onMouseEnter={() => navItem.hasDropdown && navItem.key !== "categories" && setOpenDropdown(navItem.key)}
-              onMouseLeave={() => navItem.hasDropdown && navItem.key !== "categories" && setOpenDropdown(null)}>
-              {navItem.hasDropdown ? (
-                <button
-                  className={cn(
-                    "flex items-center gap-1 px-3 py-2 text-[13px] font-medium rounded-lg transition-colors",
-                    openDropdown === navItem.key
-                      ? "text-[#8A6A4A] bg-[#D8B27A]/10"
-                      : "text-[#1D1D1D] hover:text-[#8A6A4A] hover:bg-[#D8B27A]/5"
-                  )}
-                  onClick={() => setOpenDropdown(openDropdown === navItem.key ? null : navItem.key)}
-                  aria-expanded={openDropdown === navItem.key}
-                  aria-haspopup="true"
-                >
-                  {navItem.label}
-                  <ChevronDown className={cn("w-3.5 h-3.5 transition-transform", openDropdown === navItem.key && "rotate-180")} />
-                </button>
-              ) : (
-                <Link href={navItem.href!}
-                  className="flex items-center gap-1 px-3 py-2 text-[13px] font-medium text-[#1D1D1D] hover:text-[#8A6A4A] hover:bg-[#D8B27A]/5 rounded-lg transition-colors">
-                  {navItem.label}
-                </Link>
-              )}
-            </div>
+            <Link key={navItem.label} href={navItem.href}
+              className="flex items-center gap-1 px-3 py-2 text-[13px] font-medium text-[#1D1D1D] hover:text-[#8A6A4A] hover:bg-[#D8B27A]/5 rounded-lg transition-colors">
+              {navItem.label}
+            </Link>
           ))}
         </div>
       </div>
-
-      {openDropdown === "categories" && (
-        <CategoryMegaDropdown isOpen={true} onClose={() => setOpenDropdown(null)} />
-      )}
     </div>
   );
 }
@@ -568,7 +542,7 @@ function MobileDrawer({
             <div className="flex-1 overflow-y-auto px-5 py-4 space-y-1">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Browse</p>
               {categoryNavItems.map((item) => (
-                <Link key={item.label} href={item.href || (item.key === "categories" ? "/categories" : "#")}
+                <Link key={item.label} href={item.href}
                   onClick={onClose}
                   className="block px-3 py-2.5 rounded-lg text-sm font-medium text-[#1D1D1D] hover:bg-gray-50 transition-colors">
                   {item.label}
@@ -618,7 +592,6 @@ export function Header() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [suggestions, setSuggestions] = useState<DemoBook[]>([]);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [totalResults, setTotalResults] = useState(0);
   const router = useRouter();
@@ -660,7 +633,6 @@ export function Header() {
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setOpenDropdown(null);
         setShowSuggestions(false);
       }
     };
@@ -774,7 +746,7 @@ export function Header() {
       </nav>
 
       {/* Layer 3: Category Navigation */}
-      <CategoryNav openDropdown={openDropdown} setOpenDropdown={setOpenDropdown} />
+      <CategoryNav />
 
       {/* Mobile Drawer */}
       <MobileDrawer
