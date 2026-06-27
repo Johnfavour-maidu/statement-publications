@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   SlidersHorizontal,
@@ -514,6 +515,14 @@ function ViewToggle({
 
 export type FilterState = Record<string, string[] | string | undefined>;
 
+const categoryNavLinks = [
+  { label: "Categories", href: "/categories" },
+  { label: "New Releases", href: "/books?sort=newest" },
+  { label: "Best Sellers", href: "/books?filter=bestsellers" },
+  { label: "Deals", href: "/deals" },
+  { label: "Coming Soon", href: "/books?filter=preorder" },
+];
+
 export function SubNav({
   sortBy,
   onSortChange,
@@ -530,11 +539,21 @@ export function SubNav({
   activeFilterCount?: number;
 }) {
   return (
-    <div className="bg-white border-b border-gray-100">
+    <div className="bg-white/80 backdrop-blur-sm border-b border-gray-100">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-12">
-          {/* Left: Filters + Sort */}
-          <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between h-11">
+          {/* Left: Category Links */}
+          <div className="hidden lg:flex items-center gap-1">
+            {categoryNavLinks.map((item) => (
+              <Link key={item.label} href={item.href}
+                className="px-3 py-2 text-[13px] font-medium text-[#1D1D1D] hover:text-[#8A6A4A] hover:bg-[#D8B27A]/5 rounded-lg transition-colors">
+                {item.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Right: Filters + Sort + View Toggle */}
+          <div className="flex items-center gap-2 ml-auto">
             <Button
               onClick={onOpenFilters}
               variant="outline"
@@ -552,13 +571,11 @@ export function SubNav({
             <div className="hidden sm:block">
               <SortDropdown value={sortBy} onChange={onSortChange} />
             </div>
-          </div>
 
-          {/* Right: View Toggle */}
-          <div className="flex items-center gap-2">
             <div className="sm:hidden">
               <SortDropdown value={sortBy} onChange={onSortChange} />
             </div>
+
             <ViewToggle value={viewMode} onChange={onViewChange} />
           </div>
         </div>

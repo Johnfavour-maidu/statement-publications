@@ -10,9 +10,6 @@ import {
   ShoppingCart,
   Heart,
   Star,
-  SlidersHorizontal,
-  LayoutGrid,
-  List,
   X,
   Menu,
   BookOpen,
@@ -36,15 +33,6 @@ const item = {
   hidden: { opacity: 0, y: 16 },
   show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: "easeOut" as const } },
 };
-
-const sortOptions = [
-  { value: "newest", label: "Newest" },
-  { value: "best-selling", label: "Best Selling" },
-  { value: "highest-rated", label: "Highest Rated" },
-  { value: "price-low", label: "Price: Low to High" },
-  { value: "price-high", label: "Price: High to Low" },
-  { value: "title-az", label: "Title A-Z" },
-];
 
 function sortBooks(bookList: typeof books, sortBy: string) {
   const sorted = [...bookList];
@@ -137,12 +125,9 @@ export default function CategoriesPage() {
     if (selectedSubcategory) {
       const subName = activeCategoryData?.subcategories.find(
         (s) => s.slug === selectedSubcategory
-      )?.name?.toLowerCase();
+      )?.name;
       if (subName) {
-        result = result.filter((b) =>
-          b.tags.some((t) => t.toLowerCase().includes(subName)) ||
-          b.description.toLowerCase().includes(subName)
-        );
+        result = result.filter((b) => b.subcategory === subName);
       }
     }
     return sortBooks(result, sortBy);
@@ -395,58 +380,6 @@ export default function CategoriesPage() {
                           ?.description || ""}
                   </p>
                 </motion.div>
-
-                {/* Toolbar */}
-                <div className="flex items-center justify-between mb-5 gap-3 flex-wrap">
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="outline"
-                      className="h-8 px-3 rounded-lg border-gray-200 text-[13px] font-medium text-[#1D1D1D] hover:border-[#D8B27A]/40 hover:bg-[#D8B27A]/5"
-                    >
-                      <SlidersHorizontal className="w-3.5 h-3.5 mr-1.5" />
-                      Filters
-                    </Button>
-                    <div className="relative">
-                      <select
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value)}
-                        className="appearance-none h-8 pl-3 pr-8 rounded-lg border border-gray-200 text-[13px] font-medium text-[#1D1D1D] bg-white hover:border-[#D8B27A]/40 transition-colors cursor-pointer focus:outline-none focus:border-[#D8B27A]"
-                      >
-                        {sortOptions.map((opt) => (
-                          <option key={opt.value} value={opt.value}>
-                            {opt.label}
-                          </option>
-                        ))}
-                      </select>
-                      <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none" />
-                    </div>
-                  </div>
-                  <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden bg-white">
-                    <button
-                      onClick={() => setViewMode("grid")}
-                      className={cn(
-                        "p-2 transition-colors",
-                        viewMode === "grid"
-                          ? "bg-[#D8B27A]/10 text-[#8A6A4A]"
-                          : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
-                      )}
-                    >
-                      <LayoutGrid className="w-4 h-4" />
-                    </button>
-                    <div className="w-px h-5 bg-gray-200" />
-                    <button
-                      onClick={() => setViewMode("list")}
-                      className={cn(
-                        "p-2 transition-colors",
-                        viewMode === "list"
-                          ? "bg-[#D8B27A]/10 text-[#8A6A4A]"
-                          : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
-                      )}
-                    >
-                      <List className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
 
                 {/* Books Grid */}
                 <AnimatePresence mode="wait">

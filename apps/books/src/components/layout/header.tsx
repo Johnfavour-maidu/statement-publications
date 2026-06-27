@@ -463,23 +463,6 @@ function SearchBar({
 
 /* ─── Category Nav ─────────────────────────────────────── */
 
-function CategoryNav() {
-  return (
-    <div className="hidden lg:block bg-white/80 backdrop-blur-sm border-b border-gray-100 relative">
-      <div className="max-w-[1400px] mx-auto px-6">
-        <div className="flex items-center gap-1 h-11">
-          {categoryNavItems.map((navItem) => (
-            <Link key={navItem.label} href={navItem.href}
-              className="flex items-center gap-1 px-3 py-2 text-[13px] font-medium text-[#1D1D1D] hover:text-[#8A6A4A] hover:bg-[#D8B27A]/5 rounded-lg transition-colors">
-              {navItem.label}
-            </Link>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ─── Mobile Drawer ────────────────────────────────────── */
 
 function MobileDrawer({
@@ -744,9 +727,6 @@ export function Header() {
           </div>
         </div>
       </nav>
-
-      {/* Layer 3: Category Navigation */}
-      <CategoryNav />
 
       {/* Mobile Drawer */}
       <MobileDrawer
