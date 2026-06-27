@@ -204,7 +204,7 @@ export default function BookDetailPage({
             >
               <div className="flex flex-wrap items-center gap-2 mb-3">
                 <Badge className="bg-[#F2D8BE] text-[#8A6A4A] border-0">
-                  {b.category.icon} {b.category.name}
+                  {b.category.name}
                 </Badge>
                 {b.isPreOrder && (
                   <Badge className="bg-amber-100 text-amber-700 border-0">
@@ -217,10 +217,19 @@ export default function BookDetailPage({
                     })}
                   </Badge>
                 )}
-                {b.isAudiobook && (
-                  <Badge className="bg-purple-100 text-purple-700 border-0">
-                    <Headphones className="w-3 h-3 mr-1" />
-                    Also available as Audiobook
+                {b.isAudiobook ? (
+                  <>
+                    <Badge className="bg-[#F2D8BE]/60 text-[#8A6A4A] border border-[#E8DDD0]">
+                      eBook
+                    </Badge>
+                    <Badge className="bg-purple-50 text-purple-700 border border-purple-200">
+                      <Headphones className="w-3 h-3 mr-1" />
+                      Audiobook
+                    </Badge>
+                  </>
+                ) : (
+                  <Badge className="bg-[#F2D8BE]/60 text-[#8A6A4A] border border-[#E8DDD0]">
+                    eBook
                   </Badge>
                 )}
               </div>
@@ -654,6 +663,17 @@ export default function BookDetailPage({
                 <p className="text-xs text-gray-400 mt-0.5">
                   {relBook.author.penName}
                 </p>
+                <div className="flex gap-1 mt-1">
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-semibold border bg-[#F2D8BE]/60 text-[#8A6A4A] border-[#E8DDD0]">
+                    eBook
+                  </span>
+                  {relBook.isAudiobook && (
+                    <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-semibold border bg-purple-50 text-purple-700 border-purple-200">
+                      <Headphones className="w-2.5 h-2.5" />
+                      Audiobook
+                    </span>
+                  )}
+                </div>
                 <div className="flex items-center gap-1 mt-1">
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
@@ -720,6 +740,17 @@ export default function BookDetailPage({
                   <p className="text-xs text-gray-400 mt-0.5">
                     {abBook.author.penName}
                   </p>
+                  <div className="flex gap-1 mt-1">
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-semibold border bg-[#F2D8BE]/60 text-[#8A6A4A] border-[#E8DDD0]">
+                      eBook
+                    </span>
+                    {abBook.isAudiobook && (
+                      <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-semibold border bg-purple-50 text-purple-700 border-purple-200">
+                        <Headphones className="w-2.5 h-2.5" />
+                        Audiobook
+                      </span>
+                    )}
+                  </div>
                   <div className="flex items-baseline gap-2 mt-1">
                     {abBook.discountPrice ? (
                       <>

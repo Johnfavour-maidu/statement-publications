@@ -150,8 +150,6 @@ const audiobooksMenuColumns = [
 
 const categoryNavItems = [
   { label: "Categories", hasDropdown: true, key: "categories" },
-  { label: "eBooks", hasDropdown: true, key: "ebooks" },
-  { label: "Audiobooks", hasDropdown: true, key: "audiobooks" },
   { label: "New Releases", href: "/books?sort=newest" },
   { label: "Best Sellers", href: "/books?filter=bestsellers" },
   { label: "Deals", href: "/deals" },
@@ -509,12 +507,6 @@ function CategoryNav({ openDropdown, setOpenDropdown }: { openDropdown: string |
             onMouseEnter={() => setOpenDropdown(openDropdown)}
             onMouseLeave={() => setOpenDropdown(null)}>
             <div className="max-w-[1400px] mx-auto relative">
-              {openDropdown === "ebooks" && (
-                <MegaMenu columns={ebooksMenuColumns} type="ebooks" onClose={() => setOpenDropdown(null)} />
-              )}
-              {openDropdown === "audiobooks" && (
-                <MegaMenu columns={audiobooksMenuColumns} type="audiobooks" onClose={() => setOpenDropdown(null)} />
-              )}
               {openDropdown === "categories" && (
                 <CategoryMegaDropdown isOpen={true} onClose={() => setOpenDropdown(null)} />
               )}
@@ -588,7 +580,7 @@ function MobileDrawer({
             <div className="flex-1 overflow-y-auto px-5 py-4 space-y-1">
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Browse</p>
               {categoryNavItems.map((item) => (
-                <Link key={item.label} href={item.href || (item.key === "ebooks" ? "/books" : item.key === "audiobooks" ? "/audiobooks" : item.key === "categories" ? "/categories" : "#")}
+                <Link key={item.label} href={item.href || (item.key === "categories" ? "/categories" : "#")}
                   onClick={onClose}
                   className="block px-3 py-2.5 rounded-lg text-sm font-medium text-[#1D1D1D] hover:bg-gray-50 transition-colors">
                   {item.label}

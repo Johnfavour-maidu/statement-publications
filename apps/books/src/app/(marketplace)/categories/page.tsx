@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -15,6 +16,8 @@ import {
   X,
   Menu,
   BookOpen,
+  Home,
+  Headphones,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -63,6 +66,36 @@ function sortBooks(bookList: typeof books, sortBy: string) {
   }
 }
 
+function getBookFormats(book: typeof books[0]) {
+  const formats: string[] = [];
+  if (book.format === "EBOOK" || book.format === "eBook") formats.push("eBook");
+  if (book.isAudiobook) formats.push("Audiobook");
+  if (formats.length === 0) formats.push("eBook");
+  return formats;
+}
+
+function FormatBadges({ book }: { book: typeof books[0] }) {
+  const formats = getBookFormats(book);
+  return (
+    <div className="flex gap-1 mt-1.5">
+      {formats.map((f) => (
+        <span
+          key={f}
+          className={cn(
+            "inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-semibold border",
+            f === "Audiobook"
+              ? "bg-purple-50 text-purple-700 border-purple-200"
+              : "bg-[#F2D8BE]/60 text-[#8A6A4A] border-[#E8DDD0]"
+          )}
+        >
+          {f === "Audiobook" && <Headphones className="w-2.5 h-2.5" />}
+          {f}
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export default function CategoriesPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -92,11 +125,20 @@ export default function CategoriesPage() {
 
   const filteredBooks = useMemo(() => {
     if (!selectedCategory) return [];
-    const demoCategory = categories.find((c) => c.slug === selectedCategory);
-    if (!demoCategory) return [];
     let result = books.filter((b) => b.category.slug === selectedCategory);
+    if (selectedSubcategory) {
+      const subName = activeCategoryData?.subcategories.find(
+        (s) => s.slug === selectedSubcategory
+      )?.name?.toLowerCase();
+      if (subName) {
+        result = result.filter((b) =>
+          b.tags.some((t) => t.toLowerCase().includes(subName)) ||
+          b.description.toLowerCase().includes(subName)
+        );
+      }
+    }
     return sortBooks(result, sortBy);
-  }, [selectedCategory, sortBy]);
+  }, [selectedCategory, selectedSubcategory, sortBy, activeCategoryData]);
 
   const handleCategoryClick = useCallback((slug: string) => {
     setSelectedCategory(slug);
@@ -246,11 +288,17 @@ export default function CategoriesPage() {
                 <h2 className="text-xl font-bold text-[#1D1D1D] mb-2">
                   Select a Category
                 </h2>
-                <p className="text-gray-500 text-sm text-center max-w-md">
+                <p className="text-gray-500 text-sm text-center max-w-md mb-6">
                   Choose a category from the sidebar to browse books. You can
                   search, filter, and sort to find exactly what you&apos;re looking
                   for.
                 </p>
+                <Link href="/books">
+                  <Button className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#8A6A4A] hover:text-white font-semibold rounded-xl px-6">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Browse All Books
+                  </Button>
+                </Link>
               </motion.div>
             ) : filteredBooks.length === 0 ? (
               /* Empty State — No Books */
@@ -270,52 +318,72 @@ export default function CategoriesPage() {
                 <h2 className="text-xl font-bold text-[#1D1D1D] mb-2">
                   No books available in this category
                 </h2>
-                <p className="text-gray-500 text-sm text-center max-w-md">
+                <p className="text-gray-500 text-sm text-center max-w-md mb-6">
                   We&apos;re working on adding more titles. Check back soon or
                   explore another category.
                 </p>
+                <Link href="/books">
+                  <Button className="bg-[#D8B27A] text-[#1D1D1D] hover:bg-[#8A6A4A] hover:text-white font-semibold rounded-xl px-6">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Browse All Books
+                  </Button>
+                </Link>
               </motion.div>
             ) : (
               <>
+                {/* Breadcrumb */}
+                <nav className="flex items-center gap-1.5 text-sm text-gray-500 mb-4 flex-wrap">
+                  <Link href="/" className="hover:text-[#D8B27A] transition-colors">
+                    <Home className="w-3.5 h-3.5" />
+                  </Link>
+                  <ChevronRight className="w-3 h-3" />
+                  <Link href="/categories" className="hover:text-[#D8B27A] transition-colors">
+                    Categories
+                  </Link>
+                  <ChevronRight className="w-3 h-3" />
+                  <span className="text-[#1D1D1D] font-medium">
+                    {activeCategoryData?.name || ""}
+                  </span>
+                  {selectedSubcategory && (
+                    <>
+                      <ChevronRight className="w-3 h-3" />
+                      <span className="text-[#1D1D1D] font-medium">
+                        {activeCategoryData?.subcategories.find(
+                          (s) => s.slug === selectedSubcategory
+                        )?.name || ""}
+                      </span>
+                    </>
+                  )}
+                </nav>
+
                 {/* Category Header */}
                 <motion.div
-                  key={selectedCategory}
+                  key={`${selectedCategory}-${selectedSubcategory}`}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
                   className="mb-6"
                 >
-                  <div className="flex items-start gap-4">
-                    {activeCategoryData && (
-                      <span className="text-4xl hidden sm:block mt-0.5">
-                        {activeCategoryData.icon}
-                      </span>
-                    )}
-                    <div>
-                      <h1 className="text-2xl sm:text-3xl font-bold text-[#1D1D1D]">
-                        {activeCategoryData?.name || ""}
-                      </h1>
-                      <div className="flex items-center gap-3 mt-1.5">
-                        <span className="text-sm font-semibold text-[#D8B27A]">
-                          {filteredBooks.length} book{filteredBooks.length !== 1 ? "s" : ""}
-                        </span>
-                        {selectedSubcategory && (
-                          <>
-                            <span className="text-gray-300">·</span>
-                            <span className="text-sm text-gray-500">
-                              {activeCategoryData?.subcategories.find(
-                                (s) => s.slug === selectedSubcategory
-                              )?.name || ""}
-                            </span>
-                          </>
-                        )}
-                      </div>
-                      <p className="text-gray-500 text-sm mt-2 max-w-2xl">
-                        {categories.find((c) => c.slug === selectedCategory)
-                          ?.description || ""}
-                      </p>
-                    </div>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-[#1D1D1D]">
+                    {selectedSubcategory
+                      ? activeCategoryData?.subcategories.find(
+                          (s) => s.slug === selectedSubcategory
+                        )?.name || ""
+                      : activeCategoryData?.name || ""}
+                  </h1>
+                  <div className="flex items-center gap-3 mt-1.5">
+                    <span className="text-sm font-semibold text-[#D8B27A]">
+                      {filteredBooks.length} book{filteredBooks.length !== 1 ? "s" : ""}
+                    </span>
                   </div>
+                  <p className="text-gray-500 text-sm mt-2 max-w-2xl">
+                    {selectedSubcategory
+                      ? `Browse books in the ${activeCategoryData?.subcategories.find(
+                          (s) => s.slug === selectedSubcategory
+                        )?.name || ""} subcategory.`
+                      : categories.find((c) => c.slug === selectedCategory)
+                          ?.description || ""}
+                  </p>
                 </motion.div>
 
                 {/* Toolbar */}
@@ -460,6 +528,7 @@ export default function CategoriesPage() {
                           <p className="text-xs text-gray-400 mt-0.5">
                             {book.author.penName}
                           </p>
+                          <FormatBadges book={book} />
                           <div className="flex items-center gap-1 mt-1">
                             <div className="flex items-center">
                               {[...Array(5)].map((_, i) => (
@@ -523,6 +592,7 @@ export default function CategoriesPage() {
                               <p className="text-xs text-gray-400 mt-0.5">
                                 {book.author.penName}
                               </p>
+                              <FormatBadges book={book} />
                               <div className="flex items-center gap-1 mt-1">
                                 <div className="flex items-center">
                                   {[...Array(5)].map((_, i) => (
@@ -650,7 +720,6 @@ function CategorySidebarContent({
                 )}
                 style={{ width: "calc(100% - 8px)" }}
               >
-                <span className="text-base flex-shrink-0">{cat.icon}</span>
                 <span className="flex-1 min-w-0 truncate">{cat.name}</span>
                 {cat.subcategories.length > 0 && (
                   <ChevronDown
@@ -670,7 +739,7 @@ function CategorySidebarContent({
                     transition={{ duration: 0.25, ease: "easeInOut" }}
                     className="overflow-hidden"
                   >
-                    <div className="pl-8 pr-2 py-1">
+                    <div className="pl-6 pr-2 py-1">
                       {cat.subcategories.map((sub) => (
                         <button
                           key={sub.slug}

@@ -179,6 +179,16 @@ function SearchPageInner() {
               <p className="text-xs text-gray-400 mt-0.5">
                 {book.author.penName}
               </p>
+              <div className="flex gap-1 mt-1">
+                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-semibold border bg-[#F2D8BE]/60 text-[#8A6A4A] border-[#E8DDD0]">
+                  eBook
+                </span>
+                {book.isAudiobook && (
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-semibold border bg-purple-50 text-purple-700 border-purple-200">
+                    Audiobook
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-1 mt-1">
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
