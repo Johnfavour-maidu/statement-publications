@@ -160,7 +160,7 @@ export default function CategoriesPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-[#FDF6EE] pt-[152px]">
+    <div className="min-h-screen bg-[#FDF6EE]">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6 lg:py-8">
         {/* Mobile Categories Button */}
         <div className="lg:hidden mb-4">
