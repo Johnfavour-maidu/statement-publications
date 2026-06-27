@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ChevronRight, X } from "lucide-react";
 import { categoryGroups, type CategoryGroup } from "@/lib/category-data";
@@ -47,7 +48,12 @@ export default function CategoryFlyout({
     cat.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  return (
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <>
@@ -174,6 +180,7 @@ export default function CategoryFlyout({
           </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
