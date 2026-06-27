@@ -499,21 +499,9 @@ function CategoryNav({ openDropdown, setOpenDropdown }: { openDropdown: string |
         </div>
       </div>
 
-      <AnimatePresence>
-        {openDropdown && (
-          <motion.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.15 }}
-            className="bg-white border-t border-gray-50 shadow-lg"
-            onMouseEnter={() => setOpenDropdown(openDropdown)}
-            onMouseLeave={() => setOpenDropdown(null)}>
-            <div className="max-w-[1400px] mx-auto relative">
-              {openDropdown === "categories" && (
-                <CategoryMegaDropdown isOpen={true} onClose={() => setOpenDropdown(null)} />
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {openDropdown === "categories" && (
+        <CategoryMegaDropdown isOpen={true} onClose={() => setOpenDropdown(null)} />
+      )}
     </div>
   );
 }
