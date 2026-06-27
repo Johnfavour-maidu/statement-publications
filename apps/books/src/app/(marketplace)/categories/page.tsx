@@ -123,6 +123,14 @@ export default function CategoriesPage() {
     return categoryGroups.find((c) => c.slug === selectedCategory) || null;
   }, [selectedCategory]);
 
+  const categoryBookCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    for (const cat of categoryGroups) {
+      counts[cat.slug] = books.filter((b) => b.category.slug === cat.slug).length;
+    }
+    return counts;
+  }, []);
+
   const filteredBooks = useMemo(() => {
     if (!selectedCategory) return [];
     let result = books.filter((b) => b.category.slug === selectedCategory);
@@ -208,6 +216,7 @@ export default function CategoriesPage() {
                     handleCategoryClick={handleCategoryClick}
                     selectedSubcategory={selectedSubcategory}
                     handleSubcategoryClick={handleSubcategoryClick}
+                    categoryBookCounts={categoryBookCounts}
                   />
                 </div>
               </motion.div>
@@ -262,6 +271,7 @@ export default function CategoriesPage() {
                     handleCategoryClick={handleCategoryClick}
                     selectedSubcategory={selectedSubcategory}
                     handleSubcategoryClick={handleSubcategoryClick}
+                    categoryBookCounts={categoryBookCounts}
                   />
                 </div>
               </div>
@@ -373,7 +383,7 @@ export default function CategoriesPage() {
                   </h1>
                   <div className="flex items-center gap-3 mt-1.5">
                     <span className="text-sm font-semibold text-[#D8B27A]">
-                      {filteredBooks.length} book{filteredBooks.length !== 1 ? "s" : ""}
+                      {filteredBooks.length} {filteredBooks.length !== 1 ? "Books" : "Book"}
                     </span>
                   </div>
                   <p className="text-gray-500 text-sm mt-2 max-w-2xl">
@@ -687,6 +697,7 @@ function CategorySidebarContent({
   handleCategoryClick,
   selectedSubcategory,
   handleSubcategoryClick,
+  categoryBookCounts,
 }: {
   searchQuery: string;
   setSearchQuery: (q: string) => void;
@@ -696,6 +707,7 @@ function CategorySidebarContent({
   handleCategoryClick: (slug: string) => void;
   selectedSubcategory: string | null;
   handleSubcategoryClick: (slug: string) => void;
+  categoryBookCounts: Record<string, number>;
 }) {
   return (
     <div className="py-2">
@@ -721,6 +733,11 @@ function CategorySidebarContent({
                 style={{ width: "calc(100% - 8px)" }}
               >
                 <span className="flex-1 min-w-0 truncate">{cat.name}</span>
+                {categoryBookCounts[cat.slug] > 0 && (
+                  <span className="text-[10px] font-semibold text-[#D8B27A] bg-[#D8B27A]/10 px-1.5 py-0.5 rounded-full flex-shrink-0">
+                    {categoryBookCounts[cat.slug]}
+                  </span>
+                )}
                 {cat.subcategories.length > 0 && (
                   <ChevronDown
                     className={cn(
