@@ -1,5 +1,6 @@
 "use client";
 
+import { MarketplaceProvider } from "@/context/marketplace-context";
 import { MarketplaceSubNav } from "@/components/layout/marketplace-sub-nav";
 
 export default function MarketplaceLayout({
@@ -8,9 +9,11 @@ export default function MarketplaceLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="pt-[152px]">
-      <MarketplaceSubNav />
-      {children}
-    </div>
+    <MarketplaceProvider>
+      <div className="pt-[140px]">
+        <MarketplaceSubNav />
+        {children}
+      </div>
+    </MarketplaceProvider>
   );
 }

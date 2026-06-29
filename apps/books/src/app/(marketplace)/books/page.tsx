@@ -23,6 +23,7 @@ import { Input } from "@/components/ui/input";
 import { books, categories } from "@/lib/demo-data";
 import { useCart } from "@/context/cart-context";
 import { useWishlist } from "@/context/wishlist-context";
+import { useMarketplace } from "@/context/marketplace-context";
 import { formatCurrency, cn } from "@/lib/utils";
 
 type SortOption =
@@ -53,14 +54,13 @@ const priceRanges = [
 
 export default function BooksPage() {
   const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<SortOption>("newest");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedPriceRange, setSelectedPriceRange] = useState(0);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [showFilters, setShowFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 12;
 
+  const { sortBy, setSortBy, viewMode, setViewMode } = useMarketplace();
   const { addItem } = useCart();
   const { addItem: addWishlist, isInWishlist } = useWishlist();
 
@@ -101,15 +101,23 @@ export default function BooksPage() {
           (a, b) => (b.discountPrice || b.price) - (a.discountPrice || a.price)
         );
         break;
+      case "highest-rated":
       case "rating":
         result.sort((a, b) => b.averageRating - a.averageRating);
         break;
+      case "best-selling":
       case "trending":
-        result.sort((a, b) => b.totalSales - a.totalSales);
-        break;
       case "bestselling":
         result.sort((a, b) => b.totalSales - a.totalSales);
         break;
+      case "title-az":
+        result.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "title-za":
+        result.sort((a, b) => b.title.localeCompare(a.title));
+        break;
+      case "recently-added":
+      case "newest":
       default:
         result.sort(
           (a, b) =>

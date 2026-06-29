@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -33,6 +33,7 @@ import {
 } from "@/lib/demo-data";
 import { useCart } from "@/context/cart-context";
 import { useWishlist } from "@/context/wishlist-context";
+import { useMarketplace } from "@/context/marketplace-context";
 import { formatCurrency, cn } from "@/lib/utils";
 import type { DemoBook } from "@/lib/demo-data";
 
@@ -441,6 +442,33 @@ function CategoryPills() {
 }
 
 export default function HomePage() {
+  const { sortBy, viewMode } = useMarketplace();
+
+  const sortedTopBooks = useMemo(() => {
+    const slice = books.slice(0, 20);
+    const sorted = [...slice];
+    switch (sortBy) {
+      case "newest":
+        return sorted.sort((a, b) => new Date(b.publicationDate).getTime() - new Date(a.publicationDate).getTime());
+      case "best-selling":
+        return sorted.sort((a, b) => b.totalSales - a.totalSales);
+      case "highest-rated":
+        return sorted.sort((a, b) => b.averageRating - a.averageRating);
+      case "price-low":
+        return sorted.sort((a, b) => (a.discountPrice || a.price) - (b.discountPrice || b.price));
+      case "price-high":
+        return sorted.sort((a, b) => (b.discountPrice || b.price) - (a.discountPrice || a.price));
+      case "title-az":
+        return sorted.sort((a, b) => a.title.localeCompare(b.title));
+      case "title-za":
+        return sorted.sort((a, b) => b.title.localeCompare(a.title));
+      case "recently-added":
+        return sorted.sort((a, b) => new Date(b.publicationDate).getTime() - new Date(a.publicationDate).getTime());
+      default:
+        return sorted;
+    }
+  }, [sortBy]);
+
   return (
     <div>
       {/* SECTION 1: Hero Slider */}
@@ -468,7 +496,48 @@ export default function HomePage() {
               See Full List <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-          <CarouselSection title="Top Books" items={books.slice(0, 20)} />
+          {viewMode === "list" ? (
+            <div className="flex flex-col gap-3">
+              {sortedTopBooks.map((book: DemoBook) => (
+                <Link key={book.id} href={`/books/${book.slug}`}
+                  className="flex gap-4 p-3 rounded-xl border border-gray-100 bg-white hover:border-[#D8B27A]/30 hover:shadow-sm transition-all">
+                  <div className="w-20 h-28 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+                    <img src={book.coverImage} alt={book.title} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-semibold text-[#1D1D1D] line-clamp-1">{book.title}</h3>
+                    <p className="text-xs text-gray-400 mt-0.5">{book.author.penName}</p>
+                    <p className="text-xs text-gray-500 mt-1.5 line-clamp-2">{book.description}</p>
+                    <div className="flex items-center gap-2 mt-2">
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-semibold border bg-[#F2D8BE]/60 text-[#8A6A4A] border-[#E8DDD0]">
+                        eBook
+                      </span>
+                      {book.isAudiobook && (
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-semibold border bg-purple-50 text-purple-700 border-purple-200">
+                          Audiobook
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-baseline gap-2 mt-2">
+                      {book.discountPrice ? (
+                        <>
+                          <span className="text-xs text-gray-400 line-through">{formatCurrency(book.price)}</span>
+                          <span className="text-sm font-bold text-[#1D1D1D]">{formatCurrency(book.discountPrice)}</span>
+                          <Badge className="bg-red-50 text-red-600 border-0 text-[9px]">
+                            {Math.round(((book.price - book.discountPrice) / book.price) * 100)}% OFF
+                          </Badge>
+                        </>
+                      ) : (
+                        <span className="text-sm font-bold text-[#1D1D1D]">{formatCurrency(book.price)}</span>
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <CarouselSection title="Top Books" items={sortedTopBooks} />
+          )}
         </div>
       </section>
 

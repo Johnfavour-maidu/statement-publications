@@ -11,6 +11,7 @@ import {
   X,
   Check,
   RotateCcw,
+  Home,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -20,56 +21,26 @@ import { cn } from "@/lib/utils";
 const sortOptions = [
   { value: "newest", label: "Newest" },
   { value: "best-selling", label: "Best Selling" },
-  { value: "most-popular", label: "Most Popular" },
   { value: "highest-rated", label: "Highest Rated" },
   { value: "price-low", label: "Price: Low to High" },
   { value: "price-high", label: "Price: High to Low" },
-  { value: "title-az", label: "Title A-Z" },
-  { value: "title-za", label: "Title Z-A" },
-  { value: "author-az", label: "Author A-Z" },
+  { value: "title-az", label: "A\u2013Z" },
+  { value: "title-za", label: "Z\u2013A" },
   { value: "recently-added", label: "Recently Added" },
-  { value: "release-date", label: "Release Date" },
 ];
 
 /* ─── Filter Data ──────────────────────────────────────── */
 
 const filterSections = [
   {
-    key: "category",
-    label: "Category",
-    options: [
-      "Business & Entrepreneurship",
-      "Personal Finance",
-      "Leadership",
-      "Technology",
-      "Self Development",
-      "Health & Wellness",
-      "Education",
-      "Religion & Inspiration",
-      "Biography",
-      "Politics",
-      "History",
-      "Science",
-      "African Literature",
-      "Fiction",
-      "Non-Fiction",
-    ],
+    key: "availability",
+    label: "Availability",
+    options: ["In Stock", "Pre-order", "Coming Soon"],
   },
   {
-    key: "genre",
-    label: "Genre",
-    options: [
-      "Self-Help",
-      "Motivational",
-      "Academic",
-      "Novel",
-      "Poetry",
-      "Children's",
-      "Romance",
-      "Thriller",
-      "Science Fiction",
-      "Fantasy",
-    ],
+    key: "rating",
+    label: "Rating",
+    options: ["4+ Stars", "3+ Stars", "2+ Stars"],
   },
   {
     key: "language",
@@ -87,25 +58,20 @@ const filterSections = [
   {
     key: "format",
     label: "Book Format",
-    options: ["eBook", "Paperback", "Hardcover", "Audiobook"],
+    options: ["eBook", "Audiobook"],
   },
   {
-    key: "availability",
-    label: "Availability",
-    options: ["In Stock", "Pre-order", "Coming Soon"],
-  },
-  {
-    key: "discount",
-    label: "Discount",
-    options: ["On Sale", "20% Off or More", "50% Off or More", "Free"],
+    key: "publisher",
+    label: "Publisher",
+    options: ["Statement Publications"],
   },
 ];
 
 const priceRanges = [
   { label: "Under $5", min: 0, max: 5 },
-  { label: "$5 - $10", min: 5, max: 10 },
-  { label: "$10 - $20", min: 10, max: 20 },
-  { label: "$20 - $50", min: 20, max: 50 },
+  { label: "$5 \u2013 $10", min: 5, max: 10 },
+  { label: "$10 \u2013 $20", min: 10, max: 20 },
+  { label: "$20 \u2013 $50", min: 20, max: 50 },
   { label: "Over $50", min: 50, max: Infinity },
 ];
 
@@ -130,7 +96,7 @@ function FilterPanel({
   onReset: () => void;
 }) {
   const [localFilters, setLocalFilters] = useState<FilterState>(filters);
-  const [expandedSection, setExpandedSection] = useState<string | null>("category");
+  const [expandedSection, setExpandedSection] = useState<string | null>("availability");
 
   useEffect(() => {
     setLocalFilters(filters);
@@ -196,7 +162,6 @@ function FilterPanel({
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
             className="fixed top-0 right-0 bottom-0 w-full max-w-md bg-white z-[90] shadow-2xl flex flex-col"
           >
-            {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
               <div className="flex items-center gap-3">
                 <SlidersHorizontal className="w-5 h-5 text-[#D8B27A]" />
@@ -212,9 +177,7 @@ function FilterPanel({
               </button>
             </div>
 
-            {/* Filter Body */}
             <div className="flex-1 overflow-y-auto px-6 py-4 space-y-1">
-              {/* Category, Genre, Language, Format, Availability, Discount */}
               {filterSections.map((section) => (
                 <div key={section.key} className="border-b border-gray-50 last:border-0">
                   <button
@@ -269,7 +232,6 @@ function FilterPanel({
                 </div>
               ))}
 
-              {/* Price Range */}
               <div className="border-b border-gray-50 last:border-0">
                 <button
                   onClick={() => setExpandedSection(expandedSection === "price" ? null : "price")}
@@ -325,13 +287,12 @@ function FilterPanel({
                 </AnimatePresence>
               </div>
 
-              {/* Publication Year */}
               <div className="border-b border-gray-50 last:border-0">
                 <button
                   onClick={() => setExpandedSection(expandedSection === "year" ? null : "year")}
                   className="w-full flex items-center justify-between py-3 text-left"
                 >
-                  <span className="text-sm font-medium text-[#1D1D1D]">Publication Year</span>
+                  <span className="text-sm font-medium text-[#1D1D1D]">Publication Date</span>
                   <ChevronDown className={cn(
                     "w-4 h-4 text-gray-400 transition-transform",
                     expandedSection === "year" && "rotate-180"
@@ -371,7 +332,6 @@ function FilterPanel({
               </div>
             </div>
 
-            {/* Footer */}
             <div className="px-6 py-4 border-t border-gray-100 flex items-center gap-3">
               <Button
                 onClick={handleReset}
@@ -428,11 +388,11 @@ function SortDropdown({
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 text-[13px] font-medium text-[#1D1D1D] hover:border-[#D8B27A]/40 transition-colors bg-white"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-gray-200 text-[13px] font-medium text-[#1D1D1D] hover:border-[#D8B27A]/40 transition-colors bg-white"
       >
-        <span className="text-gray-500">Sort by:</span>
-        <span>{selected?.label || "Newest"}</span>
-        <ChevronDown className={cn("w-3.5 h-3.5 text-gray-400 transition-transform", open && "rotate-180")} />
+        <span className="text-gray-500">Sort:</span>
+        <span className="max-w-[100px] truncate">{selected?.label || "Newest"}</span>
+        <ChevronDown className={cn("w-3 h-3 text-gray-400 transition-transform", open && "rotate-180")} />
       </button>
 
       <AnimatePresence>
@@ -442,7 +402,7 @@ function SortDropdown({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.97 }}
             transition={{ duration: 0.15 }}
-            className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50"
+            className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden z-50"
           >
             <div className="py-1">
               {sortOptions.map((option) => (
@@ -453,7 +413,7 @@ function SortDropdown({
                     setOpen(false);
                   }}
                   className={cn(
-                    "w-full flex items-center gap-3 px-4 py-2.5 text-[13px] transition-colors text-left",
+                    "w-full flex items-center gap-3 px-4 py-2 text-[13px] transition-colors text-left",
                     value === option.value
                       ? "bg-[#D8B27A]/10 text-[#8A6A4A] font-medium"
                       : "text-gray-600 hover:bg-gray-50"
@@ -487,25 +447,25 @@ function ViewToggle({
       <button
         onClick={() => onChange("grid")}
         className={cn(
-          "p-2 transition-colors",
+          "p-1.5 transition-colors",
           value === "grid"
             ? "bg-[#D8B27A]/10 text-[#8A6A4A]"
             : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
         )}
       >
-        <LayoutGrid className="w-4 h-4" />
+        <LayoutGrid className="w-3.5 h-3.5" />
       </button>
-      <div className="w-px h-5 bg-gray-200" />
+      <div className="w-px h-4 bg-gray-200" />
       <button
         onClick={() => onChange("list")}
         className={cn(
-          "p-2 transition-colors",
+          "p-1.5 transition-colors",
           value === "list"
             ? "bg-[#D8B27A]/10 text-[#8A6A4A]"
             : "text-gray-400 hover:text-gray-600 hover:bg-gray-50"
         )}
       >
-        <List className="w-4 h-4" />
+        <List className="w-3.5 h-3.5" />
       </button>
     </div>
   );
@@ -516,6 +476,7 @@ function ViewToggle({
 export type FilterState = Record<string, string[] | string | undefined>;
 
 const categoryNavLinks = [
+  { label: "Home", href: "/", icon: Home },
   { label: "Categories", href: "/categories" },
   { label: "New Releases", href: "/books?sort=newest" },
   { label: "Best Sellers", href: "/books?filter=bestsellers" },
@@ -541,41 +502,36 @@ export function SubNav({
   return (
     <div className="bg-white/80 backdrop-blur-sm border-b border-gray-100">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-11">
-          {/* Left: Category Links */}
-          <div className="hidden lg:flex items-center gap-1">
+        <div className="flex items-center justify-between h-10">
+          <div className="hidden lg:flex items-center gap-0.5">
             {categoryNavLinks.map((item) => (
               <Link key={item.label} href={item.href}
-                className="px-3 py-2 text-[13px] font-medium text-[#1D1D1D] hover:text-[#8A6A4A] hover:bg-[#D8B27A]/5 rounded-lg transition-colors">
+                className={cn(
+                  "flex items-center gap-1 px-2.5 py-1.5 text-[13px] font-medium rounded-lg transition-colors",
+                  "text-[#1D1D1D] hover:text-[#8A6A4A] hover:bg-[#D8B27A]/5"
+                )}>
+                {"icon" in item && item.icon && <item.icon className="w-3.5 h-3.5" />}
                 {item.label}
               </Link>
             ))}
           </div>
 
-          {/* Right: Filters + Sort + View Toggle */}
-          <div className="flex items-center gap-2 ml-auto">
+          <div className="flex items-center gap-1.5 ml-auto">
             <Button
               onClick={onOpenFilters}
               variant="outline"
-              className="h-8 px-3 rounded-lg border-gray-200 text-[13px] font-medium text-[#1D1D1D] hover:border-[#D8B27A]/40 hover:bg-[#D8B27A]/5"
+              className="h-7 px-2.5 rounded-lg border-gray-200 text-[13px] font-medium text-[#1D1D1D] hover:border-[#D8B27A]/40 hover:bg-[#D8B27A]/5"
             >
-              <SlidersHorizontal className="w-3.5 h-3.5 mr-1.5" />
+              <SlidersHorizontal className="w-3.5 h-3.5 mr-1" />
               Filters
               {activeFilterCount > 0 && (
-                <span className="ml-1.5 text-[10px] font-semibold bg-[#D8B27A] text-white w-4 h-4 rounded-full flex items-center justify-center">
+                <span className="ml-1 text-[10px] font-semibold bg-[#D8B27A] text-white w-4 h-4 rounded-full flex items-center justify-center">
                   {activeFilterCount}
                 </span>
               )}
             </Button>
 
-            <div className="hidden sm:block">
-              <SortDropdown value={sortBy} onChange={onSortChange} />
-            </div>
-
-            <div className="sm:hidden">
-              <SortDropdown value={sortBy} onChange={onSortChange} />
-            </div>
-
+            <SortDropdown value={sortBy} onChange={onSortChange} />
             <ViewToggle value={viewMode} onChange={onViewChange} />
           </div>
         </div>
@@ -583,7 +539,5 @@ export function SubNav({
     </div>
   );
 }
-
-/* ─── Export FilterPanel for direct use ─────────────────── */
 
 export { FilterPanel };
