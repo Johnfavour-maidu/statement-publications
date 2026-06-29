@@ -36,7 +36,7 @@ import { useWishlist } from "@/context/wishlist-context";
 import { formatCurrency, cn } from "@/lib/utils";
 import type { DemoBook } from "@/lib/demo-data";
 
-const featuredBooks = getFeaturedBooks();
+const featuredBooks = getFeaturedBooks().slice(0, 15);
 const bestsellers = getBestsellerBooks();
 const newReleases = getNewReleases();
 const preOrderBooks = getPreOrderBooks();
@@ -240,6 +240,7 @@ function CarouselSection({
 // SECTION 1: Hero Slider
 function HeroSlider() {
   const [current, setCurrent] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
   const next = useCallback(
     () => setCurrent((c) => (c + 1) % featuredBooks.length),
     []
@@ -253,15 +254,20 @@ function HeroSlider() {
   );
 
   useEffect(() => {
-    const timer = setInterval(next, 6000);
+    if (isHovered) return;
+    const timer = setInterval(next, 5000);
     return () => clearInterval(timer);
-  }, [next]);
+  }, [next, isHovered]);
 
   const book = featuredBooks[current];
   if (!book) return null;
 
   return (
-    <section className="relative overflow-hidden bg-white">
+    <section
+      className="relative overflow-hidden bg-white"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <div
         className="absolute inset-0"
         style={{
@@ -436,7 +442,7 @@ function CategoryPills() {
 
 export default function HomePage() {
   return (
-    <div className="pt-[152px]">
+    <div>
       {/* SECTION 1: Hero Slider */}
       <HeroSlider />
 
