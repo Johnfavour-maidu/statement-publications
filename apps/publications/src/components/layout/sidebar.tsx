@@ -101,6 +101,7 @@ const dashboardNav: Record<string, NavSection[]> = {
       title: "Management",
       items: [
         { label: "Authors", href: "/admin/users", icon: Users },
+        { label: "Readers", href: "/admin/readers", icon: BookMarked },
         { label: "Books", href: "/admin/books", icon: BookOpen },
         { label: "Service Orders", href: "/admin/orders", icon: ShoppingCart },
         { label: "Book Categories", href: "/admin/categories", icon: Tag },
